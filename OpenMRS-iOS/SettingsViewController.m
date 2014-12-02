@@ -70,7 +70,7 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 1 && indexPath.row == 1)
+    if (indexPath.section == 0 && indexPath.row == 1)
     {
         [self dismissViewControllerAnimated:NO completion:^{
             [OpenMRSAPIManager logout];
