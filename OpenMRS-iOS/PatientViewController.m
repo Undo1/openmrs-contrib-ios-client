@@ -37,6 +37,24 @@
             });
         }
     }];
+    [OpenMRSAPIManager getEncountersForPatient:self.patient completion:^(NSError *error, NSArray *encounters) {
+        if (error == nil)
+        {
+            self.encounters = encounters;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+        }
+    }];
+    [OpenMRSAPIManager getVisitsForPatient:self.patient completion:^(NSError *error, NSArray *visits) {
+       if (error == nil)
+       {
+           self.visits = visits;
+           dispatch_async(dispatch_get_main_queue(), ^{
+               [self.tableView reloadData];
+           });
+       }
+    }];
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -127,14 +145,47 @@
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.information.count;
+    if (section == 0)
+    {
+        return self.information.count;
+    }
+    else // section == 1
+    {
+        return 2;
+    }
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 1)
+    {
+        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"countCell"];
+        
+        if (!cell)
+        {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"countCell"];
+        }
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
+        if (indexPath.row == 0)
+        {
+            cell.textLabel.text = @"Visits";
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)self.visits.count];
+            
+            return cell;
+        }
+        else if (indexPath.row == 1)
+        {
+            cell.textLabel.text = @"Encounters";
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)self.encounters.count];
+            
+            return cell;
+        }
+    }
+    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     
     if (!cell)

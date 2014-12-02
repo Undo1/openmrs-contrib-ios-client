@@ -11,4 +11,6 @@
 @interface PatientViewController : UITableViewController
 @property (nonatomic, strong) MRSPatient *patient;
 @property (nonatomic, strong) NSArray *information;
+@property (nonatomic, strong) NSArray *visits;
+@property (nonatomic, strong) NSArray *encounters;
 @end
