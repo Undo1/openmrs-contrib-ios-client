@@ -34,7 +34,7 @@
     
     [[CredentialsLayer sharedManagerWithHost:host] setUsername:username andPassword:password];
     
-    [[CredentialsLayer sharedManagerWithHost:host] GET:[NSString stringWithFormat:@"openmrs/ws/rest/v1/patient?q=%@", search] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[CredentialsLayer sharedManagerWithHost:host] GET:[NSString stringWithFormat:@"openmrs/ws/rest/v1/patient?q=%@", [search stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"Success, %@", [[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
         NSLog(@"array: %@", results[@"results"]);
