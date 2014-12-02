@@ -30,7 +30,6 @@
             self.information = @[@{@"Name" : [self notNil:self.patient.name]},
                                  @{@"Age" : [self notNil:self.patient.age]},
                                  @{@"Gender" : [self notNil:self.patient.gender]},
-                                 @{@"Birthdate" : [self formatDate:[self notNil:self.patient.birthdate]]},
                                  @{@"Address" : [self formatPatientAdress:self.patient]}];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
