@@ -2,12 +2,13 @@
 //  AppDelegate.m
 //  OpenMRS-iOS
 //
-//  Created by Parker Erway on 12/2/14.
-//  Copyright (c) 2014 Erway Software. All rights reserved.
+//  Created by Parker Erway on 12/1/14.
 //
 
 #import "AppDelegate.h"
-
+#import "SignInViewController.h"
+#import "MainMenuViewController.h"
+#import "KeychainItemWrapper.h"
 @interface AppDelegate ()
 
 @end
@@ -16,7 +17,28 @@
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-    // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    
+// SignInViewController *vc = [[SignInViewController alloc] init];
+    
+//    [[[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil] resetKeychainItem];
+    
+    MainMenuViewController *menu = [[MainMenuViewController alloc] init];
+    
+    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:menu];
+    
+    [self.window makeKeyAndVisible];
+    
+    NSString *password = [[[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil] objectForKey:(__bridge id)(kSecValueData)];
+    
+    if ([password isEqual:@" "] || [password isEqual:@""] || password == nil)
+    {
+        //No password stored, go straight to login screen
+        SignInViewController *signin = [[SignInViewController alloc] init];
+        
+        [self.window.rootViewController presentViewController:signin animated:NO completion:nil];
+    }
+    
     return YES;
 }
 

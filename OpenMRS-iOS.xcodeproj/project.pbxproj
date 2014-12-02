@@ -7,10 +7,21 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		65BE2B3E2C5F8BE1FB7090C2 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87CFC2F5FC6F1445E8327AF6 /* libPods.a */; };
+		D396A5261A2E09DE00DE6448 /* PatientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5131A2E09DE00DE6448 /* PatientViewController.m */; };
+		D396A5271A2E09DE00DE6448 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5151A2E09DE00DE6448 /* AppDelegate.m */; };
+		D396A5281A2E09DE00DE6448 /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5171A2E09DE00DE6448 /* SignInViewController.m */; };
+		D396A5291A2E09DE00DE6448 /* OpenMRSAPIManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5191A2E09DE00DE6448 /* OpenMRSAPIManager.m */; };
+		D396A52A1A2E09DE00DE6448 /* KeychainItemWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A51B1A2E09DE00DE6448 /* KeychainItemWrapper.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		D396A52B1A2E09DE00DE6448 /* MainMenuViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A51D1A2E09DE00DE6448 /* MainMenuViewController.m */; };
+		D396A52C1A2E09DE00DE6448 /* PatientSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A51F1A2E09DE00DE6448 /* PatientSearchViewController.m */; };
+		D396A52D1A2E09DE00DE6448 /* MRSPatient.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5211A2E09DE00DE6448 /* MRSPatient.m */; };
+		D396A52E1A2E09DE00DE6448 /* CredentialsLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5231A2E09DE00DE6448 /* CredentialsLayer.m */; };
+		D396A52F1A2E09DE00DE6448 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5251A2E09DE00DE6448 /* ViewController.m */; };
+		D396A53F1A2E0B5A00DE6448 /* openmrs-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D396A53C1A2E0B5A00DE6448 /* openmrs-logo@2x.png */; };
+		D396A5401A2E0B5A00DE6448 /* openmrs-logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D396A53D1A2E0B5A00DE6448 /* openmrs-logo@3x.png */; };
+		D396A5411A2E0B5A00DE6448 /* openmrs-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = D396A53E1A2E0B5A00DE6448 /* openmrs-logo.png */; };
 		D39739711A2E082300D0AB69 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D39739701A2E082300D0AB69 /* main.m */; };
-		D39739741A2E082300D0AB69 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D39739731A2E082300D0AB69 /* AppDelegate.m */; };
-		D39739771A2E082300D0AB69 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D39739761A2E082300D0AB69 /* ViewController.m */; };
-		D397397A1A2E082300D0AB69 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D39739781A2E082300D0AB69 /* Main.storyboard */; };
 		D397397C1A2E082300D0AB69 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D397397B1A2E082300D0AB69 /* Images.xcassets */; };
 		D397397F1A2E082300D0AB69 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D397397D1A2E082300D0AB69 /* LaunchScreen.xib */; };
 		D397398B1A2E082300D0AB69 /* OpenMRS_iOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D397398A1A2E082300D0AB69 /* OpenMRS_iOSTests.m */; };
@@ -27,14 +38,35 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		87CFC2F5FC6F1445E8327AF6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		AFA25E06F401CA7D732F7C67 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		D21FB0B4A47906E6EF7F24EA /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		D396A5121A2E09DE00DE6448 /* PatientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PatientViewController.h; sourceTree = "<group>"; };
+		D396A5131A2E09DE00DE6448 /* PatientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PatientViewController.m; sourceTree = "<group>"; };
+		D396A5141A2E09DE00DE6448 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		D396A5151A2E09DE00DE6448 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		D396A5161A2E09DE00DE6448 /* SignInViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SignInViewController.h; sourceTree = "<group>"; };
+		D396A5171A2E09DE00DE6448 /* SignInViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SignInViewController.m; sourceTree = "<group>"; };
+		D396A5181A2E09DE00DE6448 /* OpenMRSAPIManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenMRSAPIManager.h; sourceTree = "<group>"; };
+		D396A5191A2E09DE00DE6448 /* OpenMRSAPIManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OpenMRSAPIManager.m; sourceTree = "<group>"; };
+		D396A51A1A2E09DE00DE6448 /* KeychainItemWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeychainItemWrapper.h; sourceTree = "<group>"; };
+		D396A51B1A2E09DE00DE6448 /* KeychainItemWrapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KeychainItemWrapper.m; sourceTree = "<group>"; };
+		D396A51C1A2E09DE00DE6448 /* MainMenuViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainMenuViewController.h; sourceTree = "<group>"; };
+		D396A51D1A2E09DE00DE6448 /* MainMenuViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainMenuViewController.m; sourceTree = "<group>"; };
+		D396A51E1A2E09DE00DE6448 /* PatientSearchViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PatientSearchViewController.h; sourceTree = "<group>"; };
+		D396A51F1A2E09DE00DE6448 /* PatientSearchViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PatientSearchViewController.m; sourceTree = "<group>"; };
+		D396A5201A2E09DE00DE6448 /* MRSPatient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSPatient.h; sourceTree = "<group>"; };
+		D396A5211A2E09DE00DE6448 /* MRSPatient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSPatient.m; sourceTree = "<group>"; };
+		D396A5221A2E09DE00DE6448 /* CredentialsLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CredentialsLayer.h; sourceTree = "<group>"; };
+		D396A5231A2E09DE00DE6448 /* CredentialsLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CredentialsLayer.m; sourceTree = "<group>"; };
+		D396A5241A2E09DE00DE6448 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		D396A5251A2E09DE00DE6448 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		D396A53C1A2E0B5A00DE6448 /* openmrs-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "openmrs-logo@2x.png"; sourceTree = "<group>"; };
+		D396A53D1A2E0B5A00DE6448 /* openmrs-logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "openmrs-logo@3x.png"; sourceTree = "<group>"; };
+		D396A53E1A2E0B5A00DE6448 /* openmrs-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "openmrs-logo.png"; sourceTree = "<group>"; };
 		D397396B1A2E082200D0AB69 /* OpenMRS-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OpenMRS-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D397396F1A2E082300D0AB69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D39739701A2E082300D0AB69 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		D39739721A2E082300D0AB69 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		D39739731A2E082300D0AB69 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		D39739751A2E082300D0AB69 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		D39739761A2E082300D0AB69 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		D39739791A2E082300D0AB69 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D397397B1A2E082300D0AB69 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		D397397E1A2E082300D0AB69 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		D39739841A2E082300D0AB69 /* OpenMRS-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OpenMRS-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -47,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				65BE2B3E2C5F8BE1FB7090C2 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -60,12 +93,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7E3ED26108E7D20D7E5E58E4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				87CFC2F5FC6F1445E8327AF6 /* libPods.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D39739621A2E082200D0AB69 = {
 			isa = PBXGroup;
 			children = (
 				D397396D1A2E082200D0AB69 /* OpenMRS-iOS */,
 				D39739871A2E082300D0AB69 /* OpenMRS-iOSTests */,
 				D397396C1A2E082200D0AB69 /* Products */,
+				E54315529FE081E009C0AF4D /* Pods */,
+				7E3ED26108E7D20D7E5E58E4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -81,11 +124,26 @@
 		D397396D1A2E082200D0AB69 /* OpenMRS-iOS */ = {
 			isa = PBXGroup;
 			children = (
-				D39739721A2E082300D0AB69 /* AppDelegate.h */,
-				D39739731A2E082300D0AB69 /* AppDelegate.m */,
-				D39739751A2E082300D0AB69 /* ViewController.h */,
-				D39739761A2E082300D0AB69 /* ViewController.m */,
-				D39739781A2E082300D0AB69 /* Main.storyboard */,
+				D396A5121A2E09DE00DE6448 /* PatientViewController.h */,
+				D396A5131A2E09DE00DE6448 /* PatientViewController.m */,
+				D396A5141A2E09DE00DE6448 /* AppDelegate.h */,
+				D396A5151A2E09DE00DE6448 /* AppDelegate.m */,
+				D396A5161A2E09DE00DE6448 /* SignInViewController.h */,
+				D396A5171A2E09DE00DE6448 /* SignInViewController.m */,
+				D396A5181A2E09DE00DE6448 /* OpenMRSAPIManager.h */,
+				D396A5191A2E09DE00DE6448 /* OpenMRSAPIManager.m */,
+				D396A51A1A2E09DE00DE6448 /* KeychainItemWrapper.h */,
+				D396A51B1A2E09DE00DE6448 /* KeychainItemWrapper.m */,
+				D396A51C1A2E09DE00DE6448 /* MainMenuViewController.h */,
+				D396A51D1A2E09DE00DE6448 /* MainMenuViewController.m */,
+				D396A51E1A2E09DE00DE6448 /* PatientSearchViewController.h */,
+				D396A51F1A2E09DE00DE6448 /* PatientSearchViewController.m */,
+				D396A5201A2E09DE00DE6448 /* MRSPatient.h */,
+				D396A5211A2E09DE00DE6448 /* MRSPatient.m */,
+				D396A5221A2E09DE00DE6448 /* CredentialsLayer.h */,
+				D396A5231A2E09DE00DE6448 /* CredentialsLayer.m */,
+				D396A5241A2E09DE00DE6448 /* ViewController.h */,
+				D396A5251A2E09DE00DE6448 /* ViewController.m */,
 				D397397B1A2E082300D0AB69 /* Images.xcassets */,
 				D397397D1A2E082300D0AB69 /* LaunchScreen.xib */,
 				D397396E1A2E082200D0AB69 /* Supporting Files */,
@@ -96,6 +154,9 @@
 		D397396E1A2E082200D0AB69 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D396A53C1A2E0B5A00DE6448 /* openmrs-logo@2x.png */,
+				D396A53D1A2E0B5A00DE6448 /* openmrs-logo@3x.png */,
+				D396A53E1A2E0B5A00DE6448 /* openmrs-logo.png */,
 				D397396F1A2E082300D0AB69 /* Info.plist */,
 				D39739701A2E082300D0AB69 /* main.m */,
 			);
@@ -119,6 +180,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		E54315529FE081E009C0AF4D /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				AFA25E06F401CA7D732F7C67 /* Pods.debug.xcconfig */,
+				D21FB0B4A47906E6EF7F24EA /* Pods.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -126,9 +196,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = D397398E1A2E082300D0AB69 /* Build configuration list for PBXNativeTarget "OpenMRS-iOS" */;
 			buildPhases = (
+				F7E9A591F9F917167E372116 /* Check Pods Manifest.lock */,
 				D39739671A2E082200D0AB69 /* Sources */,
 				D39739681A2E082200D0AB69 /* Frameworks */,
 				D39739691A2E082200D0AB69 /* Resources */,
+				4B447D2D789118A659448643 /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -199,9 +271,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D397397A1A2E082300D0AB69 /* Main.storyboard in Resources */,
 				D397397F1A2E082300D0AB69 /* LaunchScreen.xib in Resources */,
 				D397397C1A2E082300D0AB69 /* Images.xcassets in Resources */,
+				D396A53F1A2E0B5A00DE6448 /* openmrs-logo@2x.png in Resources */,
+				D396A5401A2E0B5A00DE6448 /* openmrs-logo@3x.png in Resources */,
+				D396A5411A2E0B5A00DE6448 /* openmrs-logo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -214,14 +288,55 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		4B447D2D789118A659448643 /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F7E9A591F9F917167E372116 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		D39739671A2E082200D0AB69 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D39739771A2E082300D0AB69 /* ViewController.m in Sources */,
-				D39739741A2E082300D0AB69 /* AppDelegate.m in Sources */,
+				D396A52E1A2E09DE00DE6448 /* CredentialsLayer.m in Sources */,
+				D396A52D1A2E09DE00DE6448 /* MRSPatient.m in Sources */,
+				D396A5281A2E09DE00DE6448 /* SignInViewController.m in Sources */,
+				D396A5261A2E09DE00DE6448 /* PatientViewController.m in Sources */,
+				D396A52C1A2E09DE00DE6448 /* PatientSearchViewController.m in Sources */,
+				D396A52F1A2E09DE00DE6448 /* ViewController.m in Sources */,
+				D396A52A1A2E09DE00DE6448 /* KeychainItemWrapper.m in Sources */,
+				D396A5291A2E09DE00DE6448 /* OpenMRSAPIManager.m in Sources */,
 				D39739711A2E082300D0AB69 /* main.m in Sources */,
+				D396A5271A2E09DE00DE6448 /* AppDelegate.m in Sources */,
+				D396A52B1A2E09DE00DE6448 /* MainMenuViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -244,14 +359,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		D39739781A2E082300D0AB69 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D39739791A2E082300D0AB69 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		D397397D1A2E082300D0AB69 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -341,9 +448,11 @@
 		};
 		D397398F1A2E082300D0AB69 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = AFA25E06F401CA7D732F7C67 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "OpenMRS-iOS/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -351,9 +460,11 @@
 		};
 		D39739901A2E082300D0AB69 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D21FB0B4A47906E6EF7F24EA /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = "OpenMRS-iOS/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -412,6 +523,7 @@
 				D39739901A2E082300D0AB69 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D39739911A2E082300D0AB69 /* Build configuration list for PBXNativeTarget "OpenMRS-iOSTests" */ = {
 			isa = XCConfigurationList;
@@ -420,6 +532,7 @@
 				D39739931A2E082300D0AB69 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

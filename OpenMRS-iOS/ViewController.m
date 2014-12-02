@@ -2,12 +2,11 @@
 //  ViewController.m
 //  OpenMRS-iOS
 //
-//  Created by Parker Erway on 12/2/14.
-//  Copyright (c) 2014 Erway Software. All rights reserved.
+//  Created by Parker Erway on 12/1/14.
+//  
 //
 
 #import "ViewController.h"
-
 @interface ViewController ()
 
 @end
