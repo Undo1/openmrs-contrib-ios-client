@@ -8,12 +8,22 @@
 
 #import "MainMenuViewController.h"
 #import "PatientSearchViewController.h"
+#import "SettingsViewController.h"
 @implementation MainMenuViewController
 -(void)viewDidLoad
 {
     [super viewDidLoad];
     
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStyleBordered target:self action:@selector(showSettings)];
+    
     self.title = @"OpenMRS";
+}
+-(void)showSettings
+{
+    SettingsViewController *settings = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    UINavigationController *navcon = [[UINavigationController alloc] initWithRootViewController:settings];
+    
+    [self presentViewController:navcon animated:YES completion:nil];
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {

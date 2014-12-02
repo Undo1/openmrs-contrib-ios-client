@@ -21,6 +21,7 @@
 		D396A53F1A2E0B5A00DE6448 /* openmrs-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D396A53C1A2E0B5A00DE6448 /* openmrs-logo@2x.png */; };
 		D396A5401A2E0B5A00DE6448 /* openmrs-logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D396A53D1A2E0B5A00DE6448 /* openmrs-logo@3x.png */; };
 		D396A5411A2E0B5A00DE6448 /* openmrs-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = D396A53E1A2E0B5A00DE6448 /* openmrs-logo.png */; };
+		D396A5441A2E0CEF00DE6448 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5431A2E0CEF00DE6448 /* SettingsViewController.m */; };
 		D39739711A2E082300D0AB69 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D39739701A2E082300D0AB69 /* main.m */; };
 		D397397C1A2E082300D0AB69 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D397397B1A2E082300D0AB69 /* Images.xcassets */; };
 		D397397F1A2E082300D0AB69 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D397397D1A2E082300D0AB69 /* LaunchScreen.xib */; };
@@ -64,6 +65,8 @@
 		D396A53C1A2E0B5A00DE6448 /* openmrs-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "openmrs-logo@2x.png"; sourceTree = "<group>"; };
 		D396A53D1A2E0B5A00DE6448 /* openmrs-logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "openmrs-logo@3x.png"; sourceTree = "<group>"; };
 		D396A53E1A2E0B5A00DE6448 /* openmrs-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "openmrs-logo.png"; sourceTree = "<group>"; };
+		D396A5421A2E0CEF00DE6448 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
+		D396A5431A2E0CEF00DE6448 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		D397396B1A2E082200D0AB69 /* OpenMRS-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OpenMRS-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D397396F1A2E082300D0AB69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D39739701A2E082300D0AB69 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -136,6 +139,8 @@
 				D396A51B1A2E09DE00DE6448 /* KeychainItemWrapper.m */,
 				D396A51C1A2E09DE00DE6448 /* MainMenuViewController.h */,
 				D396A51D1A2E09DE00DE6448 /* MainMenuViewController.m */,
+				D396A5421A2E0CEF00DE6448 /* SettingsViewController.h */,
+				D396A5431A2E0CEF00DE6448 /* SettingsViewController.m */,
 				D396A51E1A2E09DE00DE6448 /* PatientSearchViewController.h */,
 				D396A51F1A2E09DE00DE6448 /* PatientSearchViewController.m */,
 				D396A5201A2E09DE00DE6448 /* MRSPatient.h */,
@@ -329,6 +334,7 @@
 				D396A52E1A2E09DE00DE6448 /* CredentialsLayer.m in Sources */,
 				D396A52D1A2E09DE00DE6448 /* MRSPatient.m in Sources */,
 				D396A5281A2E09DE00DE6448 /* SignInViewController.m in Sources */,
+				D396A5441A2E0CEF00DE6448 /* SettingsViewController.m in Sources */,
 				D396A5261A2E09DE00DE6448 /* PatientViewController.m in Sources */,
 				D396A52C1A2E09DE00DE6448 /* PatientSearchViewController.m in Sources */,
 				D396A52F1A2E09DE00DE6448 /* ViewController.m in Sources */,

@@ -119,4 +119,21 @@
     
     [delegate.window.rootViewController presentViewController:vc animated:YES completion:nil];
 }
++ (void)logout
+{
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    
+    [[CredentialsLayer sharedManagerWithHost:host] setUsername:nil andPassword:nil];
+    
+    [wrapper resetKeychainItem];
+    
+    NSHTTPCookie *cookie;
+    NSHTTPCookieStorage *storage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    for (cookie in [storage cookies]) {
+        [storage deleteCookie:cookie];
+    }
+    
+    [OpenMRSAPIManager presentLoginController];
+}
 @end
