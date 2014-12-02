@@ -63,7 +63,7 @@
 {
     MRSPatient *patient = self.currentSearchResults[indexPath.row];
     
-    PatientViewController *vc = [[PatientViewController alloc] initWithStyle:UITableViewStylePlain];
+    PatientViewController *vc = [[PatientViewController alloc] initWithStyle:UITableViewStyleGrouped];
     vc.patient = patient;
     [self.navigationController pushViewController:vc animated:YES];
 }
