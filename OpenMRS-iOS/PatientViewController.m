@@ -8,6 +8,8 @@
 
 #import "PatientViewController.h"
 #import "OpenMRSAPIManager.h"
+#import "PatientEncounterListView.h"
+#import "PatientVisitListView.h"
 @implementation PatientViewController
 -(void)setPatient:(MRSPatient *)patient
 {
@@ -202,5 +204,23 @@
     cell.detailTextLabel.backgroundColor = [UIColor redColor];
     
     return cell;
+}
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.section == 1)
+    {
+        if (indexPath.row == 1) //encounters row selected
+        {
+            PatientEncounterListView *encounterList = [[PatientEncounterListView alloc] initWithStyle:UITableViewStyleGrouped];
+            encounterList.encounters = self.encounters;
+            [self.navigationController pushViewController:encounterList animated:YES];
+        }
+        else if (indexPath.row == 0) //visits row selected
+        {
+            PatientVisitListView *visitsList = [[PatientVisitListView alloc] initWithStyle:UITableViewStyleGrouped];
+            visitsList.visits = self.visits;
+            [self.navigationController pushViewController:visitsList animated:YES];
+        }
+    }
 }
 @end

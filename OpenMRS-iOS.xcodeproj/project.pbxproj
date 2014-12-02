@@ -24,6 +24,8 @@
 		D396A5441A2E0CEF00DE6448 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5431A2E0CEF00DE6448 /* SettingsViewController.m */; };
 		D396A5471A2E396300DE6448 /* MRSVisit.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5461A2E396300DE6448 /* MRSVisit.m */; };
 		D396A54A1A2E3CBC00DE6448 /* MRSEncounter.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5491A2E3CBC00DE6448 /* MRSEncounter.m */; };
+		D396A54D1A2E3E5600DE6448 /* PatientEncounterListView.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A54C1A2E3E5600DE6448 /* PatientEncounterListView.m */; };
+		D396A5501A2E3F7600DE6448 /* PatientVisitListView.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A54F1A2E3F7600DE6448 /* PatientVisitListView.m */; };
 		D39739711A2E082300D0AB69 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D39739701A2E082300D0AB69 /* main.m */; };
 		D397397C1A2E082300D0AB69 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D397397B1A2E082300D0AB69 /* Images.xcassets */; };
 		D397397F1A2E082300D0AB69 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D397397D1A2E082300D0AB69 /* LaunchScreen.xib */; };
@@ -73,6 +75,10 @@
 		D396A5461A2E396300DE6448 /* MRSVisit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSVisit.m; sourceTree = "<group>"; };
 		D396A5481A2E3CBC00DE6448 /* MRSEncounter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSEncounter.h; sourceTree = "<group>"; };
 		D396A5491A2E3CBC00DE6448 /* MRSEncounter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSEncounter.m; sourceTree = "<group>"; };
+		D396A54B1A2E3E5600DE6448 /* PatientEncounterListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PatientEncounterListView.h; sourceTree = "<group>"; };
+		D396A54C1A2E3E5600DE6448 /* PatientEncounterListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PatientEncounterListView.m; sourceTree = "<group>"; };
+		D396A54E1A2E3F7600DE6448 /* PatientVisitListView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PatientVisitListView.h; sourceTree = "<group>"; };
+		D396A54F1A2E3F7600DE6448 /* PatientVisitListView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PatientVisitListView.m; sourceTree = "<group>"; };
 		D397396B1A2E082200D0AB69 /* OpenMRS-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OpenMRS-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D397396F1A2E082300D0AB69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D39739701A2E082300D0AB69 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -135,6 +141,10 @@
 			children = (
 				D396A5121A2E09DE00DE6448 /* PatientViewController.h */,
 				D396A5131A2E09DE00DE6448 /* PatientViewController.m */,
+				D396A54E1A2E3F7600DE6448 /* PatientVisitListView.h */,
+				D396A54F1A2E3F7600DE6448 /* PatientVisitListView.m */,
+				D396A54B1A2E3E5600DE6448 /* PatientEncounterListView.h */,
+				D396A54C1A2E3E5600DE6448 /* PatientEncounterListView.m */,
 				D396A5141A2E09DE00DE6448 /* AppDelegate.h */,
 				D396A5151A2E09DE00DE6448 /* AppDelegate.m */,
 				D396A5161A2E09DE00DE6448 /* SignInViewController.h */,
@@ -348,10 +358,12 @@
 				D396A5441A2E0CEF00DE6448 /* SettingsViewController.m in Sources */,
 				D396A5261A2E09DE00DE6448 /* PatientViewController.m in Sources */,
 				D396A52C1A2E09DE00DE6448 /* PatientSearchViewController.m in Sources */,
+				D396A54D1A2E3E5600DE6448 /* PatientEncounterListView.m in Sources */,
 				D396A52F1A2E09DE00DE6448 /* ViewController.m in Sources */,
 				D396A52A1A2E09DE00DE6448 /* KeychainItemWrapper.m in Sources */,
 				D396A5291A2E09DE00DE6448 /* OpenMRSAPIManager.m in Sources */,
 				D39739711A2E082300D0AB69 /* main.m in Sources */,
+				D396A5501A2E3F7600DE6448 /* PatientVisitListView.m in Sources */,
 				D396A5271A2E09DE00DE6448 /* AppDelegate.m in Sources */,
 				D396A54A1A2E3CBC00DE6448 /* MRSEncounter.m in Sources */,
 				D396A52B1A2E09DE00DE6448 /* MainMenuViewController.m in Sources */,
