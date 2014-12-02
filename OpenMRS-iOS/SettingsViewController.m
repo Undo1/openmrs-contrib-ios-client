@@ -8,7 +8,7 @@
 
 #import "SettingsViewController.h"
 #import "OpenMRSAPIManager.h"
-
+#import "KeychainItemWrapper.h"
 @implementation SettingsViewController
 -(void)viewDidLoad
 {
@@ -28,7 +28,7 @@
 {
     if (section == 1)
     {
-        return 1;
+        return 2;
     }
     else
     {
@@ -39,23 +39,43 @@
 {
     if (indexPath.section == 1)
     {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"logoutCell"];
-        if (!cell)
+        if (indexPath.row == 1)
         {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"logoutCell"];
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"logoutCell"];
+            if (!cell)
+            {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"logoutCell"];
+            }
+            
+            cell.textLabel.text = @"Logout";
+            cell.textLabel.textColor = [UIColor redColor];
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            
+            return cell;
         }
-        
-        cell.textLabel.text = @"Logout";
-        cell.textLabel.textColor = [UIColor redColor];
-        cell.textLabel.textAlignment = NSTextAlignmentCenter;
-        
-        return cell;
+        else if (indexPath.row == 0)
+        {
+            UITableViewCell *usernameCell = [tableView dequeueReusableCellWithIdentifier:@"usernameCell"];
+            
+            if (!usernameCell)
+            {
+                usernameCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"usernameCell"];
+            }
+            
+            KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+            NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+            
+            usernameCell.textLabel.text = [NSString stringWithFormat:@"Logged in as: %@", username];
+            usernameCell.textLabel.textColor = [UIColor grayColor];
+            
+            return usernameCell;
+        }
     }
     return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 1)
+    if (indexPath.section == 1 && indexPath.row == 1)
     {
         [self dismissViewControllerAnimated:NO completion:^{
             [OpenMRSAPIManager logout];
