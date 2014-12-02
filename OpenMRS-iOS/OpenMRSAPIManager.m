@@ -16,12 +16,14 @@
 @implementation OpenMRSAPIManager
 + (void)verifyCredentialsWithUsername:(NSString *)username password:(NSString *)password host:(NSString *)host completion:(void (^)(BOOL success))completion
 {
-    [[CredentialsLayer sharedManagerWithHost:host] setUsername:username andPassword:password];
+    NSURL *hostUrl = [NSURL URLWithString:host];
     
-    [[CredentialsLayer sharedManagerWithHost:host] GET:[NSString stringWithFormat:@"openmrs/ws/rest/v1/user"] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/user", host] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         completion(YES);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Error: %@", error);
+//        NSLog(@"Error: %@", error);
         completion(NO);
     }];
 }
@@ -29,12 +31,13 @@
 {
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
     NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
     NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
     NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
     
-    [[CredentialsLayer sharedManagerWithHost:host] setUsername:username andPassword:password];
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
     
-    [[CredentialsLayer sharedManagerWithHost:host] GET:[NSString stringWithFormat:@"openmrs/ws/rest/v1/patient?q=%@", [search stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/patient?q=%@", host, [search stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSLog(@"Success, %@", [[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
         NSLog(@"array: %@", results[@"results"]);
@@ -68,8 +71,7 @@
     
     [[CredentialsLayer sharedManagerWithHost:host] setUsername:username andPassword:password];
     
-    [[CredentialsLayer sharedManagerWithHost:host] GET:[NSString stringWithFormat:@"openmrs/ws/rest/v1/patient/%@?v=full", patient.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSLog(@"Success, %@", [[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
+    [[CredentialsLayer sharedManagerWithHost:host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/patient/%@?v=full", host, patient.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
         NSLog(@"results: %@", results);
         
