@@ -43,7 +43,7 @@
             }
             
             cell.textLabel.text = @"Logout";
-            cell.textLabel.textColor = [UIColor redColor];
+            cell.textLabel.textColor = [UIColor colorWithRed:231/255.0 green:81/255.0 blue:0/255.0 alpha:1];
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             
             return cell;

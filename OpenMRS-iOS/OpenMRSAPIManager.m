@@ -14,23 +14,34 @@
 #import "SignInViewController.h"
 #import "AppDelegate.h"
 #import "KeychainItemWrapper.h"
+#import "SVProgressHUD.h"
 
 @implementation OpenMRSAPIManager
 + (void)verifyCredentialsWithUsername:(NSString *)username password:(NSString *)password host:(NSString *)host completion:(void (^)(BOOL success))completion
 {
+    [SVProgressHUD show];
+    
     NSURL *hostUrl = [NSURL URLWithString:host];
     
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
     
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/user", host] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         completion(YES);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD showSuccessWithStatus:@"Logged In"];
+        });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
 //        NSLog(@"Error: %@", error);
         completion(NO);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD showErrorWithStatus:@"Login failed"];
+        });
     }];
 }
 + (void)getEncountersForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *encounters))completion
 {
+    [SVProgressHUD show];
+    
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
     NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
     NSURL *hostUrl = [NSURL URLWithString:host];
@@ -53,13 +64,22 @@
         }
         completion(nil, array);
         
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD popActivity];
+        });
+        
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         completion(error, nil);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD popActivity];
+        });
         NSLog(@"Failure, %@", error);
     }];
 }
 + (void)getVisitsForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *visits))completion
 {
+    [SVProgressHUD show];
+    
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
     NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
     NSURL *hostUrl = [NSURL URLWithString:host];
@@ -80,14 +100,22 @@
             [array addObject:visit];
         }
         completion(nil, array);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD popActivity];
+        });
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         completion(error, nil);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD popActivity];
+        });
         NSLog(@"Failure, %@", error);
     }];
 }
 + (void)getPatientListWithSearch:(NSString *)search completion:(void (^)(NSError *error, NSArray *patients))completion
 {
+//    [SVProgressHUD show];
+    
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
     NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
     NSURL *hostUrl = [NSURL URLWithString:host];
@@ -111,6 +139,9 @@
         }
         
         completion(nil, patients);
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [SVProgressHUD popActivity];
+//        });
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Failure, %@", error);
@@ -119,10 +150,15 @@
             [OpenMRSAPIManager presentLoginController];
         }
         completion(error, nil);
+//        dispatch_async(dispatch_get_main_queue(), ^{
+//            [SVProgressHUD popActivity];
+//        });
     }];
 }
 + (void)getDetailedDataOnPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, MRSPatient *detailedPatient))completion
 {
+    [SVProgressHUD show];
+    
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
     NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
     NSURL *hostUrl = [NSURL URLWithString:host];
@@ -164,6 +200,9 @@
         detailedPatient.hasDetailedInfo = YES;
         
         completion(nil, detailedPatient);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD showSuccessWithStatus:@"" maskType:SVProgressHUDMaskTypeGradient];
+        });
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Failure, %@", error);
@@ -172,6 +211,9 @@
             [OpenMRSAPIManager presentLoginController];
         }
         completion(error, nil);
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [SVProgressHUD popActivity];
+        });
     }];
 }
 + (void)presentLoginController
