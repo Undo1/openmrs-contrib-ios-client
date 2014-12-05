@@ -10,6 +10,7 @@
 #import "CredentialsLayer.h"
 #import "MRSPatient.h"
 #import "MRSVisit.h"
+#import "MRSEncounterOb.h"
 #import "MRSEncounter.h"
 #import "SignInViewController.h"
 #import "AppDelegate.h"
@@ -29,6 +30,39 @@
         completion(NO);
     }];
 }
++ (void)getDetailedDataOnEncounter:(MRSEncounter *)encounter completion:(void (^)(NSError *, MRSEncounter *))completion
+{
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+    
+    NSLog(@"%@", encounter.UUID);
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/encounter/%@?v=full", host, encounter.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
+        NSLog(@"encounter detail array: %@", results);
+        
+        NSMutableArray *array = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary *obDict in results[@"obs"]) {
+            MRSEncounterOb *ob = [[MRSEncounterOb alloc] init];
+            ob.UUID = obDict[@"uuid"];
+            ob.display = obDict[@"display"];
+            [array addObject:ob];
+        }
+        encounter.obs = array;
+        
+        completion(nil, encounter);
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(error, nil);
+        NSLog(@"Failure, %@", error);
+    }];
+}
 + (void)getEncountersForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *encounters))completion
 {
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
@@ -41,7 +75,7 @@
     
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/encounter?patient=%@", host, patient.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
-        NSLog(@"array: %@", results);
+        NSLog(@"encounter array: %@", results);
         
         NSMutableArray *array = [[NSMutableArray alloc] init];
         
