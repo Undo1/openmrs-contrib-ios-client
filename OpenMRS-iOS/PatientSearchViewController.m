@@ -22,8 +22,9 @@
     bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     bar.delegate = self;
     [bar sizeToFit];
-    [self.tableView addSubview:bar];
+    self.tableView.tableHeaderView = bar;
     [bar becomeFirstResponder];
+    
 }
 -(void)reloadDataForSearch:(NSString *)search
 {

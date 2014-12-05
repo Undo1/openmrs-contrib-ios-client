@@ -201,7 +201,6 @@
     cell.textLabel.text = key;
     cell.detailTextLabel.text = value;
     cell.detailTextLabel.numberOfLines = 0;
-    cell.detailTextLabel.backgroundColor = [UIColor redColor];
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     
     return cell;
