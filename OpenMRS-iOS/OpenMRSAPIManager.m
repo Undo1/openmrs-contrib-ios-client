@@ -14,6 +14,7 @@
 #import "MRSEncounter.h"
 #import "SignInViewController.h"
 #import "AppDelegate.h"
+#import "MRSEncounterType.h"
 #import "KeychainItemWrapper.h"
 
 @implementation OpenMRSAPIManager
@@ -29,6 +30,37 @@
 //        NSLog(@"Error: %@", error);
         completion(NO);
     }];
+}
++ (void)getEncounterTypesWithCompletion:(void (^)(NSError *, NSArray *))completion
+{
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/encountertype", host] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
+        NSLog(@"encounter types array: %@", results);
+        
+        NSMutableArray *array = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary *dict in results[@"results"]) {
+            MRSEncounterType *type = [[MRSEncounterType alloc] init];
+            type.UUID = dict[@"uuid"];
+            type.display = dict[@"display"];
+            [array addObject:type];
+        }
+        
+        completion(nil, array);
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(error, nil);
+        NSLog(@"Failure, %@", error);
+    }];
+
 }
 + (void)getDetailedDataOnEncounter:(MRSEncounter *)encounter completion:(void (^)(NSError *, MRSEncounter *))completion
 {

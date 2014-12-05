@@ -10,6 +10,7 @@
 #import "OpenMRSAPIManager.h"
 #import "PatientEncounterListView.h"
 #import "PatientVisitListView.h"
+#import "SelectEncounterTypeView.h"
 @implementation PatientViewController
 -(void)setPatient:(MRSPatient *)patient
 {
@@ -60,6 +61,11 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 2)
+    {
+        return 44;
+    }
+    
     UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
     NSString *detail = cell.detailTextLabel.text;
     
@@ -147,11 +153,15 @@
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0)
+    if (section == 2)
+    {
+        return 1;
+    }
+    else if (section == 0)
     {
         return self.information.count;
     }
@@ -162,6 +172,21 @@
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 2)
+    {
+        UITableViewCell *actionCell = [tableView dequeueReusableCellWithIdentifier:@"actionCell"];
+        
+        if (!actionCell)
+        {
+            actionCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"actionCell"];
+        }
+        
+        actionCell.textLabel.text = @"Add notes/vitals...";
+        actionCell.textLabel.textAlignment = NSTextAlignmentCenter;
+        actionCell.textLabel.textColor = self.view.tintColor;
+        
+        return actionCell;
+    }
     if (indexPath.section == 1)
     {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"countCell"];
@@ -208,7 +233,12 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 1)
+    if (indexPath.section == 2)
+    {
+        SelectEncounterTypeView *sETV = [[SelectEncounterTypeView alloc] initWithStyle:UITableViewStylePlain];
+        [self presentViewController:[[UINavigationController alloc] initWithRootViewController:sETV] animated:YES completion:nil];
+    }
+    else if (indexPath.section == 1)
     {
         if (indexPath.row == 1) //encounters row selected
         {
