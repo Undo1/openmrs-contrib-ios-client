@@ -20,11 +20,25 @@ PODS:
   - AFNetworking/UIKit (2.4.1):
     - AFNetworking/NSURLConnection
     - AFNetworking/NSURLSession
+  - EncryptedCoreData (3.0):
+    - SQLCipher (~> 3.1.0)
+  - SQLCipher (3.1.0):
+    - SQLCipher/standard
+  - SQLCipher/common (3.1.0)
+  - SQLCipher/standard (3.1.0):
+    - SQLCipher/common
 
 DEPENDENCIES:
   - AFNetworking (~> 2.0)
+  - EncryptedCoreData (from `https://github.com/project-imas/encrypted-core-data.git`)
+
+EXTERNAL SOURCES:
+  EncryptedCoreData:
+    :git: https://github.com/project-imas/encrypted-core-data.git
 
 SPEC CHECKSUMS:
   AFNetworking: 0aabc6fae66d6e5d039eeb21c315843c7aae51ab
+  EncryptedCoreData: a52183de3620d305b78b8c8a3b323ebf7adf76a5
+  SQLCipher: 981110217eb93c2779c34fb59e646a1c1da918d8
 
 COCOAPODS: 0.34.4

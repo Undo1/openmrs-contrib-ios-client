@@ -16,6 +16,7 @@
 #import "AppDelegate.h"
 #import "MRSEncounterType.h"
 #import "KeychainItemWrapper.h"
+#import <CoreData/CoreData.h>
 
 @implementation OpenMRSAPIManager
 + (void)verifyCredentialsWithUsername:(NSString *)username password:(NSString *)password host:(NSString *)host completion:(void (^)(BOOL success))completion
@@ -184,7 +185,35 @@
         {
             [OpenMRSAPIManager presentLoginController];
         }
-        completion(error, nil);
+        else
+        {
+            AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+            
+            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+            [fetchRequest setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:appDelegate.managedObjectContext]];
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K contains %@) OR (%K contains %@) OR (%K contains %@)", @"name", search, @"display", search, @"displayName", search];
+            [fetchRequest setPredicate:predicate];
+            
+            NSError *error;
+            NSArray *results = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+            
+            if (results.count > 0)
+            {
+                NSMutableArray *patients = [[NSMutableArray alloc] init];
+                for (NSManagedObject *object in results) {
+                    MRSPatient *patient = [[MRSPatient alloc] init];
+                    patient.UUID = [object valueForKey:@"uuid"];
+                    [patient updateFromCoreData];
+                    [patients addObject:patient];
+                }
+                completion(nil, patients);
+            }
+            else
+            {
+                completion(error, nil);
+            }
+        }
     }];
 }
 + (void)getDetailedDataOnPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, MRSPatient *detailedPatient))completion
@@ -194,13 +223,6 @@
     NSURL *hostUrl = [NSURL URLWithString:host];
     NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
     NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
-    
-    if ([patient isInCoreData])
-    {
-        [patient updateFromCoreData];
-        patient.hasDetailedInfo = YES;
-        completion(nil, patient);
-    }
     
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
     
@@ -244,7 +266,17 @@
         {
             [OpenMRSAPIManager presentLoginController];
         }
-        completion(error, nil);
+        
+        if ([patient isInCoreData])
+        {
+            [patient updateFromCoreData];
+            patient.hasDetailedInfo = YES;
+            completion(nil, patient);
+        }
+        else
+        {
+            completion(error, nil);
+        }
     }];
 }
 + (void)presentLoginController

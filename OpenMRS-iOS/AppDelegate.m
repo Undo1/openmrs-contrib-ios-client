@@ -10,6 +10,7 @@
 #import "MainMenuViewController.h"
 #import "KeychainItemWrapper.h"
 #import <CoreData/CoreData.h>
+#import "EncryptedStore.h"
 @interface AppDelegate ()
 
 @end
@@ -96,8 +97,13 @@
     NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"openmrs-offline"];
     
     NSError *error = nil;
-    _persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:[self managedObjectModel]];
-    if (![_persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error])
+    
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSDictionary *options = @{ EncryptedStorePassphraseKey: [wrapper objectForKey:(__bridge id)(kSecValueData)] };
+    
+    _persistentStoreCoordinator = [EncryptedStore makeStoreWithOptions:options managedObjectModel:[self managedObjectModel]];
+    
+    if (![_persistentStoreCoordinator addPersistentStoreWithType:EncryptedStoreType configuration:nil URL:storeURL options:nil error:&error])
     {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();

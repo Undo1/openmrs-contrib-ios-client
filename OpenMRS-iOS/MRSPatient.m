@@ -111,6 +111,8 @@
         self.name = [result valueForKey:@"name"];
         self.postalCode = [result valueForKey:@"postalCode"];
         self.stateProvince = [result valueForKey:@"stateProvince"];
+        
+        self.fromCoreData = YES;
     }
 }
 - (BOOL)isInCoreData

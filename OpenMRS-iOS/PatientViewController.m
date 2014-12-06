@@ -19,10 +19,12 @@
     self.information = @[@{@"Name" : patient.name}];
     
     [self.tableView reloadData];
-    if (!patient.hasDetailedInfo)
-    {
-        [self updateWithDetailedInfo];
-    }
+}
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    [self updateWithDetailedInfo];
 }
 -(void)updateWithDetailedInfo
 {

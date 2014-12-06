@@ -40,6 +40,7 @@
 @property (nonatomic, strong) NSString *givenName;
 @property (nonatomic, strong) NSString *middleName;
 
+@property (nonatomic) BOOL fromCoreData;
 @property (nonatomic) BOOL hasDetailedInfo;
 
 - (void)saveToCoreData;
