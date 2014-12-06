@@ -34,6 +34,9 @@
                                  @{@"Age" : [self notNil:self.patient.age]},
                                  @{@"Gender" : [self notNil:self.patient.gender]},
                                  @{@"Address" : [self formatPatientAdress:self.patient]}];
+            
+            [self.patient isInCoreData];
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.tableView reloadData];
                 self.title = self.patient.name;
@@ -159,7 +162,7 @@
 {
     if (section == 2)
     {
-        return 1;
+        return 2;
     }
     else if (section == 0)
     {
@@ -174,6 +177,21 @@
 {
     if (indexPath.section == 2)
     {
+        if (indexPath.row == 1)
+        {
+            UITableViewCell *saveToCoreDataCell = [tableView dequeueReusableCellWithIdentifier:@"coredata"];
+            if (!saveToCoreDataCell)
+            {
+                saveToCoreDataCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"coredata"];
+            }
+            
+            saveToCoreDataCell.textLabel.text = @"Save";
+            saveToCoreDataCell.textLabel.textAlignment = NSTextAlignmentCenter;
+            saveToCoreDataCell.textLabel.textColor = [UIColor orangeColor];
+            
+            return saveToCoreDataCell;
+        }
+        
         UITableViewCell *actionCell = [tableView dequeueReusableCellWithIdentifier:@"actionCell"];
         
         if (!actionCell)
@@ -235,6 +253,12 @@
 {
     if (indexPath.section == 2)
     {
+        if (indexPath.row == 1)
+        {
+            [self.patient saveToCoreData];
+            return;
+        }
+        
         SelectEncounterTypeView *sETV = [[SelectEncounterTypeView alloc] initWithStyle:UITableViewStylePlain];
         [self presentViewController:[[UINavigationController alloc] initWithRootViewController:sETV] animated:YES completion:nil];
     }

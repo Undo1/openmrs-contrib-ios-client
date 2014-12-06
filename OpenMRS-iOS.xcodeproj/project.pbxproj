@@ -34,6 +34,8 @@
 		D397397C1A2E082300D0AB69 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D397397B1A2E082300D0AB69 /* Images.xcassets */; };
 		D397397F1A2E082300D0AB69 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D397397D1A2E082300D0AB69 /* LaunchScreen.xib */; };
 		D397398B1A2E082300D0AB69 /* OpenMRS_iOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D397398A1A2E082300D0AB69 /* OpenMRS_iOSTests.m */; };
+		D3A869511A32B3D400D1963F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3A869501A32B3D400D1963F /* CoreData.framework */; };
+		D3A869541A32B42A00D1963F /* openmrs-offline.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D3A869521A32B42A00D1963F /* openmrs-offline.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -99,6 +101,8 @@
 		D39739841A2E082300D0AB69 /* OpenMRS-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OpenMRS-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D39739891A2E082300D0AB69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D397398A1A2E082300D0AB69 /* OpenMRS_iOSTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenMRS_iOSTests.m; sourceTree = "<group>"; };
+		D3A869501A32B3D400D1963F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		D3A869531A32B42A00D1963F /* openmrs-offline.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "openmrs-offline.xcdatamodel"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +110,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3A869511A32B3D400D1963F /* CoreData.framework in Frameworks */,
 				65BE2B3E2C5F8BE1FB7090C2 /* libPods.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -123,6 +128,7 @@
 		7E3ED26108E7D20D7E5E58E4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D3A869501A32B3D400D1963F /* CoreData.framework */,
 				87CFC2F5FC6F1445E8327AF6 /* libPods.a */,
 			);
 			name = Frameworks;
@@ -151,6 +157,7 @@
 		D397396D1A2E082200D0AB69 /* OpenMRS-iOS */ = {
 			isa = PBXGroup;
 			children = (
+				D3A869521A32B42A00D1963F /* openmrs-offline.xcdatamodeld */,
 				D396A5121A2E09DE00DE6448 /* PatientViewController.h */,
 				D396A5131A2E09DE00DE6448 /* PatientViewController.m */,
 				D38DB4F91A3216A300E2CF23 /* SelectEncounterTypeView.h */,
@@ -174,10 +181,10 @@
 				D38DB4F61A320EF700E2CF23 /* MRSEncounterOb.h */,
 				D38DB4F71A320EF700E2CF23 /* MRSEncounterOb.m */,
 				D396A51A1A2E09DE00DE6448 /* KeychainItemWrapper.h */,
-				D396A51B1A2E09DE00DE6448 /* KeychainItemWrapper.m */,
 				D396A51C1A2E09DE00DE6448 /* MainMenuViewController.h */,
 				D396A51D1A2E09DE00DE6448 /* MainMenuViewController.m */,
 				D396A5421A2E0CEF00DE6448 /* SettingsViewController.h */,
+				D396A51B1A2E09DE00DE6448 /* KeychainItemWrapper.m */,
 				D396A5431A2E0CEF00DE6448 /* SettingsViewController.m */,
 				D396A51E1A2E09DE00DE6448 /* PatientSearchViewController.h */,
 				D396A51F1A2E09DE00DE6448 /* PatientSearchViewController.m */,
@@ -373,6 +380,7 @@
 			files = (
 				D396A5471A2E396300DE6448 /* MRSVisit.m in Sources */,
 				D396A52E1A2E09DE00DE6448 /* CredentialsLayer.m in Sources */,
+				D3A869541A32B42A00D1963F /* openmrs-offline.xcdatamodeld in Sources */,
 				D38DB4F51A316FAA00E2CF23 /* EncounterViewController.m in Sources */,
 				D38DB4FB1A3216A300E2CF23 /* SelectEncounterTypeView.m in Sources */,
 				D38DB4FE1A3216CF00E2CF23 /* MRSEncounterType.m in Sources */,
@@ -589,6 +597,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		D3A869521A32B42A00D1963F /* openmrs-offline.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				D3A869531A32B42A00D1963F /* openmrs-offline.xcdatamodel */,
+			);
+			currentVersion = D3A869531A32B42A00D1963F /* openmrs-offline.xcdatamodel */;
+			name = "openmrs-offline.xcdatamodeld";
+			path = "../openmrs-offline.xcdatamodeld";
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = D39739631A2E082200D0AB69 /* Project object */;
 }

@@ -195,6 +195,13 @@
     NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
     NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
     
+    if ([patient isInCoreData])
+    {
+        [patient updateFromCoreData];
+        patient.hasDetailedInfo = YES;
+        completion(nil, patient);
+    }
+    
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
     
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/patient/%@?v=full", host, patient.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {

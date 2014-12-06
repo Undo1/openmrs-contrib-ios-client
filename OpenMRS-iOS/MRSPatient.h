@@ -41,4 +41,9 @@
 @property (nonatomic, strong) NSString *middleName;
 
 @property (nonatomic) BOOL hasDetailedInfo;
+
+- (void)saveToCoreData;
+- (void)updateFromCoreData;
+- (BOOL)isInCoreData;
+
 @end
