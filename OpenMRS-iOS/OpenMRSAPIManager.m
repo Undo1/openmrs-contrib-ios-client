@@ -182,7 +182,40 @@
         completion(nil, array);
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        completion(error, nil);
+        if (error.code == -1009) //network down
+        {
+            AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+            
+            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+            [fetchRequest setEntity:[NSEntityDescription entityForName:@"Visit" inManagedObjectContext:appDelegate.managedObjectContext]];
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(patient == %@)", patient.UUID];
+            [fetchRequest setPredicate:predicate];
+            
+            NSError *error;
+            NSArray *results = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+            
+            if (error)
+            {
+                NSLog(@"error: %@", error);
+            }
+            
+            if (results.count > 0)
+            {
+                NSMutableArray *visits = [[NSMutableArray alloc] init];
+                for (NSManagedObject *object in results) {
+                    MRSVisit *visit = [[MRSVisit alloc] init];
+                    visit.UUID = [object valueForKey:@"uuid"];
+                    visit.displayName = [object valueForKey:@"displayName"];
+                    [visits addObject:visit];
+                }
+                completion(nil, visits);
+            }
+        }
+        else
+        {
+            completion(error, nil);
+        }
         NSLog(@"Failure, %@", error);
     }];
 }

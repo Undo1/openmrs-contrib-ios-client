@@ -8,6 +8,7 @@
 
 #import "MRSPatient.h"
 #import "OpenMRSAPIManager.h"
+#import "MRSVisit.h"
 #import <CoreData/CoreData.h>
 #import "AppDelegate.h"
 @implementation MRSPatient
@@ -65,6 +66,8 @@
     [OpenMRSAPIManager getEncountersForPatient:self completion:^(NSError *error, NSArray *encounters) {
         
         for (MRSEncounter *encounter in encounters) {
+            
+            
             NSManagedObject *cdencounter = [[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"Encounter" inManagedObjectContext:managedContext] insertIntoManagedObjectContext:managedContext];
             [cdencounter setValue:encounter.UUID forKey:@"uuid"];
             [cdencounter setValue:encounter.displayName forKey:@"displayName"];
@@ -76,6 +79,23 @@
         if (![managedContext save:&saveError])
         {
             NSLog(@"Error saving encounter! %@", saveError);
+        }
+    }];
+    
+    [OpenMRSAPIManager getVisitsForPatient:self completion:^(NSError *error, NSArray *visits) {
+        for (MRSVisit *visit in visits)
+        {
+            NSManagedObject *cdvisit = [[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"Visit" inManagedObjectContext:managedContext] insertIntoManagedObjectContext:managedContext];
+            [cdvisit setValue:visit.UUID forKey:@"uuid"];
+            [cdvisit setValue:visit.displayName forKey:@"displayName"];
+            [cdvisit setValue:self.UUID forKey:@"patient"];
+        }
+        
+        NSError *saveError;
+        
+        if (![managedContext save:&saveError])
+        {
+            NSLog(@"Error saving visit! %@", saveError);
         }
     }];
 }
