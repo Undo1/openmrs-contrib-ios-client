@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14B25" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Encounter" syncable="YES">
+        <attribute name="displayName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="patient" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="EncounterOb" syncable="YES">
+        <attribute name="display" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="encounter" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="encounterDisplay" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="Patient" syncable="YES">
         <attribute name="address1" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="address2" optional="YES" attributeType="String" syncable="YES"/>
@@ -34,5 +45,7 @@
     </entity>
     <elements>
         <element name="Patient" positionX="-63" positionY="-18" width="128" height="495"/>
+        <element name="Encounter" positionX="-54" positionY="144" width="128" height="90"/>
+        <element name="EncounterOb" positionX="-36" positionY="153" width="128" height="103"/>
     </elements>
 </model>

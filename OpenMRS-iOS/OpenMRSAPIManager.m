@@ -121,7 +121,40 @@
         completion(nil, array);
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        completion(error, nil);
+        if (error.code == -1009) //network down
+        {
+            AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+            
+            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+            [fetchRequest setEntity:[NSEntityDescription entityForName:@"Encounter" inManagedObjectContext:appDelegate.managedObjectContext]];
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(patient == %@)", patient.UUID];
+            [fetchRequest setPredicate:predicate];
+            
+            NSError *error;
+            NSArray *results = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+            
+            if (error)
+            {
+                NSLog(@"error: %@", error);
+            }
+            
+            if (results.count > 0)
+            {
+                NSMutableArray *encounters = [[NSMutableArray alloc] init];
+                for (NSManagedObject *object in results) {
+                    MRSEncounter *encounter = [[MRSEncounter alloc] init];
+                    encounter.UUID = [object valueForKey:@"uuid"];
+                    encounter.displayName = [object valueForKey:@"displayName"];
+                    [encounters addObject:encounter];
+                }
+                completion(nil, encounters);
+            }
+        }
+        else
+        {
+            completion(error, nil);
+        }
         NSLog(@"Failure, %@", error);
     }];
 }
@@ -192,8 +225,11 @@
             NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
             [fetchRequest setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:appDelegate.managedObjectContext]];
             
-            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(%K contains %@) OR (%K contains %@) OR (%K contains %@)", @"name", search, @"display", search, @"displayName", search];
-            [fetchRequest setPredicate:predicate];
+            if (search.length != 0)
+            {
+                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(name CONTAINS[cd] %@) OR (display CONTAINS[cd] %@) OR (display CONTAINS[cd] %@)", search, search, search];
+                [fetchRequest setPredicate:predicate];
+            }
             
             NSError *error;
             NSArray *results = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];

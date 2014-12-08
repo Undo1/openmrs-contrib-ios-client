@@ -115,4 +115,18 @@
 {
     return [[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject];
 }
+- (void)clearStore;
+{
+    if (self.persistentStoreCoordinator.persistentStores.count == 0)
+    {
+        return;
+    }
+    
+    NSPersistentStore *store = self.persistentStoreCoordinator.persistentStores[0];
+    NSError *error;
+    NSURL *storeURL = store.URL;
+    NSPersistentStoreCoordinator *storeCoordinator = self.persistentStoreCoordinator;
+    [storeCoordinator removePersistentStore:store error:&error];
+    [[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error];
+}
 @end

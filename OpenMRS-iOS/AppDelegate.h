@@ -16,6 +16,7 @@
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
+- (void)clearStore;
 
 @end
 

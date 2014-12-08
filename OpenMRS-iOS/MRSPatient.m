@@ -7,6 +7,7 @@
 //
 
 #import "MRSPatient.h"
+#import "OpenMRSAPIManager.h"
 #import <CoreData/CoreData.h>
 #import "AppDelegate.h"
 @implementation MRSPatient
@@ -57,6 +58,26 @@
     {
         NSLog(@"Error saving patient! %@", error);
     }
+    
+//   Save Encounters
+    NSLog(@"uuid: %@", self.UUID);
+    
+    [OpenMRSAPIManager getEncountersForPatient:self completion:^(NSError *error, NSArray *encounters) {
+        
+        for (MRSEncounter *encounter in encounters) {
+            NSManagedObject *cdencounter = [[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"Encounter" inManagedObjectContext:managedContext] insertIntoManagedObjectContext:managedContext];
+            [cdencounter setValue:encounter.UUID forKey:@"uuid"];
+            [cdencounter setValue:encounter.displayName forKey:@"displayName"];
+            [cdencounter setValue:self.UUID forKey:@"patient"];
+        }
+        
+        NSError *saveError;
+        
+        if (![managedContext save:&saveError])
+        {
+            NSLog(@"Error saving encounter! %@", saveError);
+        }
+    }];
 }
 - (void)updateFromCoreData
 {
@@ -78,7 +99,7 @@
     {
         NSLog(@"Error retrieving patient data from Core Data: %@", error);
     }
-    else if (results.count > 1)
+    else if (results.count >= 1)
     {
         NSManagedObject *result = results[0];
         
