@@ -9,6 +9,7 @@
 #import "MRSPatient.h"
 #import "OpenMRSAPIManager.h"
 #import "MRSVisit.h"
+#import "MRSEncounterOb.h"
 #import <CoreData/CoreData.h>
 #import "AppDelegate.h"
 @implementation MRSPatient
@@ -67,6 +68,19 @@
         
         for (MRSEncounter *encounter in encounters) {
             
+            [OpenMRSAPIManager getDetailedDataOnEncounter:encounter completion:^(NSError *fetchError, MRSEncounter *detailedEncounter) {
+                for (MRSEncounterOb *ob in detailedEncounter.obs) {
+                    NSManagedObject *cdencounterob = [[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"EncounterOb" inManagedObjectContext:managedContext] insertIntoManagedObjectContext:managedContext];
+                    [cdencounterob setValue:ob.display forKey:@"display"];
+                    [cdencounterob setValue:encounter.UUID forKey:@"encounter"];
+                }
+                NSError *saveError;
+                
+                if (![managedContext save:&saveError])
+                {
+                    NSLog(@"Error saving encounter! %@", saveError);
+                }
+            }];
             
             NSManagedObject *cdencounter = [[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"Encounter" inManagedObjectContext:managedContext] insertIntoManagedObjectContext:managedContext];
             [cdencounter setValue:encounter.UUID forKey:@"uuid"];

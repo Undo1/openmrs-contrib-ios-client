@@ -92,7 +92,42 @@
         completion(nil, encounter);
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        completion(error, nil);
+        if (error.code == -1009) //network down
+        {
+            AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+            
+            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+            [fetchRequest setEntity:[NSEntityDescription entityForName:@"EncounterOb" inManagedObjectContext:appDelegate.managedObjectContext]];
+            
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(encounter == %@)", encounter.UUID];
+            [fetchRequest setPredicate:predicate];
+            
+            NSError *error;
+            NSArray *results = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+            
+            if (error)
+            {
+                NSLog(@"error: %@", error);
+            }
+            
+            if (results.count > 0)
+            {
+                NSMutableArray *obs = [[NSMutableArray alloc] init];
+                for (NSManagedObject *object in results) {
+                    MRSEncounterOb *encounterOb = [[MRSEncounterOb alloc] init];
+                    encounterOb.UUID = [object valueForKey:@"uuid"];
+                    encounterOb.encounterDisplay = [object valueForKey:@"encounterDisplay"];
+                    encounterOb.display = [object valueForKey:@"display"];
+                    [obs addObject:encounterOb];
+                }
+                encounter.obs = obs;
+                completion(nil, encounter);
+            }
+        }
+        else
+        {
+            completion(error, nil);
+        }
         NSLog(@"Failure, %@", error);
     }];
 }
