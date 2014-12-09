@@ -46,7 +46,7 @@
             
             cell.textLabel.textColor = [UIColor redColor];
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
-            cell.textLabel.text = @"Clear Core Data";
+            cell.textLabel.text = @"Remove Offline Patients";
             
             return cell;
         }
