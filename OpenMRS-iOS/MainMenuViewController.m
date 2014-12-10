@@ -9,6 +9,7 @@
 #import "MainMenuViewController.h"
 #import "PatientSearchViewController.h"
 #import "SettingsViewController.h"
+#import "AddPatientTableViewController.h"
 @implementation MainMenuViewController
 -(void)viewDidLoad
 {
@@ -31,7 +32,7 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 1;
+    return 2;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -41,14 +42,32 @@
     {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
-    cell.textLabel.text = @"Patient Search";
+    switch (indexPath.row)
+    {
+        case 0:
+            cell.textLabel.text = @"Patient Search";
+            break;
+        case 1:
+            cell.textLabel.text = @"Register a Patient";
+            break;
+        default:
+            break;
+    }
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     return cell;
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    PatientSearchViewController *search = [[PatientSearchViewController alloc] initWithStyle:UITableViewStylePlain];
-    
-    [self.navigationController pushViewController:search animated:YES];
+    if (indexPath.row == 0)
+    {
+        PatientSearchViewController *search = [[PatientSearchViewController alloc] initWithStyle:UITableViewStylePlain];
+        
+        [self.navigationController pushViewController:search animated:YES];
+    }
+    else if (indexPath.row == 1)
+    {
+        AddPatientTableViewController *add = [[AddPatientTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        [self presentViewController:[[UINavigationController alloc] initWithRootViewController:add] animated:YES completion:nil];
+    }
 }
 @end

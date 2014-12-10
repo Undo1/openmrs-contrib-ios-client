@@ -15,5 +15,6 @@
 + (void)verifyCredentialsWithUsername:(NSString *)username password:(NSString *)password host:(NSString *)host completion:(void (^)(BOOL success))completion;
 + (void)getVisitsForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *visits))completion;
 + (void)getEncountersForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *encounters))completion;
++ (void)addPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, MRSPatient *createdPatient))completion;
 + (void)logout;
 @end
