@@ -14,6 +14,7 @@
 #import "MRSEncounter.h"
 #import "SignInViewController.h"
 #import "AppDelegate.h"
+#import "MRSPatientIdentifierType.h"
 #import "KeychainItemWrapper.h"
 
 @implementation OpenMRSAPIManager
@@ -30,7 +31,7 @@
         completion(NO);
     }];
 }
-+ (void)addPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, MRSPatient *createdPatient))completion
++ (void)addPatient:(MRSPatient *)patient withIdentifier:(MRSPatientIdentifier *)identifier completion:(void (^)(NSError *error, MRSPatient *createdPatient))completion;
 {
     MRSPerson *person = [[MRSPerson alloc] init];
     person.familyName = patient.familyName;
@@ -53,7 +54,7 @@
             
             [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
             
-            [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/patient", host] parameters:@{@"person" : createdPerson.UUID, @"identifiers" : @[@{@"identifier" : @"100UCC", @"identifierType" : @"8d793bee-c2cc-11de-8d13-0010c6dffd0f"}]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/patient", host] parameters:@{@"person" : createdPerson.UUID, @"identifiers" : @[@{@"identifier" : identifier.identifier, @"identifierType" : identifier.identifierType.UUID}]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 
                 NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
                 
@@ -118,6 +119,35 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Failure adding patient: %@", [[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
         completion(error, nil);
+    }];
+}
++ (void)getPatientIdentifierTypesWithCompletion:(void (^)(NSError *error, NSArray *types))completion
+{
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/patientidentifiertype", host] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
+        
+        NSMutableArray *types = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary *typeDict in results[@"results"]) {
+            MRSPatientIdentifierType *type = [[MRSPatientIdentifierType alloc] init];
+            type.UUID = typeDict[@"uuid"];
+            type.display = typeDict[@"display"];
+            [types addObject:type];
+        }
+        
+        completion(nil, types);
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(error, nil);
+        NSLog(@"Failure, %@", error);
     }];
 }
 + (void)getEncountersForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *encounters))completion

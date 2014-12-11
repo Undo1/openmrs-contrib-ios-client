@@ -7,9 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface AddPatientTableViewController : UITableViewController <UITextFieldDelegate>
+#import "SelectPatientIdentifierTypeTableViewController.h"
+@interface AddPatientTableViewController : UITableViewController <UITextFieldDelegate, SelectPatientIdentifierTypeTableViewControllerDelegate>
 @property (nonatomic, strong) NSString *selectedGender;
 @property (nonatomic, strong) NSString *selectedGivenName;
 @property (nonatomic, strong) NSString *selectedFamilyName;
+@property (nonatomic, strong) NSString *selectedIdentifier;
+@property (nonatomic, strong) MRSPatientIdentifierType *selectedIdentifierType;
 @end

@@ -8,7 +8,9 @@
 
 #import "AddPatientTableViewController.h"
 #import "OpenMRSAPIManager.h"
+#import "MRSPatientIdentifierType.h"
 #import "PatientViewController.h"
+#import "SelectPatientIdentifierTypeTableViewController.h"
 @interface AddPatientTableViewController ()
 
 @end
@@ -34,15 +36,12 @@
     patient.age = @98;
     patient.gender = self.selectedGender;
     
-    [OpenMRSAPIManager addPatient:patient completion:^(NSError *error, MRSPatient *createdPatient) {
-        if (error != nil)
-        {
-            
-        }
-        else
-        {
-            
-        }
+    MRSPatientIdentifier *identifier = [[MRSPatientIdentifier alloc] init];
+    identifier.identifier = self.selectedIdentifier;
+    identifier.identifierType = self.selectedIdentifierType;
+    
+    [OpenMRSAPIManager addPatient:patient withIdentifier:identifier completion:^(NSError *error, MRSPatient *createdPatient) {
+        NSLog(@"add patient request finished");
     }];
 }
 - (void)cancel
@@ -57,7 +56,7 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -66,6 +65,9 @@
             return 2;
             break;
         case 1:
+            return 2;
+            break;
+        case 2:
             return 2;
             break;
         default:
@@ -135,6 +137,53 @@
         
         return cell;
     }
+    if (indexPath.section == 2)
+    {
+        if (indexPath.row == 0)
+        {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"idTypeCell"];
+            if (!cell)
+            {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"idTypeCell"];
+            }
+            
+            cell.textLabel.text = @"ID Type";
+            
+            if (self.selectedIdentifierType)
+            {
+                cell.detailTextLabel.text = self.selectedIdentifierType.display;
+            }
+            else
+            {
+                cell.detailTextLabel.text = @"Select";
+            }
+            
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            
+            return cell;
+        }
+        if (indexPath.row == 1)
+        {
+            UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"identifierCell"];
+            
+            cell.textLabel.text = @"Identifier ";
+            
+            UITextField *field = [[UITextField alloc] initWithFrame:CGRectMake(cell.bounds.size.width-150, 0, 130, cell.bounds.size.height)];
+            field.backgroundColor = [UIColor clearColor];
+            field.textColor = self.view.tintColor;
+            field.textAlignment = NSTextAlignmentRight;
+            field.returnKeyType = UIReturnKeyDone;
+            [field addTarget:self action:@selector(textFieldDidUpdate:) forControlEvents:UIControlEventEditingChanged];
+            
+            field.placeholder = @"Identifier";
+            field.text = self.selectedIdentifier;
+            field.tag = 3;
+            
+            [cell addSubview:field];
+            
+            return cell;
+        }
+    }
     return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
 }
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
@@ -145,6 +194,9 @@
             break;
         case 1:
             return @"Gender";
+            break;
+        case 2:
+            return @"Identifier";
             break;
         default:
             return nil;
@@ -165,6 +217,12 @@
         }
         [self.tableView reloadData];
     }
+    if (indexPath.section == 2 && indexPath.row == 0)
+    {
+        SelectPatientIdentifierTypeTableViewController *selectIdType = [[SelectPatientIdentifierTypeTableViewController alloc] initWithStyle:UITableViewStylePlain];
+        selectIdType.delegate = self;
+        [self.navigationController pushViewController:selectIdType animated:YES];
+    }
 }
 - (void)textFieldDidUpdate:(UITextField *)sender
 {
@@ -175,6 +233,15 @@
         case 2:
             self.selectedFamilyName = sender.text;
             break;
+        case 3:
+            self.selectedIdentifier = sender.text;
+            break;
     }
+}
+- (void)didSelectPatientIdentifierType:(MRSPatientIdentifierType *)type
+{
+    self.selectedIdentifierType = type;
+    [self.navigationController popToViewController:self animated:YES];
+    [self.tableView reloadData];
 }
 @end

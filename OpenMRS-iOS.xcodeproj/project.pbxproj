@@ -32,6 +32,9 @@
 		D397398B1A2E082300D0AB69 /* OpenMRS_iOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D397398A1A2E082300D0AB69 /* OpenMRS_iOSTests.m */; };
 		D3A4728B1A3770B4002A0BBD /* AddPatientTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3A4728A1A3770B4002A0BBD /* AddPatientTableViewController.m */; };
 		D3A4728E1A37794D002A0BBD /* MRSPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = D3A4728D1A37794D002A0BBD /* MRSPerson.m */; };
+		D3E47BA31A3A00C0004B3F95 /* MRSPatientIdentifierType.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E47BA21A3A00C0004B3F95 /* MRSPatientIdentifierType.m */; };
+		D3E47BA61A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E47BA51A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m */; };
+		D3E47BA91A3A08EF004B3F95 /* MRSPatientIdentifier.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E47BA81A3A08EF004B3F95 /* MRSPatientIdentifier.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -93,6 +96,12 @@
 		D3A4728A1A3770B4002A0BBD /* AddPatientTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddPatientTableViewController.m; sourceTree = "<group>"; };
 		D3A4728C1A37794D002A0BBD /* MRSPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSPerson.h; sourceTree = "<group>"; };
 		D3A4728D1A37794D002A0BBD /* MRSPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSPerson.m; sourceTree = "<group>"; };
+		D3E47BA11A3A00C0004B3F95 /* MRSPatientIdentifierType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSPatientIdentifierType.h; sourceTree = "<group>"; };
+		D3E47BA21A3A00C0004B3F95 /* MRSPatientIdentifierType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSPatientIdentifierType.m; sourceTree = "<group>"; };
+		D3E47BA41A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectPatientIdentifierTypeTableViewController.h; sourceTree = "<group>"; };
+		D3E47BA51A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectPatientIdentifierTypeTableViewController.m; sourceTree = "<group>"; };
+		D3E47BA71A3A08EF004B3F95 /* MRSPatientIdentifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSPatientIdentifier.h; sourceTree = "<group>"; };
+		D3E47BA81A3A08EF004B3F95 /* MRSPatientIdentifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSPatientIdentifier.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +166,8 @@
 				D396A5171A2E09DE00DE6448 /* SignInViewController.m */,
 				D396A5181A2E09DE00DE6448 /* OpenMRSAPIManager.h */,
 				D396A5191A2E09DE00DE6448 /* OpenMRSAPIManager.m */,
+				D3E47BA11A3A00C0004B3F95 /* MRSPatientIdentifierType.h */,
+				D3E47BA21A3A00C0004B3F95 /* MRSPatientIdentifierType.m */,
 				D3A4728C1A37794D002A0BBD /* MRSPerson.h */,
 				D3A4728D1A37794D002A0BBD /* MRSPerson.m */,
 				D396A5481A2E3CBC00DE6448 /* MRSEncounter.h */,
@@ -165,8 +176,12 @@
 				D396A51B1A2E09DE00DE6448 /* KeychainItemWrapper.m */,
 				D396A51C1A2E09DE00DE6448 /* MainMenuViewController.h */,
 				D396A51D1A2E09DE00DE6448 /* MainMenuViewController.m */,
+				D3E47BA71A3A08EF004B3F95 /* MRSPatientIdentifier.h */,
+				D3E47BA81A3A08EF004B3F95 /* MRSPatientIdentifier.m */,
 				D3A472891A3770B4002A0BBD /* AddPatientTableViewController.h */,
 				D3A4728A1A3770B4002A0BBD /* AddPatientTableViewController.m */,
+				D3E47BA41A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.h */,
+				D3E47BA51A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m */,
 				D396A5421A2E0CEF00DE6448 /* SettingsViewController.h */,
 				D396A5431A2E0CEF00DE6448 /* SettingsViewController.m */,
 				D396A51E1A2E09DE00DE6448 /* PatientSearchViewController.h */,
@@ -367,17 +382,20 @@
 				D396A52D1A2E09DE00DE6448 /* MRSPatient.m in Sources */,
 				D396A5281A2E09DE00DE6448 /* SignInViewController.m in Sources */,
 				D396A5441A2E0CEF00DE6448 /* SettingsViewController.m in Sources */,
+				D3E47BA91A3A08EF004B3F95 /* MRSPatientIdentifier.m in Sources */,
 				D396A5261A2E09DE00DE6448 /* PatientViewController.m in Sources */,
 				D396A52C1A2E09DE00DE6448 /* PatientSearchViewController.m in Sources */,
 				D396A54D1A2E3E5600DE6448 /* PatientEncounterListView.m in Sources */,
 				D396A52F1A2E09DE00DE6448 /* ViewController.m in Sources */,
 				D396A52A1A2E09DE00DE6448 /* KeychainItemWrapper.m in Sources */,
 				D3A4728E1A37794D002A0BBD /* MRSPerson.m in Sources */,
+				D3E47BA61A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m in Sources */,
 				D396A5291A2E09DE00DE6448 /* OpenMRSAPIManager.m in Sources */,
 				D39739711A2E082300D0AB69 /* main.m in Sources */,
 				D396A5501A2E3F7600DE6448 /* PatientVisitListView.m in Sources */,
 				D396A5271A2E09DE00DE6448 /* AppDelegate.m in Sources */,
 				D396A54A1A2E3CBC00DE6448 /* MRSEncounter.m in Sources */,
+				D3E47BA31A3A00C0004B3F95 /* MRSPatientIdentifierType.m in Sources */,
 				D396A52B1A2E09DE00DE6448 /* MainMenuViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
