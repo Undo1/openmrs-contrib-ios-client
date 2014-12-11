@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "SelectPatientIdentifierTypeTableViewController.h"
+@class MRSPatient;
+@protocol AddPatientTableViewControllerDelegate <NSObject>
+- (void)didAddPatient:(MRSPatient *)patient;
+@end
+
 @interface AddPatientTableViewController : UITableViewController <UITextFieldDelegate, SelectPatientIdentifierTypeTableViewControllerDelegate>
 @property (nonatomic, strong) NSString *selectedGender;
 @property (nonatomic, strong) NSString *selectedGivenName;

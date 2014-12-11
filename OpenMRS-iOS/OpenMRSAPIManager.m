@@ -84,7 +84,6 @@
                 patient.UUID = results[@"uuid"];
                 patient.name = results[@"display"];
                 patient.age = [results[@"person"][@"age"] stringValue];
-                patient.hasDetailedInfo = YES;
                 
                 completion(nil, patient);
                 

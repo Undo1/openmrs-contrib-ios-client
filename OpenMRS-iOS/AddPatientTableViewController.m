@@ -8,6 +8,7 @@
 
 #import "AddPatientTableViewController.h"
 #import "OpenMRSAPIManager.h"
+#import "AppDelegate.h"
 #import "MRSPatientIdentifierType.h"
 #import "PatientViewController.h"
 #import "SelectPatientIdentifierTypeTableViewController.h"
@@ -41,7 +42,16 @@
     identifier.identifierType = self.selectedIdentifierType;
     
     [OpenMRSAPIManager addPatient:patient withIdentifier:identifier completion:^(NSError *error, MRSPatient *createdPatient) {
-        NSLog(@"add patient request finished");
+        if (!error)
+        {
+            PatientViewController *patientVc = [[PatientViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            patientVc.patient = createdPatient;
+            
+            [self dismissViewControllerAnimated:YES completion:^{
+                AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+                [(UINavigationController *)delegate.window.rootViewController pushViewController:patientVc animated:YES];
+            }];
+        }
     }];
 }
 - (void)cancel
