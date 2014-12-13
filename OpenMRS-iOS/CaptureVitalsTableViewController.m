@@ -35,6 +35,7 @@
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
+    self.navigationItem.rightBarButtonItem.enabled = NO;
 }
 
 - (void)cancel
@@ -162,6 +163,7 @@
 -(void)didChooseLocation:(MRSLocation *)location
 {
     self.currentLocation = location;
+    self.navigationItem.rightBarButtonItem.enabled = YES;
     [self.navigationController popToViewController:self animated:YES];
     [self.tableView reloadData];
 }
