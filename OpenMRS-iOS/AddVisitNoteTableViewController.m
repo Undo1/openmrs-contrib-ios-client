@@ -85,8 +85,9 @@
     
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     
-    UITextView *textView = [[UITextView alloc] initWithFrame:cell.bounds];
+    UITextView *textView = [[UITextView alloc] initWithFrame:CGRectMake(10, 10, cell.bounds.size.width-20, cell.bounds.size.height-20)];
     textView.delegate = self;
+    textView.font = [UIFont fontWithName:textView.font.fontName size:cell.textLabel.font.pointSize];
     textView.text = self.currentVisitNote;
     textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
     
