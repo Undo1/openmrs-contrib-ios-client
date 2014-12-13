@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		65BE2B3E2C5F8BE1FB7090C2 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87CFC2F5FC6F1445E8327AF6 /* libPods.a */; };
+		D34BF5391A3BA7BE009205C9 /* AddVisitNoteTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D34BF5381A3BA7BE009205C9 /* AddVisitNoteTableViewController.m */; };
+		D37674271A3BB114003A8005 /* MRSLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = D37674261A3BB114003A8005 /* MRSLocation.m */; };
+		D376742A1A3BB254003A8005 /* LocationListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D37674291A3BB254003A8005 /* LocationListTableViewController.m */; };
 		D396A5261A2E09DE00DE6448 /* PatientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5131A2E09DE00DE6448 /* PatientViewController.m */; };
 		D396A5271A2E09DE00DE6448 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5151A2E09DE00DE6448 /* AppDelegate.m */; };
 		D396A5281A2E09DE00DE6448 /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5171A2E09DE00DE6448 /* SignInViewController.m */; };
@@ -46,6 +49,12 @@
 		87CFC2F5FC6F1445E8327AF6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFA25E06F401CA7D732F7C67 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		D21FB0B4A47906E6EF7F24EA /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		D34BF5371A3BA7BE009205C9 /* AddVisitNoteTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddVisitNoteTableViewController.h; sourceTree = "<group>"; };
+		D34BF5381A3BA7BE009205C9 /* AddVisitNoteTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddVisitNoteTableViewController.m; sourceTree = "<group>"; };
+		D37674251A3BB114003A8005 /* MRSLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSLocation.h; sourceTree = "<group>"; };
+		D37674261A3BB114003A8005 /* MRSLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSLocation.m; sourceTree = "<group>"; };
+		D37674281A3BB254003A8005 /* LocationListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationListTableViewController.h; sourceTree = "<group>"; };
+		D37674291A3BB254003A8005 /* LocationListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationListTableViewController.m; sourceTree = "<group>"; };
 		D396A5121A2E09DE00DE6448 /* PatientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PatientViewController.h; sourceTree = "<group>"; };
 		D396A5131A2E09DE00DE6448 /* PatientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PatientViewController.m; sourceTree = "<group>"; };
 		D396A5141A2E09DE00DE6448 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -151,6 +160,12 @@
 				D396A5171A2E09DE00DE6448 /* SignInViewController.m */,
 				D396A5181A2E09DE00DE6448 /* OpenMRSAPIManager.h */,
 				D396A5191A2E09DE00DE6448 /* OpenMRSAPIManager.m */,
+				D37674281A3BB254003A8005 /* LocationListTableViewController.h */,
+				D37674291A3BB254003A8005 /* LocationListTableViewController.m */,
+				D37674251A3BB114003A8005 /* MRSLocation.h */,
+				D37674261A3BB114003A8005 /* MRSLocation.m */,
+				D34BF5371A3BA7BE009205C9 /* AddVisitNoteTableViewController.h */,
+				D34BF5381A3BA7BE009205C9 /* AddVisitNoteTableViewController.m */,
 				D396A5481A2E3CBC00DE6448 /* MRSEncounter.h */,
 				D396A5491A2E3CBC00DE6448 /* MRSEncounter.m */,
 				D396A51A1A2E09DE00DE6448 /* KeychainItemWrapper.h */,
@@ -360,12 +375,15 @@
 				D396A52C1A2E09DE00DE6448 /* PatientSearchViewController.m in Sources */,
 				D396A54D1A2E3E5600DE6448 /* PatientEncounterListView.m in Sources */,
 				D396A52F1A2E09DE00DE6448 /* ViewController.m in Sources */,
+				D37674271A3BB114003A8005 /* MRSLocation.m in Sources */,
+				D34BF5391A3BA7BE009205C9 /* AddVisitNoteTableViewController.m in Sources */,
 				D396A52A1A2E09DE00DE6448 /* KeychainItemWrapper.m in Sources */,
 				D396A5291A2E09DE00DE6448 /* OpenMRSAPIManager.m in Sources */,
 				D39739711A2E082300D0AB69 /* main.m in Sources */,
 				D396A5501A2E3F7600DE6448 /* PatientVisitListView.m in Sources */,
 				D396A5271A2E09DE00DE6448 /* AppDelegate.m in Sources */,
 				D396A54A1A2E3CBC00DE6448 /* MRSEncounter.m in Sources */,
+				D376742A1A3BB254003A8005 /* LocationListTableViewController.m in Sources */,
 				D396A52B1A2E09DE00DE6448 /* MainMenuViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

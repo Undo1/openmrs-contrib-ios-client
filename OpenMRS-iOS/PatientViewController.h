@@ -8,7 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "MRSPatient.h"
-@interface PatientViewController : UITableViewController
+#import "AddVisitNoteTableViewController.h"
+@interface PatientViewController : UITableViewController <AddVisitNoteTableViewControllerDelegate>
 @property (nonatomic, strong) MRSPatient *patient;
 @property (nonatomic, strong) NSArray *information;
 @property (nonatomic, strong) NSArray *visits;

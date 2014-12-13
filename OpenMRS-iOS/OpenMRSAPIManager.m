@@ -10,6 +10,7 @@
 #import "CredentialsLayer.h"
 #import "MRSPatient.h"
 #import "MRSVisit.h"
+#import "MRSLocation.h"
 #import "MRSEncounter.h"
 #import "SignInViewController.h"
 #import "AppDelegate.h"
@@ -28,6 +29,47 @@
 //        NSLog(@"Error: %@", error);
         completion(NO);
     }];
+}
++ (void)addVisitNote:(NSString *)note toPatient:(MRSPatient *)patient atLocation:(MRSLocation *)location completion:(void (^)(NSError *error))completion;
+{
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+
+    NSDictionary *parameters = @{@"patient" : patient.UUID,
+                                 @"encounterDatetime" : [self openMRSFormatStringWithDate:[NSDate date]],
+                                 @"encounterType" : @"d7151f82-c1f3-4152-a605-2f9ea7414a79",
+                                 @"obs" : @[ @{
+                                             @"person" : patient.UUID,
+                                             @"obsDatetime" : [self openMRSFormatStringWithDate:[NSDate date]],
+                                             @"concept" : @"162169AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+                                             @"value" : note
+                                         }],
+                                 @"location" : location.UUID};
+
+    NSLog(@"parameters: %@", parameters);
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/encounter", host] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"success");
+        completion(nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"failure, %@", error);
+        completion(error);
+    }];
+}
++ (NSString *)openMRSFormatStringWithDate:(NSDate *)date
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-d'T'HH:mm:ss.SSSZ"];
+
+    NSString *stringFromDate = [formatter stringFromDate:date];
+    NSLog(@"stringFromDate: %@", stringFromDate);
+
+    return stringFromDate;
 }
 + (void)getEncountersForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *encounters))completion
 {
@@ -84,6 +126,36 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         completion(error, nil);
         NSLog(@"Failure, %@", error);
+    }];
+}
++ (void)getLocationsWithCompletion:(void (^)(NSError *error, NSArray *locations))completion
+{
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/location", host] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
+        
+        NSMutableArray *locations = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary *locDict in results[@"results"]) {
+            MRSLocation *location = [[MRSLocation alloc] init];
+            location.UUID = locDict[@"uuid"];
+            location.display = locDict[@"display"];
+            [locations addObject:location];
+        }
+        
+        completion(nil, locations);
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(error, nil);
     }];
 }
 + (void)getPatientListWithSearch:(NSString *)search completion:(void (^)(NSError *error, NSArray *patients))completion
