@@ -8,6 +8,7 @@
 
 #import "PatientEncounterListView.h"
 #import "MRSEncounter.h"
+#import "EncounterViewController.h"
 
 @implementation PatientEncounterListView
 -(void)setEncounters:(NSArray *)encounters
@@ -41,6 +42,16 @@
     cell.textLabel.text = encounter.displayName;
     cell.textLabel.numberOfLines = 0;
     
+    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    
     return cell;
+}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    MRSEncounter *encounter = self.encounters[indexPath.row];
+    
+    EncounterViewController *vc = [[EncounterViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    vc.encounter = encounter;
+    [self.navigationController pushViewController:vc animated:YES];
 }
 @end

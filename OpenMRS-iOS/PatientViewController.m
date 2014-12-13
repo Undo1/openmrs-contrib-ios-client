@@ -11,6 +11,8 @@
 #import "PatientEncounterListView.h"
 #import "PatientVisitListView.h"
 #import "AddVisitNoteTableViewController.h"
+#import "SelectEncounterTypeView.h"
+
 @implementation PatientViewController
 -(void)setPatient:(MRSPatient *)patient
 {
@@ -157,7 +159,11 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0)
+    if (section == 2)
+    {
+        return 2;
+    }
+    else if (section == 0)
     {
         return self.information.count;
     }
@@ -174,18 +180,33 @@
 {
     if (indexPath.section == 2)
     {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"addVisitNoteCell"];
-        
-        if (!cell)
+        if (indexPath.row == 0)
         {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"addVisitNoteCell"];
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"addVisitNoteCell"];
+            
+            if (!cell)
+            {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"addVisitNoteCell"];
+            }
+            
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.textLabel.textColor = self.view.tintColor;
+            cell.textLabel.text = @"Add Visit Note";
+            
+            return cell;
+        }
+        UITableViewCell *actionCell = [tableView dequeueReusableCellWithIdentifier:@"actionCell"];
+        
+        if (!actionCell)
+        {
+            actionCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"actionCell"];
         }
         
-        cell.textLabel.textAlignment = NSTextAlignmentCenter;
-        cell.textLabel.textColor = self.view.tintColor;
-        cell.textLabel.text = @"Add Visit Note";
+        actionCell.textLabel.text = @"Add notes/vitals...";
+        actionCell.textLabel.textAlignment = NSTextAlignmentCenter;
+        actionCell.textLabel.textColor = self.view.tintColor;
         
-        return cell;
+        return actionCell;
     }
     if (indexPath.section == 1)
     {
@@ -235,13 +256,21 @@
 {
     if (indexPath.section == 2)
     {
-        AddVisitNoteTableViewController *addVisitNote = [[AddVisitNoteTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        addVisitNote.delegate = self;
-        addVisitNote.patient = self.patient;
-        addVisitNote.delegate = self;
-        [self presentViewController:[[UINavigationController alloc] initWithRootViewController:addVisitNote] animated:YES completion:nil];
+        if (indexPath.row == 0)
+        {
+            AddVisitNoteTableViewController *addVisitNote = [[AddVisitNoteTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            addVisitNote.delegate = self;
+            addVisitNote.patient = self.patient;
+            addVisitNote.delegate = self;
+            [self presentViewController:[[UINavigationController alloc] initWithRootViewController:addVisitNote] animated:YES completion:nil];
+        }
+        else if (indexPath.row == 1)
+        {
+            SelectEncounterTypeView *sETV = [[SelectEncounterTypeView alloc] initWithStyle:UITableViewStylePlain];
+            [self presentViewController:[[UINavigationController alloc] initWithRootViewController:sETV] animated:YES completion:nil];
+        }
     }
-    if (indexPath.section == 1)
+    else if (indexPath.section == 1)
     {
         if (indexPath.row == 1) //encounters row selected
         {
