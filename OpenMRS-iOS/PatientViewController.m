@@ -161,7 +161,7 @@
 {
     if (section == 2)
     {
-        return 2;
+        return 1;
     }
     else if (section == 0)
     {
