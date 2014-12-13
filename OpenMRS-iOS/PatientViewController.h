@@ -9,7 +9,9 @@
 #import <UIKit/UIKit.h>
 #import "MRSPatient.h"
 #import "AddVisitNoteTableViewController.h"
-@interface PatientViewController : UITableViewController <AddVisitNoteTableViewControllerDelegate>
+#import "CaptureVitalsTableViewController.h"
+
+@interface PatientViewController : UITableViewController <AddVisitNoteTableViewControllerDelegate, CaptureVitalsTableViewControllerDelegate>
 @property (nonatomic, strong) MRSPatient *patient;
 @property (nonatomic, strong) NSArray *information;
 @property (nonatomic, strong) NSArray *visits;

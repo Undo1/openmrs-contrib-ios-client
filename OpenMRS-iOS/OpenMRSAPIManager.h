@@ -19,6 +19,7 @@
 + (void)getEncounterTypesWithCompletion:(void (^)(NSError *, NSArray *))completion;
 + (void)getEncountersForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *encounters))completion;
 + (void)addVisitNote:(NSString *)note toPatient:(MRSPatient *)patient atLocation:(MRSLocation *)location completion:(void (^)(NSError *error))completion;
++ (void)captureVitals:(NSArray *)vitals toPatient:(MRSPatient *)patient atLocation:(MRSLocation *)location completion:(void (^)(NSError *error))completion;
 + (void)getLocationsWithCompletion:(void (^)(NSError *error, NSArray *locations))completion;
 + (void)logout;
 @end

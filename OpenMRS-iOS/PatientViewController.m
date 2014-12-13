@@ -11,7 +11,7 @@
 #import "PatientEncounterListView.h"
 #import "PatientVisitListView.h"
 #import "AddVisitNoteTableViewController.h"
-#import "SelectEncounterTypeView.h"
+#import "CaptureVitalsTableViewController.h"
 
 @implementation PatientViewController
 -(void)setPatient:(MRSPatient *)patient
@@ -161,7 +161,7 @@
 {
     if (section == 2)
     {
-        return 1;
+        return 2;
     }
     else if (section == 0)
     {
@@ -191,7 +191,7 @@
             
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             cell.textLabel.textColor = self.view.tintColor;
-            cell.textLabel.text = @"Add Visit Note";
+            cell.textLabel.text = @"Add Visit Note...";
             
             return cell;
         }
@@ -202,7 +202,7 @@
             actionCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"actionCell"];
         }
         
-        actionCell.textLabel.text = @"Add notes/vitals...";
+        actionCell.textLabel.text = @"Capture Vitals...";
         actionCell.textLabel.textAlignment = NSTextAlignmentCenter;
         actionCell.textLabel.textColor = self.view.tintColor;
         
@@ -266,8 +266,10 @@
         }
         else if (indexPath.row == 1)
         {
-            SelectEncounterTypeView *sETV = [[SelectEncounterTypeView alloc] initWithStyle:UITableViewStylePlain];
-            [self presentViewController:[[UINavigationController alloc] initWithRootViewController:sETV] animated:YES completion:nil];
+            CaptureVitalsTableViewController *vitals = [[CaptureVitalsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            vitals.patient = self.patient;
+            vitals.delegate = self;
+            [self presentViewController:[[UINavigationController alloc] initWithRootViewController:vitals] animated:YES completion:nil];
         }
     }
     else if (indexPath.section == 1)
@@ -292,5 +294,13 @@
     {
         [self updateWithDetailedInfo];
     }
+}
+- (void)didCaptureVitalsForPatient:(MRSPatient *)patient
+{
+    if ([patient.UUID isEqualToString:self.patient.UUID])
+    {
+        [self updateWithDetailedInfo];
+    }
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 @end

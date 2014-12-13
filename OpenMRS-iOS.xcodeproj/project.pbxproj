@@ -37,6 +37,8 @@
 		D397397C1A2E082300D0AB69 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D397397B1A2E082300D0AB69 /* Images.xcassets */; };
 		D397397F1A2E082300D0AB69 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D397397D1A2E082300D0AB69 /* LaunchScreen.xib */; };
 		D397398B1A2E082300D0AB69 /* OpenMRS_iOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D397398A1A2E082300D0AB69 /* OpenMRS_iOSTests.m */; };
+		D39AD7AB1A3BFE8600C01540 /* CaptureVitalsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D39AD7AA1A3BFE8600C01540 /* CaptureVitalsTableViewController.m */; };
+		D39AD7AE1A3C081000C01540 /* MRSVital.m in Sources */ = {isa = PBXBuildFile; fileRef = D39AD7AD1A3C081000C01540 /* MRSVital.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,6 +110,10 @@
 		D39739841A2E082300D0AB69 /* OpenMRS-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OpenMRS-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D39739891A2E082300D0AB69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D397398A1A2E082300D0AB69 /* OpenMRS_iOSTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenMRS_iOSTests.m; sourceTree = "<group>"; };
+		D39AD7A91A3BFE8600C01540 /* CaptureVitalsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureVitalsTableViewController.h; sourceTree = "<group>"; };
+		D39AD7AA1A3BFE8600C01540 /* CaptureVitalsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaptureVitalsTableViewController.m; sourceTree = "<group>"; };
+		D39AD7AC1A3C081000C01540 /* MRSVital.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSVital.h; sourceTree = "<group>"; };
+		D39AD7AD1A3C081000C01540 /* MRSVital.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSVital.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -176,12 +182,16 @@
 				D396A5171A2E09DE00DE6448 /* SignInViewController.m */,
 				D396A5181A2E09DE00DE6448 /* OpenMRSAPIManager.h */,
 				D396A5191A2E09DE00DE6448 /* OpenMRSAPIManager.m */,
+				D39AD7AC1A3C081000C01540 /* MRSVital.h */,
+				D39AD7AD1A3C081000C01540 /* MRSVital.m */,
 				D37674281A3BB254003A8005 /* LocationListTableViewController.h */,
 				D37674291A3BB254003A8005 /* LocationListTableViewController.m */,
 				D37674251A3BB114003A8005 /* MRSLocation.h */,
 				D37674261A3BB114003A8005 /* MRSLocation.m */,
 				D34BF5371A3BA7BE009205C9 /* AddVisitNoteTableViewController.h */,
 				D34BF5381A3BA7BE009205C9 /* AddVisitNoteTableViewController.m */,
+				D39AD7A91A3BFE8600C01540 /* CaptureVitalsTableViewController.h */,
+				D39AD7AA1A3BFE8600C01540 /* CaptureVitalsTableViewController.m */,
 				D38DB4F31A316FAA00E2CF23 /* EncounterViewController.h */,
 				D38DB4F41A316FAA00E2CF23 /* EncounterViewController.m */,
 				D396A5481A2E3CBC00DE6448 /* MRSEncounter.h */,
@@ -392,7 +402,9 @@
 				D38DB4FB1A3216A300E2CF23 /* SelectEncounterTypeView.m in Sources */,
 				D38DB4FE1A3216CF00E2CF23 /* MRSEncounterType.m in Sources */,
 				D38DB4F81A320EF700E2CF23 /* MRSEncounterOb.m in Sources */,
+				D39AD7AE1A3C081000C01540 /* MRSVital.m in Sources */,
 				D396A52D1A2E09DE00DE6448 /* MRSPatient.m in Sources */,
+				D39AD7AB1A3BFE8600C01540 /* CaptureVitalsTableViewController.m in Sources */,
 				D396A5281A2E09DE00DE6448 /* SignInViewController.m in Sources */,
 				D396A5441A2E0CEF00DE6448 /* SettingsViewController.m in Sources */,
 				D396A5261A2E09DE00DE6448 /* PatientViewController.m in Sources */,

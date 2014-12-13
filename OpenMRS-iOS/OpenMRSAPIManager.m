@@ -10,6 +10,7 @@
 #import "CredentialsLayer.h"
 #import "MRSPatient.h"
 #import "MRSVisit.h"
+#import "MRSVital.h"
 #import "MRSLocation.h"
 #import "MRSEncounterOb.h"
 #import "MRSEncounter.h"
@@ -191,6 +192,42 @@
         
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         completion(error, nil);
+        NSLog(@"Failure, %@", error);
+    }];
+}
++ (void)captureVitals:(NSArray *)vitals toPatient:(MRSPatient *)patient atLocation:(MRSLocation *)location completion:(void (^)(NSError *error))completion
+{
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+    
+    NSMutableArray *obs = [[NSMutableArray alloc] init];
+    
+    for (MRSVital *vital in vitals) {
+        [obs addObject:@{
+                         @"concept" : vital.conceptUUID,
+                         @"obsDatetime" : [self openMRSFormatStringWithDate:[NSDate date]],
+                         @"person" : patient.UUID,
+                         @"value" : vital.value} ];
+    }
+    
+    NSDictionary *parameters = @{@"patient" : patient.UUID,
+                                 @"encounterDatetime" : [self openMRSFormatStringWithDate:[NSDate date]],
+                                 @"encounterType" : @"67a71486-1a54-468f-ac3e-7091a9a79584",
+                                 @"obs" : obs,
+                                 @"location" : location.UUID};
+    
+    NSLog(@"parameters: %@", parameters);
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/encounter", host] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        completion(nil);
+        NSLog(@"Success capturing vitals");
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(error);
         NSLog(@"Failure, %@", error);
     }];
 }
