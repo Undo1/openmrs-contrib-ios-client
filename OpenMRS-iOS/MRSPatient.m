@@ -13,8 +13,79 @@
 #import <CoreData/CoreData.h>
 #import "AppDelegate.h"
 @implementation MRSPatient
+- (void)cascadingDelete
+{
+    AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+    
+    NSManagedObjectContext *managedContext = appDelegate.managedObjectContext;
+
+    //delete patient record
+    
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:appDelegate.managedObjectContext]];
+    request.includesPropertyValues = NO;
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uuid == %@", self.UUID];
+    [request setPredicate:predicate];
+    
+    NSArray *results = [managedContext executeFetchRequest:request error:nil];
+    
+    for (NSManagedObject *object in results) {
+        [managedContext deleteObject:object];
+    }
+    
+    request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"Visit" inManagedObjectContext:appDelegate.managedObjectContext]];
+    
+    predicate = [NSPredicate predicateWithFormat:@"patient == %@", self.UUID];
+    [request setPredicate:predicate];
+    
+    results = [managedContext executeFetchRequest:request error:nil];
+    
+    for (NSManagedObject *object in results) {
+        NSFetchRequest *getVisitObsRequest = [[NSFetchRequest alloc] initWithEntityName:@"EncounterOb"];
+        getVisitObsRequest.includesPropertyValues = NO;
+        
+        NSPredicate *pred = [NSPredicate predicateWithFormat:@"encounter == %@", [object valueForKey:@"uuid"]];
+        getVisitObsRequest.predicate = pred;
+        
+        NSArray *visitObs = [managedContext executeFetchRequest:getVisitObsRequest error:nil];
+        
+        for (NSManagedObject *ob in visitObs) {
+            [managedContext deleteObject:ob];
+        }
+        
+        [managedContext deleteObject:object];
+    }
+    
+    request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"Encounter" inManagedObjectContext:appDelegate.managedObjectContext]];
+    
+    predicate = [NSPredicate predicateWithFormat:@"patient == %@", self.UUID];
+    [request setPredicate:predicate];
+    
+    results = [managedContext executeFetchRequest:request error:nil];
+    
+    for (NSManagedObject *object in results) {
+        NSFetchRequest *getVisitObsRequest = [[NSFetchRequest alloc] initWithEntityName:@"EncounterOb"];
+        getVisitObsRequest.includesPropertyValues = NO;
+        
+        NSPredicate *pred = [NSPredicate predicateWithFormat:@"encounter == %@", [object valueForKey:@"uuid"]];
+        getVisitObsRequest.predicate = pred;
+        
+        NSArray *visitObs = [managedContext executeFetchRequest:getVisitObsRequest error:nil];
+        
+        for (NSManagedObject *ob in visitObs) {
+            [managedContext deleteObject:ob];
+        }
+        
+        [managedContext deleteObject:object];
+    }
+}
 - (void)saveToCoreData
 {
+    [self cascadingDelete];
+    
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     
     NSManagedObjectContext *managedContext = appDelegate.managedObjectContext;
