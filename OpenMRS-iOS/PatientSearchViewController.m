@@ -31,6 +31,7 @@
     [OpenMRSAPIManager getPatientListWithSearch:search completion:^(NSError *error, NSArray *patients) {
         self.currentSearchResults = patients;
         dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"%lu", (unsigned long)self.currentSearchResults.count);
             [self.tableView reloadData];
         });
     }];
