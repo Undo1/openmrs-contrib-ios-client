@@ -4,6 +4,7 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
 pod "AFNetworking", "~> 2.0"
+pod "SVProgressHUD", :head
 
 target 'OpenMRS-iOS' do
 
