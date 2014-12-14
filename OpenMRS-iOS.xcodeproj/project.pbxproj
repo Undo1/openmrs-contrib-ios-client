@@ -11,6 +11,9 @@
 		D3079E751A3D4DED00E308C7 /* add_patient_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D3079E721A3D4DED00E308C7 /* add_patient_icon@2x.png */; };
 		D3079E761A3D4DED00E308C7 /* add_patient_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D3079E731A3D4DED00E308C7 /* add_patient_icon.png */; };
 		D3079E771A3D4DED00E308C7 /* add_patient_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D3079E741A3D4DED00E308C7 /* add_patient_icon@3x.png */; };
+		D34BF5391A3BA7BE009205C9 /* AddVisitNoteTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D34BF5381A3BA7BE009205C9 /* AddVisitNoteTableViewController.m */; };
+		D37674271A3BB114003A8005 /* MRSLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = D37674261A3BB114003A8005 /* MRSLocation.m */; };
+		D376742A1A3BB254003A8005 /* LocationListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D37674291A3BB254003A8005 /* LocationListTableViewController.m */; };
 		D38DB4F51A316FAA00E2CF23 /* EncounterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D38DB4F41A316FAA00E2CF23 /* EncounterViewController.m */; };
 		D38DB4F81A320EF700E2CF23 /* MRSEncounterOb.m in Sources */ = {isa = PBXBuildFile; fileRef = D38DB4F71A320EF700E2CF23 /* MRSEncounterOb.m */; };
 		D38DB4FB1A3216A300E2CF23 /* SelectEncounterTypeView.m in Sources */ = {isa = PBXBuildFile; fileRef = D38DB4FA1A3216A300E2CF23 /* SelectEncounterTypeView.m */; };
@@ -47,7 +50,8 @@
 		D3E47BA91A3A08EF004B3F95 /* MRSPatientIdentifier.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E47BA81A3A08EF004B3F95 /* MRSPatientIdentifier.m */; };
 		D3A869511A32B3D400D1963F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3A869501A32B3D400D1963F /* CoreData.framework */; };
 		D3A869541A32B42A00D1963F /* openmrs-offline.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D3A869521A32B42A00D1963F /* openmrs-offline.xcdatamodeld */; };
-
+		D39AD7AB1A3BFE8600C01540 /* CaptureVitalsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D39AD7AA1A3BFE8600C01540 /* CaptureVitalsTableViewController.m */; };
+		D39AD7AE1A3C081000C01540 /* MRSVital.m in Sources */ = {isa = PBXBuildFile; fileRef = D39AD7AD1A3C081000C01540 /* MRSVital.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,6 +71,12 @@
 		D3079E721A3D4DED00E308C7 /* add_patient_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add_patient_icon@2x.png"; sourceTree = "<group>"; };
 		D3079E731A3D4DED00E308C7 /* add_patient_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add_patient_icon.png; sourceTree = "<group>"; };
 		D3079E741A3D4DED00E308C7 /* add_patient_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add_patient_icon@3x.png"; sourceTree = "<group>"; };
+		D34BF5371A3BA7BE009205C9 /* AddVisitNoteTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddVisitNoteTableViewController.h; sourceTree = "<group>"; };
+		D34BF5381A3BA7BE009205C9 /* AddVisitNoteTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddVisitNoteTableViewController.m; sourceTree = "<group>"; };
+		D37674251A3BB114003A8005 /* MRSLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSLocation.h; sourceTree = "<group>"; };
+		D37674261A3BB114003A8005 /* MRSLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSLocation.m; sourceTree = "<group>"; };
+		D37674281A3BB254003A8005 /* LocationListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationListTableViewController.h; sourceTree = "<group>"; };
+		D37674291A3BB254003A8005 /* LocationListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocationListTableViewController.m; sourceTree = "<group>"; };
 		D38DB4F31A316FAA00E2CF23 /* EncounterViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncounterViewController.h; sourceTree = "<group>"; };
 		D38DB4F41A316FAA00E2CF23 /* EncounterViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EncounterViewController.m; sourceTree = "<group>"; };
 		D38DB4F61A320EF700E2CF23 /* MRSEncounterOb.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSEncounterOb.h; sourceTree = "<group>"; };
@@ -132,6 +142,10 @@
 		D3A869501A32B3D400D1963F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		D3A869531A32B42A00D1963F /* openmrs-offline.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "openmrs-offline.xcdatamodel"; sourceTree = "<group>"; };
 
+		D39AD7A91A3BFE8600C01540 /* CaptureVitalsTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureVitalsTableViewController.h; sourceTree = "<group>"; };
+		D39AD7AA1A3BFE8600C01540 /* CaptureVitalsTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CaptureVitalsTableViewController.m; sourceTree = "<group>"; };
+		D39AD7AC1A3C081000C01540 /* MRSVital.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSVital.h; sourceTree = "<group>"; };
+		D39AD7AD1A3C081000C01540 /* MRSVital.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSVital.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,6 +221,16 @@
 				D3E47BA21A3A00C0004B3F95 /* MRSPatientIdentifierType.m */,
 				D3A4728C1A37794D002A0BBD /* MRSPerson.h */,
 				D3A4728D1A37794D002A0BBD /* MRSPerson.m */,
+				D39AD7AC1A3C081000C01540 /* MRSVital.h */,
+				D39AD7AD1A3C081000C01540 /* MRSVital.m */,
+				D37674281A3BB254003A8005 /* LocationListTableViewController.h */,
+				D37674291A3BB254003A8005 /* LocationListTableViewController.m */,
+				D37674251A3BB114003A8005 /* MRSLocation.h */,
+				D37674261A3BB114003A8005 /* MRSLocation.m */,
+				D34BF5371A3BA7BE009205C9 /* AddVisitNoteTableViewController.h */,
+				D34BF5381A3BA7BE009205C9 /* AddVisitNoteTableViewController.m */,
+				D39AD7A91A3BFE8600C01540 /* CaptureVitalsTableViewController.h */,
+				D39AD7AA1A3BFE8600C01540 /* CaptureVitalsTableViewController.m */,
 				D38DB4F31A316FAA00E2CF23 /* EncounterViewController.h */,
 				D38DB4F41A316FAA00E2CF23 /* EncounterViewController.m */,
 				D396A5481A2E3CBC00DE6448 /* MRSEncounter.h */,
@@ -437,7 +461,9 @@
 				D38DB4FB1A3216A300E2CF23 /* SelectEncounterTypeView.m in Sources */,
 				D38DB4FE1A3216CF00E2CF23 /* MRSEncounterType.m in Sources */,
 				D38DB4F81A320EF700E2CF23 /* MRSEncounterOb.m in Sources */,
+				D39AD7AE1A3C081000C01540 /* MRSVital.m in Sources */,
 				D396A52D1A2E09DE00DE6448 /* MRSPatient.m in Sources */,
+				D39AD7AB1A3BFE8600C01540 /* CaptureVitalsTableViewController.m in Sources */,
 				D396A5281A2E09DE00DE6448 /* SignInViewController.m in Sources */,
 				D396A5441A2E0CEF00DE6448 /* SettingsViewController.m in Sources */,
 				D3E47BA91A3A08EF004B3F95 /* MRSPatientIdentifier.m in Sources */,
@@ -445,6 +471,8 @@
 				D396A52C1A2E09DE00DE6448 /* PatientSearchViewController.m in Sources */,
 				D396A54D1A2E3E5600DE6448 /* PatientEncounterListView.m in Sources */,
 				D396A52F1A2E09DE00DE6448 /* ViewController.m in Sources */,
+				D37674271A3BB114003A8005 /* MRSLocation.m in Sources */,
+				D34BF5391A3BA7BE009205C9 /* AddVisitNoteTableViewController.m in Sources */,
 				D396A52A1A2E09DE00DE6448 /* KeychainItemWrapper.m in Sources */,
 				D3A4728E1A37794D002A0BBD /* MRSPerson.m in Sources */,
 				D3E47BA61A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m in Sources */,
@@ -455,6 +483,7 @@
 				D396A54A1A2E3CBC00DE6448 /* MRSEncounter.m in Sources */,
 				D3E47BA31A3A00C0004B3F95 /* MRSPatientIdentifierType.m in Sources */,
 				D396EAF11A363E4000191F50 /* MainMenuCollectionViewController.m in Sources */,
+				D376742A1A3BB254003A8005 /* LocationListTableViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

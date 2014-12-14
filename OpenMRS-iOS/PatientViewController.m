@@ -10,7 +10,9 @@
 #import "OpenMRSAPIManager.h"
 #import "PatientEncounterListView.h"
 #import "PatientVisitListView.h"
-#import "SelectEncounterTypeView.h"
+#import "AddVisitNoteTableViewController.h"
+#import "CaptureVitalsTableViewController.h"
+
 @implementation PatientViewController
 -(void)setPatient:(MRSPatient *)patient
 {
@@ -164,22 +166,26 @@
 {
     if (section == 2)
     {
-        return 2;
+        return 3;
     }
     else if (section == 0)
     {
         return self.information.count;
     }
-    else // section == 1
+    else if (section == 1)
     {
         return 2;
+    }
+    else
+    {
+        return 1;
     }
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 2)
     {
-        if (indexPath.row == 1)
+        if (indexPath.row == 2)
         {
             UITableViewCell *saveToCoreDataCell = [tableView dequeueReusableCellWithIdentifier:@"coredata"];
             if (!saveToCoreDataCell)
@@ -187,13 +193,35 @@
                 saveToCoreDataCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"coredata"];
             }
             
-            saveToCoreDataCell.textLabel.text = @"Save";
+            if (self.patient.isInCoreData)
+            {
+                saveToCoreDataCell.textLabel.text = @"Update Offline Record";
+            }
+            else
+            {
+                saveToCoreDataCell.textLabel.text = @"Save for Offline Use";
+            }
             saveToCoreDataCell.textLabel.textAlignment = NSTextAlignmentCenter;
             saveToCoreDataCell.textLabel.textColor = self.view.tintColor;
             
             return saveToCoreDataCell;
         }
-        
+
+        if (indexPath.row == 0)
+        {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"addVisitNoteCell"];
+            
+            if (!cell)
+            {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"addVisitNoteCell"];
+            }
+            
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.textLabel.textColor = self.view.tintColor;
+            cell.textLabel.text = @"Add Visit Note...";
+            
+            return cell;
+        }
         UITableViewCell *actionCell = [tableView dequeueReusableCellWithIdentifier:@"actionCell"];
         
         if (!actionCell)
@@ -201,7 +229,7 @@
             actionCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"actionCell"];
         }
         
-        actionCell.textLabel.text = @"Add notes/vitals...";
+        actionCell.textLabel.text = @"Capture Vitals...";
         actionCell.textLabel.textAlignment = NSTextAlignmentCenter;
         actionCell.textLabel.textColor = self.view.tintColor;
         
@@ -254,14 +282,27 @@
 {
     if (indexPath.section == 2)
     {
-        if (indexPath.row == 1)
+        if (indexPath.row == 2)
         {
             [self.patient saveToCoreData];
             return;
         }
         
-        SelectEncounterTypeView *sETV = [[SelectEncounterTypeView alloc] initWithStyle:UITableViewStylePlain];
-        [self presentViewController:[[UINavigationController alloc] initWithRootViewController:sETV] animated:YES completion:nil];
+        if (indexPath.row == 0)
+        {
+            AddVisitNoteTableViewController *addVisitNote = [[AddVisitNoteTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            addVisitNote.delegate = self;
+            addVisitNote.patient = self.patient;
+            addVisitNote.delegate = self;
+            [self presentViewController:[[UINavigationController alloc] initWithRootViewController:addVisitNote] animated:YES completion:nil];
+        }
+        else if (indexPath.row == 1)
+        {
+            CaptureVitalsTableViewController *vitals = [[CaptureVitalsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            vitals.patient = self.patient;
+            vitals.delegate = self;
+            [self presentViewController:[[UINavigationController alloc] initWithRootViewController:vitals] animated:YES completion:nil];
+        }
     }
     else if (indexPath.section == 1)
     {
@@ -278,5 +319,20 @@
             [self.navigationController pushViewController:visitsList animated:YES];
         }
     }
+}
+- (void)didAddVisitNoteToPatient:(MRSPatient *)patient
+{
+    if ([patient.UUID isEqualToString:self.patient.UUID])
+    {
+        [self updateWithDetailedInfo];
+    }
+}
+- (void)didCaptureVitalsForPatient:(MRSPatient *)patient
+{
+    if ([patient.UUID isEqualToString:self.patient.UUID])
+    {
+        [self updateWithDetailedInfo];
+    }
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 @end
