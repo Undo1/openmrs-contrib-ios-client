@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		65BE2B3E2C5F8BE1FB7090C2 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87CFC2F5FC6F1445E8327AF6 /* libPods.a */; };
+		D3079E751A3D4DED00E308C7 /* add_patient_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D3079E721A3D4DED00E308C7 /* add_patient_icon@2x.png */; };
+		D3079E761A3D4DED00E308C7 /* add_patient_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D3079E731A3D4DED00E308C7 /* add_patient_icon.png */; };
+		D3079E771A3D4DED00E308C7 /* add_patient_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D3079E741A3D4DED00E308C7 /* add_patient_icon@3x.png */; };
 		D396A5261A2E09DE00DE6448 /* PatientViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5131A2E09DE00DE6448 /* PatientViewController.m */; };
 		D396A5271A2E09DE00DE6448 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5151A2E09DE00DE6448 /* AppDelegate.m */; };
 		D396A5281A2E09DE00DE6448 /* SignInViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5171A2E09DE00DE6448 /* SignInViewController.m */; };
@@ -33,6 +36,11 @@
 		D397397C1A2E082300D0AB69 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D397397B1A2E082300D0AB69 /* Images.xcassets */; };
 		D397397F1A2E082300D0AB69 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D397397D1A2E082300D0AB69 /* LaunchScreen.xib */; };
 		D397398B1A2E082300D0AB69 /* OpenMRS_iOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D397398A1A2E082300D0AB69 /* OpenMRS_iOSTests.m */; };
+		D3A4728B1A3770B4002A0BBD /* AddPatientTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3A4728A1A3770B4002A0BBD /* AddPatientTableViewController.m */; };
+		D3A4728E1A37794D002A0BBD /* MRSPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = D3A4728D1A37794D002A0BBD /* MRSPerson.m */; };
+		D3E47BA31A3A00C0004B3F95 /* MRSPatientIdentifierType.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E47BA21A3A00C0004B3F95 /* MRSPatientIdentifierType.m */; };
+		D3E47BA61A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E47BA51A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m */; };
+		D3E47BA91A3A08EF004B3F95 /* MRSPatientIdentifier.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E47BA81A3A08EF004B3F95 /* MRSPatientIdentifier.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +57,9 @@
 		87CFC2F5FC6F1445E8327AF6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFA25E06F401CA7D732F7C67 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 		D21FB0B4A47906E6EF7F24EA /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		D3079E721A3D4DED00E308C7 /* add_patient_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add_patient_icon@2x.png"; sourceTree = "<group>"; };
+		D3079E731A3D4DED00E308C7 /* add_patient_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add_patient_icon.png; sourceTree = "<group>"; };
+		D3079E741A3D4DED00E308C7 /* add_patient_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add_patient_icon@3x.png"; sourceTree = "<group>"; };
 		D396A5121A2E09DE00DE6448 /* PatientViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PatientViewController.h; sourceTree = "<group>"; };
 		D396A5131A2E09DE00DE6448 /* PatientViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PatientViewController.m; sourceTree = "<group>"; };
 		D396A5141A2E09DE00DE6448 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -93,6 +104,16 @@
 		D39739841A2E082300D0AB69 /* OpenMRS-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OpenMRS-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D39739891A2E082300D0AB69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D397398A1A2E082300D0AB69 /* OpenMRS_iOSTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenMRS_iOSTests.m; sourceTree = "<group>"; };
+		D3A472891A3770B4002A0BBD /* AddPatientTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPatientTableViewController.h; sourceTree = "<group>"; };
+		D3A4728A1A3770B4002A0BBD /* AddPatientTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddPatientTableViewController.m; sourceTree = "<group>"; };
+		D3A4728C1A37794D002A0BBD /* MRSPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSPerson.h; sourceTree = "<group>"; };
+		D3A4728D1A37794D002A0BBD /* MRSPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSPerson.m; sourceTree = "<group>"; };
+		D3E47BA11A3A00C0004B3F95 /* MRSPatientIdentifierType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSPatientIdentifierType.h; sourceTree = "<group>"; };
+		D3E47BA21A3A00C0004B3F95 /* MRSPatientIdentifierType.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSPatientIdentifierType.m; sourceTree = "<group>"; };
+		D3E47BA41A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SelectPatientIdentifierTypeTableViewController.h; sourceTree = "<group>"; };
+		D3E47BA51A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectPatientIdentifierTypeTableViewController.m; sourceTree = "<group>"; };
+		D3E47BA71A3A08EF004B3F95 /* MRSPatientIdentifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSPatientIdentifier.h; sourceTree = "<group>"; };
+		D3E47BA81A3A08EF004B3F95 /* MRSPatientIdentifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSPatientIdentifier.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,10 +178,20 @@
 				D396A5171A2E09DE00DE6448 /* SignInViewController.m */,
 				D396A5181A2E09DE00DE6448 /* OpenMRSAPIManager.h */,
 				D396A5191A2E09DE00DE6448 /* OpenMRSAPIManager.m */,
+				D3E47BA11A3A00C0004B3F95 /* MRSPatientIdentifierType.h */,
+				D3E47BA21A3A00C0004B3F95 /* MRSPatientIdentifierType.m */,
+				D3A4728C1A37794D002A0BBD /* MRSPerson.h */,
+				D3A4728D1A37794D002A0BBD /* MRSPerson.m */,
 				D396A5481A2E3CBC00DE6448 /* MRSEncounter.h */,
 				D396A5491A2E3CBC00DE6448 /* MRSEncounter.m */,
 				D396A51A1A2E09DE00DE6448 /* KeychainItemWrapper.h */,
 				D396A51B1A2E09DE00DE6448 /* KeychainItemWrapper.m */,
+				D3E47BA71A3A08EF004B3F95 /* MRSPatientIdentifier.h */,
+				D3E47BA81A3A08EF004B3F95 /* MRSPatientIdentifier.m */,
+				D3A472891A3770B4002A0BBD /* AddPatientTableViewController.h */,
+				D3A4728A1A3770B4002A0BBD /* AddPatientTableViewController.m */,
+				D3E47BA41A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.h */,
+				D3E47BA51A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m */,
 				D396EAEF1A363E4000191F50 /* MainMenuCollectionViewController.h */,
 				D396EAF01A363E4000191F50 /* MainMenuCollectionViewController.m */,
 				D396A5421A2E0CEF00DE6448 /* SettingsViewController.h */,
@@ -188,6 +219,9 @@
 				D396EAF21A36460500191F50 /* search_icon.png */,
 				D396EAF31A36460500191F50 /* search_icon@2x.png */,
 				D396EAF41A36460500191F50 /* search_icon@3x.png */,
+				D3079E721A3D4DED00E308C7 /* add_patient_icon@2x.png */,
+				D3079E731A3D4DED00E308C7 /* add_patient_icon.png */,
+				D3079E741A3D4DED00E308C7 /* add_patient_icon@3x.png */,
 				D396A53C1A2E0B5A00DE6448 /* openmrs-logo@2x.png */,
 				D396A53D1A2E0B5A00DE6448 /* openmrs-logo@3x.png */,
 				D396A53E1A2E0B5A00DE6448 /* openmrs-logo.png */,
@@ -307,10 +341,13 @@
 			files = (
 				D396EAF51A36460500191F50 /* search_icon.png in Resources */,
 				D397397F1A2E082300D0AB69 /* LaunchScreen.xib in Resources */,
+				D3079E761A3D4DED00E308C7 /* add_patient_icon.png in Resources */,
 				D397397C1A2E082300D0AB69 /* Images.xcassets in Resources */,
+				D3079E751A3D4DED00E308C7 /* add_patient_icon@2x.png in Resources */,
 				D396EAF61A36460500191F50 /* search_icon@2x.png in Resources */,
 				D396A53F1A2E0B5A00DE6448 /* openmrs-logo@2x.png in Resources */,
 				D396A5401A2E0B5A00DE6448 /* openmrs-logo@3x.png in Resources */,
+				D3079E771A3D4DED00E308C7 /* add_patient_icon@3x.png in Resources */,
 				D396EAF71A36460500191F50 /* search_icon@3x.png in Resources */,
 				D396A5411A2E0B5A00DE6448 /* openmrs-logo.png in Resources */,
 			);
@@ -364,20 +401,25 @@
 			buildActionMask = 2147483647;
 			files = (
 				D396A5471A2E396300DE6448 /* MRSVisit.m in Sources */,
+				D3A4728B1A3770B4002A0BBD /* AddPatientTableViewController.m in Sources */,
 				D396A52E1A2E09DE00DE6448 /* CredentialsLayer.m in Sources */,
 				D396A52D1A2E09DE00DE6448 /* MRSPatient.m in Sources */,
 				D396A5281A2E09DE00DE6448 /* SignInViewController.m in Sources */,
 				D396A5441A2E0CEF00DE6448 /* SettingsViewController.m in Sources */,
+				D3E47BA91A3A08EF004B3F95 /* MRSPatientIdentifier.m in Sources */,
 				D396A5261A2E09DE00DE6448 /* PatientViewController.m in Sources */,
 				D396A52C1A2E09DE00DE6448 /* PatientSearchViewController.m in Sources */,
 				D396A54D1A2E3E5600DE6448 /* PatientEncounterListView.m in Sources */,
 				D396A52F1A2E09DE00DE6448 /* ViewController.m in Sources */,
 				D396A52A1A2E09DE00DE6448 /* KeychainItemWrapper.m in Sources */,
+				D3A4728E1A37794D002A0BBD /* MRSPerson.m in Sources */,
+				D3E47BA61A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m in Sources */,
 				D396A5291A2E09DE00DE6448 /* OpenMRSAPIManager.m in Sources */,
 				D39739711A2E082300D0AB69 /* main.m in Sources */,
 				D396A5501A2E3F7600DE6448 /* PatientVisitListView.m in Sources */,
 				D396A5271A2E09DE00DE6448 /* AppDelegate.m in Sources */,
 				D396A54A1A2E3CBC00DE6448 /* MRSEncounter.m in Sources */,
+				D3E47BA31A3A00C0004B3F95 /* MRSPatientIdentifierType.m in Sources */,
 				D396EAF11A363E4000191F50 /* MainMenuCollectionViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

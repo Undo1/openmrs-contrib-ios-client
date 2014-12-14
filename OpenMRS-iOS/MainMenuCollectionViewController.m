@@ -9,6 +9,7 @@
 #import "MainMenuCollectionViewController.h"
 #import "PatientSearchViewController.h"
 #import "SettingsViewController.h"
+#import "AddPatientTableViewController.h"
 
 @implementation MainMenuCollectionViewController
 
@@ -52,7 +53,7 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return 1;
+    return 2;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -60,7 +61,19 @@ static NSString * const reuseIdentifier = @"Cell";
     
     cell.backgroundColor = [UIColor clearColor];
     
-    UIImage *image = [UIImage imageNamed:@"search_icon"];
+    UIImage *image;
+    
+    switch (indexPath.row) {
+        case 0:
+            image = [UIImage imageNamed:@"search_icon"];
+            break;
+        case 1:
+            image = [UIImage imageNamed:@"add_patient_icon"];
+            break;
+        default:
+            break;
+    }
+    
     
     UIImageView *iView = [[UIImageView alloc] initWithImage:[image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     iView.frame = CGRectMake(25, 0, cell.frame.size.width-50, cell.frame.size.height-44);
@@ -71,7 +84,16 @@ static NSString * const reuseIdentifier = @"Cell";
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, cell.frame.size.height - 44, cell.frame.size.width, 44)];
     label.backgroundColor = [UIColor clearColor];
     label.textColor = [UIColor darkGrayColor];
-    label.text = @"Patient Search";
+    switch (indexPath.row) {
+        case 0:
+            label.text = @"Patient Search";
+            break;
+        case 1:
+            label.text = @"Add Patient";
+            break;
+        default:
+            break;
+    }
     label.numberOfLines = 0;
     label.textAlignment = NSTextAlignmentCenter;
     label.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleTopMargin;
@@ -108,6 +130,11 @@ static NSString * const reuseIdentifier = @"Cell";
         PatientSearchViewController *search = [[PatientSearchViewController alloc] initWithStyle:UITableViewStylePlain];
         
         [self.navigationController pushViewController:search animated:YES];
+    }
+    else if (indexPath.item == 1)
+    {
+        AddPatientTableViewController *addPatient = [[AddPatientTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        [self presentViewController:[[UINavigationController alloc] initWithRootViewController:addPatient] animated:YES completion:nil];
     }
 }
 

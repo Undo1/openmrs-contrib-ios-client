@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "MRSPatient.h"
+#import "MRSPatientIdentifier.h"
 #import "MRSEncounter.h"
 @interface OpenMRSAPIManager : NSObject
 + (void)getPatientListWithSearch:(NSString *)search completion:(void (^)(NSError *error, NSArray *patients))completion;
@@ -15,5 +16,7 @@
 + (void)verifyCredentialsWithUsername:(NSString *)username password:(NSString *)password host:(NSString *)host completion:(void (^)(BOOL success))completion;
 + (void)getVisitsForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *visits))completion;
 + (void)getEncountersForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *encounters))completion;
++ (void)getPatientIdentifierTypesWithCompletion:(void (^)(NSError *error, NSArray *types))completion;
++ (void)addPatient:(MRSPatient *)patient withIdentifier:(MRSPatientIdentifier *)identifier completion:(void (^)(NSError *error, MRSPatient *createdPatient))completion;
 + (void)logout;
 @end
