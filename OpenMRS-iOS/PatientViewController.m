@@ -189,7 +189,7 @@
             
             saveToCoreDataCell.textLabel.text = @"Save";
             saveToCoreDataCell.textLabel.textAlignment = NSTextAlignmentCenter;
-            saveToCoreDataCell.textLabel.textColor = [UIColor orangeColor];
+            saveToCoreDataCell.textLabel.textColor = self.view.tintColor;
             
             return saveToCoreDataCell;
         }
