@@ -7,7 +7,7 @@
 
 #import "AppDelegate.h"
 #import "SignInViewController.h"
-#import "MainMenuViewController.h"
+#import "MainMenuCollectionViewController.h"
 #import "KeychainItemWrapper.h"
 @interface AppDelegate ()
 
@@ -23,7 +23,7 @@
     
 //    [[[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil] resetKeychainItem];
     
-    MainMenuViewController *menu = [[MainMenuViewController alloc] init];
+    MainMenuCollectionViewController *menu = [[MainMenuCollectionViewController alloc] initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
     
     self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:menu];
     
