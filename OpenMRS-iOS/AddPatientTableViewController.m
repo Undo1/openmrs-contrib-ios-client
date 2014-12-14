@@ -34,7 +34,7 @@
     MRSPatient *patient = [[MRSPatient alloc] init];
     patient.name = self.selectedGivenName;
     patient.familyName = self.selectedFamilyName;
-    patient.age = @98;
+    patient.age = [NSNumber numberWithInt:[self.selectedAge intValue]];
     patient.gender = self.selectedGender;
     
     MRSPatientIdentifier *identifier = [[MRSPatientIdentifier alloc] init];
@@ -66,7 +66,7 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 3;
+    return 4;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
@@ -78,6 +78,8 @@
             return 2;
             break;
         case 2:
+            return 1;
+        case 3:
             return 2;
             break;
         default:
@@ -151,6 +153,30 @@
     {
         if (indexPath.row == 0)
         {
+            UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"ageCell"];
+            
+            cell.textLabel.text = @"Age";
+            
+            UITextField *field = [[UITextField alloc] initWithFrame:CGRectMake(cell.bounds.size.width-150, 0, 130, cell.bounds.size.height)];
+            field.backgroundColor = [UIColor clearColor];
+            field.textColor = self.view.tintColor;
+            field.textAlignment = NSTextAlignmentRight;
+            field.returnKeyType = UIReturnKeyDone;
+            [field addTarget:self action:@selector(textFieldDidUpdate:) forControlEvents:UIControlEventEditingChanged];
+            
+            field.placeholder = @"Age";
+            field.text = self.selectedAge;
+            field.tag = 4;
+            
+            [cell addSubview:field];
+            
+            return cell;
+        }
+    }
+    if (indexPath.section == 3)
+    {
+        if (indexPath.row == 0)
+        {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"idTypeCell"];
             if (!cell)
             {
@@ -206,6 +232,9 @@
             return @"Gender";
             break;
         case 2:
+            return @"Age";
+            break;
+        case 3:
             return @"Identifier";
             break;
         default:
@@ -227,7 +256,7 @@
         }
         [self.tableView reloadData];
     }
-    if (indexPath.section == 2 && indexPath.row == 0)
+    if (indexPath.section == 3 && indexPath.row == 0)
     {
         SelectPatientIdentifierTypeTableViewController *selectIdType = [[SelectPatientIdentifierTypeTableViewController alloc] initWithStyle:UITableViewStylePlain];
         selectIdType.delegate = self;
@@ -245,6 +274,9 @@
             break;
         case 3:
             self.selectedIdentifier = sender.text;
+            break;
+        case 4:
+            self.selectedAge = sender.text;
             break;
     }
 }

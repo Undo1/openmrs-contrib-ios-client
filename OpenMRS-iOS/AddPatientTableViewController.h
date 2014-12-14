@@ -17,6 +17,7 @@
 @property (nonatomic, strong) NSString *selectedGender;
 @property (nonatomic, strong) NSString *selectedGivenName;
 @property (nonatomic, strong) NSString *selectedFamilyName;
+@property (nonatomic, strong) NSString *selectedAge;
 @property (nonatomic, strong) NSString *selectedIdentifier;
 @property (nonatomic, strong) MRSPatientIdentifierType *selectedIdentifierType;
 @end
