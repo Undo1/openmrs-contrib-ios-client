@@ -48,3 +48,33 @@
 #define COCOAPODS_VERSION_MINOR_AFNetworking_UIKit 4
 #define COCOAPODS_VERSION_PATCH_AFNetworking_UIKit 1
 
+// EncryptedCoreData
+#define COCOAPODS_POD_AVAILABLE_EncryptedCoreData
+#define COCOAPODS_VERSION_MAJOR_EncryptedCoreData 3
+#define COCOAPODS_VERSION_MINOR_EncryptedCoreData 0
+#define COCOAPODS_VERSION_PATCH_EncryptedCoreData 0
+
+// SQLCipher
+#define COCOAPODS_POD_AVAILABLE_SQLCipher
+#define COCOAPODS_VERSION_MAJOR_SQLCipher 3
+#define COCOAPODS_VERSION_MINOR_SQLCipher 1
+#define COCOAPODS_VERSION_PATCH_SQLCipher 0
+
+// SQLCipher/common
+#define COCOAPODS_POD_AVAILABLE_SQLCipher_common
+#define COCOAPODS_VERSION_MAJOR_SQLCipher_common 3
+#define COCOAPODS_VERSION_MINOR_SQLCipher_common 1
+#define COCOAPODS_VERSION_PATCH_SQLCipher_common 0
+
+// SQLCipher/standard
+#define COCOAPODS_POD_AVAILABLE_SQLCipher_standard
+#define COCOAPODS_VERSION_MAJOR_SQLCipher_standard 3
+#define COCOAPODS_VERSION_MINOR_SQLCipher_standard 1
+#define COCOAPODS_VERSION_PATCH_SQLCipher_standard 0
+
+// SVProgressHUD
+#define COCOAPODS_POD_AVAILABLE_SVProgressHUD
+#define COCOAPODS_VERSION_MAJOR_SVProgressHUD 1
+#define COCOAPODS_VERSION_MINOR_SVProgressHUD 0
+#define COCOAPODS_VERSION_PATCH_SVProgressHUD 0
+

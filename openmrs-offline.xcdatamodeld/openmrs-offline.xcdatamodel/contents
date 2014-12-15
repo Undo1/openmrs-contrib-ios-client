@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6252" systemVersion="14B25" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="Encounter" syncable="YES">
+        <attribute name="displayName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="patient" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="EncounterOb" syncable="YES">
+        <attribute name="display" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="encounter" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="encounterDisplay" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Patient" syncable="YES">
+        <attribute name="address1" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="address2" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="address3" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="address4" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="address5" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="address6" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="age" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="birthdate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="birthdateEstimated" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="causeOfDeath" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="cityVillage" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="country" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="countyDistrict" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="deathDate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="display" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="displayName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="endDate" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="familyName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="familyName2" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="gender" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="givenName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="hasDetailedInfo" optional="YES" attributeType="Boolean" syncable="YES"/>
+        <attribute name="latitude" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="locationDisplay" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="longitude" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="middleName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="postalCode" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="stateProvince" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <entity name="Visit" syncable="YES">
+        <attribute name="displayName" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="patient" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="Encounter" positionX="-54" positionY="144" width="128" height="90"/>
+        <element name="EncounterOb" positionX="-36" positionY="153" width="128" height="103"/>
+        <element name="Patient" positionX="-63" positionY="-18" width="128" height="495"/>
+        <element name="Visit" positionX="-45" positionY="135" width="128" height="88"/>
+    </elements>
+</model>

@@ -11,7 +11,7 @@
 @interface MRSPatient : NSObject
 @property (nonatomic, strong) NSString *UUID;
 @property (nonatomic, strong) NSString *gender;
-@property (nonatomic, strong) NSString *age;
+@property (nonatomic, strong) NSNumber *age;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *displayName;
 @property (nonatomic) BOOL dead;
@@ -40,5 +40,11 @@
 @property (nonatomic, strong) NSString *givenName;
 @property (nonatomic, strong) NSString *middleName;
 
+@property (nonatomic) BOOL fromCoreData;
 @property (nonatomic) BOOL hasDetailedInfo;
+
+- (void)saveToCoreData;
+- (void)updateFromCoreData;
+- (BOOL)isInCoreData;
+
 @end

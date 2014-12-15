@@ -11,4 +11,5 @@
 @interface MRSEncounter : NSObject
 @property (nonatomic, strong) NSString *displayName;
 @property (nonatomic, strong) NSString *UUID;
+@property (nonatomic, strong) NSArray *obs;
 @end

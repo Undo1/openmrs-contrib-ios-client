@@ -11,7 +11,14 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (strong, nonatomic) NSManagedObjectContext *managedObjectContext;
+@property (strong, nonatomic) NSManagedObjectModel *managedObjectModel;
+@property (strong, nonatomic) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 @property (nonatomic, strong) AFHTTPRequestOperation *currentSearchOperation;
+
+- (void)saveContext;
+- (NSURL *)applicationDocumentsDirectory;
+- (void)clearStore;
 
 @end
 

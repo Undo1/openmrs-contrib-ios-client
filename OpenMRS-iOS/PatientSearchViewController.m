@@ -22,14 +22,16 @@
     bar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     bar.delegate = self;
     [bar sizeToFit];
-    [self.tableView addSubview:bar];
+    self.tableView.tableHeaderView = bar;
     [bar becomeFirstResponder];
+    
 }
 -(void)reloadDataForSearch:(NSString *)search
 {
     [OpenMRSAPIManager getPatientListWithSearch:search completion:^(NSError *error, NSArray *patients) {
         self.currentSearchResults = patients;
         dispatch_async(dispatch_get_main_queue(), ^{
+            NSLog(@"%lu", (unsigned long)self.currentSearchResults.count);
             [self.tableView reloadData];
         });
     }];

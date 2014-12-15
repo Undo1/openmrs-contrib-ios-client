@@ -9,6 +9,7 @@
 #import "SettingsViewController.h"
 #import "OpenMRSAPIManager.h"
 #import "KeychainItemWrapper.h"
+#import "AppDelegate.h"
 @implementation SettingsViewController
 -(void)viewDidLoad
 {
@@ -28,12 +29,27 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 2;
+    return 3;
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0)
     {
+        if (indexPath.row == 2)
+        {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"clearCell"];
+            
+            if (!cell)
+            {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"clearCell"];
+            }
+            
+            cell.textLabel.textColor = [UIColor redColor];
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.textLabel.text = @"Remove Offline Patients";
+            
+            return cell;
+        }
         if (indexPath.row == 1)
         {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"logoutCell"];
@@ -43,7 +59,7 @@
             }
             
             cell.textLabel.text = @"Logout";
-            cell.textLabel.textColor = [UIColor redColor];
+            cell.textLabel.textColor = self.view.tintColor;
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             
             return cell;
@@ -70,7 +86,13 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0 && indexPath.row == 1)
+    if (indexPath.section == 0 && indexPath.row == 2)
+    {
+        AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+        
+        [delegate clearStore];
+    }
+    else if (indexPath.section == 0 && indexPath.row == 1)
     {
         [self dismissViewControllerAnimated:NO completion:^{
             [OpenMRSAPIManager logout];
