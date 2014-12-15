@@ -16,4 +16,5 @@
 @property (nonatomic, strong) NSArray *information;
 @property (nonatomic, strong) NSArray *visits;
 @property (nonatomic, strong) NSArray *encounters;
+@property (nonatomic) BOOL isShowingActions;
 @end

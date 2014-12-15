@@ -68,7 +68,7 @@
 }
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 2)
+    if (indexPath.section == 0)
     {
         return 44;
     }
@@ -164,15 +164,15 @@
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 2)
+    if (section == 0)
     {
-        return 3;
+        return (self.isShowingActions) ? 3 : 1;
     }
-    else if (section == 0)
+    else if (section == 1)
     {
         return self.information.count;
     }
-    else if (section == 1)
+    else if (section == 2)
     {
         return 2;
     }
@@ -183,8 +183,23 @@
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 2)
+    if (indexPath.section == 0)
     {
+        if (!self.isShowingActions)
+        {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"showActions"];
+            
+            if (!cell)
+            {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"showActions"];
+            }
+            
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.textLabel.text = @"Actions...";
+            cell.textLabel.textColor = self.view.tintColor;
+            
+            return cell;
+        }
         if (indexPath.row == 2)
         {
             UITableViewCell *saveToCoreDataCell = [tableView dequeueReusableCellWithIdentifier:@"coredata"];
@@ -235,7 +250,7 @@
         
         return actionCell;
     }
-    if (indexPath.section == 1)
+    if (indexPath.section == 2)
     {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"countCell"];
         
@@ -280,8 +295,14 @@
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 2)
+    if (indexPath.section == 0)
     {
+        if (!self.isShowingActions)
+        {
+            self.isShowingActions = YES;
+            [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
+            return;
+        }
         if (indexPath.row == 2)
         {
             [self.patient saveToCoreData];
@@ -304,7 +325,7 @@
             [self presentViewController:[[UINavigationController alloc] initWithRootViewController:vitals] animated:YES completion:nil];
         }
     }
-    else if (indexPath.section == 1)
+    else if (indexPath.section == 2)
     {
         if (indexPath.row == 1) //encounters row selected
         {
