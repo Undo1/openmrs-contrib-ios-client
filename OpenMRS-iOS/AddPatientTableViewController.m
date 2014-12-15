@@ -52,6 +52,10 @@
                 [(UINavigationController *)delegate.window.rootViewController pushViewController:patientVc animated:YES];
             }];
         }
+        else
+        {
+            [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Couldn't save patient. Make sure all required fields are filled out" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+        }
     }];
 }
 - (void)cancel

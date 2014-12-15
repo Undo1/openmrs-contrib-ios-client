@@ -118,8 +118,17 @@
     
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
     
-    NSDictionary *parameters = @{@"names":@[@{@"givenName": person.name, @"familyName": person.familyName}],@"gender":person.gender,@"age":person.age};
-    NSLog(@"Parameters: %@", parameters);
+    NSDictionary *parameters;
+    
+    @try {
+        parameters = @{@"names":@[@{@"givenName": person.name, @"familyName": person.familyName}],@"gender":person.gender,@"age":person.age};
+        NSLog(@"Parameters: %@", parameters);
+    }
+    @catch (NSException *exception) {
+        completion([[NSError alloc] init], nil);
+        return;
+    }
+    
     
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/person", host] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
