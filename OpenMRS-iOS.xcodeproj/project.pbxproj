@@ -41,7 +41,6 @@
 		D396EAF61A36460500191F50 /* search_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D396EAF31A36460500191F50 /* search_icon@2x.png */; };
 		D396EAF71A36460500191F50 /* search_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D396EAF41A36460500191F50 /* search_icon@3x.png */; };
 		D39739711A2E082300D0AB69 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D39739701A2E082300D0AB69 /* main.m */; };
-		D397397F1A2E082300D0AB69 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = D397397D1A2E082300D0AB69 /* LaunchScreen.xib */; };
 		D397398B1A2E082300D0AB69 /* OpenMRS_iOSTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D397398A1A2E082300D0AB69 /* OpenMRS_iOSTests.m */; };
 		D39AD7AB1A3BFE8600C01540 /* CaptureVitalsTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D39AD7AA1A3BFE8600C01540 /* CaptureVitalsTableViewController.m */; };
 		D39AD7AE1A3C081000C01540 /* MRSVital.m in Sources */ = {isa = PBXBuildFile; fileRef = D39AD7AD1A3C081000C01540 /* MRSVital.m */; };
@@ -125,7 +124,6 @@
 		D397396B1A2E082200D0AB69 /* OpenMRS-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "OpenMRS-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D397396F1A2E082300D0AB69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D39739701A2E082300D0AB69 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		D397397E1A2E082300D0AB69 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		D39739841A2E082300D0AB69 /* OpenMRS-iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "OpenMRS-iOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D39739891A2E082300D0AB69 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D397398A1A2E082300D0AB69 /* OpenMRS_iOSTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OpenMRS_iOSTests.m; sourceTree = "<group>"; };
@@ -259,7 +257,6 @@
 				D396A5241A2E09DE00DE6448 /* ViewController.h */,
 				D396A5251A2E09DE00DE6448 /* ViewController.m */,
 				D356E9491A3F5B810014C82C /* catalog.xcassets */,
-				D397397D1A2E082300D0AB69 /* LaunchScreen.xib */,
 				D397396E1A2E082200D0AB69 /* Supporting Files */,
 			);
 			path = "OpenMRS-iOS";
@@ -392,7 +389,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				D396EAF51A36460500191F50 /* search_icon.png in Resources */,
-				D397397F1A2E082300D0AB69 /* LaunchScreen.xib in Resources */,
 				D3079E761A3D4DED00E308C7 /* add_patient_icon.png in Resources */,
 				D3079E751A3D4DED00E308C7 /* add_patient_icon@2x.png in Resources */,
 				D396EAF61A36460500191F50 /* search_icon@2x.png in Resources */,
@@ -504,17 +500,6 @@
 		};
 /* End PBXTargetDependency section */
 
-/* Begin PBXVariantGroup section */
-		D397397D1A2E082300D0AB69 /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D397397E1A2E082300D0AB69 /* Base */,
-			);
-			name = LaunchScreen.xib;
-			sourceTree = "<group>";
-		};
-/* End PBXVariantGroup section */
-
 /* Begin XCBuildConfiguration section */
 		D397398C1A2E082300D0AB69 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -597,6 +582,7 @@
 			baseConfigurationReference = AFA25E06F401CA7D732F7C67 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				INFOPLIST_FILE = "OpenMRS-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -609,6 +595,7 @@
 			baseConfigurationReference = D21FB0B4A47906E6EF7F24EA /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				INFOPLIST_FILE = "OpenMRS-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
