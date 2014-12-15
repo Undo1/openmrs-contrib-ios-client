@@ -118,6 +118,7 @@
     textField.backgroundColor = [UIColor clearColor];
     textField.textColor = self.view.tintColor;
     textField.textAlignment = NSTextAlignmentRight;
+    textField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     textField.returnKeyType = UIReturnKeyDone;
     [textField addTarget:self action:@selector(textFieldDidUpdate:) forControlEvents:UIControlEventEditingChanged];
     

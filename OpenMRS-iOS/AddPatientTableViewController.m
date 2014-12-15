@@ -109,6 +109,7 @@
         
         UITextField *field = [[UITextField alloc] initWithFrame:CGRectMake(cell.bounds.size.width-150, 0, 130, cell.bounds.size.height)];
         field.backgroundColor = [UIColor clearColor];
+        field.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         field.textColor = self.view.tintColor;
         field.textAlignment = NSTextAlignmentRight;
         field.returnKeyType = UIReturnKeyDone;
@@ -163,6 +164,7 @@
             
             UITextField *field = [[UITextField alloc] initWithFrame:CGRectMake(cell.bounds.size.width-150, 0, 130, cell.bounds.size.height)];
             field.backgroundColor = [UIColor clearColor];
+            field.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             field.textColor = self.view.tintColor;
             field.textAlignment = NSTextAlignmentRight;
             field.returnKeyType = UIReturnKeyDone;
@@ -213,6 +215,7 @@
             field.textColor = self.view.tintColor;
             field.textAlignment = NSTextAlignmentRight;
             field.returnKeyType = UIReturnKeyDone;
+            field.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             [field addTarget:self action:@selector(textFieldDidUpdate:) forControlEvents:UIControlEventEditingChanged];
             
             field.placeholder = @"Identifier";
