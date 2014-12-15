@@ -52,6 +52,8 @@
     [goButton setTitleColor:self.view.tintColor forState:UIControlStateNormal];
     [goButton addTarget:self action:@selector(signIn:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:goButton];
+    
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleDefault];
 }
 - (void)signIn:(UIButton *)sender
 {
@@ -71,6 +73,7 @@
             [wrapper setObject:host forKey:(__bridge id)(kSecAttrService)];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self dismissViewControllerAnimated:YES completion:nil];
+                [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
             });
         }
         else
