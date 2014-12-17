@@ -39,10 +39,17 @@
             [SVProgressHUD showSuccessWithStatus:@"Logged In"];
         });
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-//        NSLog(@"Error: %@", error);
+        NSLog(@"Couldn't verify creds: %@", error);
         completion(NO);
         dispatch_async(dispatch_get_main_queue(), ^{
-            [SVProgressHUD showErrorWithStatus:@"Login failed"];
+            if (error.code == -1003) //Server with specified hostname not found
+            {
+                [SVProgressHUD showErrorWithStatus:@"Couldn't find server"];
+            }
+            else
+            {
+                [SVProgressHUD showErrorWithStatus:@"Login failed"];
+            }
         });
     }];
 }
