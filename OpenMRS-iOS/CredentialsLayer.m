@@ -36,7 +36,7 @@
     static CredentialsLayer *_sharedManager = nil;
     
     dispatch_once(&pred, ^{ _sharedManager = [[self alloc] initWithBaseURL:[NSURL URLWithString:host]]; });
-    NSLog(@"%@ | %@", [_sharedManager.baseURL.absoluteString stringByReplacingOccurrencesOfString:@"/" withString:@""], [[NSURL URLWithString:host].absoluteString stringByReplacingOccurrencesOfString:@"/" withString:@""]);
+
     if (![[_sharedManager.baseURL.absoluteString stringByReplacingOccurrencesOfString:@"/" withString:@""] isEqual:[[NSURL URLWithString:host].absoluteString stringByReplacingOccurrencesOfString:@"/" withString:@""]])
     {
         NSLog(@"%@", _sharedManager.baseURL.absoluteString);
