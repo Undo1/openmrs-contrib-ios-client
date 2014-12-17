@@ -25,9 +25,11 @@
     [self.view addSubview:imageView];
     
     self.hostTextField = [[UITextField alloc] initWithFrame:CGRectMake(74, 50, self.view.frame.size.width-84, 44)];
-    self.hostTextField .borderStyle = UITextBorderStyleNone;
-    self.hostTextField .autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth;
-    self.hostTextField .placeholder = @"Host";
+    self.hostTextField.borderStyle = UITextBorderStyleNone;
+    self.hostTextField.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth;
+    self.hostTextField.keyboardType = UIKeyboardTypeURL;
+    self.hostTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
+    self.hostTextField.placeholder = @"Host";
     
     [self.view addSubview:self.hostTextField ];
     
