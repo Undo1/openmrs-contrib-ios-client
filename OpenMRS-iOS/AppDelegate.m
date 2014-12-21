@@ -148,6 +148,6 @@
     [storeCoordinator removePersistentStore:store error:&error];
     [[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error];
     
-    [[self.managedObjectContext persistentStoreCoordinator] addPersistentStoreWithType:NSSQLiteStoreType configuration:nil URL:storeURL options:nil error:&error];//recreates the persistent store
+    [[self.managedObjectContext persistentStoreCoordinator] addPersistentStoreWithType:EncryptedStoreType configuration:nil URL:storeURL options:nil error:&error];//recreates the persistent store
 }
 @end
