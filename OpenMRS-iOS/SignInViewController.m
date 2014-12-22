@@ -30,6 +30,9 @@
     self.hostTextField.keyboardType = UIKeyboardTypeURL;
     self.hostTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
     self.hostTextField.placeholder = @"Host";
+#ifdef DEBUG
+    self.hostTextField.placeholder = @"Host (demo.openmrs.org/openmrs)";
+#endif
     
     [self.view addSubview:self.hostTextField ];
     
@@ -37,6 +40,9 @@
     self.usernameTextField.borderStyle = UITextBorderStyleNone;
     self.usernameTextField.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth;
     self.usernameTextField.placeholder = @"Username";
+#ifdef DEBUG
+    self.usernameTextField.placeholder = @"Username (admin)";
+#endif
     
     [self.view addSubview:self.usernameTextField];
     
@@ -44,6 +50,9 @@
     self.passwordTextField.borderStyle = UITextBorderStyleNone;
     self.passwordTextField.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth;
     self.passwordTextField.placeholder = @"Password";
+#ifdef DEBUG
+    self.passwordTextField.placeholder = @"Password (••••••••)";
+#endif
     self.passwordTextField.secureTextEntry = YES;
     
     [self.view addSubview:self.passwordTextField];
@@ -64,6 +73,12 @@
     NSString *password = self.passwordTextField.text;
     NSString *username = self.usernameTextField.text;
     NSString *host = self.hostTextField.text;
+    
+#ifdef DEBUG
+    if (username.length == 0) username = @"admin";
+    if (password.length == 0) password = @"Admin123";
+    if (host.length == 0 || [host isEqualToString:@"http://"]) host = @"http://demo.openmrs.org/openmrs";
+#endif
     
     [OpenMRSAPIManager verifyCredentialsWithUsername:username password:password host:host completion:^(BOOL success) {
         if (success)
