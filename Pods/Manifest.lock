@@ -1,7 +1,4 @@
 PODS:
-  - AFNetworkActivityLogger (2.0.3):
-    - AFNetworking/NSURLConnection (~> 2.0)
-    - AFNetworking/NSURLSession (~> 2.0)
   - AFNetworking (2.5.0):
     - AFNetworking/NSURLConnection (= 2.5.0)
     - AFNetworking/NSURLSession (= 2.5.0)
@@ -33,7 +30,6 @@ PODS:
   - SVProgressHUD (1.1.2)
 
 DEPENDENCIES:
-  - AFNetworkActivityLogger
   - AFNetworking (= 2.5.0)
   - EncryptedCoreData (from `https://github.com/project-imas/encrypted-core-data.git`)
   - SVProgressHUD
@@ -48,7 +44,6 @@ CHECKOUT OPTIONS:
     :git: https://github.com/project-imas/encrypted-core-data.git
 
 SPEC CHECKSUMS:
-  AFNetworkActivityLogger: d6a2d2755fada3a1fbf1f490ec0dd92224e092a4
   AFNetworking: 0f54cb5d16ce38c1b76948faffb8d5fb705021c7
   EncryptedCoreData: a52183de3620d305b78b8c8a3b323ebf7adf76a5
   SQLCipher: 981110217eb93c2779c34fb59e646a1c1da918d8

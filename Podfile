@@ -3,8 +3,8 @@
 
 source 'https://github.com/CocoaPods/Specs.git'
 
-pod "AFNetworking", "~> 2.0"
-pod "SVProgressHUD", :head
+pod "AFNetworking", "2.5.0"
+pod "SVProgressHUD"
 pod "EncryptedCoreData", :git => 'https://github.com/project-imas/encrypted-core-data.git'
 
 target 'OpenMRS-iOS' do

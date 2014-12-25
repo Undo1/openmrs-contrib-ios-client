@@ -11,6 +11,7 @@
 #import "MRSPatient.h"
 #import "MRSVisit.h"
 #import "MRSPerson.h"
+#import "OrderedDictionary.h"
 #import "MRSVital.h"
 #import "MRSLocation.h"
 #import "MRSEncounterOb.h"
@@ -473,11 +474,15 @@
     NSMutableArray *obs = [[NSMutableArray alloc] init];
     
     for (MRSVital *vital in vitals) {
-        [obs addObject:@{
-                         @"concept" : vital.conceptUUID,
-                         @"obsDatetime" : [self openMRSFormatStringWithDate:[NSDate date]],
-                         @"person" : patient.UUID,
-                         @"value" : vital.value} ];
+//        [obs addObject:@{
+//                         @"concept" : vital.conceptUUID,
+//                         @"obsDatetime" : [self openMRSFormatStringWithDate:[NSDate date]],
+//                         @"person" : patient.UUID,
+//                         @"value" : vital.value} ];
+        
+        OrderedDictionary *dict = [[OrderedDictionary alloc] initWithObjectsAndKeys:vital.conceptUUID, @"concept", [self openMRSFormatStringWithDate:[NSDate date]], @"obsDatetime", patient.UUID, @"person", vital.value, @"value", nil];
+        
+        [obs addObject:dict];
     }
     
     NSDictionary *parameters = @{@"patient" : patient.UUID,
@@ -486,14 +491,13 @@
                                  @"obs" : obs,
                                  @"location" : location.UUID};
     
-    NSLog(@"parameters: %@", parameters);
     
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/encounter", host] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         completion(nil);
         NSLog(@"Success capturing vitals");
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         completion(error);
-        NSLog(@"Failure, %@", error);
+        NSLog(@"Failure, %@", [[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
     }];
 }
 + (void)getLocationsWithCompletion:(void (^)(NSError *error, NSArray *locations))completion

@@ -11,6 +11,7 @@
 		D3079E751A3D4DED00E308C7 /* add_patient_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D3079E721A3D4DED00E308C7 /* add_patient_icon@2x.png */; };
 		D3079E761A3D4DED00E308C7 /* add_patient_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D3079E731A3D4DED00E308C7 /* add_patient_icon.png */; };
 		D3079E771A3D4DED00E308C7 /* add_patient_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D3079E741A3D4DED00E308C7 /* add_patient_icon@3x.png */; };
+		D317E7F61A4C6BD300E05212 /* OrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = D317E7F41A4C6BD300E05212 /* OrderedDictionary.m */; };
 		D34BF5391A3BA7BE009205C9 /* AddVisitNoteTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D34BF5381A3BA7BE009205C9 /* AddVisitNoteTableViewController.m */; };
 		D356E94A1A3F5B810014C82C /* catalog.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D356E9491A3F5B810014C82C /* catalog.xcassets */; };
 		D37674271A3BB114003A8005 /* MRSLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = D37674261A3BB114003A8005 /* MRSLocation.m */; };
@@ -70,6 +71,8 @@
 		D3079E721A3D4DED00E308C7 /* add_patient_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add_patient_icon@2x.png"; sourceTree = "<group>"; };
 		D3079E731A3D4DED00E308C7 /* add_patient_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = add_patient_icon.png; sourceTree = "<group>"; };
 		D3079E741A3D4DED00E308C7 /* add_patient_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "add_patient_icon@3x.png"; sourceTree = "<group>"; };
+		D317E7F41A4C6BD300E05212 /* OrderedDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderedDictionary.m; sourceTree = "<group>"; };
+		D317E7F51A4C6BD300E05212 /* OrderedDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderedDictionary.h; sourceTree = "<group>"; };
 		D34BF5371A3BA7BE009205C9 /* AddVisitNoteTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddVisitNoteTableViewController.h; sourceTree = "<group>"; };
 		D34BF5381A3BA7BE009205C9 /* AddVisitNoteTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddVisitNoteTableViewController.m; sourceTree = "<group>"; };
 		D356E9491A3F5B810014C82C /* catalog.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = catalog.xcassets; sourceTree = "<group>"; };
@@ -214,6 +217,8 @@
 				D396A5171A2E09DE00DE6448 /* SignInViewController.m */,
 				D396A5181A2E09DE00DE6448 /* OpenMRSAPIManager.h */,
 				D396A5191A2E09DE00DE6448 /* OpenMRSAPIManager.m */,
+				D317E7F41A4C6BD300E05212 /* OrderedDictionary.m */,
+				D317E7F51A4C6BD300E05212 /* OrderedDictionary.h */,
 				D3E47BA11A3A00C0004B3F95 /* MRSPatientIdentifierType.h */,
 				D3E47BA21A3A00C0004B3F95 /* MRSPatientIdentifierType.m */,
 				D3A4728C1A37794D002A0BBD /* MRSPerson.h */,
@@ -457,6 +462,7 @@
 				D38DB4FE1A3216CF00E2CF23 /* MRSEncounterType.m in Sources */,
 				D38DB4F81A320EF700E2CF23 /* MRSEncounterOb.m in Sources */,
 				D39AD7AE1A3C081000C01540 /* MRSVital.m in Sources */,
+				D317E7F61A4C6BD300E05212 /* OrderedDictionary.m in Sources */,
 				D396A52D1A2E09DE00DE6448 /* MRSPatient.m in Sources */,
 				D39AD7AB1A3BFE8600C01540 /* CaptureVitalsTableViewController.m in Sources */,
 				D396A5281A2E09DE00DE6448 /* SignInViewController.m in Sources */,
