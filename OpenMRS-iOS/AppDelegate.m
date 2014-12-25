@@ -11,7 +11,6 @@
 #import "KeychainItemWrapper.h"
 #import <CoreData/CoreData.h>
 #import "EncryptedStore.h"
-#import "AFNetworkActivityLogger.h"
 @interface AppDelegate ()
 
 @end
