@@ -11,4 +11,4 @@ After cloning the repository, install [Cocoapods](http://cocoapods.org/) and run
 More Information
 ----------------
 
-More information about this app can be found on its [OpenMRS Wiki page](https://wiki.openmrs.org/display/docs/OpenMRS+iOS+Client), the [OpenMRS-iOS User Guide](https://wiki.openmrs.org/display/docs/OpenMRS-iOS+User+Guide), and the [OpenMRS-iOS Development Guide](https://wiki.openmrs.org/display/docs/OpenMRS-iOS+Development+Guide).
+More information about this app can be found on the [OpenMRS-iOS Wiki page](https://wiki.openmrs.org/display/docs/OpenMRS+iOS+Client).
