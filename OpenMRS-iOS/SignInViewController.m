@@ -17,8 +17,8 @@
     
     self.view.backgroundColor = [UIColor whiteColor];
     
-    UIImage *rmsLogo = [UIImage imageNamed:@"openmrs-logo"];
-    UIImageView *imageView = [[UIImageView alloc] initWithImage:rmsLogo];
+    UIImage *openMrsLogo = [UIImage imageNamed:@"openmrs-logo"];
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:openMrsLogo];
     [imageView sizeToFit];
     imageView.frame = CGRectMake(15, 50, 44, 44);
     imageView.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;

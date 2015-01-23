@@ -13,7 +13,6 @@
 		D3079E771A3D4DED00E308C7 /* add_patient_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D3079E741A3D4DED00E308C7 /* add_patient_icon@3x.png */; };
 		D317E7F61A4C6BD300E05212 /* OrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = D317E7F41A4C6BD300E05212 /* OrderedDictionary.m */; };
 		D34BF5391A3BA7BE009205C9 /* AddVisitNoteTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D34BF5381A3BA7BE009205C9 /* AddVisitNoteTableViewController.m */; };
-		D356E94A1A3F5B810014C82C /* catalog.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D356E9491A3F5B810014C82C /* catalog.xcassets */; };
 		D37674271A3BB114003A8005 /* MRSLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = D37674261A3BB114003A8005 /* MRSLocation.m */; };
 		D376742A1A3BB254003A8005 /* LocationListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D37674291A3BB254003A8005 /* LocationListTableViewController.m */; };
 		D38DB4F51A316FAA00E2CF23 /* EncounterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D38DB4F41A316FAA00E2CF23 /* EncounterViewController.m */; };
@@ -52,6 +51,7 @@
 		D3E47BA31A3A00C0004B3F95 /* MRSPatientIdentifierType.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E47BA21A3A00C0004B3F95 /* MRSPatientIdentifierType.m */; };
 		D3E47BA61A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E47BA51A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m */; };
 		D3E47BA91A3A08EF004B3F95 /* MRSPatientIdentifier.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E47BA81A3A08EF004B3F95 /* MRSPatientIdentifier.m */; };
+		D3FAEFFE1A51C1CD002B1BF7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3FAEFFD1A51C1CD002B1BF7 /* Images.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,7 +75,6 @@
 		D317E7F51A4C6BD300E05212 /* OrderedDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderedDictionary.h; sourceTree = "<group>"; };
 		D34BF5371A3BA7BE009205C9 /* AddVisitNoteTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddVisitNoteTableViewController.h; sourceTree = "<group>"; };
 		D34BF5381A3BA7BE009205C9 /* AddVisitNoteTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddVisitNoteTableViewController.m; sourceTree = "<group>"; };
-		D356E9491A3F5B810014C82C /* catalog.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = catalog.xcassets; sourceTree = "<group>"; };
 		D37674251A3BB114003A8005 /* MRSLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSLocation.h; sourceTree = "<group>"; };
 		D37674261A3BB114003A8005 /* MRSLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSLocation.m; sourceTree = "<group>"; };
 		D37674281A3BB254003A8005 /* LocationListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationListTableViewController.h; sourceTree = "<group>"; };
@@ -146,6 +145,7 @@
 		D3E47BA51A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectPatientIdentifierTypeTableViewController.m; sourceTree = "<group>"; };
 		D3E47BA71A3A08EF004B3F95 /* MRSPatientIdentifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSPatientIdentifier.h; sourceTree = "<group>"; };
 		D3E47BA81A3A08EF004B3F95 /* MRSPatientIdentifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSPatientIdentifier.m; sourceTree = "<group>"; };
+		D3FAEFFD1A51C1CD002B1BF7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -261,7 +261,7 @@
 				D396A5231A2E09DE00DE6448 /* CredentialsLayer.m */,
 				D396A5241A2E09DE00DE6448 /* ViewController.h */,
 				D396A5251A2E09DE00DE6448 /* ViewController.m */,
-				D356E9491A3F5B810014C82C /* catalog.xcassets */,
+				D3FAEFFD1A51C1CD002B1BF7 /* Images.xcassets */,
 				D397396E1A2E082200D0AB69 /* Supporting Files */,
 			);
 			path = "OpenMRS-iOS";
@@ -362,6 +362,7 @@
 				TargetAttributes = {
 					D397396A1A2E082200D0AB69 = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = VRGDQ857JW;
 					};
 					D39739831A2E082300D0AB69 = {
 						CreatedOnToolsVersion = 6.2;
@@ -394,10 +395,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				D396EAF51A36460500191F50 /* search_icon.png in Resources */,
+				D3FAEFFE1A51C1CD002B1BF7 /* Images.xcassets in Resources */,
 				D3079E761A3D4DED00E308C7 /* add_patient_icon.png in Resources */,
 				D3079E751A3D4DED00E308C7 /* add_patient_icon@2x.png in Resources */,
 				D396EAF61A36460500191F50 /* search_icon@2x.png in Resources */,
-				D356E94A1A3F5B810014C82C /* catalog.xcassets in Resources */,
 				D396A53F1A2E0B5A00DE6448 /* openmrs-logo@2x.png in Resources */,
 				D396A5401A2E0B5A00DE6448 /* openmrs-logo@3x.png in Resources */,
 				D3079E771A3D4DED00E308C7 /* add_patient_icon@3x.png in Resources */,
@@ -589,10 +590,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				INFOPLIST_FILE = "OpenMRS-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "50f5fd6f-7e44-4af5-8805-4836a63ea1f7";
 			};
 			name = Debug;
 		};
@@ -602,10 +606,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				INFOPLIST_FILE = "OpenMRS-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "50f5fd6f-7e44-4af5-8805-4836a63ea1f7";
 			};
 			name = Release;
 		};
