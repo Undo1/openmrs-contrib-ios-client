@@ -106,7 +106,10 @@
                 patient.gender = results[@"person"][@"gender"];
                 patient.UUID = results[@"uuid"];
                 patient.name = results[@"display"];
-                patient.age = [results[@"person"][@"age"] stringValue];
+                if (results[@"person"][@"age"] != [NSNull null])
+                {
+                    patient.age = [results[@"person"][@"age"] stringValue];
+                }
                 
                 completion(nil, patient);
                 
@@ -645,7 +648,10 @@
         detailedPatient.gender = results[@"person"][@"gender"];
         detailedPatient.UUID = results[@"uuid"];
         detailedPatient.name = results[@"display"];
-        detailedPatient.age = [results[@"person"][@"age"] stringValue];
+        if (results[@"person"][@"age"] != [NSNull null])
+        {
+            detailedPatient.age = [results[@"person"][@"age"] stringValue];
+        }
         detailedPatient.hasDetailedInfo = YES;
         
         completion(nil, detailedPatient);
