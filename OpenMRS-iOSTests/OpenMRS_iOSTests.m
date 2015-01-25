@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 #import "OpenMRSAPIManager.h"
+#import "KeychainItemWrapper.h"
 
 @interface OpenMRS_iOSTests : XCTestCase
 
@@ -18,14 +19,30 @@
 
 - (void)setUp {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    [wrapper setObject:@"admin123" forKey:(__bridge id)(kSecValueData)];
+    [wrapper setObject:@"admin" forKey:(__bridge id)(kSecAttrAccount)];
+    [wrapper setObject:@"http://demo.openmrs.org/openmrs" forKey:(__bridge id)(kSecAttrService)];
 }
 
 - (void)tearDown {
     // Put teardown code here. This method is called after the invocation of each test method in the class.
     [super tearDown];
 }
-
+- (void)testSearchResults {
+    XCTestExpectation *expectation = [self expectationWithDescription:@"login"];
+    
+    [OpenMRSAPIManager getPatientListWithSearch:@"Mark" completion:^(NSError *error, NSArray *patients) {
+        XCTAssert(!error && patients.count > 0);
+        
+        [expectation fulfill];
+    }];
+    
+    [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
+        XCTAssertNil(error);
+    }];
+}
 - (void)testAdminLogin {
     [OpenMRSAPIManager logout];
     
