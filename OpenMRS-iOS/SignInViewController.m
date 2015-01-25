@@ -73,10 +73,7 @@
         if (success)
         {
             NSLog(@"Success!");
-            KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
-            [wrapper setObject:password forKey:(__bridge id)(kSecValueData)];
-            [wrapper setObject:username forKey:(__bridge id)(kSecAttrAccount)];
-            [wrapper setObject:host forKey:(__bridge id)(kSecAttrService)];
+            [self updateKeychainWithHost:host username:username password:password];
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self dismissViewControllerAnimated:YES completion:nil];
                 [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
@@ -85,8 +82,32 @@
         else
         {
             NSLog(@"Failure!");
+            
+            NSString *hostWithOpenmrs = [host stringByAppendingString:@"/openmrs"];
+            
+            [OpenMRSAPIManager verifyCredentialsWithUsername:username password:password host:hostWithOpenmrs completion:^(BOOL success) {
+                if (success)
+                {
+                    [self updateKeychainWithHost:hostWithOpenmrs username:username password:password];
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        [self dismissViewControllerAnimated:YES completion:nil];
+                        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+                    });
+                }
+                else
+                {
+                    NSLog(@"Failure");
+                }
+            }];
         }
     }];
+}
+- (void)updateKeychainWithHost:(NSString *)host username:(NSString *)username password:(NSString *)password
+{
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    [wrapper setObject:password forKey:(__bridge id)(kSecValueData)];
+    [wrapper setObject:username forKey:(__bridge id)(kSecAttrAccount)];
+    [wrapper setObject:host forKey:(__bridge id)(kSecAttrService)];
 }
 - (NSString *)urlifiedString:(NSString *)inputUrl
 {
