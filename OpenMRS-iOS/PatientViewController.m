@@ -10,6 +10,7 @@
 #import "OpenMRSAPIManager.h"
 #import "PatientEncounterListView.h"
 #import "PatientVisitListView.h"
+#import "OpenMRS_iOS-Swift.h"
 #import "AddVisitNoteTableViewController.h"
 #import "CaptureVitalsTableViewController.h"
 
@@ -63,6 +64,19 @@
            dispatch_async(dispatch_get_main_queue(), ^{
                [self.tableView reloadData];
            });
+           
+           self.hasActiveVisit = NO;
+           
+           for (MRSVisit *visit in visits) {
+               if (visit.active)
+               {
+                   self.hasActiveVisit = YES;
+                   dispatch_async(dispatch_get_main_queue(), ^{
+                       [self.tableView reloadData];
+                   });
+                   break;
+               }
+           }
        }
     }];
 }
@@ -166,7 +180,7 @@
 {
     if (section == 0)
     {
-        return (self.isShowingActions) ? 3 : 1;
+        return (self.isShowingActions) ? ((self.hasActiveVisit) ? 3 : 4) : 1;
     }
     else if (section == 1)
     {
@@ -234,6 +248,21 @@
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             cell.textLabel.textColor = self.view.tintColor;
             cell.textLabel.text = @"Add Visit Note...";
+            
+            return cell;
+        }
+        if (indexPath.row == 3)
+        {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"startVisitCell"];
+            
+            if (!cell)
+            {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"startVisitCell"];
+            }
+            
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.textLabel.textColor = self.view.tintColor;
+            cell.textLabel.text = @"Start Visit...";
             
             return cell;
         }
@@ -308,6 +337,14 @@
             [self.patient saveToCoreData];
             return;
         }
+        if (indexPath.row == 3)
+        {
+            StartVisitViewController *startVisitVC = [[StartVisitViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            startVisitVC.delegate = self;
+            startVisitVC.patient = self.patient;
+            [self presentViewController:[[UINavigationController alloc] initWithRootViewController:startVisitVC] animated:YES completion:nil];
+            return;
+        }
         
         if (indexPath.row == 0)
         {
@@ -355,5 +392,12 @@
         [self updateWithDetailedInfo];
     }
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+- (void)didCreateVisitForPatient:(MRSPatient *)patient
+{
+    if ([patient.UUID isEqualToString:self.patient.UUID])
+    {
+        [self updateWithDetailedInfo];
+    }
 }
 @end

@@ -23,6 +23,7 @@
 #import "SVProgressHUD.h"
 #import "MRSEncounterOb.h"
 #import "MRSEncounterType.h"
+#import "OpenMRS_iOS-Swift.h"
 #import <CoreData/CoreData.h>
 
 @implementation OpenMRSAPIManager
@@ -52,6 +53,38 @@
                 [SVProgressHUD showErrorWithStatus:@"Login failed"];
             }
         });
+    }];
+}
++ (void)getVisitTypesWithCompletion:(void (^)(NSError *, NSArray *))completion
+{
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/visittype", host] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        
+        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
+        
+        NSMutableArray *visitTypes = [[NSMutableArray alloc] init];
+        
+        for (NSDictionary *dict in results[@"results"])
+        {
+            MRSVisitType *type = [[MRSVisitType alloc] init];
+            
+            type.uuid = dict[@"uuid"];
+            type.display = dict[@"display"];
+            
+            [visitTypes addObject:type];
+        }
+        
+        completion(nil, visitTypes);
+        
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(error, nil);
     }];
 }
 + (void)addPatient:(MRSPatient *)patient withIdentifier:(MRSPatientIdentifier *)identifier completion:(void (^)(NSError *error, MRSPatient *createdPatient))completion;
@@ -219,7 +252,9 @@
 {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-d'T'HH:mm:ss.SSSZ"];
-
+    NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+    [formatter setTimeZone:timeZone];
+    
     NSString *stringFromDate = [formatter stringFromDate:date];
     NSLog(@"stringFromDate: %@", stringFromDate);
 
@@ -395,6 +430,30 @@
         NSLog(@"Failure, %@", error);
     }];
 }
++ (void)currentlyActiveVisitFromVisits:(NSArray *)visits withCompletion:(void (^)(NSError *error, MRSVisit *visit))completion
+{
+    return;
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+    
+    __block NSError *error = nil;
+    
+    for (MRSVisit *visit in visits) {
+        [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/visit/%@?v=custom:(uuid,stopDatetime)", host, visit.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *failureReason) {
+            error = failureReason;
+        }];
+    }
+    
+    completion(error, nil);
+    
+}
 + (void)getVisitsForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *visits))completion
 {
     [SVProgressHUD show];
@@ -407,7 +466,7 @@
     
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
     
-    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/visit?patient=%@", host, patient.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/visit?v=full&patient=%@", host, patient.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
         
         NSMutableArray *array = [[NSMutableArray alloc] init];
@@ -416,6 +475,7 @@
             MRSVisit *visit = [[MRSVisit alloc] init];
             visit.UUID = visitDict[@"uuid"];
             visit.displayName = visitDict[@"display"];
+            visit.active = (visitDict[@"stopDatetime"] == nil || visitDict[@"stopDatetime"] == [NSNull null]);
             [array addObject:visit];
         }
         completion(nil, array);
@@ -501,6 +561,38 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         completion(error);
         NSLog(@"Failure, %@", [[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+    }];
+}
++ (void)startVisitWithLocation:(MRSLocation *)location visitType:(MRSVisitType *)visitType forPatient:(MRSPatient *)patient completion:(void (^)(NSError *error))completion
+{
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    
+    NSDictionary *parameters = @{};
+    
+    @try {
+        parameters = @{@"patient": patient.UUID,
+                       @"visitType" : visitType.uuid,
+                       @"location" : location.UUID,
+                       @"startDatetime" : [self openMRSFormatStringWithDate:[NSDate date]]};
+        
+        NSLog(@"Parameters: %@", parameters);
+    }
+    @catch (NSException *exception) {
+        completion([[NSError alloc] init]);
+        return;
+    }
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/visit", host] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        completion(nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"error starting visit: %@", error);
+        completion(error);
     }];
 }
 + (void)getLocationsWithCompletion:(void (^)(NSError *error, NSArray *locations))completion

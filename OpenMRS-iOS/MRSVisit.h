@@ -11,4 +11,5 @@
 @interface MRSVisit : NSObject
 @property (nonatomic, strong) NSString *displayName;
 @property (nonatomic, strong) NSString *UUID;
+@property (nonatomic) BOOL active;
 @end
