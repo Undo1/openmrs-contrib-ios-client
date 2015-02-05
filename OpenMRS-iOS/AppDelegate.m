@@ -45,14 +45,24 @@
     
     [[UIView appearance] setTintColor:[UIColor colorWithRed:39/255.0 green:139/255.0 blue:146/255.0 alpha:1]];
     [[UIView appearanceWhenContainedIn:[UINavigationBar class], nil] setTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:30/255.0 green:130/255.0 blue:112/255.0 alpha:1]];
-    [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    
+    
     [[UINavigationBar appearance] setTitleTextAttributes:@{ NSForegroundColorAttributeName : [UIColor whiteColor] }];
-    [[UINavigationBar appearance] setTranslucent:NO];
+    
     
     [[UISearchBar appearance] setBarTintColor:[UIColor colorWithRed:30/255.0 green:130/255.0 blue:112/255.0 alpha:1]];
-    [[UISearchBar appearance] setClipsToBounds:YES];
+    
+    if ([[NSProcessInfo processInfo] respondsToSelector:@selector(operatingSystemVersion)])
+    {
+        if ([[NSProcessInfo processInfo] operatingSystemVersion].majorVersion >= 8) {
+            [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];
+            [[UINavigationBar appearance] setTranslucent:NO];
+            [[UISearchBar appearance] setClipsToBounds:YES];
+        }
+    }
+    
 
     
     return YES;
