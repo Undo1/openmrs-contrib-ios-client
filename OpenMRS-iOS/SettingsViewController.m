@@ -25,31 +25,23 @@
 }
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return 2;
 }
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+	if (section == 0)
+	{
+		return 2;
+	}
+	else
+	{
+		return 1;
+	}
 }
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0)
     {
-        if (indexPath.row == 2)
-        {
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"clearCell"];
-            
-            if (!cell)
-            {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"clearCell"];
-            }
-            
-            cell.textLabel.textColor = [UIColor redColor];
-            cell.textLabel.textAlignment = NSTextAlignmentCenter;
-            cell.textLabel.text = @"Remove Offline Patients";
-            
-            return cell;
-        }
         if (indexPath.row == 1)
         {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"logoutCell"];
@@ -82,11 +74,28 @@
             return usernameCell;
         }
     }
+	if (indexPath.section == 1)
+	{
+		if (indexPath.row == 0) {
+			UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"clearCell"];
+
+			if (!cell)
+			{
+				cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"clearCell"];
+			}
+
+			cell.textLabel.textColor = [UIColor redColor];
+			cell.textLabel.textAlignment = NSTextAlignmentCenter;
+			cell.textLabel.text = @"Remove Offline Patients";
+
+			return cell;
+		}
+	}
     return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
 }
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0 && indexPath.row == 2)
+    if (indexPath.section == 1 && indexPath.row == 0)
     {
         AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
         
