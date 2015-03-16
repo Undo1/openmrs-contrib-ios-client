@@ -1,6 +1,0 @@
-GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
-HEADER_SEARCH_PATHS = "${PODS_ROOT}/Headers/Public" "${PODS_ROOT}/Headers/Public/AFNetworking" "${PODS_ROOT}/Headers/Public/EncryptedCoreData" "${PODS_ROOT}/Headers/Public/SQLCipher" "${PODS_ROOT}/Headers/Public/SVProgressHUD"
-OTHER_CFLAGS = $(inherited) -isystem "${PODS_ROOT}/Headers/Public" -isystem "${PODS_ROOT}/Headers/Public/AFNetworking" -isystem "${PODS_ROOT}/Headers/Public/EncryptedCoreData" -isystem "${PODS_ROOT}/Headers/Public/SQLCipher" -isystem "${PODS_ROOT}/Headers/Public/SVProgressHUD" $(inherited) -DSQLITE_HAS_CODEC -DSQLCIPHER_CRYPTO_CC $(inherited) -DSQLITE_HAS_CODEC -DSQLITE_TEMP_STORE=2 -DSQLITE_THREADSAFE -DSQLCIPHER_CRYPTO_CC
-OTHER_LDFLAGS = -ObjC -l"Pods-OpenMRS-iOS-AFNetworking" -l"Pods-OpenMRS-iOS-EncryptedCoreData" -l"Pods-OpenMRS-iOS-SQLCipher" -l"Pods-OpenMRS-iOS-SVProgressHUD" -framework "CoreData" -framework "CoreGraphics" -framework "MobileCoreServices" -framework "QuartzCore" -framework "Security" -framework "SystemConfiguration"
-OTHER_LIBTOOLFLAGS = $(OTHER_LDFLAGS)
-PODS_ROOT = ${SRCROOT}/Pods
