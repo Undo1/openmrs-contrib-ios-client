@@ -120,11 +120,11 @@
     textField.textAlignment = NSTextAlignmentRight;
     textField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     textField.returnKeyType = UIReturnKeyDone;
-	if (indexPath.row != 3) { //The pulse field.
-		textField.keyboardType = UIKeyboardTypeDecimalPad;
-	} else {
-		textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
-	}
+    if (indexPath.row != 3) { //The pulse field.
+        textField.keyboardType = UIKeyboardTypeDecimalPad;
+    } else {
+        textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
+    }
     [textField addTarget:self action:@selector(textFieldDidUpdate:) forControlEvents:UIControlEventEditingChanged];
     
     textField.placeholder = @"Value";
