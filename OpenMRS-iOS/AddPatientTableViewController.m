@@ -168,6 +168,7 @@
             field.textColor = self.view.tintColor;
             field.textAlignment = NSTextAlignmentRight;
             field.returnKeyType = UIReturnKeyDone;
+			field.keyboardType = UIKeyboardTypeNumberPad;
             [field addTarget:self action:@selector(textFieldDidUpdate:) forControlEvents:UIControlEventEditingChanged];
             
             field.placeholder = @"Age";
