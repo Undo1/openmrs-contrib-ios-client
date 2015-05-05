@@ -27,7 +27,6 @@
     
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
-    
 }
 - (void)done
 {
@@ -97,7 +96,8 @@
     if (indexPath.section == 0)
     {
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"namecell"];
-        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
         switch (indexPath.row) {
             case 0:
                 cell.textLabel.text = @"Given Name";
@@ -159,7 +159,8 @@
         if (indexPath.row == 0)
         {
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"ageCell"];
-            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
             cell.textLabel.text = @"Age";
             
             UITextField *field = [[UITextField alloc] initWithFrame:CGRectMake(cell.bounds.size.width-150, 0, 130, cell.bounds.size.height)];
@@ -208,7 +209,8 @@
         if (indexPath.row == 1)
         {
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"identifierCell"];
-            
+            cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
             cell.textLabel.text = @"Identifier ";
             
             UITextField *field = [[UITextField alloc] initWithFrame:CGRectMake(cell.bounds.size.width-150, 0, 130, cell.bounds.size.height)];
@@ -269,6 +271,9 @@
         SelectPatientIdentifierTypeTableViewController *selectIdType = [[SelectPatientIdentifierTypeTableViewController alloc] initWithStyle:UITableViewStylePlain];
         selectIdType.delegate = self;
         [self.navigationController pushViewController:selectIdType animated:YES];
+    } else {
+        //Pick the textfield in tableviewcell and make it first responder.
+        [(UITextField *)([self.tableView cellForRowAtIndexPath:indexPath].subviews[1]) becomeFirstResponder];
     }
 }
 - (void)textFieldDidUpdate:(UITextField *)sender

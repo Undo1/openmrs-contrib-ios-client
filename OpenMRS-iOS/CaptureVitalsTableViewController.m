@@ -144,6 +144,9 @@
         LocationListTableViewController *locList = [[LocationListTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
         locList.delegate = self;
         [self.navigationController pushViewController:locList animated:YES];
+    } else {
+        //Pick the textfield in tableviewcell and make it first responder.
+        [(UITextField *)([self.tableView cellForRowAtIndexPath:indexPath].subviews[1]) becomeFirstResponder];
     }
 }
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
