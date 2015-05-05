@@ -10,6 +10,13 @@
 #import "OpenMRSAPIManager.h"
 #import "MRSPatient.h"
 #import "PatientViewController.h"
+#import "SVProgressHUD.h"
+
+@interface PatientSearchViewController ()
+
+@property (atomic, assign) BOOL searchButtonPressed;
+
+@end
 
 @implementation PatientSearchViewController
 -(void)viewDidLoad
@@ -24,14 +31,25 @@
     [bar sizeToFit];
     self.tableView.tableHeaderView = bar;
     [bar becomeFirstResponder];
-    
+
+    self.searchButtonPressed = NO;
 }
 -(void)reloadDataForSearch:(NSString *)search
 {
+	if (self.searchButtonPressed) {
+		[SVProgressHUD show];
+	}
     [OpenMRSAPIManager getPatientListWithSearch:search completion:^(NSError *error, NSArray *patients) {
         self.currentSearchResults = patients;
         dispatch_async(dispatch_get_main_queue(), ^{
-            NSLog(@"%lu", (unsigned long)self.currentSearchResults.count);
+            if (self.currentSearchResults.count == 0 && self.searchButtonPressed && [SVProgressHUD isVisible]) {
+                [SVProgressHUD showErrorWithStatus:@"Couldn't find patients"];
+                self.searchButtonPressed = NO;
+            } else if (self.searchButtonPressed && [SVProgressHUD isVisible]) {
+                [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"%lu patients found", self.currentSearchResults.count]];
+                self.searchButtonPressed = NO;
+            }
+
             [self.tableView reloadData];
         });
     }];
@@ -74,6 +92,8 @@
     [self reloadDataForSearch:searchText];
 }
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+    self.searchButtonPressed = YES;
+    [self reloadDataForSearch:searchBar.text];
     [searchBar resignFirstResponder];
 }
 @end
