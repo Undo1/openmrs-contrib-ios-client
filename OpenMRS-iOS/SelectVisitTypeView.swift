@@ -47,7 +47,7 @@ class SelectVisitTypeView : UITableViewController
                 }
                 else
                 {
-                    self.visitTypes = types as [MRSVisitType]
+                    self.visitTypes = types as! [MRSVisitType]
                     dispatch_async(dispatch_get_main_queue()) {
                         self.tableView.reloadData()
                     }
@@ -63,7 +63,7 @@ class SelectVisitTypeView : UITableViewController
         return self.visitTypes.count
     }
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("cell") as UITableViewCell!
+        var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("cell") as! UITableViewCell!
         
         if cell == nil
         {

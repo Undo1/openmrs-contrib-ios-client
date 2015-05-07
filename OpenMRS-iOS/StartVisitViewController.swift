@@ -62,10 +62,10 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
         OpenMRSAPIManager.getVisitTypesWithCompletion { (error:NSError!, types:[AnyObject]!) -> Void in
             if error == nil
             {
-                self.cachedVisitTypes = types as [MRSVisitType]!
+                self.cachedVisitTypes = types as! [MRSVisitType]!
                 if types.count == 1
                 {
-                    self.visitType = types[0] as MRSVisitType
+                    self.visitType = types[0] as! MRSVisitType
                     
                     dispatch_async(dispatch_get_main_queue()) {
                         self.tableView.reloadData()
@@ -110,7 +110,7 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
         switch indexPath.section
         {
         case 0:
-            var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("visit_type") as UITableViewCell!
+            var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("visit_type") as! UITableViewCell!
             
             if cell == nil
             {
@@ -132,7 +132,7 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
             
             return cell
         case 1:
-            var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("location") as UITableViewCell!
+            var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("location") as! UITableViewCell!
             
             if cell == nil
             {
