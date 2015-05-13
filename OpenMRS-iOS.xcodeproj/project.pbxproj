@@ -27,7 +27,6 @@
 		D396A52C1A2E09DE00DE6448 /* PatientSearchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A51F1A2E09DE00DE6448 /* PatientSearchViewController.m */; };
 		D396A52D1A2E09DE00DE6448 /* MRSPatient.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5211A2E09DE00DE6448 /* MRSPatient.m */; };
 		D396A52E1A2E09DE00DE6448 /* CredentialsLayer.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5231A2E09DE00DE6448 /* CredentialsLayer.m */; };
-		D396A52F1A2E09DE00DE6448 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5251A2E09DE00DE6448 /* ViewController.m */; };
 		D396A53F1A2E0B5A00DE6448 /* openmrs-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D396A53C1A2E0B5A00DE6448 /* openmrs-logo@2x.png */; };
 		D396A5401A2E0B5A00DE6448 /* openmrs-logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D396A53D1A2E0B5A00DE6448 /* openmrs-logo@3x.png */; };
 		D396A5411A2E0B5A00DE6448 /* openmrs-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = D396A53E1A2E0B5A00DE6448 /* openmrs-logo.png */; };
@@ -106,8 +105,6 @@
 		D396A5211A2E09DE00DE6448 /* MRSPatient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSPatient.m; sourceTree = "<group>"; };
 		D396A5221A2E09DE00DE6448 /* CredentialsLayer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CredentialsLayer.h; sourceTree = "<group>"; };
 		D396A5231A2E09DE00DE6448 /* CredentialsLayer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CredentialsLayer.m; sourceTree = "<group>"; };
-		D396A5241A2E09DE00DE6448 /* ViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		D396A5251A2E09DE00DE6448 /* ViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		D396A53C1A2E0B5A00DE6448 /* openmrs-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "openmrs-logo@2x.png"; sourceTree = "<group>"; };
 		D396A53D1A2E0B5A00DE6448 /* openmrs-logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "openmrs-logo@3x.png"; sourceTree = "<group>"; };
 		D396A53E1A2E0B5A00DE6448 /* openmrs-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "openmrs-logo.png"; sourceTree = "<group>"; };
@@ -175,6 +172,335 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		248FBE2F1B03B9E400569C2C /* View Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				248FBE4C1B03BC7100569C2C /* Patient Search */,
+				248FBE4B1B03BC6400569C2C /* Settings */,
+				248FBE4A1B03BC5700569C2C /* Main menu */,
+				248FBE491B03BC3B00569C2C /* Patient identifier types list */,
+				248FBE481B03BC2300569C2C /* Add patient */,
+				248FBE441B03BBD100569C2C /* Encouters list */,
+				248FBE431B03BBB700569C2C /* Capture vitals */,
+				248FBE421B03BBAA00569C2C /* Add visit note */,
+				248FBE401B03BB9100569C2C /* Locations list */,
+				248FBE391B03BB1900569C2C /* Visit type list */,
+				248FBE381B03BB0E00569C2C /* Start visit */,
+				248FBE371B03BB0300569C2C /* Sign in */,
+				248FBE351B03BAE900569C2C /* Patient encounter list */,
+				248FBE341B03BADC00569C2C /* Patient visit list */,
+				248FBE311B03BA1500569C2C /* Select encounter type */,
+				248FBE301B03B9F400569C2C /* Patient  */,
+			);
+			name = "View Controllers";
+			sourceTree = "<group>";
+		};
+		248FBE301B03B9F400569C2C /* Patient  */ = {
+			isa = PBXGroup;
+			children = (
+				D396A5121A2E09DE00DE6448 /* PatientViewController.h */,
+				D396A5131A2E09DE00DE6448 /* PatientViewController.m */,
+			);
+			name = "Patient ";
+			sourceTree = "<group>";
+		};
+		248FBE311B03BA1500569C2C /* Select encounter type */ = {
+			isa = PBXGroup;
+			children = (
+				D38DB4F91A3216A300E2CF23 /* SelectEncounterTypeView.h */,
+				D38DB4FA1A3216A300E2CF23 /* SelectEncounterTypeView.m */,
+			);
+			name = "Select encounter type";
+			sourceTree = "<group>";
+		};
+		248FBE321B03BA2600569C2C /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				248FBE4E1B03BC9100569C2C /* Visit */,
+				248FBE4D1B03BC7D00569C2C /* Patient */,
+				248FBE471B03BC0900569C2C /* Patient identifier */,
+				248FBE461B03BBF000569C2C /* Encounter Ob */,
+				248FBE451B03BBDB00569C2C /* Encounter */,
+				248FBE411B03BB9D00569C2C /* Location */,
+				248FBE3F1B03BB8400569C2C /* Vitals */,
+				248FBE3E1B03BB7400569C2C /* Person */,
+				248FBE3D1B03BB6400569C2C /* Patient identifier type */,
+				248FBE3A1B03BB2900569C2C /* Visit type */,
+				D3A869521A32B42A00D1963F /* openmrs-offline.xcdatamodeld */,
+				248FBE331B03BA2B00569C2C /* Encounter type */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
+		248FBE331B03BA2B00569C2C /* Encounter type */ = {
+			isa = PBXGroup;
+			children = (
+				D38DB4FC1A3216CF00E2CF23 /* MRSEncounterType.h */,
+				D38DB4FD1A3216CF00E2CF23 /* MRSEncounterType.m */,
+			);
+			name = "Encounter type";
+			sourceTree = "<group>";
+		};
+		248FBE341B03BADC00569C2C /* Patient visit list */ = {
+			isa = PBXGroup;
+			children = (
+				D396A54E1A2E3F7600DE6448 /* PatientVisitListView.h */,
+				D396A54F1A2E3F7600DE6448 /* PatientVisitListView.m */,
+			);
+			name = "Patient visit list";
+			sourceTree = "<group>";
+		};
+		248FBE351B03BAE900569C2C /* Patient encounter list */ = {
+			isa = PBXGroup;
+			children = (
+				D396A54B1A2E3E5600DE6448 /* PatientEncounterListView.h */,
+				D396A54C1A2E3E5600DE6448 /* PatientEncounterListView.m */,
+			);
+			name = "Patient encounter list";
+			sourceTree = "<group>";
+		};
+		248FBE361B03BAF600569C2C /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				D396A5141A2E09DE00DE6448 /* AppDelegate.h */,
+				D396A5151A2E09DE00DE6448 /* AppDelegate.m */,
+			);
+			name = Application;
+			sourceTree = "<group>";
+		};
+		248FBE371B03BB0300569C2C /* Sign in */ = {
+			isa = PBXGroup;
+			children = (
+				D396A5161A2E09DE00DE6448 /* SignInViewController.h */,
+				D396A5171A2E09DE00DE6448 /* SignInViewController.m */,
+			);
+			name = "Sign in";
+			sourceTree = "<group>";
+		};
+		248FBE381B03BB0E00569C2C /* Start visit */ = {
+			isa = PBXGroup;
+			children = (
+				D3DCBBF71A71F4940024D088 /* StartVisitViewController.swift */,
+			);
+			name = "Start visit";
+			sourceTree = "<group>";
+		};
+		248FBE391B03BB1900569C2C /* Visit type list */ = {
+			isa = PBXGroup;
+			children = (
+				D3F797B91A71F690008E6064 /* SelectVisitTypeView.swift */,
+			);
+			name = "Visit type list";
+			sourceTree = "<group>";
+		};
+		248FBE3A1B03BB2900569C2C /* Visit type */ = {
+			isa = PBXGroup;
+			children = (
+				D3F797BB1A71F72B008E6064 /* MRSVisitType.swift */,
+			);
+			name = "Visit type";
+			sourceTree = "<group>";
+		};
+		248FBE3B1B03BB3600569C2C /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				248FBE501B03BCAD00569C2C /* Credentials */,
+				248FBE4F1B03BCA100569C2C /* Manager */,
+			);
+			name = Services;
+			sourceTree = "<group>";
+		};
+		248FBE3C1B03BB4E00569C2C /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				D396A51A1A2E09DE00DE6448 /* KeychainItemWrapper.h */,
+				D396A51B1A2E09DE00DE6448 /* KeychainItemWrapper.m */,
+				D317E7F51A4C6BD300E05212 /* OrderedDictionary.h */,
+				D317E7F41A4C6BD300E05212 /* OrderedDictionary.m */,
+			);
+			name = Support;
+			sourceTree = "<group>";
+		};
+		248FBE3D1B03BB6400569C2C /* Patient identifier type */ = {
+			isa = PBXGroup;
+			children = (
+				D3E47BA11A3A00C0004B3F95 /* MRSPatientIdentifierType.h */,
+				D3E47BA21A3A00C0004B3F95 /* MRSPatientIdentifierType.m */,
+			);
+			name = "Patient identifier type";
+			sourceTree = "<group>";
+		};
+		248FBE3E1B03BB7400569C2C /* Person */ = {
+			isa = PBXGroup;
+			children = (
+				D3A4728C1A37794D002A0BBD /* MRSPerson.h */,
+				D3A4728D1A37794D002A0BBD /* MRSPerson.m */,
+			);
+			name = Person;
+			sourceTree = "<group>";
+		};
+		248FBE3F1B03BB8400569C2C /* Vitals */ = {
+			isa = PBXGroup;
+			children = (
+				D39AD7AC1A3C081000C01540 /* MRSVital.h */,
+				D39AD7AD1A3C081000C01540 /* MRSVital.m */,
+			);
+			name = Vitals;
+			sourceTree = "<group>";
+		};
+		248FBE401B03BB9100569C2C /* Locations list */ = {
+			isa = PBXGroup;
+			children = (
+				D37674281A3BB254003A8005 /* LocationListTableViewController.h */,
+				D37674291A3BB254003A8005 /* LocationListTableViewController.m */,
+			);
+			name = "Locations list";
+			sourceTree = "<group>";
+		};
+		248FBE411B03BB9D00569C2C /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				D37674251A3BB114003A8005 /* MRSLocation.h */,
+				D37674261A3BB114003A8005 /* MRSLocation.m */,
+			);
+			name = Location;
+			sourceTree = "<group>";
+		};
+		248FBE421B03BBAA00569C2C /* Add visit note */ = {
+			isa = PBXGroup;
+			children = (
+				D34BF5371A3BA7BE009205C9 /* AddVisitNoteTableViewController.h */,
+				D34BF5381A3BA7BE009205C9 /* AddVisitNoteTableViewController.m */,
+			);
+			name = "Add visit note";
+			sourceTree = "<group>";
+		};
+		248FBE431B03BBB700569C2C /* Capture vitals */ = {
+			isa = PBXGroup;
+			children = (
+				D39AD7A91A3BFE8600C01540 /* CaptureVitalsTableViewController.h */,
+				D39AD7AA1A3BFE8600C01540 /* CaptureVitalsTableViewController.m */,
+			);
+			name = "Capture vitals";
+			sourceTree = "<group>";
+		};
+		248FBE441B03BBD100569C2C /* Encouters list */ = {
+			isa = PBXGroup;
+			children = (
+				D38DB4F31A316FAA00E2CF23 /* EncounterViewController.h */,
+				D38DB4F41A316FAA00E2CF23 /* EncounterViewController.m */,
+			);
+			name = "Encouters list";
+			sourceTree = "<group>";
+		};
+		248FBE451B03BBDB00569C2C /* Encounter */ = {
+			isa = PBXGroup;
+			children = (
+				D396A5481A2E3CBC00DE6448 /* MRSEncounter.h */,
+				D396A5491A2E3CBC00DE6448 /* MRSEncounter.m */,
+			);
+			name = Encounter;
+			sourceTree = "<group>";
+		};
+		248FBE461B03BBF000569C2C /* Encounter Ob */ = {
+			isa = PBXGroup;
+			children = (
+				D38DB4F61A320EF700E2CF23 /* MRSEncounterOb.h */,
+				D38DB4F71A320EF700E2CF23 /* MRSEncounterOb.m */,
+			);
+			name = "Encounter Ob";
+			sourceTree = "<group>";
+		};
+		248FBE471B03BC0900569C2C /* Patient identifier */ = {
+			isa = PBXGroup;
+			children = (
+				D3E47BA71A3A08EF004B3F95 /* MRSPatientIdentifier.h */,
+				D3E47BA81A3A08EF004B3F95 /* MRSPatientIdentifier.m */,
+			);
+			name = "Patient identifier";
+			sourceTree = "<group>";
+		};
+		248FBE481B03BC2300569C2C /* Add patient */ = {
+			isa = PBXGroup;
+			children = (
+				D3A472891A3770B4002A0BBD /* AddPatientTableViewController.h */,
+				D3A4728A1A3770B4002A0BBD /* AddPatientTableViewController.m */,
+			);
+			name = "Add patient";
+			sourceTree = "<group>";
+		};
+		248FBE491B03BC3B00569C2C /* Patient identifier types list */ = {
+			isa = PBXGroup;
+			children = (
+				D3E47BA41A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.h */,
+				D3E47BA51A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m */,
+			);
+			name = "Patient identifier types list";
+			sourceTree = "<group>";
+		};
+		248FBE4A1B03BC5700569C2C /* Main menu */ = {
+			isa = PBXGroup;
+			children = (
+				D396EAEF1A363E4000191F50 /* MainMenuCollectionViewController.h */,
+				D396EAF01A363E4000191F50 /* MainMenuCollectionViewController.m */,
+			);
+			name = "Main menu";
+			sourceTree = "<group>";
+		};
+		248FBE4B1B03BC6400569C2C /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				D396A5421A2E0CEF00DE6448 /* SettingsViewController.h */,
+				D396A5431A2E0CEF00DE6448 /* SettingsViewController.m */,
+			);
+			name = Settings;
+			sourceTree = "<group>";
+		};
+		248FBE4C1B03BC7100569C2C /* Patient Search */ = {
+			isa = PBXGroup;
+			children = (
+				D396A51E1A2E09DE00DE6448 /* PatientSearchViewController.h */,
+				D396A51F1A2E09DE00DE6448 /* PatientSearchViewController.m */,
+			);
+			name = "Patient Search";
+			sourceTree = "<group>";
+		};
+		248FBE4D1B03BC7D00569C2C /* Patient */ = {
+			isa = PBXGroup;
+			children = (
+				D396A5201A2E09DE00DE6448 /* MRSPatient.h */,
+				D396A5211A2E09DE00DE6448 /* MRSPatient.m */,
+			);
+			name = Patient;
+			sourceTree = "<group>";
+		};
+		248FBE4E1B03BC9100569C2C /* Visit */ = {
+			isa = PBXGroup;
+			children = (
+				D396A5451A2E396300DE6448 /* MRSVisit.h */,
+				D396A5461A2E396300DE6448 /* MRSVisit.m */,
+			);
+			name = Visit;
+			sourceTree = "<group>";
+		};
+		248FBE4F1B03BCA100569C2C /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				D396A5181A2E09DE00DE6448 /* OpenMRSAPIManager.h */,
+				D396A5191A2E09DE00DE6448 /* OpenMRSAPIManager.m */,
+			);
+			name = Manager;
+			sourceTree = "<group>";
+		};
+		248FBE501B03BCAD00569C2C /* Credentials */ = {
+			isa = PBXGroup;
+			children = (
+				D396A5221A2E09DE00DE6448 /* CredentialsLayer.h */,
+				D396A5231A2E09DE00DE6448 /* CredentialsLayer.m */,
+			);
+			name = Credentials;
+			sourceTree = "<group>";
+		};
 		7E3ED26108E7D20D7E5E58E4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -207,70 +533,11 @@
 		D397396D1A2E082200D0AB69 /* OpenMRS-iOS */ = {
 			isa = PBXGroup;
 			children = (
-				D3A869521A32B42A00D1963F /* openmrs-offline.xcdatamodeld */,
-				D396A5121A2E09DE00DE6448 /* PatientViewController.h */,
-				D396A5131A2E09DE00DE6448 /* PatientViewController.m */,
-				D38DB4F91A3216A300E2CF23 /* SelectEncounterTypeView.h */,
-				D38DB4FA1A3216A300E2CF23 /* SelectEncounterTypeView.m */,
-				D38DB4FC1A3216CF00E2CF23 /* MRSEncounterType.h */,
-				D38DB4FD1A3216CF00E2CF23 /* MRSEncounterType.m */,
-				D396A54E1A2E3F7600DE6448 /* PatientVisitListView.h */,
-				D396A54F1A2E3F7600DE6448 /* PatientVisitListView.m */,
-				D396A54B1A2E3E5600DE6448 /* PatientEncounterListView.h */,
-				D396A54C1A2E3E5600DE6448 /* PatientEncounterListView.m */,
-				D396A5141A2E09DE00DE6448 /* AppDelegate.h */,
-				D396A5151A2E09DE00DE6448 /* AppDelegate.m */,
-				D396A5161A2E09DE00DE6448 /* SignInViewController.h */,
-				D396A5171A2E09DE00DE6448 /* SignInViewController.m */,
-				D3DCBBF71A71F4940024D088 /* StartVisitViewController.swift */,
-				D3F797B91A71F690008E6064 /* SelectVisitTypeView.swift */,
-				D3F797BB1A71F72B008E6064 /* MRSVisitType.swift */,
-				D396A5181A2E09DE00DE6448 /* OpenMRSAPIManager.h */,
-				D396A5191A2E09DE00DE6448 /* OpenMRSAPIManager.m */,
-				D317E7F51A4C6BD300E05212 /* OrderedDictionary.h */,
-				D317E7F41A4C6BD300E05212 /* OrderedDictionary.m */,
-				D3E47BA11A3A00C0004B3F95 /* MRSPatientIdentifierType.h */,
-				D3E47BA21A3A00C0004B3F95 /* MRSPatientIdentifierType.m */,
-				D3A4728C1A37794D002A0BBD /* MRSPerson.h */,
-				D3A4728D1A37794D002A0BBD /* MRSPerson.m */,
-				D39AD7AC1A3C081000C01540 /* MRSVital.h */,
-				D39AD7AD1A3C081000C01540 /* MRSVital.m */,
-				D37674281A3BB254003A8005 /* LocationListTableViewController.h */,
-				D37674291A3BB254003A8005 /* LocationListTableViewController.m */,
-				D37674251A3BB114003A8005 /* MRSLocation.h */,
-				D37674261A3BB114003A8005 /* MRSLocation.m */,
-				D34BF5371A3BA7BE009205C9 /* AddVisitNoteTableViewController.h */,
-				D34BF5381A3BA7BE009205C9 /* AddVisitNoteTableViewController.m */,
-				D39AD7A91A3BFE8600C01540 /* CaptureVitalsTableViewController.h */,
-				D39AD7AA1A3BFE8600C01540 /* CaptureVitalsTableViewController.m */,
-				D38DB4F31A316FAA00E2CF23 /* EncounterViewController.h */,
-				D38DB4F41A316FAA00E2CF23 /* EncounterViewController.m */,
-				D396A5481A2E3CBC00DE6448 /* MRSEncounter.h */,
-				D396A5491A2E3CBC00DE6448 /* MRSEncounter.m */,
-				D38DB4F61A320EF700E2CF23 /* MRSEncounterOb.h */,
-				D38DB4F71A320EF700E2CF23 /* MRSEncounterOb.m */,
-				D396A51A1A2E09DE00DE6448 /* KeychainItemWrapper.h */,
-				D396A51B1A2E09DE00DE6448 /* KeychainItemWrapper.m */,
-				D3E47BA71A3A08EF004B3F95 /* MRSPatientIdentifier.h */,
-				D3E47BA81A3A08EF004B3F95 /* MRSPatientIdentifier.m */,
-				D3A472891A3770B4002A0BBD /* AddPatientTableViewController.h */,
-				D3A4728A1A3770B4002A0BBD /* AddPatientTableViewController.m */,
-				D3E47BA41A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.h */,
-				D3E47BA51A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m */,
-				D396EAEF1A363E4000191F50 /* MainMenuCollectionViewController.h */,
-				D396EAF01A363E4000191F50 /* MainMenuCollectionViewController.m */,
-				D396A5421A2E0CEF00DE6448 /* SettingsViewController.h */,
-				D396A5431A2E0CEF00DE6448 /* SettingsViewController.m */,
-				D396A51E1A2E09DE00DE6448 /* PatientSearchViewController.h */,
-				D396A51F1A2E09DE00DE6448 /* PatientSearchViewController.m */,
-				D396A5201A2E09DE00DE6448 /* MRSPatient.h */,
-				D396A5211A2E09DE00DE6448 /* MRSPatient.m */,
-				D396A5451A2E396300DE6448 /* MRSVisit.h */,
-				D396A5461A2E396300DE6448 /* MRSVisit.m */,
-				D396A5221A2E09DE00DE6448 /* CredentialsLayer.h */,
-				D396A5231A2E09DE00DE6448 /* CredentialsLayer.m */,
-				D396A5241A2E09DE00DE6448 /* ViewController.h */,
-				D396A5251A2E09DE00DE6448 /* ViewController.m */,
+				248FBE3C1B03BB4E00569C2C /* Support */,
+				248FBE3B1B03BB3600569C2C /* Services */,
+				248FBE361B03BAF600569C2C /* Application */,
+				248FBE321B03BA2600569C2C /* Model */,
+				248FBE2F1B03B9E400569C2C /* View Controllers */,
 				D3FAEFFD1A51C1CD002B1BF7 /* Images.xcassets */,
 				D397396E1A2E082200D0AB69 /* Supporting Files */,
 				D3DCBBF61A71F4930024D088 /* OpenMRS-iOS-Bridging-Header.h */,
@@ -484,7 +751,6 @@
 				D396A5261A2E09DE00DE6448 /* PatientViewController.m in Sources */,
 				D396A52C1A2E09DE00DE6448 /* PatientSearchViewController.m in Sources */,
 				D396A54D1A2E3E5600DE6448 /* PatientEncounterListView.m in Sources */,
-				D396A52F1A2E09DE00DE6448 /* ViewController.m in Sources */,
 				D37674271A3BB114003A8005 /* MRSLocation.m in Sources */,
 				D34BF5391A3BA7BE009205C9 /* AddVisitNoteTableViewController.m in Sources */,
 				D3DCBBF81A71F4940024D088 /* StartVisitViewController.swift in Sources */,
