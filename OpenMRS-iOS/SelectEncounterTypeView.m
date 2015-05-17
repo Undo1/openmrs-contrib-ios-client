@@ -13,11 +13,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
     self.title = @"Select Type";
-    
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
-    
     [self refreshEncounterTypes];
 }
 - (void)cancel
@@ -27,16 +24,14 @@
 - (void)setEncounterTypes:(NSArray *)encounterTypes
 {
     _encounterTypes = encounterTypes;
-    
     [self.tableView reloadData];
 }
 - (void)refreshEncounterTypes
 {
     [OpenMRSAPIManager getEncounterTypesWithCompletion:^(NSError *error, NSArray *types) {
-        if (!error)
-        {
+        if (!error) {
             self.encounterTypes = types;
-            dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_main_queue(), ^ {
                 [self.tableView reloadData];
             });
         }
@@ -53,16 +48,11 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    
-    if (!cell)
-    {
+    if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
-    
     MRSEncounterType *type = self.encounterTypes[indexPath.row];
-    
     cell.textLabel.text = type.display;
-    
     return cell;
 }
 @end

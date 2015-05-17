@@ -3,7 +3,7 @@
 //  OpenMRS-iOS
 //
 //  Created by Parker Erway on 12/1/14.
-//  
+//
 //
 
 #import "MRSPatient.h"
@@ -16,84 +16,57 @@
 - (void)cascadingDelete
 {
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    
     NSManagedObjectContext *managedContext = appDelegate.managedObjectContext;
-
     //delete patient record
-    
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:appDelegate.managedObjectContext]];
     request.includesPropertyValues = NO;
-    
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uuid == %@", self.UUID];
     [request setPredicate:predicate];
-    
     NSArray *results = [managedContext executeFetchRequest:request error:nil];
-    
     for (NSManagedObject *object in results) {
         [managedContext deleteObject:object];
     }
-    
     request = [[NSFetchRequest alloc] init];
     [request setEntity:[NSEntityDescription entityForName:@"Visit" inManagedObjectContext:appDelegate.managedObjectContext]];
-    
     predicate = [NSPredicate predicateWithFormat:@"patient == %@", self.UUID];
     [request setPredicate:predicate];
-    
     results = [managedContext executeFetchRequest:request error:nil];
-    
     for (NSManagedObject *object in results) {
         NSFetchRequest *getVisitObsRequest = [[NSFetchRequest alloc] initWithEntityName:@"EncounterOb"];
         getVisitObsRequest.includesPropertyValues = NO;
-        
         NSPredicate *pred = [NSPredicate predicateWithFormat:@"encounter == %@", [object valueForKey:@"uuid"]];
         getVisitObsRequest.predicate = pred;
-        
         NSArray *visitObs = [managedContext executeFetchRequest:getVisitObsRequest error:nil];
-        
         for (NSManagedObject *ob in visitObs) {
             [managedContext deleteObject:ob];
         }
-        
         [managedContext deleteObject:object];
     }
-    
     request = [[NSFetchRequest alloc] init];
     [request setEntity:[NSEntityDescription entityForName:@"Encounter" inManagedObjectContext:appDelegate.managedObjectContext]];
-    
     predicate = [NSPredicate predicateWithFormat:@"patient == %@", self.UUID];
     [request setPredicate:predicate];
-    
     results = [managedContext executeFetchRequest:request error:nil];
-    
     for (NSManagedObject *object in results) {
         NSFetchRequest *getVisitObsRequest = [[NSFetchRequest alloc] initWithEntityName:@"EncounterOb"];
         getVisitObsRequest.includesPropertyValues = NO;
-        
         NSPredicate *pred = [NSPredicate predicateWithFormat:@"encounter == %@", [object valueForKey:@"uuid"]];
         getVisitObsRequest.predicate = pred;
-        
         NSArray *visitObs = [managedContext executeFetchRequest:getVisitObsRequest error:nil];
-        
         for (NSManagedObject *ob in visitObs) {
             [managedContext deleteObject:ob];
         }
-        
         [managedContext deleteObject:object];
     }
 }
 - (void)saveToCoreData
 {
     [self cascadingDelete];
-    
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    
     NSManagedObjectContext *managedContext = appDelegate.managedObjectContext;
-
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Patient" inManagedObjectContext:managedContext];
-    
     NSManagedObject *patient = [[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:managedContext];
-    
     [patient setValue:[self valueNotNullAndIsString:self.UUID] forKey:@"uuid"];
     [patient setValue:[self valueNotNullAndIsString:self.address1] forKey:@"address1"];
     [patient setValue:[self valueNotNullAndIsString:self.address2] forKey:@"address2"];
@@ -124,21 +97,14 @@
     [patient setValue:[self valueNotNullAndIsString:self.name] forKey:@"name"];
     [patient setValue:[self valueNotNullAndIsString:self.postalCode] forKey:@"postalCode"];
     [patient setValue:[self valueNotNullAndIsString:self.stateProvince] forKey:@"stateProvince"];
-    
     NSError *error;
-    
-    if (![managedContext save:&error])
-    {
+    if (![managedContext save:&error]) {
         NSLog(@"Error saving patient! %@", error);
     }
-    
 //   Save Encounters
     NSLog(@"uuid: %@", self.UUID);
-    
     [OpenMRSAPIManager getEncountersForPatient:self completion:^(NSError *error, NSArray *encounters) {
-        
         for (MRSEncounter *encounter in encounters) {
-            
             [OpenMRSAPIManager getDetailedDataOnEncounter:encounter completion:^(NSError *fetchError, MRSEncounter *detailedEncounter) {
                 for (MRSEncounterOb *ob in detailedEncounter.obs) {
                     NSManagedObject *cdencounterob = [[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"EncounterOb" inManagedObjectContext:managedContext] insertIntoManagedObjectContext:managedContext];
@@ -146,40 +112,29 @@
                     [cdencounterob setValue:encounter.UUID forKey:@"encounter"];
                 }
                 NSError *saveError;
-                
-                if (![managedContext save:&saveError])
-                {
+                if (![managedContext save:&saveError]) {
                     NSLog(@"Error saving encounter! %@", saveError);
                 }
             }];
-            
             NSManagedObject *cdencounter = [[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"Encounter" inManagedObjectContext:managedContext] insertIntoManagedObjectContext:managedContext];
             [cdencounter setValue:encounter.UUID forKey:@"uuid"];
             [cdencounter setValue:encounter.displayName forKey:@"displayName"];
             [cdencounter setValue:self.UUID forKey:@"patient"];
         }
-        
         NSError *saveError;
-        
-        if (![managedContext save:&saveError])
-        {
+        if (![managedContext save:&saveError]) {
             NSLog(@"Error saving encounter! %@", saveError);
         }
     }];
-    
     [OpenMRSAPIManager getVisitsForPatient:self completion:^(NSError *error, NSArray *visits) {
-        for (MRSVisit *visit in visits)
-        {
+        for (MRSVisit *visit in visits) {
             NSManagedObject *cdvisit = [[NSManagedObject alloc] initWithEntity:[NSEntityDescription entityForName:@"Visit" inManagedObjectContext:managedContext] insertIntoManagedObjectContext:managedContext];
             [cdvisit setValue:visit.UUID forKey:@"uuid"];
             [cdvisit setValue:visit.displayName forKey:@"displayName"];
             [cdvisit setValue:self.UUID forKey:@"patient"];
         }
-        
         NSError *saveError;
-        
-        if (![managedContext save:&saveError])
-        {
+        if (![managedContext save:&saveError]) {
             NSLog(@"Error saving visit! %@", saveError);
         }
     }];
@@ -187,27 +142,17 @@
 - (void)updateFromCoreData
 {
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    
     NSManagedObjectContext *managedContext = appDelegate.managedObjectContext;
-    
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:appDelegate.managedObjectContext]];
-    
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uuid == %@", self.UUID];
     [request setPredicate:predicate];
-    
     NSError *error;
-    
     NSArray *results = [managedContext executeFetchRequest:request error:&error];
-    
-    if (error)
-    {
+    if (error) {
         NSLog(@"Error retrieving patient data from Core Data: %@", error);
-    }
-    else if (results.count >= 1)
-    {
+    } else if (results.count >= 1) {
         NSManagedObject *result = results[0];
-        
         self.address1 = [result valueForKey:@"address1"];
         self.address2 = [result valueForKey:@"address2"];
         self.address3 = [result valueForKey:@"address3"];
@@ -237,38 +182,28 @@
         self.name = [result valueForKey:@"name"];
         self.postalCode = [result valueForKey:@"postalCode"];
         self.stateProvince = [result valueForKey:@"stateProvince"];
-        
         self.fromCoreData = YES;
     }
 }
 - (BOOL)isInCoreData
 {
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-    
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:appDelegate.managedObjectContext]];
-    
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uuid == %@", self.UUID];
     [request setPredicate:predicate];
-    
     NSError *error = nil;
     NSArray *results = [appDelegate.managedObjectContext executeFetchRequest:request error:&error];
-    
     NSLog(@"results count: %lu", (unsigned long)results.count);
-    
-    if (results.count > 0)
-    {
+    if (results.count > 0) {
         return YES;
-    }
-    else
-    {
+    } else {
         return NO;
     }
 }
 - (id)valueNotNullAndIsString:(id)value
 {
-    if (value == [NSNull null] || ![[value class] isSubclassOfClass:[NSString class]])
-    {
+    if (value == [NSNull null] || ![[value class] isSubclassOfClass:[NSString class]]) {
         return nil;
     }
     return value;
