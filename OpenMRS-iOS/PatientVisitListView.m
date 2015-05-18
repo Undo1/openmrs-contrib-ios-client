@@ -10,37 +10,32 @@
 #import "MRSVisit.h"
 
 @implementation PatientVisitListView
--(void)setVisits:(NSArray *)visits
+- (void)setVisits:(NSArray *)visits
 {
     _visits = visits;
     [self.tableView reloadData];
 }
--(void)viewDidLoad
+- (void)viewDidLoad
 {
     self.title = @"Visits";
 }
--(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
 }
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     return self.visits.count;
 }
--(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    
-    if (!cell)
-    {
+    if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
-    
     MRSVisit *visit = self.visits[indexPath.row];
-    
     cell.textLabel.text = visit.displayName;
     cell.textLabel.numberOfLines = 0;
-    
     return cell;
 }
 @end

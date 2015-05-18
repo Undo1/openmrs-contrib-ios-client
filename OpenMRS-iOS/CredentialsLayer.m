@@ -20,11 +20,8 @@
     self = [super initWithBaseURL:url];
     if(!self)
         return nil;
-    
     self.requestSerializer = [AFJSONRequestSerializer serializer];
-    
     [[AFNetworkActivityIndicatorManager sharedManager] setEnabled:YES];
-    
     return self;
 }
 
@@ -34,11 +31,8 @@
 {
     static dispatch_once_t pred;
     static CredentialsLayer *_sharedManager = nil;
-    
-    dispatch_once(&pred, ^{ _sharedManager = [[self alloc] initWithBaseURL:[NSURL URLWithString:host]]; });
-
-    if (![[_sharedManager.baseURL.absoluteString stringByReplacingOccurrencesOfString:@"/" withString:@""] isEqual:[[NSURL URLWithString:host].absoluteString stringByReplacingOccurrencesOfString:@"/" withString:@""]])
-    {
+    dispatch_once(&pred, ^ { _sharedManager = [[self alloc] initWithBaseURL:[NSURL URLWithString:host]]; });
+    if (![[_sharedManager.baseURL.absoluteString stringByReplacingOccurrencesOfString:@"/" withString:@""] isEqual:[[NSURL URLWithString:host].absoluteString stringByReplacingOccurrencesOfString:@"/" withString:@""]]) {
         NSLog(@"%@", _sharedManager.baseURL.absoluteString);
         _sharedManager = [[self alloc] initWithBaseURL:[NSURL URLWithString:host]];
     }
