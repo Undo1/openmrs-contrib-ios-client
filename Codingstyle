@@ -1,9 +1,9 @@
 CodingStyle
 ===========
 
-Below are just some basic rules to follow when adding new code
-to the codebase, most of the code are supposebly meeting this
-style by using "Artistic Style".
+Below are some basic rules to follow when adding new code
+to the codebase. Most of the code should already meet this
+style when using "Artistic Style":
 
 astyle -A4 -s4 -xe -xM -xQ -xP0 --recursive 'OpenMRS-iOS/*.m'
 
