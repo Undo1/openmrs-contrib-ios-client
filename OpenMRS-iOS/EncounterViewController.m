@@ -13,26 +13,20 @@
 - (void)setEncounter:(MRSEncounter *)encounter
 {
     _encounter = encounter;
-    
     self.title = self.encounter.displayName;
-    
-    if (encounter.obs == nil)
-    {
+    if (encounter.obs == nil) {
         [self refreshData];
     }
 }
 - (void)refreshData
 {
     [OpenMRSAPIManager getDetailedDataOnEncounter:self.encounter completion:^(NSError *error, MRSEncounter *detailedEncounter) {
-        if (error != nil)
-        {
-            
+        if (error != nil) {
         }
-        else
-        {
+        else {
             self.encounter = detailedEncounter;
             NSLog(@"obs: %@", self.encounter.obs);
-            dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_async(dispatch_get_main_queue(), ^ {
                 [self.tableView reloadData];
             });
         }
@@ -49,17 +43,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    
-    if (!cell)
-    {
+    if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
-    
     MRSEncounterOb *ob = self.encounter.obs[indexPath.row];
-    
     cell.textLabel.text = ob.display;
     cell.textLabel.numberOfLines = 0;
-    
     return cell;
 }
 @end

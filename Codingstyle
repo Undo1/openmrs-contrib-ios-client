@@ -1,0 +1,40 @@
+CodingStyle
+===========
+
+Below are just some basic rules to follow when adding new code
+to the codebase, most of the code are supposebly meeting this
+style by using "Artistic Style".
+
+astyle -A4 -s4 -xe -xM -xQ -xP0 --recursive 'OpenMRS-iOS/*.m'
+
+Basic rules
+==========
+
+- All identiation are spaces set to 4
+
+- Methods brackets are on a new line but attached for anything else
+  example:
+    - (void)foo:(bool) isBar 
+    {
+        if (isBar) {
+            bar();
+            return 1;
+        } else
+            return 0;
+    }
+
+- Insert a space padding between '-' or '+' for Method prefix
+    example:
+    - (void)foo1;
+    + (void)foo2;
+
+- When declaring a method is multiple line, align the colons
+    example:
+    -(void)deleteKey:(id)key
+             atIndex:(int)index
+              ofNode:(Node*)node;
+
+- When calling a method leave no spaces padding before or after
+  the colon
+    example:
+    [node insertKey:key];
