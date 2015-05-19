@@ -126,6 +126,7 @@
             }
             failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                 NSLog(@"failure: %@", [[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+                completion(error, nil);
             }];
         }
     }];
