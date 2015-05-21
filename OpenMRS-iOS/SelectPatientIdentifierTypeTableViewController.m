@@ -20,6 +20,7 @@
     [super viewDidLoad];
     self.title = @"Identifier Type";
     [self reloadData];
+    self.tableView.rowHeight = 77;
 }
 - (void)reloadData
 {
@@ -49,10 +50,12 @@
 {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
     }
     MRSPatientIdentifierType *type = self.identifierTypes[indexPath.row];
     cell.textLabel.text = type.display;
+    cell.detailTextLabel.text = type.typeDescription;
+    cell.detailTextLabel.numberOfLines = 3;
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath

@@ -11,4 +11,5 @@
 @interface MRSPatientIdentifierType : NSObject
 @property (nonatomic, strong) NSString *UUID;
 @property (nonatomic, strong) NSString *display;
+@property (nonatomic, strong) NSString *typeDescription;
 @end
