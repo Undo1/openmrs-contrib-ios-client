@@ -1,8 +1,11 @@
 language: objective-c
 before_script:
+    - git revert dd536d6 -n
     - brew update
     - brew unlink xctool
     - brew install -v --HEAD xctool
 script:
-    - xctool -workspace OpenMRS-iOS.xcworkspace -scheme OpenMRS-iOS test -sdk iphonesimulator ONLY_ACTIVE_ARCH=NO
+    - xctool -workspace OpenMRS-iOS.xcworkspace -scheme OpenMRS-iOS test -sdk iphonesimulator -xcconfig TestBuild.xcconfig
+after_script:
+    - git reset HEAD~1 --hard
 osx_image: xcode611
