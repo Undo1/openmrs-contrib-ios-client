@@ -167,13 +167,14 @@
     NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
     NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
-    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/patientidentifiertype", host] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/patientidentifiertype/?v=full", host] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
         NSMutableArray *types = [[NSMutableArray alloc] init];
         for (NSDictionary *typeDict in results[@"results"]) {
             MRSPatientIdentifierType *type = [[MRSPatientIdentifierType alloc] init];
             type.UUID = typeDict[@"uuid"];
             type.display = typeDict[@"display"];
+            type.typeDescription = typeDict[@"description"];
             [types addObject:type];
         }
         completion(nil, types);
