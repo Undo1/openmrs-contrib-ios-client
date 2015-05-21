@@ -20,6 +20,8 @@
     [super viewDidLoad];
     self.title = @"Identifier Type";
     [self reloadData];
+    
+    //TODO: self-sizing cells
     self.tableView.rowHeight = 77;
 }
 - (void)reloadData
