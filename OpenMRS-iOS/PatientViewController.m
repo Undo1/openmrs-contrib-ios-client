@@ -200,7 +200,7 @@
                 if (!cell) {
                     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"stopVisitCell"];
                 }
-                cell.textLabel.text = @"End Current Visit";
+                cell.textLabel.text = @"End Visit...";
             } else {
                 cell = [tableView dequeueReusableCellWithIdentifier:@"startVisitCell"];
                 if (!cell) {
@@ -270,19 +270,18 @@
                         break;
                     }
                 }
-                [OpenMRSAPIManager stopVisit:activeVisit completion:^(NSError *error) {
-                    if (error == nil) {
-                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Stopping visit"
-                                                                        message:[NSString stringWithFormat:@"Visit has ended @%@ of type %@", activeVisit.location.display, activeVisit.visitType.display]
-                                                                       delegate:self
-                                                              cancelButtonTitle:@"Ok"
-                                                              otherButtonTitles: nil];
-                        [alert show];
-                        [self updateWithDetailedInfo];
-                    } else {
-                        [SVProgressHUD showErrorWithStatus:@"Couldn't stop visit"];
+                [UIAlertView showWithTitle:@"Stopping Visit" message:[NSString stringWithFormat:@"Stop visit of type \"%@\" at %@?", activeVisit.visitType.display, activeVisit.location.display] cancelButtonTitle:@"Cancel" otherButtonTitles:@[@"Stop Visit"] tapBlock:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                    if (buttonIndex != alertView.cancelButtonIndex) {
+                        [OpenMRSAPIManager stopVisit:activeVisit completion:^(NSError *error) {
+                            if (error == nil) {
+                                [self updateWithDetailedInfo];
+                            } else {
+                                [SVProgressHUD showErrorWithStatus:@"Couldn't stop visit"];
+                            }
+                        }];
                     }
                 }];
+                
             } else {
                 StartVisitViewController *startVisitVC = [[StartVisitViewController alloc] initWithStyle:UITableViewStyleGrouped];
                 startVisitVC.delegate = self;
