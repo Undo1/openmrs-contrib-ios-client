@@ -24,6 +24,7 @@
 #import "MRSEncounterOb.h"
 #import "MRSEncounterType.h"
 #import "OpenMRS_iOS-Swift.h"
+#import "MRSDateUtilities.h"
 #import <CoreData/CoreData.h>
 
 @implementation OpenMRSAPIManager
@@ -195,13 +196,13 @@
     NSDictionary *parameters = @ {@"patient" :
                                   patient.UUID,
                                   @"encounterDatetime" :
-                                  [self openMRSFormatStringWithDate:[NSDate date]],
+                                  [MRSDateUtilities openMRSFormatStringWithDate:[NSDate date]],
                                   @"encounterType" :
                                   @"d7151f82-c1f3-4152-a605-2f9ea7414a79",
                                   @"obs" :
     @[ @{
 @"person":patient.UUID,
-@"obsDatetime":[self openMRSFormatStringWithDate:[NSDate date]],
+@"obsDatetime":[MRSDateUtilities openMRSFormatStringWithDate:[NSDate date]],
 @"concept":@"162169AAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
 @"value":note
     }],
@@ -217,16 +218,6 @@
         NSLog(@"failure, %@", error);
         completion(error);
     }];
-}
-+ (NSString *)openMRSFormatStringWithDate:(NSDate *)date
-{
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-d'T'HH:mm:ss.SSSZ"];
-    NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
-    [formatter setTimeZone:timeZone];
-    NSString *stringFromDate = [formatter stringFromDate:date];
-    NSLog(@"stringFromDate: %@", stringFromDate);
-    return stringFromDate;
 }
 
 + (void)getEncounterTypesWithCompletion:(void (^)(NSError *, NSArray *))completion
@@ -393,9 +384,23 @@
         NSMutableArray *array = [[NSMutableArray alloc] init];
         for (NSDictionary *visitDict in results[@"results"]) {
             MRSVisit *visit = [[MRSVisit alloc] init];
+            MRSLocation *location = [[MRSLocation alloc] init];
+            MRSVisitType *visitType =  [[MRSVisitType alloc] init];
+
             visit.UUID = visitDict[@"uuid"];
             visit.displayName = visitDict[@"display"];
             visit.active = (visitDict[@"stopDatetime"] == nil || visitDict[@"stopDatetime"] == [NSNull null]);
+            visit.startDateTime = visitDict[@"startDatetime"];
+
+            location.UUID = visitDict[@"location"][@"uuid"];
+            location.display = visitDict[@"location"][@"display"];
+
+            visitType.uuid = visitDict[@"visitType"][@"uuid"];
+            visitType.display = visitDict[@"visitType"][@"display"];
+
+            visit.visitType = visitType;
+            visit.location = location;
+            NSLog(@"VISITS!!:\n%@", visitDict);
             [array addObject:visit];
         }
         completion(nil, array);
@@ -449,13 +454,15 @@
 //                         @"obsDatetime" : [self openMRSFormatStringWithDate:[NSDate date]],
 //                         @"person" : patient.UUID,
 //                         @"value" : vital.value} ];
-        OrderedDictionary *dict = [[OrderedDictionary alloc] initWithObjectsAndKeys:vital.conceptUUID, @"concept", [self openMRSFormatStringWithDate:[NSDate date]], @"obsDatetime", patient.UUID, @"person", vital.value, @"value", nil];
+        OrderedDictionary *dict = [[OrderedDictionary alloc] initWithObjectsAndKeys:vital.conceptUUID,
+                                   @"concept", [MRSDateUtilities openMRSFormatStringWithDate:[NSDate date]],
+                                   @"obsDatetime", patient.UUID, @"person", vital.value, @"value", nil];
         [obs addObject:dict];
     }
     NSDictionary *parameters = @ {@"patient" :
                                   patient.UUID,
                                   @"encounterDatetime" :
-                                  [self openMRSFormatStringWithDate:[NSDate date]],
+                                  [MRSDateUtilities openMRSFormatStringWithDate:[NSDate date]],
                                   @"encounterType" :
                                   @"67a71486-1a54-468f-ac3e-7091a9a79584",
                                   @"obs" :
@@ -488,7 +495,7 @@
                         @"location" :
                         location.UUID,
                         @"startDatetime" :
-                        [self openMRSFormatStringWithDate:[NSDate date]]
+                        [MRSDateUtilities openMRSFormatStringWithDate:[NSDate date]]
                        };
         NSLog(@"Parameters: %@", parameters);
     }
@@ -505,6 +512,41 @@
         completion(error);
     }];
 }
+
++ (void)stopVisit:(MRSVisit *)visit completion:(void (^)(NSError *))completion {
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+
+    NSDictionary *parameters = nil;
+    @try {
+        parameters = @ {
+            @"visitType" :
+            visit.visitType.uuid,
+            @"location" :
+            visit.location.UUID,
+            @"startDatetime" :
+            visit.startDateTime,
+            @"stopDatetime" :
+            [MRSDateUtilities openMRSFormatStringWithDate:[NSDate date]]
+        };
+    }
+    @catch (NSException *exception) {
+        completion([[NSError alloc] init]);
+        return;
+    }
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/visit/%@", host, visit.UUID] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        completion(nil);
+    }
+    failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Failure, %@", [[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
+        completion([[NSError alloc] init]);
+    }];
+}
+
 + (void)getLocationsWithCompletion:(void (^)(NSError *error, NSArray *locations))completion
 {
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];

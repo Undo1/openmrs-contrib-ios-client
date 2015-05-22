@@ -11,6 +11,7 @@
 #import "PatientEncounterListView.h"
 #import "PatientVisitListView.h"
 #import "OpenMRS_iOS-Swift.h"
+#import <SVProgressHUD.h>
 #import "AddVisitNoteTableViewController.h"
 #import "CaptureVitalsTableViewController.h"
 
@@ -146,7 +147,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return (self.isShowingActions) ? ((self.hasActiveVisit) ? 3 : 4) : 1;
+        return (self.isShowingActions) ? 4 : 1;
     } else if (section == 1) {
         return self.information.count;
     } else if (section == 2) {
@@ -193,13 +194,22 @@
             return cell;
         }
         if (indexPath.row == 3) {
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"startVisitCell"];
-            if (!cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"startVisitCell"];
+            UITableViewCell *cell = nil;
+            if (self.hasActiveVisit) {
+                cell = [tableView dequeueReusableCellWithIdentifier:@"stopVisitCell"];
+                if (!cell) {
+                    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"stopisitCell"];
+                }
+                cell.textLabel.text = @"Stop Visit...";
+            } else {
+                cell = [tableView dequeueReusableCellWithIdentifier:@"startVisitCell"];
+                if (!cell) {
+                    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"startVisitCell"];
+                }
+                cell.textLabel.text = @"Start Visit...";
             }
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             cell.textLabel.textColor = self.view.tintColor;
-            cell.textLabel.text = @"Start Visit...";
             return cell;
         }
         UITableViewCell *actionCell = [tableView dequeueReusableCellWithIdentifier:@"actionCell"];
@@ -252,10 +262,33 @@
             return;
         }
         if (indexPath.row == 3) {
-            StartVisitViewController *startVisitVC = [[StartVisitViewController alloc] initWithStyle:UITableViewStyleGrouped];
-            startVisitVC.delegate = self;
-            startVisitVC.patient = self.patient;
-            [self presentViewController:[[UINavigationController alloc] initWithRootViewController:startVisitVC] animated:YES completion:nil];
+            if (self.hasActiveVisit) {
+                MRSVisit *activeVisit;
+                for (MRSVisit *visit in self.visits) {
+                    if (visit.active) {
+                        activeVisit = visit;
+                        break;
+                    }
+                }
+                [OpenMRSAPIManager stopVisit:activeVisit completion:^(NSError *error) {
+                    if (error == nil) {
+                        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Stopping visit"
+                                                                        message:[NSString stringWithFormat:@"Visit has ended @%@ of type %@", activeVisit.location.display, activeVisit.visitType.display]
+                                                                       delegate:self
+                                                              cancelButtonTitle:@"Ok"
+                                                              otherButtonTitles: nil];
+                        [alert show];
+                        [self updateWithDetailedInfo];
+                    } else {
+                        [SVProgressHUD showErrorWithStatus:@"Couldn't stop visit"];
+                    }
+                }];
+            } else {
+                StartVisitViewController *startVisitVC = [[StartVisitViewController alloc] initWithStyle:UITableViewStyleGrouped];
+                startVisitVC.delegate = self;
+                startVisitVC.patient = self.patient;
+                [self presentViewController:[[UINavigationController alloc] initWithRootViewController:startVisitVC] animated:YES completion:nil];
+            }
             return;
         }
         if (indexPath.row == 0) {
