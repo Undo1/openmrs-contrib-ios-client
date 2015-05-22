@@ -10,6 +10,8 @@
 #import "OpenMRSAPIManager.h"
 #import "KeychainItemWrapper.h"
 #import "AppDelegate.h"
+#import "OpenMRS_iOS-Swift.h"
+
 @implementation SettingsViewController
 - (void)viewDidLoad
 {
@@ -23,13 +25,16 @@
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
         return 2;
-    } else {
+    } else if (section == 1) {
+        return 1;
+    }
+    else {
         return 1;
     }
 }
@@ -69,6 +74,18 @@
             return cell;
         }
     }
+    if (indexPath.section == 2) {
+        if (indexPath.row == 0) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"attributionCell"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"attributionCell"];
+            }
+            cell.textLabel.text = @"Attribution";
+            cell.textLabel.textColor = [UIColor darkGrayColor];
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            return cell;
+        }
+    }
     return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -80,6 +97,9 @@
         [self dismissViewControllerAnimated:NO completion:^ {
             [OpenMRSAPIManager logout];
         }];
+    } else if (indexPath.section == 2 && indexPath.row == 0) {
+        AttributionTableViewController *attributionView = [[AttributionTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        [self.navigationController pushViewController:attributionView animated:YES];
     }
 }
 @end
