@@ -198,7 +198,7 @@
             if (self.hasActiveVisit) {
                 cell = [tableView dequeueReusableCellWithIdentifier:@"stopVisitCell"];
                 if (!cell) {
-                    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"stopisitCell"];
+                    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"stopVisitCell"];
                 }
                 cell.textLabel.text = @"Stop Visit...";
             } else {
