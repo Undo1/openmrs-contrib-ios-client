@@ -1,4 +1,4 @@
-openmrs-contrib-ios-client
+openmrs-contrib-ios-client [![Build Status](https://travis-ci.org/Undo1/openmrs-contrib-ios-client.svg?branch=master)](https://travis-ci.org/Undo1/openmrs-contrib-ios-client)
 ===========
 
 This app is a mobile client for [OpenMRS](http://openmrs.org/). It was originally created by Parker Erway (@Undo1) as part of [Google Code-in 2014](https://issues.openmrs.org/browse/GCI-18).
