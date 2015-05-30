@@ -36,16 +36,9 @@
     self.activeVisits = [[NSMutableArray alloc] init];
     self.loading = YES;
     self.hasMore = YES;
-    [OpenMRSAPIManager getActiveVisits:self.activeVisits From:self.startIndex withCompletion:^(NSError *error) {
-        if (!error) {
-            [self.tableView reloadData];
-            self.startIndex = self.activeVisits.count;
-            self.loading = NO;
-        } else {
-            [SVProgressHUD showErrorWithStatus:@"Problem loading active visits"];
-            [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
-        }
-    }];
+
+    [self loadMore];
+
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"transperantCell"];
     
@@ -106,9 +99,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
-    NSLog(@"Row= %d, threshhold = %d", indexPath.row, self.activeVisits.count - MARGIN);
     if (indexPath.row == self.activeVisits.count- MARGIN && !self.loading && self.hasMore) {
-        NSLog(@"NOW LOAD MORE!");
         [self loadMore];
     }
 }
