@@ -5,96 +5,138 @@
 //  Created by Yousef Hamza on 5/29/15.
 //  Copyright (c) 2015 Erway Software. All rights reserved.
 //
-
+#import "OpenMRSAPIManager.h"
+#import "SVProgressHUD.h"
 #import "ActiveVisitsList.h"
 
+
 @interface ActiveVisitsList ()
+
+@property (nonatomic, strong) NSMutableArray *activeVisits;
+@property (nonatomic) int startIndex;
+@property (nonatomic) BOOL loading;
+@property (nonatomic) BOOL hasMore;
 
 @end
 
 @implementation ActiveVisitsList
 
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
-}
+#define MARGIN 5
+#define SPINNERSIZE 50
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    self.title = @"Active visits";
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close"
+                                                                             style:UIBarButtonItemStylePlain
+                                                                            target:self
+                                                                            action:@selector(close)];
+    self.startIndex = 0;
+    self.activeVisits = [[NSMutableArray alloc] init];
+    self.loading = YES;
+    self.hasMore = YES;
+    [OpenMRSAPIManager getActiveVisits:self.activeVisits From:self.startIndex withCompletion:^(NSError *error) {
+        if (!error) {
+            [self.tableView reloadData];
+            self.startIndex = self.activeVisits.count;
+            self.loading = NO;
+        } else {
+            [SVProgressHUD showErrorWithStatus:@"Problem loading active visits"];
+            [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+        }
+    }];
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"transperantCell"];
+    
+    self.tableView.separatorColor = [UIColor clearColor];
+    self.tableView.rowHeight = 66;
 }
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-#warning Potentially incomplete method implementation.
-    // Return the number of sections.
-    return 0;
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-#warning Incomplete method implementation.
-    // Return the number of rows in the section.
-    return 0;
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    if (self.hasMore) {
+        return self.activeVisits.count + 1;
+    } else {
+        return self.activeVisits.count;
+    }
 }
 
-/*
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:<#@"reuseIdentifier"#> forIndexPath:indexPath];
-    
-    // Configure the cell...
-    
+- (void)close
+{
+    [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
+}
+
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell;
+    if (indexPath.row == self.activeVisits.count) {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"transperantCell" forIndexPath:indexPath];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"transperantCell"];
+        }
+        [[cell contentView] setBackgroundColor:[UIColor clearColor]];
+        [[cell backgroundView] setBackgroundColor:[UIColor clearColor]];
+        [cell setBackgroundColor:[UIColor clearColor]];
+        UIActivityIndicatorView *loading = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhiteLarge];
+
+        CGSize size = cell.contentView.frame.size;
+        [loading setFrame:CGRectMake(size.width/2 - SPINNERSIZE/2, 33 - SPINNERSIZE / 2, SPINNERSIZE, SPINNERSIZE)];
+        cell.separatorInset = UIEdgeInsetsMake(0.f, 0.f, 0.f, cell.bounds.size.width);
+        [cell.contentView addSubview:loading];
+        [loading startAnimating];
+    } else {
+        cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
+        if (!cell) {
+            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        }
+        MRSVisit *visit = self.activeVisits[indexPath.row];
+        cell.textLabel.text = visit.displayName;
+        cell.textLabel.numberOfLines = 2;
+    }
     return cell;
 }
-*/
 
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
+- (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    NSLog(@"Row= %d, threshhold = %d", indexPath.row, self.activeVisits.count - MARGIN);
+    if (indexPath.row == self.activeVisits.count- MARGIN && !self.loading && self.hasMore) {
+        NSLog(@"NOW LOAD MORE!");
+        [self loadMore];
+    }
 }
-*/
 
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-    } else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
+- (void)loadMore {
+    self.loading = YES;
+    [SVProgressHUD showWithStatus:@"Loading more visits.."];
+    [OpenMRSAPIManager getActiveVisits:self.activeVisits From:self.startIndex withCompletion:^(NSError *error) {
+        if (!error) {
+            [self.tableView reloadData];
+            int current = self.startIndex;
+            self.startIndex = self.activeVisits.count;
+            self.loading = NO;
+            [self addNewRows:current];
+            [SVProgressHUD showSuccessWithStatus:@"Done"];
+        } else {
+            [SVProgressHUD showErrorWithStatus:@"Problem loading more active visits"];
+        }
+    }];
 }
-*/
+-(void)addNewRows:(int)currentIndex {
+    if (self.startIndex - currentIndex < 50) {
+        self.hasMore = NO;
+    }
 
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
+    [self.tableView beginUpdates];
+    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:currentIndex inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
+    [self.tableView endUpdates];
 }
-*/
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end
