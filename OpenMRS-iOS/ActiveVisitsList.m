@@ -115,7 +115,11 @@
             [self addNewRows:current];
             [SVProgressHUD showSuccessWithStatus:@"Done"];
         } else {
-            [SVProgressHUD showErrorWithStatus:@"Problem loading more active visits"];
+            if (self.activeVisits.count == 0){
+                [SVProgressHUD showErrorWithStatus:@"Can not load active visits"];
+            } else {
+                [SVProgressHUD showErrorWithStatus:@"Problem loading more active visits"];
+            }
         }
     }];
 }
