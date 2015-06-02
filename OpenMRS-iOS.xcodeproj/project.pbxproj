@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		24A8DEC71B18C18A00F5FF84 /* active_visits_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 24A8DEC41B18C18A00F5FF84 /* active_visits_icon@3x.png */; };
+		24A8DEC81B18C18A00F5FF84 /* active_visits_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 24A8DEC51B18C18A00F5FF84 /* active_visits_icon@2x.png */; };
+		24A8DEC91B18C18A00F5FF84 /* active_visits_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 24A8DEC61B18C18A00F5FF84 /* active_visits_icon.png */; };
+		24A8DECC1B18F66E00F5FF84 /* ActiveVisitsList.m in Sources */ = {isa = PBXBuildFile; fileRef = 24A8DECB1B18F66E00F5FF84 /* ActiveVisitsList.m */; };
 		24D127511B0DF6140018AA1D /* MRSDateUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 24D127501B0DF6140018AA1D /* MRSDateUtilities.m */; };
 		65BE2B3E2C5F8BE1FB7090C2 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87CFC2F5FC6F1445E8327AF6 /* libPods.a */; };
 		D3079E751A3D4DED00E308C7 /* add_patient_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D3079E721A3D4DED00E308C7 /* add_patient_icon@2x.png */; };
@@ -68,6 +72,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		24A8DEC41B18C18A00F5FF84 /* active_visits_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "active_visits_icon@3x.png"; sourceTree = "<group>"; };
+		24A8DEC51B18C18A00F5FF84 /* active_visits_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "active_visits_icon@2x.png"; sourceTree = "<group>"; };
+		24A8DEC61B18C18A00F5FF84 /* active_visits_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = active_visits_icon.png; sourceTree = "<group>"; };
+		24A8DECA1B18F66E00F5FF84 /* ActiveVisitsList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActiveVisitsList.h; sourceTree = "<group>"; };
+		24A8DECB1B18F66E00F5FF84 /* ActiveVisitsList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActiveVisitsList.m; sourceTree = "<group>"; };
 		24D1274F1B0DF6140018AA1D /* MRSDateUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSDateUtilities.h; sourceTree = "<group>"; };
 		24D127501B0DF6140018AA1D /* MRSDateUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSDateUtilities.m; sourceTree = "<group>"; };
 		87CFC2F5FC6F1445E8327AF6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -178,22 +187,23 @@
 		248FBE2F1B03B9E400569C2C /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
-				248FBE4C1B03BC7100569C2C /* Patient Search */,
-				248FBE4B1B03BC6400569C2C /* Settings */,
-				248FBE4A1B03BC5700569C2C /* Main menu */,
-				248FBE491B03BC3B00569C2C /* Patient identifier types list */,
+				24A8DECD1B18F67500F5FF84 /* ActiveVisits */,
 				248FBE481B03BC2300569C2C /* Add patient */,
-				248FBE441B03BBD100569C2C /* Encouters list */,
-				248FBE431B03BBB700569C2C /* Capture vitals */,
 				248FBE421B03BBAA00569C2C /* Add visit note */,
+				248FBE431B03BBB700569C2C /* Capture vitals */,
+				248FBE441B03BBD100569C2C /* Encouters list */,
 				248FBE401B03BB9100569C2C /* Locations list */,
-				248FBE391B03BB1900569C2C /* Visit type list */,
-				248FBE381B03BB0E00569C2C /* Start visit */,
-				248FBE371B03BB0300569C2C /* Sign in */,
+				248FBE4A1B03BC5700569C2C /* Main menu */,
+				248FBE301B03B9F400569C2C /* Patient  */,
 				248FBE351B03BAE900569C2C /* Patient encounter list */,
+				248FBE491B03BC3B00569C2C /* Patient identifier types list */,
+				248FBE4C1B03BC7100569C2C /* Patient Search */,
 				248FBE341B03BADC00569C2C /* Patient visit list */,
 				248FBE311B03BA1500569C2C /* Select encounter type */,
-				248FBE301B03B9F400569C2C /* Patient  */,
+				248FBE4B1B03BC6400569C2C /* Settings */,
+				248FBE371B03BB0300569C2C /* Sign in */,
+				248FBE381B03BB0E00569C2C /* Start visit */,
+				248FBE391B03BB1900569C2C /* Visit type list */,
 			);
 			name = "View Controllers";
 			sourceTree = "<group>";
@@ -506,6 +516,15 @@
 			name = Credentials;
 			sourceTree = "<group>";
 		};
+		24A8DECD1B18F67500F5FF84 /* ActiveVisits */ = {
+			isa = PBXGroup;
+			children = (
+				24A8DECA1B18F66E00F5FF84 /* ActiveVisitsList.h */,
+				24A8DECB1B18F66E00F5FF84 /* ActiveVisitsList.m */,
+			);
+			name = ActiveVisits;
+			sourceTree = "<group>";
+		};
 		7E3ED26108E7D20D7E5E58E4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -553,6 +572,9 @@
 		D397396E1A2E082200D0AB69 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				24A8DEC41B18C18A00F5FF84 /* active_visits_icon@3x.png */,
+				24A8DEC51B18C18A00F5FF84 /* active_visits_icon@2x.png */,
+				24A8DEC61B18C18A00F5FF84 /* active_visits_icon.png */,
 				D396EAF21A36460500191F50 /* search_icon.png */,
 				D396EAF31A36460500191F50 /* search_icon@2x.png */,
 				D396EAF41A36460500191F50 /* search_icon@3x.png */,
@@ -677,12 +699,15 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				24A8DEC71B18C18A00F5FF84 /* active_visits_icon@3x.png in Resources */,
 				D396EAF51A36460500191F50 /* search_icon.png in Resources */,
 				D3FAEFFE1A51C1CD002B1BF7 /* Images.xcassets in Resources */,
 				D3079E761A3D4DED00E308C7 /* add_patient_icon.png in Resources */,
 				D3079E751A3D4DED00E308C7 /* add_patient_icon@2x.png in Resources */,
 				D396EAF61A36460500191F50 /* search_icon@2x.png in Resources */,
 				D396A53F1A2E0B5A00DE6448 /* openmrs-logo@2x.png in Resources */,
+				24A8DEC81B18C18A00F5FF84 /* active_visits_icon@2x.png in Resources */,
+				24A8DEC91B18C18A00F5FF84 /* active_visits_icon.png in Resources */,
 				D396A5401A2E0B5A00DE6448 /* openmrs-logo@3x.png in Resources */,
 				D3079E771A3D4DED00E308C7 /* add_patient_icon@3x.png in Resources */,
 				D396EAF71A36460500191F50 /* search_icon@3x.png in Resources */,
@@ -772,6 +797,7 @@
 				D3E47BA31A3A00C0004B3F95 /* MRSPatientIdentifierType.m in Sources */,
 				D396EAF11A363E4000191F50 /* MainMenuCollectionViewController.m in Sources */,
 				D376742A1A3BB254003A8005 /* LocationListTableViewController.m in Sources */,
+				24A8DECC1B18F66E00F5FF84 /* ActiveVisitsList.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -883,7 +909,7 @@
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				INFOPLIST_FILE = "OpenMRS-iOS/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "50f5fd6f-7e44-4af5-8805-4836a63ea1f7";
@@ -902,7 +928,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				INFOPLIST_FILE = "OpenMRS-iOS/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "50f5fd6f-7e44-4af5-8805-4836a63ea1f7";
