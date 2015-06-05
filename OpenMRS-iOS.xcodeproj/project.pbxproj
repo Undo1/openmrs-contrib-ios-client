@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		245EDDC91B21A0F400B8C0EB /* user_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDC71B21A0F400B8C0EB /* user_icon.png */; };
+		245EDDCA1B21A0F400B8C0EB /* vitals_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDC81B21A0F400B8C0EB /* vitals_icon.png */; };
+		245EDDCD1B21A10B00B8C0EB /* user_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDCB1B21A10B00B8C0EB /* user_icon@2x.png */; };
+		245EDDCE1B21A10B00B8C0EB /* vitals_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDCC1B21A10B00B8C0EB /* vitals_icon@2x.png */; };
+		245EDDD11B21A11800B8C0EB /* user_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDCF1B21A11800B8C0EB /* user_icon@3x.png */; };
+		245EDDD21B21A11800B8C0EB /* vitals_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDD01B21A11800B8C0EB /* vitals_icon@3x.png */; };
 		24D127511B0DF6140018AA1D /* MRSDateUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 24D127501B0DF6140018AA1D /* MRSDateUtilities.m */; };
 		65BE2B3E2C5F8BE1FB7090C2 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87CFC2F5FC6F1445E8327AF6 /* libPods.a */; };
 		D3079E751A3D4DED00E308C7 /* add_patient_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D3079E721A3D4DED00E308C7 /* add_patient_icon@2x.png */; };
@@ -68,6 +74,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		245EDDC71B21A0F400B8C0EB /* user_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = user_icon.png; sourceTree = "<group>"; };
+		245EDDC81B21A0F400B8C0EB /* vitals_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vitals_icon.png; sourceTree = "<group>"; };
+		245EDDCB1B21A10B00B8C0EB /* user_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user_icon@2x.png"; sourceTree = "<group>"; };
+		245EDDCC1B21A10B00B8C0EB /* vitals_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vitals_icon@2x.png"; sourceTree = "<group>"; };
+		245EDDCF1B21A11800B8C0EB /* user_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user_icon@3x.png"; sourceTree = "<group>"; };
+		245EDDD01B21A11800B8C0EB /* vitals_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vitals_icon@3x.png"; sourceTree = "<group>"; };
 		24D1274F1B0DF6140018AA1D /* MRSDateUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSDateUtilities.h; sourceTree = "<group>"; };
 		24D127501B0DF6140018AA1D /* MRSDateUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSDateUtilities.m; sourceTree = "<group>"; };
 		87CFC2F5FC6F1445E8327AF6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -553,6 +565,12 @@
 		D397396E1A2E082200D0AB69 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				245EDDCF1B21A11800B8C0EB /* user_icon@3x.png */,
+				245EDDD01B21A11800B8C0EB /* vitals_icon@3x.png */,
+				245EDDCB1B21A10B00B8C0EB /* user_icon@2x.png */,
+				245EDDCC1B21A10B00B8C0EB /* vitals_icon@2x.png */,
+				245EDDC71B21A0F400B8C0EB /* user_icon.png */,
+				245EDDC81B21A0F400B8C0EB /* vitals_icon.png */,
 				D396EAF21A36460500191F50 /* search_icon.png */,
 				D396EAF31A36460500191F50 /* search_icon@2x.png */,
 				D396EAF41A36460500191F50 /* search_icon@3x.png */,
@@ -679,12 +697,18 @@
 			files = (
 				D396EAF51A36460500191F50 /* search_icon.png in Resources */,
 				D3FAEFFE1A51C1CD002B1BF7 /* Images.xcassets in Resources */,
+				245EDDCE1B21A10B00B8C0EB /* vitals_icon@2x.png in Resources */,
 				D3079E761A3D4DED00E308C7 /* add_patient_icon.png in Resources */,
+				245EDDD11B21A11800B8C0EB /* user_icon@3x.png in Resources */,
 				D3079E751A3D4DED00E308C7 /* add_patient_icon@2x.png in Resources */,
+				245EDDC91B21A0F400B8C0EB /* user_icon.png in Resources */,
+				245EDDCD1B21A10B00B8C0EB /* user_icon@2x.png in Resources */,
 				D396EAF61A36460500191F50 /* search_icon@2x.png in Resources */,
+				245EDDD21B21A11800B8C0EB /* vitals_icon@3x.png in Resources */,
 				D396A53F1A2E0B5A00DE6448 /* openmrs-logo@2x.png in Resources */,
 				D396A5401A2E0B5A00DE6448 /* openmrs-logo@3x.png in Resources */,
 				D3079E771A3D4DED00E308C7 /* add_patient_icon@3x.png in Resources */,
+				245EDDCA1B21A0F400B8C0EB /* vitals_icon.png in Resources */,
 				D396EAF71A36460500191F50 /* search_icon@3x.png in Resources */,
 				D396A5411A2E0B5A00DE6448 /* openmrs-logo.png in Resources */,
 			);
