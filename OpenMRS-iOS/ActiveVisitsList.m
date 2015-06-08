@@ -128,9 +128,7 @@
         self.hasMore = NO;
     }
 
-    [self.tableView beginUpdates];
-    [self.tableView reloadRowsAtIndexPaths:@[[NSIndexPath indexPathForRow:currentIndex inSection:0]] withRowAnimation:UITableViewRowAnimationNone];
-    [self.tableView endUpdates];
+    [self.tableView reloadData];
 }
 
 @end
