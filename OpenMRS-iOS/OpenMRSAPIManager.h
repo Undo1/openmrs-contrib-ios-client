@@ -29,6 +29,7 @@
 + (void)startVisitWithLocation:(MRSLocation *)location visitType:(MRSVisitType *)visitType forPatient:(MRSPatient *)patient completion:(void (^)(NSError *error))completion;
 + (void)stopVisit:(MRSVisit *)visit completion:(void (^)(NSError *))completion;
 + (void)currentlyActiveVisitFromVisits:(NSArray *)visits withCompletion:(void (^)(NSError *error, MRSVisit *visit))completion;
++ (void)getActiveVisits:(NSMutableArray *)activeVisits  From:(int)startIndex  withCompletion:(void (^)(NSError *error))completion;
 + (void)getVisitTypesWithCompletion:(void (^)(NSError *error, NSArray *types))completion;
 + (void)getLocationsWithCompletion:(void (^)(NSError *error, NSArray *locations))completion;
 + (void)logout;

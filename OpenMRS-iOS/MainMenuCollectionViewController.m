@@ -10,6 +10,7 @@
 #import "PatientSearchViewController.h"
 #import "SettingsViewController.h"
 #import "AddPatientTableViewController.h"
+#import "ActiveVisitsList.h"
 
 @implementation MainMenuCollectionViewController
 
@@ -53,7 +54,7 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    return 2;
+    return 3;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -68,6 +69,8 @@ static NSString * const reuseIdentifier = @"Cell";
     case 1:
         image = [UIImage imageNamed:@"add_patient_icon"];
         break;
+    case 2:
+        image = [UIImage imageNamed:@"active_visits_icon"];
     default:
         break;
     }
@@ -86,6 +89,8 @@ static NSString * const reuseIdentifier = @"Cell";
     case 1:
         label.text = @"Add Patient";
         break;
+    case 2:
+        label.text = @"Active visits";
     default:
         break;
     }
@@ -128,6 +133,9 @@ static NSString * const reuseIdentifier = @"Cell";
     } else if (indexPath.item == 1) {
         AddPatientTableViewController *addPatient = [[AddPatientTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
         [self presentViewController:[[UINavigationController alloc] initWithRootViewController:addPatient] animated:YES completion:nil];
+    } else if (indexPath.item == 2) {
+        ActiveVisitsList *activeVisits = [[ActiveVisitsList alloc] initWithStyle:UITableViewStyleGrouped];
+        [self presentViewController:[[UINavigationController alloc] initWithRootViewController:activeVisits] animated:YES completion:nil];
     }
 }
 

@@ -370,6 +370,29 @@
     }
     completion(error, nil);
 }
+
++ (void)getActiveVisits:(NSMutableArray *)activeVisits  From:(int)startIndex  withCompletion:(void (^)(NSError *error))completion
+{
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/visit?includeInactive=false&startIndex=%d",host,startIndex] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
+        for (NSDictionary *visit in results[@"results"]) {
+            MRSVisit *newVisit = [[MRSVisit alloc] init];
+            newVisit.displayName = visit[@"display"];
+            newVisit.UUID = visit[@"uuid"];
+            [activeVisits addObject:newVisit];
+        }
+        completion(nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *failureReason) {
+        completion(failureReason);
+    }];
+    
+}
 + (void)getVisitsForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *visits))completion
 {
     [SVProgressHUD show];
