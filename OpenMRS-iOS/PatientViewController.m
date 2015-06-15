@@ -49,6 +49,8 @@
             dispatch_async(dispatch_get_main_queue(), ^ {
                 [self.tableView reloadData];
             });
+            PatientEncounterListView *encounterList = self.tabBarController.viewControllers[2];
+            encounterList.encounters = self.encounters;
         }
     }];
     [OpenMRSAPIManager getVisitsForPatient:self.patient completion:^(NSError *error, NSArray *visits) {
@@ -67,6 +69,8 @@
                     break;
                 }
             }
+            PatientVisitListView *visitsView = self.tabBarController.viewControllers[1];
+            visitsView.visits = self.visits;
         }
     }];
 }
@@ -142,7 +146,7 @@
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 3;
+    return 2;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -301,16 +305,6 @@
             vitals.patient = self.patient;
             vitals.delegate = self;
             [self presentViewController:[[UINavigationController alloc] initWithRootViewController:vitals] animated:YES completion:nil];
-        }
-    } else if (indexPath.section == 2) {
-        if (indexPath.row == 1) { //encounters row selected
-            PatientEncounterListView *encounterList = [[PatientEncounterListView alloc] initWithStyle:UITableViewStyleGrouped];
-            encounterList.encounters = self.encounters;
-            [self.navigationController pushViewController:encounterList animated:YES];
-        } else if (indexPath.row == 0) { //visits row selected
-            PatientVisitListView *visitsList = [[PatientVisitListView alloc] initWithStyle:UITableViewStyleGrouped];
-            visitsList.visits = self.visits;
-            [self.navigationController pushViewController:visitsList animated:YES];
         }
     }
 }
