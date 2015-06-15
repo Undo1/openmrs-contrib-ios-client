@@ -85,7 +85,7 @@
 
     PatientVisitListView *visitsList = [[PatientVisitListView alloc] initWithStyle:UITableViewStyleGrouped];
     visitsList.tabBarItem.title = @"Visits";
-    visitsList.tabBarItem.image = [UIImage imageNamed:@"active_visits_icon"];
+    visitsList.tabBarItem.image = [UIImage imageNamed:@"active_visits_tab_bar_icon"];
 
 
     PatientEncounterListView *encounterList = [[PatientEncounterListView alloc] initWithStyle:UITableViewStyleGrouped];
