@@ -39,7 +39,8 @@
             [self.patient isInCoreData];
             dispatch_async(dispatch_get_main_queue(), ^ {
                 [self.tableView reloadData];
-                self.title = self.patient.name;
+                self.tabBarController.title = self.patient.name;
+                self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
             });
         }
     }];
