@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		245EDDC91B21A0F400B8C0EB /* user_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDC71B21A0F400B8C0EB /* user_icon.png */; };
+		245EDDCA1B21A0F400B8C0EB /* vitals_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDC81B21A0F400B8C0EB /* vitals_icon.png */; };
+		245EDDCD1B21A10B00B8C0EB /* user_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDCB1B21A10B00B8C0EB /* user_icon@2x.png */; };
+		245EDDCE1B21A10B00B8C0EB /* vitals_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDCC1B21A10B00B8C0EB /* vitals_icon@2x.png */; };
+		245EDDD11B21A11800B8C0EB /* user_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDCF1B21A11800B8C0EB /* user_icon@3x.png */; };
+		245EDDD21B21A11800B8C0EB /* vitals_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDD01B21A11800B8C0EB /* vitals_icon@3x.png */; };
 		24A8DEC71B18C18A00F5FF84 /* active_visits_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 24A8DEC41B18C18A00F5FF84 /* active_visits_icon@3x.png */; };
 		24A8DEC81B18C18A00F5FF84 /* active_visits_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 24A8DEC51B18C18A00F5FF84 /* active_visits_icon@2x.png */; };
 		24A8DEC91B18C18A00F5FF84 /* active_visits_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 24A8DEC61B18C18A00F5FF84 /* active_visits_icon.png */; };
@@ -50,6 +56,9 @@
 		D39AD7AE1A3C081000C01540 /* MRSVital.m in Sources */ = {isa = PBXBuildFile; fileRef = D39AD7AD1A3C081000C01540 /* MRSVital.m */; };
 		D3A4728B1A3770B4002A0BBD /* AddPatientTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3A4728A1A3770B4002A0BBD /* AddPatientTableViewController.m */; };
 		D3A4728E1A37794D002A0BBD /* MRSPerson.m in Sources */ = {isa = PBXBuildFile; fileRef = D3A4728D1A37794D002A0BBD /* MRSPerson.m */; };
+		D3A57DBC1B2E5BF800F25F30 /* active_visits_tab_bar_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = D3A57DB91B2E5BF800F25F30 /* active_visits_tab_bar_icon.png */; };
+		D3A57DBD1B2E5BF800F25F30 /* active_visits_tab_bar_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D3A57DBA1B2E5BF800F25F30 /* active_visits_tab_bar_icon@2x.png */; };
+		D3A57DBE1B2E5BF800F25F30 /* active_visits_tab_bar_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D3A57DBB1B2E5BF800F25F30 /* active_visits_tab_bar_icon@3x.png */; };
 		D3A869511A32B3D400D1963F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3A869501A32B3D400D1963F /* CoreData.framework */; };
 		D3A869541A32B42A00D1963F /* openmrs-offline.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D3A869521A32B42A00D1963F /* openmrs-offline.xcdatamodeld */; };
 		D3DCBBF81A71F4940024D088 /* StartVisitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DCBBF71A71F4940024D088 /* StartVisitViewController.swift */; };
@@ -72,6 +81,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		245EDDC71B21A0F400B8C0EB /* user_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = user_icon.png; sourceTree = "<group>"; };
+		245EDDC81B21A0F400B8C0EB /* vitals_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vitals_icon.png; sourceTree = "<group>"; };
+		245EDDCB1B21A10B00B8C0EB /* user_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user_icon@2x.png"; sourceTree = "<group>"; };
+		245EDDCC1B21A10B00B8C0EB /* vitals_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vitals_icon@2x.png"; sourceTree = "<group>"; };
+		245EDDCF1B21A11800B8C0EB /* user_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user_icon@3x.png"; sourceTree = "<group>"; };
+		245EDDD01B21A11800B8C0EB /* vitals_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vitals_icon@3x.png"; sourceTree = "<group>"; };
 		24A8DEC41B18C18A00F5FF84 /* active_visits_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "active_visits_icon@3x.png"; sourceTree = "<group>"; };
 		24A8DEC51B18C18A00F5FF84 /* active_visits_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "active_visits_icon@2x.png"; sourceTree = "<group>"; };
 		24A8DEC61B18C18A00F5FF84 /* active_visits_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = active_visits_icon.png; sourceTree = "<group>"; };
@@ -149,6 +164,9 @@
 		D3A4728A1A3770B4002A0BBD /* AddPatientTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddPatientTableViewController.m; sourceTree = "<group>"; };
 		D3A4728C1A37794D002A0BBD /* MRSPerson.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSPerson.h; sourceTree = "<group>"; };
 		D3A4728D1A37794D002A0BBD /* MRSPerson.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSPerson.m; sourceTree = "<group>"; };
+		D3A57DB91B2E5BF800F25F30 /* active_visits_tab_bar_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = active_visits_tab_bar_icon.png; sourceTree = "<group>"; };
+		D3A57DBA1B2E5BF800F25F30 /* active_visits_tab_bar_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "active_visits_tab_bar_icon@2x.png"; sourceTree = "<group>"; };
+		D3A57DBB1B2E5BF800F25F30 /* active_visits_tab_bar_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "active_visits_tab_bar_icon@3x.png"; sourceTree = "<group>"; };
 		D3A869501A32B3D400D1963F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		D3A869531A32B42A00D1963F /* openmrs-offline.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "openmrs-offline.xcdatamodel"; sourceTree = "<group>"; };
 		D3DCBBF61A71F4930024D088 /* OpenMRS-iOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OpenMRS-iOS-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -575,6 +593,15 @@
 				24A8DEC41B18C18A00F5FF84 /* active_visits_icon@3x.png */,
 				24A8DEC51B18C18A00F5FF84 /* active_visits_icon@2x.png */,
 				24A8DEC61B18C18A00F5FF84 /* active_visits_icon.png */,
+				D3A57DB91B2E5BF800F25F30 /* active_visits_tab_bar_icon.png */,
+				D3A57DBA1B2E5BF800F25F30 /* active_visits_tab_bar_icon@2x.png */,
+				D3A57DBB1B2E5BF800F25F30 /* active_visits_tab_bar_icon@3x.png */,
+				245EDDCF1B21A11800B8C0EB /* user_icon@3x.png */,
+				245EDDD01B21A11800B8C0EB /* vitals_icon@3x.png */,
+				245EDDCB1B21A10B00B8C0EB /* user_icon@2x.png */,
+				245EDDCC1B21A10B00B8C0EB /* vitals_icon@2x.png */,
+				245EDDC71B21A0F400B8C0EB /* user_icon.png */,
+				245EDDC81B21A0F400B8C0EB /* vitals_icon.png */,
 				D396EAF21A36460500191F50 /* search_icon.png */,
 				D396EAF31A36460500191F50 /* search_icon@2x.png */,
 				D396EAF41A36460500191F50 /* search_icon@3x.png */,
@@ -699,17 +726,26 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3A57DBC1B2E5BF800F25F30 /* active_visits_tab_bar_icon.png in Resources */,
 				24A8DEC71B18C18A00F5FF84 /* active_visits_icon@3x.png in Resources */,
+				D3A57DBE1B2E5BF800F25F30 /* active_visits_tab_bar_icon@3x.png in Resources */,
 				D396EAF51A36460500191F50 /* search_icon.png in Resources */,
 				D3FAEFFE1A51C1CD002B1BF7 /* Images.xcassets in Resources */,
+				245EDDCE1B21A10B00B8C0EB /* vitals_icon@2x.png in Resources */,
+				D3A57DBD1B2E5BF800F25F30 /* active_visits_tab_bar_icon@2x.png in Resources */,
 				D3079E761A3D4DED00E308C7 /* add_patient_icon.png in Resources */,
+				245EDDD11B21A11800B8C0EB /* user_icon@3x.png in Resources */,
 				D3079E751A3D4DED00E308C7 /* add_patient_icon@2x.png in Resources */,
+				245EDDC91B21A0F400B8C0EB /* user_icon.png in Resources */,
+				245EDDCD1B21A10B00B8C0EB /* user_icon@2x.png in Resources */,
 				D396EAF61A36460500191F50 /* search_icon@2x.png in Resources */,
+				245EDDD21B21A11800B8C0EB /* vitals_icon@3x.png in Resources */,
 				D396A53F1A2E0B5A00DE6448 /* openmrs-logo@2x.png in Resources */,
 				24A8DEC81B18C18A00F5FF84 /* active_visits_icon@2x.png in Resources */,
 				24A8DEC91B18C18A00F5FF84 /* active_visits_icon.png in Resources */,
 				D396A5401A2E0B5A00DE6448 /* openmrs-logo@3x.png in Resources */,
 				D3079E771A3D4DED00E308C7 /* add_patient_icon@3x.png in Resources */,
+				245EDDCA1B21A0F400B8C0EB /* vitals_icon.png in Resources */,
 				D396EAF71A36460500191F50 /* search_icon@3x.png in Resources */,
 				D396A5411A2E0B5A00DE6448 /* openmrs-logo.png in Resources */,
 			);
@@ -912,7 +948,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "50f5fd6f-7e44-4af5-8805-4836a63ea1f7";
+				PROVISIONING_PROFILE = "ea4deb9c-c248-45fe-b8d1-8eb19b4f8702";
 				SWIFT_OBJC_BRIDGING_HEADER = "OpenMRS-iOS/OpenMRS-iOS-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -931,7 +967,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "50f5fd6f-7e44-4af5-8805-4836a63ea1f7";
+				PROVISIONING_PROFILE = "ea4deb9c-c248-45fe-b8d1-8eb19b4f8702";
 				SWIFT_OBJC_BRIDGING_HEADER = "OpenMRS-iOS/OpenMRS-iOS-Bridging-Header.h";
 			};
 			name = Release;

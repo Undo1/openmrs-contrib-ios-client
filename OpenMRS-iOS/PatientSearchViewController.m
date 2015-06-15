@@ -8,6 +8,8 @@
 
 #import "PatientSearchViewController.h"
 #import "OpenMRSAPIManager.h"
+#import "PatientEncounterListView.h"
+#import "PatientVisitListView.h"
 #import "MRSPatient.h"
 #import "PatientViewController.h"
 #import "SVProgressHUD.h"
@@ -78,7 +80,23 @@
     MRSPatient *patient = self.currentSearchResults[indexPath.row];
     PatientViewController *vc = [[PatientViewController alloc] initWithStyle:UITableViewStyleGrouped];
     vc.patient = patient;
-    [self.navigationController pushViewController:vc animated:YES];
+    vc.tabBarItem.title = patient.display;
+    vc.tabBarItem.image = [UIImage imageNamed:@"user_icon"];
+
+    PatientVisitListView *visitsList = [[PatientVisitListView alloc] initWithStyle:UITableViewStyleGrouped];
+    visitsList.tabBarItem.title = @"Visits";
+    visitsList.tabBarItem.image = [UIImage imageNamed:@"active_visits_tab_bar_icon"];
+
+
+    PatientEncounterListView *encounterList = [[PatientEncounterListView alloc] initWithStyle:UITableViewStyleGrouped];
+    encounterList.tabBarItem.title = @"Encounters";
+    encounterList.tabBarItem.image = [UIImage imageNamed:@"vitals_icon"];
+    
+    UITabBarController *patientView = [[UITabBarController alloc] init];
+    patientView.viewControllers = @[vc, visitsList, encounterList];
+    
+    [patientView setSelectedIndex:0];
+    [self.navigationController pushViewController:patientView animated:YES];
 }
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
