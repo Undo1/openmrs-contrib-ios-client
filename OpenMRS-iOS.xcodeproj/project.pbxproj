@@ -74,6 +74,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		241729061B30C73400BB35F0 /* openmrs-offline 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "openmrs-offline 2.xcdatamodel"; sourceTree = "<group>"; };
 		2432066B1B2E439000B54970 /* EditPatient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditPatient.h; sourceTree = "<group>"; };
 		2432066C1B2E439000B54970 /* EditPatient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditPatient.m; sourceTree = "<group>"; };
 		2432066F1B30436700B54970 /* MRSHelperFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSHelperFunctions.h; sourceTree = "<group>"; };
@@ -1027,6 +1028,7 @@
 		D3A869521A32B42A00D1963F /* openmrs-offline.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				241729061B30C73400BB35F0 /* openmrs-offline 2.xcdatamodel */,
 				D3A869531A32B42A00D1963F /* openmrs-offline.xcdatamodel */,
 			);
 			currentVersion = D3A869531A32B42A00D1963F /* openmrs-offline.xcdatamodel */;

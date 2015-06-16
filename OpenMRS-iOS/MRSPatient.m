@@ -86,11 +86,12 @@
     [patient setValue:[self valueNotNullAndIsString:self.address6] forKey:@"address6"];
     [patient setValue:[self valueNotNullAndIsString:self.age] forKey:@"age"];
     [patient setValue:[self valueNotNullAndIsString:self.birthdate] forKey:@"birthdate"];
-//    [patient setValue:[self valueNotNullAndIsString:self.birthdateEstimated ] forKey:@"birthdateEstimated"];
+    [patient setValue:[self valueNotNullAndIsString:self.birthdateEstimated ] forKey:@"birthdateEstimated"];
     [patient setValue:[self valueNotNullAndIsString:self.causeOfDeath] forKey:@"causeOfDeath"];
     [patient setValue:[self valueNotNullAndIsString:self.cityVillage] forKey:@"cityVillage"];
     [patient setValue:[self valueNotNullAndIsString:self.country] forKey:@"country"];
     [patient setValue:[self valueNotNullAndIsString:self.countyDistrict] forKey:@"countyDistrict"];
+    [patient setValue:[self valueNotNullAndIsString:[NSNumber numberWithBool:self.dead]] forKey:@"dead"];
     [patient setValue:[self valueNotNullAndIsString:self.deathDate] forKey:@"deathDate"];
     [patient setValue:[self valueNotNullAndIsString:self.display] forKey:@"display"];
     [patient setValue:[self valueNotNullAndIsString:self.displayName] forKey:@"displayName"];
@@ -106,6 +107,8 @@
     [patient setValue:[self valueNotNullAndIsString:self.middleName] forKey:@"middleName"];
     [patient setValue:[self valueNotNullAndIsString:self.name] forKey:@"name"];
     [patient setValue:[self valueNotNullAndIsString:self.postalCode] forKey:@"postalCode"];
+    [patient setValue:[self valueNotNullAndIsString:self.preferredNameUUID] forKey:@"preferredNameUUID"];
+    [patient setValue:[self valueNotNullAndIsString:self.preferredAddressUUID] forKey:@"preferredAddressUUID"];
     [patient setValue:[self valueNotNullAndIsString:self.stateProvince] forKey:@"stateProvince"];
     NSError *error;
     if (![managedContext save:&error]) {
