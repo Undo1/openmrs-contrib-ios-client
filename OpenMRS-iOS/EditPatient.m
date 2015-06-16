@@ -69,7 +69,7 @@
                          ];
     self.personKeys = @[@"Gender", @"BirthDate", @"BirthDate Estimated", @"Dead", @"Cause Of Death"];
     self.nameKeys = @[@"Given Name", @"Middle Name", @"Family Name", @"Family Name2"];
-    self.addressKeys = @[@"Preferred", @"Address 1", @"Address 2", @"Address 3", @"Address 4", @"Address 5", @"Address 6",
+    self.addressKeys = @[@"Address 1", @"Address 2", @"Address 3", @"Address 4", @"Address 5", @"Address 6",
                          @"City Village", @"State Province", @"Country" ,@"Postal Code", @"Latitude", @"Latitude", @"County District"];
     self.allKeys = @[self.personKeys, self.nameKeys, self.addressKeys];
     
