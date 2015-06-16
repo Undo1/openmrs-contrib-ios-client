@@ -1,7 +1,7 @@
 openmrs-contrib-ios-client
 ===========
 
-This app is a mobile(iOS) client for [OpenMRS](http://openmrs.org/). It was originally created by [Parker Erway](https://github.com/Undo1) as part of [Google Code-in 2014](https://issues.openmrs.org/browse/GCI-18). Being extended to a fully fleged OpenMRS client by, [Yosef Hamza](https://github.com/yousefhamza) as part of [Google Summer of Code 2015](https://wiki.openmrs.org/display/projects/OpenMRS+iOS+Client+Extensions), Under the mentorship of [Harsha Siriwardena](https://github.com/harshadura). Logo, splash & [Promo video](https://www.youtube.com/watch?v=R8GsgtoXMgQ) created by, [Ungku Zoë Anysa](https://github.com/uzanysa).
+This app is a mobile (iOS) client for [OpenMRS](http://openmrs.org/). It was originally created by [Parker Erway](https://github.com/Undo1) as part of [Google Code-in 2014](https://issues.openmrs.org/browse/GCI-18). Being extended to a fully fleged OpenMRS client by, [Yosef Hamza](https://github.com/yousefhamza) as part of [Google Summer of Code 2015](https://wiki.openmrs.org/display/projects/OpenMRS+iOS+Client+Extensions), Under the mentorship of [Harsha Siriwardena](https://github.com/harshadura). Logo, splash & [Promo video](https://www.youtube.com/watch?v=R8GsgtoXMgQ) created by, [Ungku Zoë Anysa](https://github.com/uzanysa).
 
 Bug reporting and feature requests
 -------
