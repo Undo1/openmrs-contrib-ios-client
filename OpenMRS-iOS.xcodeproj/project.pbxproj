@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2432066D1B2E439000B54970 /* EditPatient.m in Sources */ = {isa = PBXBuildFile; fileRef = 2432066C1B2E439000B54970 /* EditPatient.m */; };
+		243206711B30436700B54970 /* MRSHelperFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 243206701B30436700B54970 /* MRSHelperFunctions.m */; };
 		24A8DEC71B18C18A00F5FF84 /* active_visits_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 24A8DEC41B18C18A00F5FF84 /* active_visits_icon@3x.png */; };
 		24A8DEC81B18C18A00F5FF84 /* active_visits_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 24A8DEC51B18C18A00F5FF84 /* active_visits_icon@2x.png */; };
 		24A8DEC91B18C18A00F5FF84 /* active_visits_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 24A8DEC61B18C18A00F5FF84 /* active_visits_icon.png */; };
@@ -72,6 +74,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2432066B1B2E439000B54970 /* EditPatient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditPatient.h; sourceTree = "<group>"; };
+		2432066C1B2E439000B54970 /* EditPatient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditPatient.m; sourceTree = "<group>"; };
+		2432066F1B30436700B54970 /* MRSHelperFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSHelperFunctions.h; sourceTree = "<group>"; };
+		243206701B30436700B54970 /* MRSHelperFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSHelperFunctions.m; sourceTree = "<group>"; };
 		24A8DEC41B18C18A00F5FF84 /* active_visits_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "active_visits_icon@3x.png"; sourceTree = "<group>"; };
 		24A8DEC51B18C18A00F5FF84 /* active_visits_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "active_visits_icon@2x.png"; sourceTree = "<group>"; };
 		24A8DEC61B18C18A00F5FF84 /* active_visits_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = active_visits_icon.png; sourceTree = "<group>"; };
@@ -184,9 +190,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2432066E1B2E439C00B54970 /* Edit Patient */ = {
+			isa = PBXGroup;
+			children = (
+				2432066B1B2E439000B54970 /* EditPatient.h */,
+				2432066C1B2E439000B54970 /* EditPatient.m */,
+			);
+			name = "Edit Patient";
+			sourceTree = "<group>";
+		};
 		248FBE2F1B03B9E400569C2C /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				2432066E1B2E439C00B54970 /* Edit Patient */,
 				24A8DECD1B18F67500F5FF84 /* ActiveVisits */,
 				248FBE481B03BC2300569C2C /* Add patient */,
 				248FBE421B03BBAA00569C2C /* Add visit note */,
@@ -332,6 +348,8 @@
 				D317E7F41A4C6BD300E05212 /* OrderedDictionary.m */,
 				24D1274F1B0DF6140018AA1D /* MRSDateUtilities.h */,
 				24D127501B0DF6140018AA1D /* MRSDateUtilities.m */,
+				2432066F1B30436700B54970 /* MRSHelperFunctions.h */,
+				243206701B30436700B54970 /* MRSHelperFunctions.m */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -773,8 +791,10 @@
 				D38DB4F81A320EF700E2CF23 /* MRSEncounterOb.m in Sources */,
 				D39AD7AE1A3C081000C01540 /* MRSVital.m in Sources */,
 				D317E7F61A4C6BD300E05212 /* OrderedDictionary.m in Sources */,
+				2432066D1B2E439000B54970 /* EditPatient.m in Sources */,
 				D396A52D1A2E09DE00DE6448 /* MRSPatient.m in Sources */,
 				D39AD7AB1A3BFE8600C01540 /* CaptureVitalsTableViewController.m in Sources */,
+				243206711B30436700B54970 /* MRSHelperFunctions.m in Sources */,
 				D396A5281A2E09DE00DE6448 /* SignInViewController.m in Sources */,
 				D396A5441A2E0CEF00DE6448 /* SettingsViewController.m in Sources */,
 				D3E47BA91A3A08EF004B3F95 /* MRSPatientIdentifier.m in Sources */,
