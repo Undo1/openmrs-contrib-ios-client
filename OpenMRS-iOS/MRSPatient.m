@@ -13,6 +13,16 @@
 #import <CoreData/CoreData.h>
 #import "AppDelegate.h"
 @implementation MRSPatient
+
+
+- (id) init {
+    self = [super init];
+    if (self) {
+        self.upToDate = YES;
+    }
+    return self;
+}
+
 - (void)cascadingDelete
 {
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
