@@ -32,7 +32,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     NSLog(@"birthdateestimated!: %@", ObjectOrEmpty(self.patient.birthdateEstimated));
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Commit"
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Save"
                                                                               style:UIBarButtonItemStylePlain
                                                                              target:self
                                                                             action:@selector(updatePatient)];
