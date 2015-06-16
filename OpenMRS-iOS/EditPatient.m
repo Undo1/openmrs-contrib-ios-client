@@ -188,7 +188,9 @@ static id ObjectOrEmpty(id object)
 
 - (void)updatePatient {
     [OpenMRSAPIManager EditPatient:self.patient completion:nil];
-    [self textFieldDidEndEditing:self.currentTextField];
+    if (![MRSHelperFunctions isNull:self.currentTextField]) {
+        [self textFieldDidEndEditing:self.currentTextField];
+    }
     //[self.navigationController popViewControllerAnimated:YES];
 }
 
