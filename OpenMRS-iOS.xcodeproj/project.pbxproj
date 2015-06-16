@@ -1031,7 +1031,7 @@
 				241729061B30C73400BB35F0 /* openmrs-offline 2.xcdatamodel */,
 				D3A869531A32B42A00D1963F /* openmrs-offline.xcdatamodel */,
 			);
-			currentVersion = D3A869531A32B42A00D1963F /* openmrs-offline.xcdatamodel */;
+			currentVersion = 241729061B30C73400BB35F0 /* openmrs-offline 2.xcdatamodel */;
 			name = "openmrs-offline.xcdatamodeld";
 			path = "../openmrs-offline.xcdatamodeld";
 			sourceTree = "<group>";

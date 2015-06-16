@@ -44,6 +44,7 @@
         <attribute name="preferredAddressUUID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="preferredNameUUID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="stateProvince" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="upToDate" optional="YES" attributeType="Boolean" syncable="YES"/>
         <attribute name="uuid" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="Visit" syncable="YES">
@@ -54,7 +55,7 @@
     <elements>
         <element name="Encounter" positionX="-54" positionY="144" width="128" height="90"/>
         <element name="EncounterOb" positionX="-36" positionY="153" width="128" height="103"/>
-        <element name="Patient" positionX="-63" positionY="-18" width="128" height="540"/>
+        <element name="Patient" positionX="-63" positionY="-18" width="128" height="555"/>
         <element name="Visit" positionX="-45" positionY="135" width="128" height="88"/>
     </elements>
 </model>
