@@ -94,6 +94,7 @@
     
     UITabBarController *patientView = [[UITabBarController alloc] init];
     patientView.viewControllers = @[vc, visitsList, encounterList];
+    patientView.tabBar.translucent = NO;
     
     [patientView setSelectedIndex:0];
     [self.navigationController pushViewController:patientView animated:YES];
