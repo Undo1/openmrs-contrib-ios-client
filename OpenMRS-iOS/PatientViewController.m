@@ -7,6 +7,7 @@
 //
 
 #import "PatientViewController.h"
+#import "EditPatient.h"
 #import "OpenMRSAPIManager.h"
 #import "PatientEncounterListView.h"
 #import "PatientVisitListView.h"
@@ -25,6 +26,11 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self updateWithDetailedInfo];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     [self updateWithDetailedInfo];
 }
 - (void)updateWithDetailedInfo
@@ -147,7 +153,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return (self.isShowingActions) ? 4 : 1;
+        return (self.isShowingActions) ? 5 : 1;
     } else if (section == 1) {
         return self.information.count;
     } else if (section == 2) {
@@ -169,6 +175,26 @@
             cell.textLabel.textColor = self.view.tintColor;
             return cell;
         }
+        if (indexPath.row == 0) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"addVisitNoteCell"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"addVisitNoteCell"];
+            }
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.textLabel.textColor = self.view.tintColor;
+            cell.textLabel.text = @"Add Visit Note...";
+            return cell;
+        }
+        if (indexPath.row == 1) {
+            UITableViewCell *actionCell = [tableView dequeueReusableCellWithIdentifier:@"actionCell"];
+            if (!actionCell) {
+                actionCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"actionCell"];
+            }
+            actionCell.textLabel.text = @"Capture Vitals...";
+            actionCell.textLabel.textAlignment = NSTextAlignmentCenter;
+            actionCell.textLabel.textColor = self.view.tintColor;
+            return actionCell;
+        }
         if (indexPath.row == 2) {
             UITableViewCell *saveToCoreDataCell = [tableView dequeueReusableCellWithIdentifier:@"coredata"];
             if (!saveToCoreDataCell) {
@@ -182,16 +208,6 @@
             saveToCoreDataCell.textLabel.textAlignment = NSTextAlignmentCenter;
             saveToCoreDataCell.textLabel.textColor = self.view.tintColor;
             return saveToCoreDataCell;
-        }
-        if (indexPath.row == 0) {
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"addVisitNoteCell"];
-            if (!cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"addVisitNoteCell"];
-            }
-            cell.textLabel.textAlignment = NSTextAlignmentCenter;
-            cell.textLabel.textColor = self.view.tintColor;
-            cell.textLabel.text = @"Add Visit Note...";
-            return cell;
         }
         if (indexPath.row == 3) {
             UITableViewCell *cell = nil;
@@ -212,14 +228,16 @@
             cell.textLabel.textColor = self.view.tintColor;
             return cell;
         }
-        UITableViewCell *actionCell = [tableView dequeueReusableCellWithIdentifier:@"actionCell"];
-        if (!actionCell) {
-            actionCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"actionCell"];
+        if (indexPath.row == 4) {
+            UITableViewCell *editCell = [tableView dequeueReusableCellWithIdentifier:@"actionCell"];
+            if (!editCell) {
+                editCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"actionCell"];
+            }
+            editCell.textLabel.text = @"Edit Patient...";
+            editCell.textLabel.textAlignment = NSTextAlignmentCenter;
+            editCell.textLabel.textColor = self.view.tintColor;
+            return editCell;
         }
-        actionCell.textLabel.text = @"Capture Vitals...";
-        actionCell.textLabel.textAlignment = NSTextAlignmentCenter;
-        actionCell.textLabel.textColor = self.view.tintColor;
-        return actionCell;
     }
     if (indexPath.section == 2) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"countCell"];
@@ -301,6 +319,11 @@
             vitals.patient = self.patient;
             vitals.delegate = self;
             [self presentViewController:[[UINavigationController alloc] initWithRootViewController:vitals] animated:YES completion:nil];
+        }
+        if (indexPath.row == 4) {
+            EditPatient *editPatient = [[EditPatient alloc] init];
+            editPatient.patient = self.patient;
+            [self.navigationController pushViewController:editPatient animated:YES];
         }
     } else if (indexPath.section == 2) {
         if (indexPath.row == 1) { //encounters row selected
