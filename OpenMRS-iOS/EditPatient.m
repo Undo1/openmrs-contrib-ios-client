@@ -150,6 +150,13 @@ static id ObjectOrEmpty(id object)
         }
         [textField resignFirstResponder];
     }
+    if ([fieldName isEqualToString:@"Gender"]) {
+        if ([textField.text isEqualToString:@"M"])
+            textField.text = @"F";
+        else
+            textField.text = @"M";
+        [textField resignFirstResponder];
+    }
     self.currentTextField = textField;
 }
 
