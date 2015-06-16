@@ -10,4 +10,7 @@
 
 @interface MRSHelperFunctions : NSObject
 
++ (NSArray *)allPropertyNames:(id)forClass;
++ (BOOL)isNull:(id)object;
++ (NSString *) formLabelToJSONLabel:(NSString *) label;
 @end
