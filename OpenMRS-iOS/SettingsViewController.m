@@ -30,7 +30,7 @@
     if (section == 0) {
         return 2;
     } else {
-        return 1;
+        return 2;
     }
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -67,6 +67,16 @@
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             cell.textLabel.text = @"Remove Offline Patients";
             return cell;
+        } else if (indexPath.row == 1) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"clearCell"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"clearCell"];
+            }
+            cell.textLabel.textColor = [UIColor blackColor];
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.textLabel.text = @"Sync offline patients";
+            return cell;
+
         }
     }
     return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
@@ -80,6 +90,10 @@
         [self dismissViewControllerAnimated:NO completion:^ {
             [OpenMRSAPIManager logout];
         }];
+    } else if (indexPath.section == 1 && indexPath.row == 1) {
+        AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+        [appDelegate updateExistingOutOfDatePatients];
+        [tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
 }
 @end
