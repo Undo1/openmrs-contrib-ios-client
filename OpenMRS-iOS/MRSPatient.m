@@ -77,6 +77,7 @@
     NSManagedObjectContext *managedContext = appDelegate.managedObjectContext;
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Patient" inManagedObjectContext:managedContext];
     NSManagedObject *patient = [[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:managedContext];
+    NSLog(@"Saving to core data with dead= %@", [NSNumber numberWithBool:self.dead]);
     [patient setValue:[self valueNotNullAndIsString:self.UUID] forKey:@"uuid"];
     [patient setValue:[self valueNotNullAndIsString:self.address1] forKey:@"address1"];
     [patient setValue:[self valueNotNullAndIsString:self.address2] forKey:@"address2"];
@@ -110,6 +111,7 @@
     [patient setValue:[self valueNotNullAndIsString:self.preferredNameUUID] forKey:@"preferredNameUUID"];
     [patient setValue:[self valueNotNullAndIsString:self.preferredAddressUUID] forKey:@"preferredAddressUUID"];
     [patient setValue:[self valueNotNullAndIsString:self.stateProvince] forKey:@"stateProvince"];
+    [patient setValue:[self valueNotNullAndIsString:[NSNumber numberWithBool:self.upToDate]] forKey:@"upToDate"];
     NSError *error;
     if (![managedContext save:&error]) {
         NSLog(@"Error saving patient! %@", error);
@@ -179,6 +181,7 @@
         self.cityVillage = [result valueForKey:@"cityVillage"];
         self.country = [result valueForKey:@"country"];
         self.countyDistrict = [result valueForKey:@"countyDistrict"];
+        self.dead = [[result valueForKey:@"dead"] boolValue];
         self.deathDate = [result valueForKey:@"deathDate"];
         self.display = [result valueForKey:@"display"];
         self.displayName = [result valueForKey:@"displayName"];
@@ -194,7 +197,10 @@
         self.middleName = [result valueForKey:@"middleName"];
         self.name = [result valueForKey:@"name"];
         self.postalCode = [result valueForKey:@"postalCode"];
+        self.preferredAddressUUID = [result valueForKey:@"preferredAddressUUID"];
+        self.preferredNameUUID = [result valueForKey:@"preferredNameUUID"];
         self.stateProvince = [result valueForKey:@"stateProvince"];
+        self.upToDate = [[result valueForKey:@"upToDate"] boolValue];
         self.fromCoreData = YES;
     }
 }
