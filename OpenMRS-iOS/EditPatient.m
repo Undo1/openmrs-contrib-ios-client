@@ -10,6 +10,7 @@
 #import "MRSDateUtilities.h"
 #import "MRSHelperFunctions.h"
 #import "OpenMRSAPIManager.h"
+#import "SVProgressHUD.h"
 
 @interface EditPatient ()
 
@@ -31,7 +32,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    NSLog(@"birthdateestimated!: %@", ObjectOrEmpty(self.patient.birthdateEstimated));
+    NSLog(@"uuid: %@" , self.patient.UUID);
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Save"
                                                                               style:UIBarButtonItemStylePlain
                                                                              target:self
@@ -187,11 +188,31 @@ static id ObjectOrEmpty(id object)
 #pragma mark - barbuttonitem Action
 
 - (void)updatePatient {
-    [OpenMRSAPIManager EditPatient:self.patient completion:nil];
+    [OpenMRSAPIManager EditPatient:self.patient completion:^(NSError *error) {
+        if (!error) {
+            [SVProgressHUD showSuccessWithStatus:@"Saved"];
+        } else {
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error saving"
+                                                                message:@"Can't save your edits right now, choose Retry to retry now or Save to save your edits offline to sync later"
+                                                               delegate:self
+                                                      cancelButtonTitle:@"Cancel"
+                                                      otherButtonTitles:@"Retry", @"Save", nil];
+            [alertView show];
+        }
+    }];
     if (![MRSHelperFunctions isNull:self.currentTextField]) {
         [self textFieldDidEndEditing:self.currentTextField];
     }
-    //[self.navigationController popViewControllerAnimated:YES];
 }
 
+#pragma mark - alertview delegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        [self updatePatient];
+    } else {
+        self.patient.upToDate = NO;
+        [self.patient saveToCoreData];
+    }
+}
 @end

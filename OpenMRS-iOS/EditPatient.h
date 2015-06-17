@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "MRSPatient.h"
 
-@interface EditPatient : UITableViewController <UITextFieldDelegate>
+@interface EditPatient : UITableViewController <UITextFieldDelegate, UIAlertViewDelegate>
 
 @property (nonatomic, strong) MRSPatient *patient;
 
