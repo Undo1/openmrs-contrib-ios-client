@@ -11,6 +11,8 @@
 #import "KeychainItemWrapper.h"
 #import <CoreData/CoreData.h>
 #import "EncryptedStore.h"
+#import "MRSPatient.h"
+#import "OpenMRSAPIManager.h"
 @interface AppDelegate ()
 
 @end
@@ -46,6 +48,7 @@
             [[UISearchBar appearance] setClipsToBounds:YES];
         }
     }
+    [self updateExistingOutOfDatePatients];
     return YES;
 }
 
@@ -132,5 +135,28 @@
                               NSInferMappingModelAutomaticallyOption : @YES
                               };
     [[self.managedObjectContext persistentStoreCoordinator] addPersistentStoreWithType:EncryptedStoreType configuration:nil URL:storeURL options:options error:&error];//recreates the persistent store
+}
+
+- (void)updateExistingOutOfDatePatients {
+    NSLog(@"Updating offline patients...");
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:self.managedObjectContext]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"TRUEPREDICATE", [NSNumber numberWithBool:YES]];
+    [request setPredicate:predicate];
+    NSError *error = nil;
+    NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
+    NSLog(@"unUpdated: %lu", (unsigned long)results.count);
+    for (NSManagedObject *object in results) {
+        MRSPatient *patient = [[MRSPatient alloc] init];
+        patient.UUID = [object valueForKey:@"uuid"];
+        [patient updateFromCoreData];
+        NSLog(@"\tUpdating patient: %@", patient.givenName);
+        [OpenMRSAPIManager EditPatient:patient completion:^(NSError *error) {
+            if (!error) {
+                patient.upToDate = YES;
+                [patient saveToCoreData];
+            }
+        }];
+    }
 }
 @end

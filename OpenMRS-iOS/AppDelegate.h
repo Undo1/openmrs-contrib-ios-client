@@ -19,5 +19,6 @@
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 - (void)clearStore;
+- (void)updateExistingOutOfDatePatients;
 
 @end
