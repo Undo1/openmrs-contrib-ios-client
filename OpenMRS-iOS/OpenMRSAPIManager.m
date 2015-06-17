@@ -632,6 +632,7 @@
         }
         NSError *error;
         NSArray *results = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+        NSLog(@"error: %@", error);
         if (results.count > 0) {
             NSMutableArray *patients = [[NSMutableArray alloc] init];
             for (NSManagedObject *object in results) {
@@ -724,10 +725,42 @@
     NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
     
-    /* UPDATING PREFERRED ADDRESS */
+    NSArray *personKeys = @[@"BirthDate", @"BirthDate Estimated", @"Dead", @"Cause Of Death"];
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithDictionary:@{
+                                                                   @"gender": patient.gender
+                                                                   }];
+    for (NSString *propertyLabel in personKeys) {
+        NSString *property = [MRSHelperFunctions formLabelToJSONLabel:propertyLabel];
+        if ([property isEqualToString:@"dead"]){
+            [parameters setValue:patient.dead?@YES:@NO forKey:property];
+            continue;
+        }
+        if (![MRSHelperFunctions isNull:[patient valueForKey:property]] && ![[patient valueForKey:property] isEqualToString:@""]){
+            [parameters setValue:[patient valueForKey:property] forKey:property];
+        }
+    }
+    NSLog(@"Person parameters: %@", parameters);
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/person/%@", host, patient.UUID] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
+        NSLog(@"Person response: %@", results);
+        [self EditAddressForPatient:patient completion:completion];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Operation failed... with Error: %@", error);
+        completion(error);
+    }];
+}
+
++ (void)EditAddressForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion {
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+    
     NSMutableDictionary *parameters =[[NSMutableDictionary alloc] init];
     NSArray *addressKeys = @[@"Address 1", @"Address 2", @"Address 3", @"Address 4", @"Address 5", @"Address 6",
-                         @"City Village", @"State Province", @"Country" ,@"Postal Code", @"Latitude", @"Latitude", @"County District"];
+                             @"City Village", @"State Province", @"Country" ,@"Postal Code", @"Latitude", @"Latitude", @"County District"];
     for (NSString *key in addressKeys) {
         NSString *propertyKey = [MRSHelperFunctions formLabelToJSONLabel:key];
         if (![MRSHelperFunctions isNull:[patient valueForKey:propertyKey]]  && ![[patient valueForKey:propertyKey] isEqualToString:@""]) {
@@ -748,51 +781,39 @@
             NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
             NSLog(@"%@", results);
             patient.preferredAddressUUID = results[@"uuid"];
+            [self EditNameForPatient:patient completion:completion];
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSLog(@"Operation failed... with Error: %@", error);
-            //completion(error);
+            completion(error);
         }];
     }
+}
 
-    /* UPDATING PREFERRED NAME */
-    parameters = [[NSMutableDictionary alloc] initWithDictionary:@{
-                                                                   @"givenName": patient.givenName,
-                                                                   @"familyName": patient.familyName
++ (void)EditNameForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion {
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithDictionary:@{
+                                                                                        @"givenName": patient.givenName?patient.givenName:[NSNull null],
+                                                                                        @"familyName": patient.familyName?patient.familyName:[NSNull null]
                                                                    }];
     if (![MRSHelperFunctions isNull:patient.middleName] && ![patient.middleName isEqualToString:@""])
         [parameters setValue:patient.middleName forKey:@"middleName"];
     if (![MRSHelperFunctions isNull:patient.familyName2] && ![patient.familyName2 isEqualToString:@""])
         [parameters setValue:patient.familyName2 forKey:@"familyName2"];
-
+    
     NSLog(@"Name parameters: %@", parameters);
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/person/%@/name/%@", host, patient.UUID, patient.preferredNameUUID] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
         NSLog(@"%@", results);
+        completion(nil);
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Operation failed... with Error: %@", error);
-        //completion(error);
-    }];
-    
-    /* UPDATING PERSON DATA */
-    NSArray *personKeys = @[@"BirthDate", @"BirthDate Estimated", @"Dead", @"Cause Of Death"];
-    parameters = [[NSMutableDictionary alloc] initWithDictionary:@{
-                                                                   @"gender": patient.gender
-                                                                   }];
-    for (NSString *propertyLabel in personKeys) {
-        NSString *property = [MRSHelperFunctions formLabelToJSONLabel:propertyLabel];
-        if ([property isEqualToString:@"dead"]){
-            [parameters setValue:patient.dead?@YES:@NO forKey:property];
-            continue;
-        }
-        if (![MRSHelperFunctions isNull:[patient valueForKey:property]] && ![[patient valueForKey:property] isEqualToString:@""]){
-            [parameters setValue:[patient valueForKey:property] forKey:property];
-        }
-    }
-
-    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/person/%@", host, patient.UUID] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Operation failed... with Error: %@", error);
-        //completion(error);
+        completion(error);
     }];
 }
 

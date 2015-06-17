@@ -33,5 +33,7 @@
 + (void)getVisitTypesWithCompletion:(void (^)(NSError *error, NSArray *types))completion;
 + (void)getLocationsWithCompletion:(void (^)(NSError *error, NSArray *locations))completion;
 + (void)EditPatient:(MRSPatient *)patient completion:(void (^)(NSError *error))completion;
++ (void)EditAddressForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion;
++ (void)EditNameForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion;
 + (void)logout;
 @end
