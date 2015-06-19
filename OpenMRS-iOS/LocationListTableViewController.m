@@ -19,7 +19,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Choose Location";
+    self.title = NSLocalizedString(@"Choose Location", @"Label -choose- -location-");
     [self refreshData];
 }
 - (void)refreshData

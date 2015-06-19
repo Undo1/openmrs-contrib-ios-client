@@ -20,7 +20,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Capture Vitals";
+    self.title = NSLocalizedString(@"Capture Vitals", @"Label -capture- -vitals-");
     self.fields = @[@ { @"label":@"Height", @"units":@"cm", @"uuid":@"5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
                     @ { @"label" : @"Weight", @"units" : @"kg", @"uuid" : @"5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
 //                    @{ @"label" : @"Calculated BMI", @"units" : @""},
@@ -84,7 +84,7 @@
         if (self.currentLocation) {
             cell.detailTextLabel.text = self.currentLocation.display;
         } else {
-            cell.detailTextLabel.text = @"Select...";
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Select", @"Label select")];
         }
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         return cell;
@@ -108,7 +108,7 @@
         textField.keyboardType = UIKeyboardTypeNumbersAndPunctuation;
     }
     [textField addTarget:self action:@selector(textFieldDidUpdate:) forControlEvents:UIControlEventEditingChanged];
-    textField.placeholder = @"Value";
+    textField.placeholder = NSLocalizedString(@"Value", @"Label value");
     textField.text = self.textFieldValues[field[@"uuid"]];
     textField.tag = indexPath.row;
     [cell addSubview:textField];
@@ -130,10 +130,10 @@
 {
     switch (section) {
     case 0:
-        return @"Location";
+        return NSLocalizedString(@"Location", @"Label location");
         break;
     case 1:
-        return @"Vitals";
+        return NSLocalizedString(@"Vitals", @"Label vitals");
         break;
     default:
         return nil;

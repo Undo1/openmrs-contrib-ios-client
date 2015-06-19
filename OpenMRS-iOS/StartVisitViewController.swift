@@ -34,7 +34,7 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.title = "Start Visit"
+        self.title = NSLocalizedString("Start Visit", comment: "Label -start- -visit-")
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancel")
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "done")
@@ -99,9 +99,9 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
         switch section
         {
         case 0:
-            return "Visit Type"
+            return NSLocalizedString("Visit Type", comment: "Label -visit- -type-")
         case 1:
-            return "Location"
+            return NSLocalizedString("Location", comment:"Label location")
         default:
             return nil
         }
@@ -117,11 +117,11 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
                 cell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "visit_type")
             }
             
-            cell.textLabel?.text = "Visit Type"
+            cell.textLabel?.text = NSLocalizedString("Visit Type", comment: "Label -visit- -type-")
             
             if visitType == nil
             {
-                cell.detailTextLabel?.text = "Select Visit Type"
+                cell.detailTextLabel?.text = NSLocalizedString("Select visit Type", comment: "Label -select- -visit- -type-")
             }
             else
             {
@@ -139,11 +139,11 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
                 cell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "location")
             }
             
-            cell.textLabel?.text = "Location"
+            cell.textLabel?.text = NSLocalizedString("Location", comment:"Label location")
             
             if location == nil
             {
-                cell.detailTextLabel?.text = "Select Location"
+                cell.detailTextLabel?.text = NSLocalizedString("Select Location", comment: "Label -select- -location-")
             }
             else
             {

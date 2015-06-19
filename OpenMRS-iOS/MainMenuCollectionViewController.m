@@ -19,9 +19,9 @@ static NSString * const reuseIdentifier = @"Cell";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"OpenMRS";
+    self.title = NSLocalizedString(@"OpenMRS", @"Orgnaization name");
     self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStyleBordered target:self action:@selector(showSettings)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Settings", @"Label settings") style:UIBarButtonItemStyleBordered target:self action:@selector(showSettings)];
     self.collectionView.backgroundColor = [UIColor whiteColor];
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
 }
@@ -84,13 +84,13 @@ static NSString * const reuseIdentifier = @"Cell";
     label.textColor = [UIColor darkGrayColor];
     switch (indexPath.row) {
     case 0:
-        label.text = @"Patient Search";
+        label.text = NSLocalizedString(@"Patient Search", @"Label -patient- -search-");
         break;
     case 1:
-        label.text = @"Add Patient";
+        label.text = NSLocalizedString(@"Add Patient", @"Label -add- -patient-");
         break;
     case 2:
-        label.text = @"Active visits";
+        label.text = NSLocalizedString(@"Active visits", @"Label -active- -visits");
     default:
         break;
     }

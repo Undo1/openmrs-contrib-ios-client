@@ -26,7 +26,7 @@
 - (void)viewDidLoad
 {
     self.isOnline = YES;
-    self.title = @"Patients";
+    self.title = NSLocalizedString(@"Patients", @"Title label patients");
     [super viewDidLoad];
     [self reloadDataForSearch:@""];
 
@@ -35,7 +35,7 @@
     self.bar .delegate = self;
     [self.bar  sizeToFit];
 
-    self.onlineOrOffile = [[UISegmentedControl alloc] initWithItems:@[@"Online", @"Offline"]];
+    self.onlineOrOffile = [[UISegmentedControl alloc] initWithItems:@[NSLocalizedString(@"Online", @"Label online"), NSLocalizedString(@"Offline", @"Label offline")]];
     self.onlineOrOffile.selectedSegmentIndex = 0;
     [self.onlineOrOffile addTarget:self action:@selector(switchOnline) forControlEvents:UIControlEventValueChanged];
     
@@ -69,12 +69,12 @@
             dispatch_async(dispatch_get_main_queue(), ^ {
                 if (patients.count == 0 && self.searchButtonPressed && [SVProgressHUD isVisible])
                 {
-                    [SVProgressHUD showErrorWithStatus:@"Couldn't find patients"];
+                    [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Couldn't find patients", @"Message -could- -not- -find- -patients")];
                     self.searchButtonPressed = NO;
                 }
                 else if (self.searchButtonPressed && [SVProgressHUD isVisible])
                 {
-                    [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"%lu patients found", self.currentSearchResults.count]];
+                    [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"%lu %@", self.currentSearchResults.count, NSLocalizedString(@"patients found", @"Message -patients- -found-")]];
                     self.searchButtonPressed = NO;
                 }
 
@@ -83,7 +83,7 @@
         } else {
             if (self.searchButtonPressed && [SVProgressHUD isVisible])
             {
-                [SVProgressHUD showErrorWithStatus:@"Can't load patients"];
+                [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Can't load patients", @"Message -can- -not- -load- -patients-")];
                 self.searchButtonPressed = NO;
             }
         }

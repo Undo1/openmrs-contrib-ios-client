@@ -18,7 +18,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Identifier Type";
+    self.title = NSLocalizedString(@"Identifier Type", @"Label -identifier- -type-");
     [self reloadData];
     
     //TODO: self-sizing cells

@@ -21,7 +21,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Add Patient";
+    self.title = NSLocalizedString(@"Add Patient", @"Label -add- -patient-");
     self.selectedGender = @"";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
@@ -46,7 +46,12 @@
             }];
         }
         else {
-            [[[UIAlertView alloc] initWithTitle:@"Error" message:@"Couldn't save patient. Make sure all required fields are filled out" delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil] show];
+            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Warning label error")
+                                        message:NSLocalizedString(@"Couldn't save patient. Make sure all required fields are filled out", @"Error message")
+                                       delegate:nil
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles:nil]
+             show];
         }
     }];
 }
@@ -94,10 +99,10 @@
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         switch (indexPath.row) {
         case 0:
-            cell.textLabel.text = @"Given Name";
+            cell.textLabel.text = NSLocalizedString(@"Given Name", @"Given -first name");
             break;
         case 1:
-            cell.textLabel.text = @"Family Name";
+            cell.textLabel.text = NSLocalizedString(@"Family Name", @"Family name");
             break;
         }
         UITextField *field = [[UITextField alloc] initWithFrame:CGRectMake(cell.bounds.size.width-150, 0, 130, cell.bounds.size.height)];
@@ -109,12 +114,12 @@
         [field addTarget:self action:@selector(textFieldDidUpdate:) forControlEvents:UIControlEventEditingChanged];
         switch (indexPath.row) {
         case 0:
-            field.placeholder = @"Given Name";
+            field.placeholder = NSLocalizedString(@"Given Name", @"Given -first name");
             field.text = self.selectedGivenName;
             field.tag = 1;
             break;
         case 1:
-            field.placeholder = @"Family Name";
+            field.placeholder = NSLocalizedString(@"Family Name", @"Family name");
             field.text = self.selectedFamilyName;
             field.tag = 2;
             break;
@@ -127,8 +132,10 @@
         if (!cell) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"gendercell"];
         }
-        cell.textLabel.text = (indexPath.row == 1) ? @"Female" : @"Male";
-        if (([self.selectedGender isEqualToString:@"M"] && indexPath.row == 0) || ([self.selectedGender isEqualToString:@"F"] && indexPath.row == 1)) {
+        cell.textLabel.text = (indexPath.row == 1) ? NSLocalizedString(@"Female", @"Label female") : NSLocalizedString(@"Male", @"Label male");
+        if (([self.selectedGender isEqualToString:NSLocalizedString(@"M", @"First character of gender -male-")] &&
+                                                                    indexPath.row == 0) ||
+            ([self.selectedGender isEqualToString:NSLocalizedString(@"F", @"First character of gender -female-")] && indexPath.row == 1)) {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
         } else {
             cell.accessoryType = UITableViewCellAccessoryNone;
@@ -139,7 +146,7 @@
         if (indexPath.row == 0) {
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"ageCell"];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.textLabel.text = @"Age";
+            cell.textLabel.text = NSLocalizedString(@"Age", @"Label age");
             UITextField *field = [[UITextField alloc] initWithFrame:CGRectMake(cell.bounds.size.width-150, 0, 130, cell.bounds.size.height)];
             field.backgroundColor = [UIColor clearColor];
             field.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -148,7 +155,7 @@
             field.returnKeyType = UIReturnKeyDone;
             field.keyboardType = UIKeyboardTypeNumberPad;
             [field addTarget:self action:@selector(textFieldDidUpdate:) forControlEvents:UIControlEventEditingChanged];
-            field.placeholder = @"Age";
+            field.placeholder = NSLocalizedString(@"Age", @"Label age");
             field.text = self.selectedAge;
             field.tag = 4;
             [cell addSubview:field];
@@ -161,11 +168,11 @@
             if (!cell) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"idTypeCell"];
             }
-            cell.textLabel.text = @"ID Type";
+            cell.textLabel.text = NSLocalizedString(@"ID Type", @"Label -ID- -type-");
             if (self.selectedIdentifierType) {
                 cell.detailTextLabel.text = self.selectedIdentifierType.display;
             } else {
-                cell.detailTextLabel.text = @"Select";
+                cell.detailTextLabel.text = NSLocalizedString(@"Select", @"Label select");
             }
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             return cell;
@@ -173,7 +180,7 @@
         if (indexPath.row == 1) {
             UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"identifierCell"];
             cell.selectionStyle = UITableViewCellSelectionStyleNone;
-            cell.textLabel.text = @"Identifier ";
+            cell.textLabel.text = NSLocalizedString(@"Identifier", @"Label identifier");
             UITextField *field = [[UITextField alloc] initWithFrame:CGRectMake(cell.bounds.size.width-150, 0, 130, cell.bounds.size.height)];
             field.backgroundColor = [UIColor clearColor];
             field.textColor = self.view.tintColor;
@@ -181,7 +188,7 @@
             field.returnKeyType = UIReturnKeyDone;
             field.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             [field addTarget:self action:@selector(textFieldDidUpdate:) forControlEvents:UIControlEventEditingChanged];
-            field.placeholder = @"Identifier";
+            field.placeholder = NSLocalizedString(@"Identifier", @"Label identifier");
             field.text = self.selectedIdentifier;
             field.tag = 3;
             [cell addSubview:field];
@@ -194,16 +201,16 @@
 {
     switch (section) {
     case 0:
-        return @"Name";
+        return NSLocalizedString(@"Name", @"Label name");
         break;
     case 1:
-        return @"Gender";
+        return NSLocalizedString(@"Gender", @"Gender of person");
         break;
     case 2:
-        return @"Age";
+        return NSLocalizedString(@"Age", @"Label age");
         break;
     case 3:
-        return @"Identifier";
+        return NSLocalizedString(@"Identifier", @"Label identifier");
         break;
     default:
         return nil;

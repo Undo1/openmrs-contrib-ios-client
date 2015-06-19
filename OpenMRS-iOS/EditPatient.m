@@ -217,6 +217,12 @@ static id ObjectOrEmpty(id object)
         NSString *openmrsDate = [MRSDateUtilities openMRSFormatStringWithDate:picker.date];
         textField.text = openmrsDate;
         [self.patient setValue:openmrsDate forKey:[MRSHelperFunctions formLabelToJSONLabel:property]];
+    } else if ([property isEqualToString:@"Gender"]) {
+        if ([newValue isEqualToString:NSLocalizedString(@"M", @"First character of gender -male-")]){
+            self.patient.gender = @"M";
+        } else {
+            self.patient.gender = @"F";
+        }
     } else {
         [self.patient setValue:newValue forKey:[MRSHelperFunctions formLabelToJSONLabel:property]];
     }

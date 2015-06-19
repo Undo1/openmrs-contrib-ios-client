@@ -38,10 +38,10 @@
     [OpenMRSAPIManager getDetailedDataOnPatient:self.patient completion:^(NSError *error, MRSPatient *detailedPatient) {
         if (error == nil) {
             self.patient = detailedPatient;
-            self.information = @[@ {@"Name":[self notNil:self.patient.name]},
-                                 @ {@"Age" : [self notNil:self.patient.age]},
-                                 @ {@"Gender" : [self notNil:self.patient.gender]},
-                                 @ {@"Address" : [self formatPatientAdress:self.patient]}];
+            self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
+                                 @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
+                                 @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
+                                 @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAdress:self.patient]}];
             [self.patient isInCoreData];
             dispatch_async(dispatch_get_main_queue(), ^ {
                 [self.tableView reloadData];
@@ -171,7 +171,7 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"showActions"];
             }
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
-            cell.textLabel.text = @"Actions...";
+            cell.textLabel.text = [NSString stringWithFormat: @"%@...", NSLocalizedString(@"Actions", @"Label Actions")];
             cell.textLabel.textColor = self.view.tintColor;
             return cell;
         }
@@ -182,7 +182,7 @@
             }
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             cell.textLabel.textColor = self.view.tintColor;
-            cell.textLabel.text = @"Add Visit Note...";
+            cell.textLabel.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Add Visit Note", @"Label add visit note")];
             return cell;
         }
         if (indexPath.row == 1) {
@@ -201,9 +201,9 @@
                 saveToCoreDataCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"coredata"];
             }
             if (self.patient.isInCoreData) {
-                saveToCoreDataCell.textLabel.text = @"Update Offline Record";
+                saveToCoreDataCell.textLabel.text = NSLocalizedString(@"Update Offline Record", @"Label update offline record");
             } else {
-                saveToCoreDataCell.textLabel.text = @"Save for Offline Use";
+                saveToCoreDataCell.textLabel.text = NSLocalizedString(@"Save for Offline Use", "Label save for offline use");
             }
             saveToCoreDataCell.textLabel.textAlignment = NSTextAlignmentCenter;
             saveToCoreDataCell.textLabel.textColor = self.view.tintColor;
@@ -216,13 +216,13 @@
                 if (!cell) {
                     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"stopVisitCell"];
                 }
-                cell.textLabel.text = @"End Visit...";
+                cell.textLabel.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Stop Visit", @"Label stop visit")];
             } else {
                 cell = [tableView dequeueReusableCellWithIdentifier:@"startVisitCell"];
                 if (!cell) {
                     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"startVisitCell"];
                 }
-                cell.textLabel.text = @"Start Visit...";
+                cell.textLabel.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Start Visit", "Label start visit")];
             }
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             cell.textLabel.textColor = self.view.tintColor;
@@ -233,7 +233,7 @@
             if (!editCell) {
                 editCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"actionCell"];
             }
-            editCell.textLabel.text = @"Edit Patient...";
+            editCell.textLabel.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Edit Patient", @"Label Edit Patient")];
             editCell.textLabel.textAlignment = NSTextAlignmentCenter;
             editCell.textLabel.textColor = self.view.tintColor;
             return editCell;
@@ -246,11 +246,11 @@
         }
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         if (indexPath.row == 0) {
-            cell.textLabel.text = @"Visits";
+            cell.textLabel.text = NSLocalizedString(@"Visits", @"Label visits");
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)self.visits.count];
             return cell;
         } else if (indexPath.row == 1) {
-            cell.textLabel.text = @"Encounters";
+            cell.textLabel.text = NSLocalizedString(@"Encounters", "Label encounters");
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)self.encounters.count];
             return cell;
         }
@@ -288,13 +288,17 @@
                         break;
                     }
                 }
-                [UIAlertView showWithTitle:@"Stopping Visit" message:[NSString stringWithFormat:@"Stop visit of type \"%@\" at %@?", activeVisit.visitType.display, activeVisit.location.display] cancelButtonTitle:@"Cancel" otherButtonTitles:@[@"Stop Visit"] tapBlock:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                [UIAlertView showWithTitle:NSLocalizedString(@"Stopping Visit", @"Label stopping visit")
+                                   message:NSLocalizedString(@"Stop Visit", @"Label stop visit")
+                         cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel button label")
+                         otherButtonTitles:@[NSLocalizedString(@"Stop Visit", @"Label stop visit")]
+                                  tapBlock:^(UIAlertView *alertView, NSInteger buttonIndex) {
                     if (buttonIndex != alertView.cancelButtonIndex) {
                         [OpenMRSAPIManager stopVisit:activeVisit completion:^(NSError *error) {
                             if (error == nil) {
                                 [self updateWithDetailedInfo];
                             } else {
-                                [SVProgressHUD showErrorWithStatus:@"Couldn't stop visit"];
+                                [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Couldn't stop visit", @"Response label -could- -not- saved - visit- ")];
                             }
                         }];
                     }

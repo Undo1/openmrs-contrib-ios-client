@@ -17,7 +17,7 @@
 }
 - (void)viewDidLoad
 {
-    self.title = @"Visits";
+    self.title = NSLocalizedString(@"Visits", @"Label visits");
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
