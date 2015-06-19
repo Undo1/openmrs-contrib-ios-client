@@ -19,6 +19,11 @@
 @property (nonatomic, strong) NSArray *nameKeys;
 @property (nonatomic, strong) NSArray *addressKeys;
 @property (nonatomic, strong) NSArray *allKeys;
+@property (nonatomic, strong) NSArray *personViewKeys;
+@property (nonatomic, strong) NSArray *nameViewKeys;
+@property (nonatomic, strong) NSArray *addressViewKeys;
+@property (nonatomic, strong) NSArray *allViewsKeys;
+@property (nonatomic, strong) NSMutableDictionary *translatedToOriginal;
 @property (nonatomic, strong) UITextField *currentTextField;
 
 @end
@@ -33,11 +38,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     NSLog(@"uuid: %@" , self.patient.UUID);
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Save"
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save", @"Save button label")
                                                                               style:UIBarButtonItemStylePlain
                                                                              target:self
                                                                             action:@selector(updatePatient)];
-    self.navigationItem.title = @"Edit patient";
+    self.navigationItem.title = NSLocalizedString(@"Edit patient", @"Title -Edit- -patient-");
     self.patientData = @[
                          @{
                              @"Gender": ObjectOrEmpty(self.patient.gender),
@@ -63,7 +68,7 @@
                              @"State Province": ObjectOrEmpty(self.patient.stateProvince),
                              @"Country": ObjectOrEmpty(self.patient.country),
                              @"Postal Code": ObjectOrEmpty(self.patient.postalCode),
-                             @"Longtiude": ObjectOrEmpty(self.patient.longitude),
+                             @"Longitude": ObjectOrEmpty(self.patient.longitude),
                              @"Latitude": ObjectOrEmpty(self.patient.latitude),
                              @"County District": ObjectOrEmpty(self.patient.countyDistrict)
                              }
@@ -71,14 +76,46 @@
     self.personKeys = @[@"Gender", @"BirthDate", @"BirthDate Estimated", @"Dead", @"Cause Of Death"];
     self.nameKeys = @[@"Given Name", @"Middle Name", @"Family Name", @"Family Name2"];
     self.addressKeys = @[@"Address 1", @"Address 2", @"Address 3", @"Address 4", @"Address 5", @"Address 6",
-                         @"City Village", @"State Province", @"Country" ,@"Postal Code", @"Latitude", @"Latitude", @"County District"];
+                         @"City Village", @"State Province", @"Country" ,@"Postal Code", @"Longitude", @"Latitude", @"County District"];
     self.allKeys = @[self.personKeys, self.nameKeys, self.addressKeys];
     
+    self.personViewKeys = @[NSLocalizedString(@"Gender", @"Gender of person"),
+                            NSLocalizedString(@"BirthDate", @"Birth date of person"),
+                            NSLocalizedString(@"BirthDate Estimated", @"Is birth date estimated?"),
+                            NSLocalizedString(@"Dead", @"Is dead?"),
+                            NSLocalizedString(@"Cause Of Death", @"Cause of death")];
+    self.nameViewKeys = @[NSLocalizedString(@"Given Name", @"Given -first name"),
+                          NSLocalizedString(@"Middle Name", @"Middle name"),
+                          NSLocalizedString(@"Family Name", @"Family name"),
+                          [NSString stringWithFormat:@"%@2", NSLocalizedString(@"Family Name", @"Family name")]
+                          ];
+    self.addressViewKeys = @[[NSString stringWithFormat:@"%@ 1", NSLocalizedString(@"Address", "Address")],
+                             [NSString stringWithFormat:@"%@ 2", NSLocalizedString(@"Address", "Address")],
+                             [NSString stringWithFormat:@"%@ 3", NSLocalizedString(@"Address", "Address")],
+                             [NSString stringWithFormat:@"%@ 4", NSLocalizedString(@"Address", "Address")],
+                             [NSString stringWithFormat:@"%@ 5", NSLocalizedString(@"Address", "Address")],
+                             [NSString stringWithFormat:@"%@ 6", NSLocalizedString(@"Address", "Address")],
+                             NSLocalizedString(@"City Village", @"City village"),
+                             NSLocalizedString(@"State Province" , @"State province"),
+                             NSLocalizedString(@"Country", @"Country"),
+                             NSLocalizedString(@"Postal Code", @"Postal code"),
+                             NSLocalizedString(@"Longitude", @"Location longtiude"),
+                             NSLocalizedString(@"Latitude", @"Location lattitude"),
+                             NSLocalizedString(@"County District", "County District")
+                             ];
+    self.allViewsKeys = @[self.personViewKeys, self.nameViewKeys, self.addressViewKeys];
+    self.translatedToOriginal = [[NSMutableDictionary alloc] init];
+    for (int i=0;i<self.allKeys.count; i++) {
+        for (int j=0;j < (unsigned long)[self.allKeys[i] count];j++) {
+            [self.translatedToOriginal setValue:self.allKeys[i][j] forKey:self.allViewsKeys[i][j]];
+        }
+    }
+    NSLog(@"Translating dictionary: %@", self.translatedToOriginal);
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
 }
 
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-    NSArray *labels = @[@"Person", @"Preferred Name", @"Preferred Address"];
+    NSArray *labels = @[NSLocalizedString(@"Person", @"Label named person"), NSLocalizedString(@"Preferred Name", @"Label named -Preferred- -Name-)"), NSLocalizedString(@"Preferred Address", @"Label named -Preferred- -Address-")];
     return labels[section];
 }
 
@@ -105,7 +142,7 @@ static id ObjectOrEmpty(id object)
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"Cell"];
-    NSString *label = self.allKeys[indexPath.section][indexPath.row];
+    NSString *label = self.allViewsKeys[indexPath.section][indexPath.row];
     cell.textLabel.text = label;
 
     UITextField *field = [[UITextField alloc] initWithFrame:CGRectMake(cell.bounds.size.width-150, 0, 130, cell.bounds.size.height)];
@@ -141,21 +178,21 @@ static id ObjectOrEmpty(id object)
 
 - (void)textFieldDidBeginEditing:(UITextField *)textField {
     UITableViewCell *cellForTextField = (UITableViewCell *)textField.superview;
-    NSString *fieldName = cellForTextField.textLabel.text;
+    NSString *fieldName = self.translatedToOriginal[cellForTextField.textLabel.text];
 
     if ([fieldName isEqualToString:@"Dead"] || [fieldName isEqualToString:@"BirthDate Estimated"]) {
         if ([textField.text isEqualToString:@"true"] || [textField.text isEqualToString:@""] ) {
-            textField.text = @"false";
+            textField.text = NSLocalizedString(@"false", @"False value");
         } else {
-            textField.text = @"true";
+            textField.text = NSLocalizedString(@"true", @"True value");
         }
         [textField resignFirstResponder];
     }
     if ([fieldName isEqualToString:@"Gender"]) {
-        if ([textField.text isEqualToString:@"M"])
-            textField.text = @"F";
+        if ([textField.text isEqualToString:NSLocalizedString(@"M", @"First character of gender -male-")])
+            textField.text = NSLocalizedString(@"F", @"First character of gender -female-");
         else
-            textField.text = @"M";
+            textField.text = NSLocalizedString(@"M", @"First character of gender -male-");
         [textField resignFirstResponder];
     }
     self.currentTextField = textField;
@@ -163,11 +200,11 @@ static id ObjectOrEmpty(id object)
 
 - (void)textFieldDidEndEditing:(UITextField *)textField {
     UITableViewCell *cellForTextField = (UITableViewCell *)textField.superview;
-    NSString *property = cellForTextField.textLabel.text;
+    NSString *property = self.translatedToOriginal[cellForTextField.textLabel.text];
     NSString *newValue = textField.text;
-
+    
     if([property isEqualToString:@"Dead"]) {
-        if ([newValue isEqualToString:@"true"]) {
+        if ([newValue isEqualToString:NSLocalizedString(@"true", @"True value")]) {
             self.patient.dead = YES;
         } else {
             self.patient.dead = NO;
@@ -197,13 +234,13 @@ static id ObjectOrEmpty(id object)
             if ([self.patient isInCoreData]) {
                 [self.patient saveToCoreData];
             }
-            [SVProgressHUD showSuccessWithStatus:@"Saved"];
+            [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Saved", @"Response -saved- label")];
         } else {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error saving"
-                                                                message:@"Can't save your edits right now, choose Retry to retry now or Save to save your edits offline to sync later"
+            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error saving", @"Warning label -Error- and -Saving-")
+                                                                message:NSLocalizedString(@"Can't save your edits right now, choose Retry to retry now or Save to save your edits offline to sync later", @"Error message")
                                                                delegate:self
-                                                      cancelButtonTitle:@"Cancel"
-                                                      otherButtonTitles:@"Retry", @"Save", nil];
+                                                      cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel button label")
+                                                      otherButtonTitles:NSLocalizedString(@"Retry", @"Retry button label"), NSLocalizedString(@"Save", @"Save button label"), nil];
             [alertView show];
         }
     }];
