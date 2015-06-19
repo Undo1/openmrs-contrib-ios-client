@@ -190,6 +190,10 @@ static id ObjectOrEmpty(id object)
 - (void)updatePatient {
     [OpenMRSAPIManager EditPatient:self.patient completion:^(NSError *error) {
         if (!error) {
+            self.patient.upToDate = YES;
+            if ([self.patient isInCoreData]) {
+                [self.patient saveToCoreData];
+            }
             [SVProgressHUD showSuccessWithStatus:@"Saved"];
         } else {
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error saving"
