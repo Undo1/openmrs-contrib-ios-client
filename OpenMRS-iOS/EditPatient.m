@@ -188,6 +188,9 @@ static id ObjectOrEmpty(id object)
 #pragma mark - barbuttonitem Action
 
 - (void)updatePatient {
+    if (![MRSHelperFunctions isNull:self.currentTextField]) {
+        [self textFieldDidEndEditing:self.currentTextField];
+    }
     [OpenMRSAPIManager EditPatient:self.patient completion:^(NSError *error) {
         if (!error) {
             self.patient.upToDate = YES;
@@ -204,9 +207,6 @@ static id ObjectOrEmpty(id object)
             [alertView show];
         }
     }];
-    if (![MRSHelperFunctions isNull:self.currentTextField]) {
-        [self textFieldDidEndEditing:self.currentTextField];
-    }
 }
 
 #pragma mark - alertview delegate
