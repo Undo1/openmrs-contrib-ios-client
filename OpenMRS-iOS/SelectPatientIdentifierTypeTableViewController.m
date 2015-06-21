@@ -18,6 +18,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.restorationIdentifier = NSStringFromClass([self class]);
+    self.restorationClass = [self class];
     self.title = NSLocalizedString(@"Identifier Type", @"Label -identifier- -type-");
     [self reloadData];
     

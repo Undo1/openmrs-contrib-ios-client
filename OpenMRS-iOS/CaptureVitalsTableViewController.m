@@ -20,6 +20,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.restorationIdentifier = NSStringFromClass([self class]);
+    self.restorationClass = [self class];
     self.title = NSLocalizedString(@"Capture Vitals", @"Label -capture- -vitals-");
     self.fields = @[@ { @"label":@"Height", @"units":@"cm", @"uuid":@"5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
                     @ { @"label" : @"Weight", @"units" : @"kg", @"uuid" : @"5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},

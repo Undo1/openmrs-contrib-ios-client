@@ -25,6 +25,8 @@
 }
 - (void)viewDidLoad
 {
+    self.restorationIdentifier = NSStringFromClass([self class]);
+    self.restorationClass = [self class];
     [super viewDidLoad];
     [self updateWithDetailedInfo];
 }
@@ -308,7 +310,10 @@
                 StartVisitViewController *startVisitVC = [[StartVisitViewController alloc] initWithStyle:UITableViewStyleGrouped];
                 startVisitVC.delegate = self;
                 startVisitVC.patient = self.patient;
-                [self presentViewController:[[UINavigationController alloc] initWithRootViewController:startVisitVC] animated:YES completion:nil];
+                UINavigationController *startVisitNavContrller = [[UINavigationController alloc] initWithRootViewController:startVisitVC];
+                startVisitNavContrller.restorationIdentifier = NSStringFromClass([startVisitNavContrller class]);
+                startVisitNavContrller.restorationClass = [startVisitNavContrller  class];
+                [self presentViewController:startVisitNavContrller animated:YES completion:nil];
             }
             return;
         }
@@ -317,12 +322,18 @@
             addVisitNote.delegate = self;
             addVisitNote.patient = self.patient;
             addVisitNote.delegate = self;
-            [self presentViewController:[[UINavigationController alloc] initWithRootViewController:addVisitNote] animated:YES completion:nil];
+            UINavigationController *addVisitNoteNavContrller = [[UINavigationController alloc] initWithRootViewController:addVisitNote];
+            addVisitNoteNavContrller.restorationIdentifier = NSStringFromClass([addVisitNote class]);
+            addVisitNoteNavContrller.restorationClass = [addVisitNote  class];
+            [self presentViewController:addVisitNoteNavContrller animated:YES completion:nil];
         } else if (indexPath.row == 1) {
             CaptureVitalsTableViewController *vitals = [[CaptureVitalsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
             vitals.patient = self.patient;
             vitals.delegate = self;
-            [self presentViewController:[[UINavigationController alloc] initWithRootViewController:vitals] animated:YES completion:nil];
+            UINavigationController *captureVitalsNavContrller = [[UINavigationController alloc] initWithRootViewController:vitals];
+            captureVitalsNavContrller.restorationIdentifier = NSStringFromClass([captureVitalsNavContrller class]);
+            captureVitalsNavContrller.restorationClass = [captureVitalsNavContrller  class];
+            [self presentViewController:captureVitalsNavContrller animated:YES completion:nil];
         }
         if (indexPath.row == 4) {
             EditPatient *editPatient = [[EditPatient alloc] init];

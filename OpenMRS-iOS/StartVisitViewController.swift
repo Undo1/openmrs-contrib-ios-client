@@ -33,7 +33,8 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        self.restorationIdentifier = NSStringFromClass(self.dynamicType);
+        self.restorationClass = self.dynamicType;
         self.title = NSLocalizedString("Start Visit", comment: "Label -start- -visit-")
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancel")

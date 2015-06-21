@@ -19,6 +19,8 @@ static NSString * const reuseIdentifier = @"Cell";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.restorationIdentifier = NSStringFromClass([self class]);
+    self.restorationClass = [self class];
     self.title = NSLocalizedString(@"OpenMRS", @"Orgnaization name");
     self.view.backgroundColor = [UIColor whiteColor];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Settings", @"Label settings") style:UIBarButtonItemStyleBordered target:self action:@selector(showSettings)];

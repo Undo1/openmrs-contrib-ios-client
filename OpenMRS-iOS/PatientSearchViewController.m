@@ -25,6 +25,8 @@
 
 - (void)viewDidLoad
 {
+    self.restorationIdentifier = NSStringFromClass([self class]);
+    self.restorationClass = [self class];
     self.isOnline = YES;
     self.title = NSLocalizedString(@"Patients", @"Title label patients");
     [super viewDidLoad];
