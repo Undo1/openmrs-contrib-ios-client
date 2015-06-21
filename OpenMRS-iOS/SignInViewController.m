@@ -12,6 +12,9 @@
 @implementation SignInViewController
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
+    self.restorationIdentifier = NSStringFromClass([self class]);
+    self.restorationClass = [self class];
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
     NSLog(@"Password: %@", [wrapper objectForKey:(__bridge id)(kSecValueData)]);
     self.view.backgroundColor = [UIColor whiteColor];
