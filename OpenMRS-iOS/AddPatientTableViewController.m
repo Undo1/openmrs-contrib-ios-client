@@ -261,4 +261,25 @@
     [self.navigationController popToViewController:self animated:YES];
     [self.tableView reloadData];
 }
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.selectedGender forKey:@"selectedGender"];
+    [coder encodeObject:self.selectedFamilyName forKey:@"familyName"];
+    [coder encodeObject:self.selectedGivenName forKey:@"givenName"];
+    [coder encodeObject:self.selectedAge forKey:@"age"];
+    [coder encodeObject:self.selectedIdentifier forKey:@"identifierType"];
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+#pragma mark - <UIViewControllerRestoration>
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    AddPatientTableViewController *addPatientVC = [[AddPatientTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    addPatientVC.selectedAge = [coder decodeObjectForKey:@"age"];
+    addPatientVC.selectedIdentifier = [coder decodeObjectForKey:@"identifierType"];
+    addPatientVC.selectedGivenName = [coder decodeObjectForKey:@"givenName"];
+    addPatientVC.selectedFamilyName = [coder decodeObjectForKey:@"familyName"];
+    addPatientVC.selectedGender = [coder decodeObjectForKey:@"selectedGender"];
+    return addPatientVC;
+}
 @end

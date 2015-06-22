@@ -31,6 +31,7 @@ static NSString * const reuseIdentifier = @"Cell";
 {
     SettingsViewController *settings = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
     UINavigationController *navcon = [[UINavigationController alloc] initWithRootViewController:settings];
+    navcon.restorationIdentifier = NSStringFromClass([navcon class]);
     [self presentViewController:navcon animated:YES completion:nil];
 }
 - (id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
@@ -125,7 +126,7 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 
-#pragma mark <UICollectionViewDelegate>
+#pragma mark - <UICollectionViewDelegate>
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -134,11 +135,21 @@ static NSString * const reuseIdentifier = @"Cell";
         [self.navigationController pushViewController:search animated:YES];
     } else if (indexPath.item == 1) {
         AddPatientTableViewController *addPatient = [[AddPatientTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        [self presentViewController:[[UINavigationController alloc] initWithRootViewController:addPatient] animated:YES completion:nil];
+        UINavigationController *addPatientNavController = [[UINavigationController alloc] initWithRootViewController:addPatient];
+        addPatientNavController.restorationIdentifier = NSStringFromClass([addPatientNavController class]);
+        [self presentViewController:addPatientNavController animated:YES completion:nil];
     } else if (indexPath.item == 2) {
         ActiveVisitsList *activeVisits = [[ActiveVisitsList alloc] initWithStyle:UITableViewStyleGrouped];
-        [self presentViewController:[[UINavigationController alloc] initWithRootViewController:activeVisits] animated:YES completion:nil];
+        UINavigationController *activeVisitsNavController = [[UINavigationController alloc] initWithRootViewController:activeVisits];
+        activeVisitsNavController.restorationIdentifier = NSStringFromClass([activeVisitsNavController class]);
+        [self presentViewController:activeVisitsNavController animated:YES completion:nil];
     }
+}
+
+#pragma mark - <UIViewControllerRestoration>
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    return [[self alloc] initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
 }
 
 @end

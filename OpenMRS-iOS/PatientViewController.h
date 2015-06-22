@@ -12,7 +12,7 @@
 #import "CaptureVitalsTableViewController.h"
 #import "OpenMRS_iOS-Swift.h"
 
-@interface PatientViewController : UITableViewController <AddVisitNoteTableViewControllerDelegate, CaptureVitalsTableViewControllerDelegate, StartVisitViewControllerDelegate>
+@interface PatientViewController : UITableViewController <AddVisitNoteTableViewControllerDelegate, CaptureVitalsTableViewControllerDelegate, StartVisitViewControllerDelegate, UIViewControllerRestoration>
 @property (nonatomic, strong) MRSPatient *patient;
 @property (nonatomic, strong) NSArray *information;
 @property (nonatomic, strong) NSArray *visits;

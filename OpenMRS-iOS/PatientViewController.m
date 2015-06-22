@@ -15,6 +15,7 @@
 #import <SVProgressHUD.h>
 #import "AddVisitNoteTableViewController.h"
 #import "CaptureVitalsTableViewController.h"
+#import "MRSPatient.h"
 
 @implementation PatientViewController
 - (void)setPatient:(MRSPatient *)patient
@@ -25,9 +26,9 @@
 }
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
-    [super viewDidLoad];
     [self updateWithDetailedInfo];
 }
 
@@ -370,5 +371,29 @@
     if ([patient.UUID isEqualToString:self.patient.UUID]) {
         [self updateWithDetailedInfo];
     }
+}
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.patient forKey:@"patient"];
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+- (void)decodeRestorableStateWithCoder:(NSCoder *)coder {
+    [super decodeRestorableStateWithCoder:coder];
+    NSLog(@"Done deconding and setting");
+}
+
+#pragma mark - UIViewControllerRestortion
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    PatientViewController *patientVC = [[PatientViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    MRSPatient *patient = [coder decodeObjectForKey:@"patient"];
+    patientVC.patient = patient;
+    patientVC.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[patientVC notNil:patientVC.patient.name]},
+                                @ {NSLocalizedString(@"Age", @"Label age") : [patientVC notNil:patientVC.patient.age]},
+                                @ {NSLocalizedString(@"Gender", @"Gender of person") : [patientVC notNil:patientVC.patient.gender]},
+                                @ {NSLocalizedString(@"Address", "Address") : [patientVC formatPatientAdress:patientVC.patient]}];
+    NSLog(@"Patient decoded for name %@, age %@, gedder %@", patient.name, patient.age, patient.gender);
+    return patientVC;
 }
 @end

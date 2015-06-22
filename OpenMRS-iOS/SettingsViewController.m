@@ -98,4 +98,9 @@
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
 }
+#pragma mark - UIViewControllerRestoration
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    return [[self alloc] initWithStyle:UITableViewStyleGrouped];
+}
 @end

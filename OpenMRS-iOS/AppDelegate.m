@@ -22,35 +22,22 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
 // SignInViewController *vc = [[SignInViewController alloc] init];
 //    [[[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil] resetKeychainItem];
-    MainMenuCollectionViewController *menu = [[MainMenuCollectionViewController alloc] initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
-    UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:menu];
-    navController.restorationIdentifier = NSStringFromClass([navController class]);
-    self.window.rootViewController = navController;
-    [self.window makeKeyAndVisible];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    if (!self.window.rootViewController) {
+        NSLog(@"Adding a root view controller");
+        MainMenuCollectionViewController *menu = [[MainMenuCollectionViewController alloc] initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
+        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:menu];
+        navController.restorationIdentifier = NSStringFromClass([navController class]);
+        self.window.rootViewController = navController;
+    }
     NSString *password = [[[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil] objectForKey:(__bridge id)(kSecValueData)];
     if ([password isEqual:@" "] || [password isEqual:@""] || password == nil) {
         //No password stored, go straight to login screen
         SignInViewController *signin = [[SignInViewController alloc] init];
         [self.window.rootViewController presentViewController:signin animated:NO completion:nil];
     }
-    [[UIView appearance] setTintColor:[UIColor colorWithRed:39/255.0 green:139/255.0 blue:146/255.0 alpha:1]];
-    [[UIView appearanceWhenContainedIn:[UINavigationBar class], nil] setTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:30/255.0 green:130/255.0 blue:112/255.0 alpha:1]];
-    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance] setTitleTextAttributes:@ { NSForegroundColorAttributeName:[UIColor whiteColor] }];
-    [[UISearchBar appearance] setBarTintColor:[UIColor colorWithRed:30/255.0 green:130/255.0 blue:112/255.0 alpha:1]];
-    if ([[NSProcessInfo processInfo] respondsToSelector:@selector(operatingSystemVersion)]) {
-        if ([[NSProcessInfo processInfo] operatingSystemVersion].majorVersion >= 8) {
-            [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];
-            [[UINavigationBar appearance] setTranslucent:NO];
-            [[UISearchBar appearance] setClipsToBounds:YES];
-        }
-    }
-    [self updateExistingOutOfDatePatients];
+    //[self updateExistingOutOfDatePatients];
     return YES;
 }
 
@@ -60,6 +47,27 @@
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
 
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    [[UIView appearance] setTintColor:[UIColor colorWithRed:39/255.0 green:139/255.0 blue:146/255.0 alpha:1]];
+    [[UIView appearanceWhenContainedIn:[UINavigationBar class], nil] setTintColor:[UIColor whiteColor]];
+    [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:30/255.0 green:130/255.0 blue:112/255.0 alpha:1]];
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
+    [[UINavigationBar appearance] setTitleTextAttributes:@ { NSForegroundColorAttributeName:[UIColor whiteColor] }];
+    [[UISearchBar appearance] setBarTintColor:[UIColor colorWithRed:30/255.0 green:130/255.0 blue:112/255.0 alpha:1]];
+    [self.window makeKeyAndVisible];
+    
+    if ([[NSProcessInfo processInfo] respondsToSelector:@selector(operatingSystemVersion)]) {
+        if ([[NSProcessInfo processInfo] operatingSystemVersion].majorVersion >= 8) {
+            [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];
+            [[UINavigationBar appearance] setTranslucent:NO];
+            [[UISearchBar appearance] setClipsToBounds:YES];
+        }
+    }
+    return YES;
+}
+
 - (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder {
     return YES;
 }
@@ -67,7 +75,14 @@
 - (BOOL)application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder {
     return YES;
 }
-
+- (UIViewController *)application:(UIApplication *)application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    UIViewController *nc = [[UINavigationController alloc] init];
+    nc.restorationIdentifier = [identifierComponents lastObject];
+    if ([identifierComponents count] == 1) {
+        self.window.rootViewController = nc;
+    }
+    return nc;
+}
 - (void)saveContext
 {
     NSError *error = nil;
