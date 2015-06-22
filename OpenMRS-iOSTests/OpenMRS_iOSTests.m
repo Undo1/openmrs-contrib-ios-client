@@ -33,7 +33,7 @@
 - (void)testSearchResults {
     XCTestExpectation *expectation = [self expectationWithDescription:@"login"];
     
-    [OpenMRSAPIManager getPatientListWithSearch:@"Mark" completion:^(NSError *error, NSArray *patients) {
+    [OpenMRSAPIManager getPatientListWithSearch:@"Mark" online:YES completion:^(NSError *error, NSArray *patients) {
         XCTAssert(!error && patients.count > 0);
         
         [expectation fulfill];

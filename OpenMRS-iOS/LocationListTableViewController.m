@@ -19,7 +19,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Choose Location";
+    self.restorationIdentifier = NSStringFromClass([self class]);
+    self.restorationClass = [self class];
+    self.title = NSLocalizedString(@"Choose Location", @"Label -choose- -location-");
     [self refreshData];
 }
 - (void)refreshData

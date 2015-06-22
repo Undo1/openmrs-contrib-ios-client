@@ -14,7 +14,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Settings";
+    self.restorationIdentifier = NSStringFromClass([self class]);
+    self.restorationClass = [self class];
+    self.title = NSLocalizedString(@"Settings", @"Label settings");
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissView)];
 }
 - (void)dismissView
@@ -30,7 +32,7 @@
     if (section == 0) {
         return 2;
     } else {
-        return 1;
+        return 2;
     }
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -41,7 +43,7 @@
             if (!cell) {
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"logoutCell"];
             }
-            cell.textLabel.text = @"Logout";
+            cell.textLabel.text = NSLocalizedString(@"Logout", @"Label logout");
             cell.textLabel.textColor = self.view.tintColor;
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             return cell;
@@ -52,7 +54,7 @@
             }
             KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
             NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
-            usernameCell.textLabel.text = [NSString stringWithFormat:@"Logged in as: %@", username];
+            usernameCell.textLabel.text = [NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Logged in as", @"Label -logged- -in- -as"), username];
             usernameCell.textLabel.textColor = [UIColor grayColor];
             return usernameCell;
         }
@@ -65,8 +67,18 @@
             }
             cell.textLabel.textColor = [UIColor redColor];
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
-            cell.textLabel.text = @"Remove Offline Patients";
+            cell.textLabel.text = NSLocalizedString(@"Remove Offline Patients", @"Label -remove- -offline- -patients-");
             return cell;
+        } else if (indexPath.row == 1) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"clearCell"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"clearCell"];
+            }
+            cell.textLabel.textColor = [UIColor blackColor];
+            cell.textLabel.textAlignment = NSTextAlignmentCenter;
+            cell.textLabel.text = NSLocalizedString(@"Sync offline patients", @"Label -sync- -offline- -patients-");
+            return cell;
+
         }
     }
     return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
@@ -80,6 +92,15 @@
         [self dismissViewControllerAnimated:NO completion:^ {
             [OpenMRSAPIManager logout];
         }];
+    } else if (indexPath.section == 1 && indexPath.row == 1) {
+        AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+        [appDelegate updateExistingOutOfDatePatients];
+        [tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
+}
+#pragma mark - UIViewControllerRestoration
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    return [[self alloc] initWithStyle:UITableViewStyleGrouped];
 }
 @end

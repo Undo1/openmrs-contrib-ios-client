@@ -8,8 +8,10 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MRSPatient : NSObject
+@interface MRSPatient : NSObject <NSCoding>
 @property (nonatomic, strong) NSString *UUID;
+@property (nonatomic, strong) NSString *preferredNameUUID;
+@property (nonatomic, strong) NSString *preferredAddressUUID;
 @property (nonatomic, strong) NSString *gender;
 @property (nonatomic, strong) NSNumber *age;
 @property (nonatomic, strong) NSString *name;
@@ -42,6 +44,7 @@
 
 @property (nonatomic) BOOL fromCoreData;
 @property (nonatomic) BOOL hasDetailedInfo;
+@property (nonatomic) BOOL upToDate;
 
 - (void)saveToCoreData;
 - (void)updateFromCoreData;

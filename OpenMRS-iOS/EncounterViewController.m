@@ -10,6 +10,12 @@
 #import "OpenMRSAPIManager.h"
 #import "MRSEncounterOb.h"
 @implementation EncounterViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    self.restorationIdentifier = NSStringFromClass([self class]);
+    self.restorationClass = [self class];
+}
 - (void)setEncounter:(MRSEncounter *)encounter
 {
     _encounter = encounter;

@@ -17,7 +17,10 @@
 }
 - (void)viewDidLoad
 {
-    self.title = @"Visits";
+    [super viewDidLoad];
+    self.restorationIdentifier = NSStringFromClass([self class]);
+    self.restorationClass = [self class];
+    self.title = NSLocalizedString(@"Visits", @"Label visits");
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {

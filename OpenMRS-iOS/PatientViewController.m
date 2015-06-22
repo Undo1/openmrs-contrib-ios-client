@@ -7,6 +7,7 @@
 //
 
 #import "PatientViewController.h"
+#import "EditPatient.h"
 #import "OpenMRSAPIManager.h"
 #import "PatientEncounterListView.h"
 #import "PatientVisitListView.h"
@@ -14,6 +15,7 @@
 #import <SVProgressHUD.h>
 #import "AddVisitNoteTableViewController.h"
 #import "CaptureVitalsTableViewController.h"
+#import "MRSPatient.h"
 
 @implementation PatientViewController
 - (void)setPatient:(MRSPatient *)patient
@@ -25,6 +27,13 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.restorationIdentifier = NSStringFromClass([self class]);
+    self.restorationClass = [self class];
+    [self updateWithDetailedInfo];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
     [self updateWithDetailedInfo];
 }
 - (void)updateWithDetailedInfo
@@ -32,10 +41,10 @@
     [OpenMRSAPIManager getDetailedDataOnPatient:self.patient completion:^(NSError *error, MRSPatient *detailedPatient) {
         if (error == nil) {
             self.patient = detailedPatient;
-            self.information = @[@ {@"Name":[self notNil:self.patient.name]},
-                                 @ {@"Age" : [self notNil:self.patient.age]},
-                                 @ {@"Gender" : [self notNil:self.patient.gender]},
-                                 @ {@"Address" : [self formatPatientAdress:self.patient]}];
+            self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
+                                 @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
+                                 @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
+                                 @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAdress:self.patient]}];
             [self.patient isInCoreData];
             dispatch_async(dispatch_get_main_queue(), ^ {
                 [self.tableView reloadData];
@@ -152,7 +161,7 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return (self.isShowingActions) ? 4 : 1;
+        return (self.isShowingActions) ? 5 : 1;
     } else if (section == 1) {
         return self.information.count;
     } else if (section == 2) {
@@ -170,23 +179,9 @@
                 cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"showActions"];
             }
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
-            cell.textLabel.text = @"Actions...";
+            cell.textLabel.text = [NSString stringWithFormat: @"%@...", NSLocalizedString(@"Actions", @"Label Actions")];
             cell.textLabel.textColor = self.view.tintColor;
             return cell;
-        }
-        if (indexPath.row == 2) {
-            UITableViewCell *saveToCoreDataCell = [tableView dequeueReusableCellWithIdentifier:@"coredata"];
-            if (!saveToCoreDataCell) {
-                saveToCoreDataCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"coredata"];
-            }
-            if (self.patient.isInCoreData) {
-                saveToCoreDataCell.textLabel.text = @"Update Offline Record";
-            } else {
-                saveToCoreDataCell.textLabel.text = @"Save for Offline Use";
-            }
-            saveToCoreDataCell.textLabel.textAlignment = NSTextAlignmentCenter;
-            saveToCoreDataCell.textLabel.textColor = self.view.tintColor;
-            return saveToCoreDataCell;
         }
         if (indexPath.row == 0) {
             UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"addVisitNoteCell"];
@@ -195,8 +190,32 @@
             }
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             cell.textLabel.textColor = self.view.tintColor;
-            cell.textLabel.text = @"Add Visit Note...";
+            cell.textLabel.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Add Visit Note", @"Label add visit note")];
             return cell;
+        }
+        if (indexPath.row == 1) {
+            UITableViewCell *actionCell = [tableView dequeueReusableCellWithIdentifier:@"actionCell"];
+            if (!actionCell) {
+                actionCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"actionCell"];
+            }
+            actionCell.textLabel.text = @"Capture Vitals...";
+            actionCell.textLabel.textAlignment = NSTextAlignmentCenter;
+            actionCell.textLabel.textColor = self.view.tintColor;
+            return actionCell;
+        }
+        if (indexPath.row == 2) {
+            UITableViewCell *saveToCoreDataCell = [tableView dequeueReusableCellWithIdentifier:@"coredata"];
+            if (!saveToCoreDataCell) {
+                saveToCoreDataCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"coredata"];
+            }
+            if (self.patient.isInCoreData) {
+                saveToCoreDataCell.textLabel.text = NSLocalizedString(@"Update Offline Record", @"Label update offline record");
+            } else {
+                saveToCoreDataCell.textLabel.text = NSLocalizedString(@"Save for Offline Use", "Label save for offline use");
+            }
+            saveToCoreDataCell.textLabel.textAlignment = NSTextAlignmentCenter;
+            saveToCoreDataCell.textLabel.textColor = self.view.tintColor;
+            return saveToCoreDataCell;
         }
         if (indexPath.row == 3) {
             UITableViewCell *cell = nil;
@@ -205,26 +224,28 @@
                 if (!cell) {
                     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"stopVisitCell"];
                 }
-                cell.textLabel.text = @"End Visit...";
+                cell.textLabel.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Stop Visit", @"Label stop visit")];
             } else {
                 cell = [tableView dequeueReusableCellWithIdentifier:@"startVisitCell"];
                 if (!cell) {
                     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"startVisitCell"];
                 }
-                cell.textLabel.text = @"Start Visit...";
+                cell.textLabel.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Start Visit", "Label start visit")];
             }
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             cell.textLabel.textColor = self.view.tintColor;
             return cell;
         }
-        UITableViewCell *actionCell = [tableView dequeueReusableCellWithIdentifier:@"actionCell"];
-        if (!actionCell) {
-            actionCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"actionCell"];
+        if (indexPath.row == 4) {
+            UITableViewCell *editCell = [tableView dequeueReusableCellWithIdentifier:@"actionCell"];
+            if (!editCell) {
+                editCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"actionCell"];
+            }
+            editCell.textLabel.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Edit Patient", @"Label Edit Patient")];
+            editCell.textLabel.textAlignment = NSTextAlignmentCenter;
+            editCell.textLabel.textColor = self.view.tintColor;
+            return editCell;
         }
-        actionCell.textLabel.text = @"Capture Vitals...";
-        actionCell.textLabel.textAlignment = NSTextAlignmentCenter;
-        actionCell.textLabel.textColor = self.view.tintColor;
-        return actionCell;
     }
     if (indexPath.section == 2) {
         UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"countCell"];
@@ -233,11 +254,11 @@
         }
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         if (indexPath.row == 0) {
-            cell.textLabel.text = @"Visits";
+            cell.textLabel.text = NSLocalizedString(@"Visits", @"Label visits");
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)self.visits.count];
             return cell;
         } else if (indexPath.row == 1) {
-            cell.textLabel.text = @"Encounters";
+            cell.textLabel.text = NSLocalizedString(@"Encounters", "Label encounters");
             cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)self.encounters.count];
             return cell;
         }
@@ -275,13 +296,17 @@
                         break;
                     }
                 }
-                [UIAlertView showWithTitle:@"Stopping Visit" message:[NSString stringWithFormat:@"Stop visit of type \"%@\" at %@?", activeVisit.visitType.display, activeVisit.location.display] cancelButtonTitle:@"Cancel" otherButtonTitles:@[@"Stop Visit"] tapBlock:^(UIAlertView *alertView, NSInteger buttonIndex) {
+                [UIAlertView showWithTitle:NSLocalizedString(@"Stopping Visit", @"Label stopping visit")
+                                   message:NSLocalizedString(@"Stop Visit", @"Label stop visit")
+                         cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel button label")
+                         otherButtonTitles:@[NSLocalizedString(@"Stop Visit", @"Label stop visit")]
+                                  tapBlock:^(UIAlertView *alertView, NSInteger buttonIndex) {
                     if (buttonIndex != alertView.cancelButtonIndex) {
                         [OpenMRSAPIManager stopVisit:activeVisit completion:^(NSError *error) {
                             if (error == nil) {
                                 [self updateWithDetailedInfo];
                             } else {
-                                [SVProgressHUD showErrorWithStatus:@"Couldn't stop visit"];
+                                [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Couldn't stop visit", @"Response label -could- -not- saved - visit- ")];
                             }
                         }];
                     }
@@ -291,7 +316,10 @@
                 StartVisitViewController *startVisitVC = [[StartVisitViewController alloc] initWithStyle:UITableViewStyleGrouped];
                 startVisitVC.delegate = self;
                 startVisitVC.patient = self.patient;
-                [self presentViewController:[[UINavigationController alloc] initWithRootViewController:startVisitVC] animated:YES completion:nil];
+                UINavigationController *startVisitNavContrller = [[UINavigationController alloc] initWithRootViewController:startVisitVC];
+                startVisitNavContrller.restorationIdentifier = NSStringFromClass([startVisitNavContrller class]);
+                startVisitNavContrller.restorationClass = [startVisitNavContrller  class];
+                [self presentViewController:startVisitNavContrller animated:YES completion:nil];
             }
             return;
         }
@@ -300,12 +328,23 @@
             addVisitNote.delegate = self;
             addVisitNote.patient = self.patient;
             addVisitNote.delegate = self;
-            [self presentViewController:[[UINavigationController alloc] initWithRootViewController:addVisitNote] animated:YES completion:nil];
+            UINavigationController *addVisitNoteNavContrller = [[UINavigationController alloc] initWithRootViewController:addVisitNote];
+            addVisitNoteNavContrller.restorationIdentifier = NSStringFromClass([addVisitNote class]);
+            addVisitNoteNavContrller.restorationClass = [addVisitNote  class];
+            [self presentViewController:addVisitNoteNavContrller animated:YES completion:nil];
         } else if (indexPath.row == 1) {
             CaptureVitalsTableViewController *vitals = [[CaptureVitalsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
             vitals.patient = self.patient;
             vitals.delegate = self;
-            [self presentViewController:[[UINavigationController alloc] initWithRootViewController:vitals] animated:YES completion:nil];
+            UINavigationController *captureVitalsNavContrller = [[UINavigationController alloc] initWithRootViewController:vitals];
+            captureVitalsNavContrller.restorationIdentifier = NSStringFromClass([captureVitalsNavContrller class]);
+            captureVitalsNavContrller.restorationClass = [captureVitalsNavContrller  class];
+            [self presentViewController:captureVitalsNavContrller animated:YES completion:nil];
+        }
+        if (indexPath.row == 4) {
+            EditPatient *editPatient = [[EditPatient alloc] init];
+            editPatient.patient = self.patient;
+            [self.navigationController pushViewController:editPatient animated:YES];
         }
     }
 }
@@ -327,5 +366,29 @@
     if ([patient.UUID isEqualToString:self.patient.UUID]) {
         [self updateWithDetailedInfo];
     }
+}
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.patient forKey:@"patient"];
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+- (void)decodeRestorableStateWithCoder:(NSCoder *)coder {
+    [super decodeRestorableStateWithCoder:coder];
+    NSLog(@"Done deconding and setting");
+}
+
+#pragma mark - UIViewControllerRestortion
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    PatientViewController *patientVC = [[PatientViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    MRSPatient *patient = [coder decodeObjectForKey:@"patient"];
+    patientVC.patient = patient;
+    patientVC.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[patientVC notNil:patientVC.patient.name]},
+                                @ {NSLocalizedString(@"Age", @"Label age") : [patientVC notNil:patientVC.patient.age]},
+                                @ {NSLocalizedString(@"Gender", @"Gender of person") : [patientVC notNil:patientVC.patient.gender]},
+                                @ {NSLocalizedString(@"Address", "Address") : [patientVC formatPatientAdress:patientVC.patient]}];
+    NSLog(@"Patient decoded for name %@, age %@, gedder %@", patient.name, patient.age, patient.gender);
+    return patientVC;
 }
 @end

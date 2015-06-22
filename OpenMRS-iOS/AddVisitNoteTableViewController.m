@@ -20,7 +20,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Add Visit Note";
+    self.restorationIdentifier = NSStringFromClass([self class]);
+    self.restorationClass = [self class];
+    self.title = NSLocalizedString(@"Add Visit Note", @"Lable -add- -visit- -note-");
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
     self.navigationItem.rightBarButtonItem.enabled = NO;
@@ -66,11 +68,11 @@
 {
     if (indexPath.section == 1) {
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"locCell"];
-        cell.textLabel.text = @"Location";
+        cell.textLabel.text = NSLocalizedString(@"Location", @"Label location");
         if (self.currentLocation) {
             cell.detailTextLabel.text = self.currentLocation.display;
         } else {
-            cell.detailTextLabel.text = @"Choose...";
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Choose", @"Label choose")];
         }
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         return cell;
@@ -95,9 +97,9 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == 1) {
-        return @"Location";
+        return NSLocalizedString(@"Location", @"Label location");
     }
-    return [NSString stringWithFormat:@"Note on %@", self.patient.name];
+    return [NSString stringWithFormat:@"%@ %@", NSLocalizedString(@"Note on", @"Label -note- -on"), self.patient.name];
 }
 - (void)textViewDidChange:(UITextView *)textView
 {
