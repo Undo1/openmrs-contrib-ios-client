@@ -370,6 +370,8 @@
 
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
     [coder encodeObject:self.patient forKey:@"patient"];
+    [coder encodeObject:[NSNumber numberWithBool:self.isShowingActions] forKey:@"showingActions"];
+    [coder encodeObject:[NSNumber numberWithBool:self.hasActiveVisit] forKey:@"hasActiveVisits"];
     [super encodeRestorableStateWithCoder:coder];
 }
 
@@ -384,6 +386,8 @@
     PatientViewController *patientVC = [[PatientViewController alloc] initWithStyle:UITableViewStyleGrouped];
     MRSPatient *patient = [coder decodeObjectForKey:@"patient"];
     patientVC.patient = patient;
+    patientVC.isShowingActions = [[coder decodeObjectForKey:@"showingActions"] boolValue];
+    patientVC.hasActiveVisit = [[coder decodeObjectForKey:@"hasActiveVisits"] boolValue];
     patientVC.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[patientVC notNil:patientVC.patient.name]},
                                 @ {NSLocalizedString(@"Age", @"Label age") : [patientVC notNil:patientVC.patient.age]},
                                 @ {NSLocalizedString(@"Gender", @"Gender of person") : [patientVC notNil:patientVC.patient.gender]},
