@@ -158,35 +158,6 @@
     [super encodeRestorableStateWithCoder:coder];
 }
 
-#pragma mark - UIDataSourceModelAssociation
-
-/*- (NSString *)modelIdentifierForElementAtIndexPath:(NSIndexPath *)idx inView:(UIView *)view {
-    NSString *identifier = nil;
-    if (idx && view) {
-        identifier = [(MRSVisit *)(self.activeVisits[idx.row]) UUID];
-    }
-    NSLog(@
-          
-          "identifier %@", identifier);
-    return identifier;
-}
-
-- (NSIndexPath *)indexPathForElementWithModelIdentifier:(NSString *)identifier inView:(UIView *)view {
-    NSIndexPath *path = nil;
-    if (identifier && view) {
-        for (int i=0;i<self.activeVisits.count;i++) {
-            MRSVisit *visit = self.activeVisits[i];
-            if ([visit.UUID isEqualToString:identifier]) {
-                path = [NSIndexPath indexPathForItem:i inSection:0];
-                break;
-            }
-        }
-    }
-    [self.tableView reloadData];
-    NSLog(@"path: %@", path);
-    return path;
-}*/
-
 #pragma mark - UIViewControllerRestortion
 
 + (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
