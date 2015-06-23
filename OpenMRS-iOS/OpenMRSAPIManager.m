@@ -380,12 +380,26 @@
     NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
     NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
-    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/visit?includeInactive=false&startIndex=%d",host,startIndex] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/visit?includeInactive=false&startIndex=%d&v=full",host,startIndex] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
         for (NSDictionary *visit in results[@"results"]) {
             MRSVisit *newVisit = [[MRSVisit alloc] init];
             newVisit.displayName = visit[@"display"];
             newVisit.UUID = visit[@"uuid"];
+            newVisit.startDateTime = visit[@"startDatetime"];
+
+            MRSLocation *location = [[MRSLocation alloc] init];
+            location.display = visit[@"location"][@"display"];
+            location.UUID = visit[@"location"][@"uuid"];
+            newVisit.location = location;
+
+            MRSVisitType *type = [[MRSVisitType alloc] init];
+            type.uuid = visit[@"visitType"][@"uuid"];
+            type.display = visit[@"visitType"][@"display"];
+            newVisit.visitType = type;
+            
+            newVisit.active = [MRSHelperFunctions isNull:visit[@"stopDatetime"]]?YES:NO;
+
             [activeVisits addObject:newVisit];
         }
         completion(nil);
