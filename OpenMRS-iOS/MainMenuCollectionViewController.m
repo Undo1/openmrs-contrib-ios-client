@@ -19,9 +19,11 @@ static NSString * const reuseIdentifier = @"Cell";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"OpenMRS";
+    self.restorationIdentifier = NSStringFromClass([self class]);
+    self.restorationClass = [self class];
+    self.title = NSLocalizedString(@"OpenMRS", @"Orgnaization name");
     self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Settings" style:UIBarButtonItemStyleBordered target:self action:@selector(showSettings)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Settings", @"Label settings") style:UIBarButtonItemStyleBordered target:self action:@selector(showSettings)];
     self.collectionView.backgroundColor = [UIColor whiteColor];
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
 }
@@ -29,6 +31,7 @@ static NSString * const reuseIdentifier = @"Cell";
 {
     SettingsViewController *settings = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
     UINavigationController *navcon = [[UINavigationController alloc] initWithRootViewController:settings];
+    navcon.restorationIdentifier = NSStringFromClass([navcon class]);
     [self presentViewController:navcon animated:YES completion:nil];
 }
 - (id)initWithCollectionViewLayout:(UICollectionViewLayout *)layout
@@ -84,13 +87,13 @@ static NSString * const reuseIdentifier = @"Cell";
     label.textColor = [UIColor darkGrayColor];
     switch (indexPath.row) {
     case 0:
-        label.text = @"Patient Search";
+        label.text = NSLocalizedString(@"Patient Search", @"Label -patient- -search-");
         break;
     case 1:
-        label.text = @"Add Patient";
+        label.text = NSLocalizedString(@"Add Patient", @"Label -add- -patient-");
         break;
     case 2:
-        label.text = @"Active visits";
+        label.text = NSLocalizedString(@"Active visits", @"Label -active- -visits");
     default:
         break;
     }
@@ -123,7 +126,7 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 
-#pragma mark <UICollectionViewDelegate>
+#pragma mark - <UICollectionViewDelegate>
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -132,11 +135,21 @@ static NSString * const reuseIdentifier = @"Cell";
         [self.navigationController pushViewController:search animated:YES];
     } else if (indexPath.item == 1) {
         AddPatientTableViewController *addPatient = [[AddPatientTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        [self presentViewController:[[UINavigationController alloc] initWithRootViewController:addPatient] animated:YES completion:nil];
+        UINavigationController *addPatientNavController = [[UINavigationController alloc] initWithRootViewController:addPatient];
+        addPatientNavController.restorationIdentifier = NSStringFromClass([addPatientNavController class]);
+        [self presentViewController:addPatientNavController animated:YES completion:nil];
     } else if (indexPath.item == 2) {
         ActiveVisitsList *activeVisits = [[ActiveVisitsList alloc] initWithStyle:UITableViewStyleGrouped];
-        [self presentViewController:[[UINavigationController alloc] initWithRootViewController:activeVisits] animated:YES completion:nil];
+        UINavigationController *activeVisitsNavController = [[UINavigationController alloc] initWithRootViewController:activeVisits];
+        activeVisitsNavController.restorationIdentifier = NSStringFromClass([activeVisitsNavController class]);
+        [self presentViewController:activeVisitsNavController animated:YES completion:nil];
     }
+}
+
+#pragma mark - <UIViewControllerRestoration>
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    return [[self alloc] initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
 }
 
 @end

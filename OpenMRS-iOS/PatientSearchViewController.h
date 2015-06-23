@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PatientSearchViewController : UITableViewController <UISearchBarDelegate>
+@interface PatientSearchViewController : UITableViewController <UISearchBarDelegate, UIViewControllerRestoration>
 @property (nonatomic, strong) NSArray *currentSearchResults;
 @end

@@ -12,7 +12,18 @@
 #import "MRSEncounterOb.h"
 #import <CoreData/CoreData.h>
 #import "AppDelegate.h"
+#import "MRSHelperFunctions.h"
 @implementation MRSPatient
+
+
+- (id) init {
+    self = [super init];
+    if (self) {
+        self.upToDate = YES;
+    }
+    return self;
+}
+
 - (void)cascadingDelete
 {
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
@@ -67,6 +78,7 @@
     NSManagedObjectContext *managedContext = appDelegate.managedObjectContext;
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Patient" inManagedObjectContext:managedContext];
     NSManagedObject *patient = [[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:managedContext];
+    NSLog(@"Saving to core data with dead= %@", [NSNumber numberWithBool:self.dead]);
     [patient setValue:[self valueNotNullAndIsString:self.UUID] forKey:@"uuid"];
     [patient setValue:[self valueNotNullAndIsString:self.address1] forKey:@"address1"];
     [patient setValue:[self valueNotNullAndIsString:self.address2] forKey:@"address2"];
@@ -76,11 +88,12 @@
     [patient setValue:[self valueNotNullAndIsString:self.address6] forKey:@"address6"];
     [patient setValue:[self valueNotNullAndIsString:self.age] forKey:@"age"];
     [patient setValue:[self valueNotNullAndIsString:self.birthdate] forKey:@"birthdate"];
-//    [patient setValue:[self valueNotNullAndIsString:self.birthdateEstimated ] forKey:@"birthdateEstimated"];
+    [patient setValue:[self valueNotNullAndIsString:self.birthdateEstimated ] forKey:@"birthdateEstimated"];
     [patient setValue:[self valueNotNullAndIsString:self.causeOfDeath] forKey:@"causeOfDeath"];
     [patient setValue:[self valueNotNullAndIsString:self.cityVillage] forKey:@"cityVillage"];
     [patient setValue:[self valueNotNullAndIsString:self.country] forKey:@"country"];
     [patient setValue:[self valueNotNullAndIsString:self.countyDistrict] forKey:@"countyDistrict"];
+    [patient setValue:[self valueNotNullAndIsString:[NSNumber numberWithBool:self.dead]] forKey:@"dead"];
     [patient setValue:[self valueNotNullAndIsString:self.deathDate] forKey:@"deathDate"];
     [patient setValue:[self valueNotNullAndIsString:self.display] forKey:@"display"];
     [patient setValue:[self valueNotNullAndIsString:self.displayName] forKey:@"displayName"];
@@ -96,7 +109,10 @@
     [patient setValue:[self valueNotNullAndIsString:self.middleName] forKey:@"middleName"];
     [patient setValue:[self valueNotNullAndIsString:self.name] forKey:@"name"];
     [patient setValue:[self valueNotNullAndIsString:self.postalCode] forKey:@"postalCode"];
+    [patient setValue:[self valueNotNullAndIsString:self.preferredNameUUID] forKey:@"preferredNameUUID"];
+    [patient setValue:[self valueNotNullAndIsString:self.preferredAddressUUID] forKey:@"preferredAddressUUID"];
     [patient setValue:[self valueNotNullAndIsString:self.stateProvince] forKey:@"stateProvince"];
+    [patient setValue:[self valueNotNullAndIsString:[NSNumber numberWithBool:self.upToDate]] forKey:@"upToDate"];
     NSError *error;
     if (![managedContext save:&error]) {
         NSLog(@"Error saving patient! %@", error);
@@ -166,6 +182,7 @@
         self.cityVillage = [result valueForKey:@"cityVillage"];
         self.country = [result valueForKey:@"country"];
         self.countyDistrict = [result valueForKey:@"countyDistrict"];
+        self.dead = [[result valueForKey:@"dead"] boolValue];
         self.deathDate = [result valueForKey:@"deathDate"];
         self.display = [result valueForKey:@"display"];
         self.displayName = [result valueForKey:@"displayName"];
@@ -181,7 +198,10 @@
         self.middleName = [result valueForKey:@"middleName"];
         self.name = [result valueForKey:@"name"];
         self.postalCode = [result valueForKey:@"postalCode"];
+        self.preferredAddressUUID = [result valueForKey:@"preferredAddressUUID"];
+        self.preferredNameUUID = [result valueForKey:@"preferredNameUUID"];
         self.stateProvince = [result valueForKey:@"stateProvince"];
+        self.upToDate = [[result valueForKey:@"upToDate"] boolValue];
         self.fromCoreData = YES;
     }
 }
@@ -208,4 +228,26 @@
     }
     return value;
 }
+
+#pragma mark - NSCoding
+
+- (id)initWithCoder:(NSCoder *)aDecoder {
+    self = [super init];
+    if (self) {
+        for (NSString *key in [MRSHelperFunctions allPropertyNames:self]) {
+            if (![MRSHelperFunctions isNull:[aDecoder decodeObjectForKey:key]]) {
+                [self setValue:[aDecoder decodeObjectForKey:key] forKey:key];
+            }
+        }
+    }
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder *)aCoder {
+    for (NSString *key in [MRSHelperFunctions allPropertyNames:self]) {
+        if (![MRSHelperFunctions isNull:[self valueForKey:key]]) {
+            [aCoder encodeObject:[self valueForKey:key] forKey:key];        }
+    }
+}
+
 @end

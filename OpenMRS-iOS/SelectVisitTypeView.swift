@@ -30,8 +30,9 @@ class SelectVisitTypeView : UITableViewController
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        self.title = "Visit Type"
+        self.restorationIdentifier = NSStringFromClass(self.dynamicType);
+        self.restorationClass = self.dynamicType;
+        self.title = NSLocalizedString("Visit Type", comment: "Label -visit- -type-")
         
         self.reloadData()
     }

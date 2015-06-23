@@ -15,7 +15,7 @@
 @class MRSVisitType;
 
 @interface OpenMRSAPIManager : NSObject
-+ (void)getPatientListWithSearch:(NSString *)search completion:(void (^)(NSError *error, NSArray *patients))completion;
++ (void)getPatientListWithSearch:(NSString *)search online:(BOOL)online completion:(void (^)(NSError *error, NSArray *patients))completion;
 + (void)getDetailedDataOnPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, MRSPatient *detailedPatient))completion;
 + (void)verifyCredentialsWithUsername:(NSString *)username password:(NSString *)password host:(NSString *)host completion:(void (^)(BOOL success))completion;
 + (void)getVisitsForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *visits))completion;
@@ -32,5 +32,8 @@
 + (void)getActiveVisits:(NSMutableArray *)activeVisits  From:(int)startIndex  withCompletion:(void (^)(NSError *error))completion;
 + (void)getVisitTypesWithCompletion:(void (^)(NSError *error, NSArray *types))completion;
 + (void)getLocationsWithCompletion:(void (^)(NSError *error, NSArray *locations))completion;
++ (void)EditPatient:(MRSPatient *)patient completion:(void (^)(NSError *error))completion;
++ (void)EditAddressForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion;
++ (void)EditNameForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion;
 + (void)logout;
 @end

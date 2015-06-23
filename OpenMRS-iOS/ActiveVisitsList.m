@@ -8,6 +8,7 @@
 #import "OpenMRSAPIManager.h"
 #import "SVProgressHUD.h"
 #import "ActiveVisitsList.h"
+#import "MRSHelperFunctions.h"
 
 
 @interface ActiveVisitsList ()
@@ -16,6 +17,7 @@
 @property (nonatomic) int startIndex;
 @property (nonatomic) BOOL loading;
 @property (nonatomic) BOOL hasMore;
+@property (nonatomic, strong) NSIndexPath *currentIndexPath;
 
 @end
 
@@ -27,23 +29,38 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    self.restorationIdentifier = NSStringFromClass([self class]);
+    self.restorationClass = [self class];
     self.title = @"Active visits";
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close"
                                                                              style:UIBarButtonItemStylePlain
                                                                             target:self
                                                                             action:@selector(close)];
-    self.startIndex = 0;
-    self.activeVisits = [[NSMutableArray alloc] init];
-    self.loading = YES;
-    self.hasMore = YES;
-
-    [self loadMore];
+    if ([MRSHelperFunctions isNull:self.activeVisits]) {
+        self.activeVisits = [[NSMutableArray alloc] init];
+    }
+    
+    //else paramters are set from restoration
+    if (self.startIndex == 0) {
+        self.hasMore = YES;
+    }
+    if (self.activeVisits.count == 0) {
+        [self loadMore];
+    }
 
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"transperantCell"];
     
     self.tableView.separatorColor = [UIColor clearColor];
     self.tableView.rowHeight = 66;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self.tableView reloadData];
+    if(![MRSHelperFunctions isNull:self.currentIndexPath]) {
+        [self.tableView scrollToRowAtIndexPath:self.currentIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+    }
 }
 
 #pragma mark - Table view data source
@@ -94,10 +111,12 @@
         cell.textLabel.text = visit.displayName;
         cell.textLabel.numberOfLines = 2;
     }
+    cell.userInteractionEnabled = NO;
     return cell;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
+    self.currentIndexPath = indexPath;
     if (indexPath.row == self.activeVisits.count- MARGIN && !self.loading && self.hasMore) {
         [self loadMore];
     }
@@ -129,6 +148,55 @@
     }
 
     [self.tableView reloadData];
+}
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.activeVisits forKey:@"activeVisits"];
+    [coder encodeObject:[NSNumber numberWithInt:self.startIndex] forKey:@"startIndex"];
+    [coder encodeObject:[NSNumber numberWithBool:self.hasMore] forKey:@"hasMore"];
+    [coder encodeObject:self.currentIndexPath forKey:@"currentRow"];
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+#pragma mark - UIDataSourceModelAssociation
+
+/*- (NSString *)modelIdentifierForElementAtIndexPath:(NSIndexPath *)idx inView:(UIView *)view {
+    NSString *identifier = nil;
+    if (idx && view) {
+        identifier = [(MRSVisit *)(self.activeVisits[idx.row]) UUID];
+    }
+    NSLog(@
+          
+          "identifier %@", identifier);
+    return identifier;
+}
+
+- (NSIndexPath *)indexPathForElementWithModelIdentifier:(NSString *)identifier inView:(UIView *)view {
+    NSIndexPath *path = nil;
+    if (identifier && view) {
+        for (int i=0;i<self.activeVisits.count;i++) {
+            MRSVisit *visit = self.activeVisits[i];
+            if ([visit.UUID isEqualToString:identifier]) {
+                path = [NSIndexPath indexPathForItem:i inSection:0];
+                break;
+            }
+        }
+    }
+    [self.tableView reloadData];
+    NSLog(@"path: %@", path);
+    return path;
+}*/
+
+#pragma mark - UIViewControllerRestortion
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    ActiveVisitsList *activeVisitsVC = [[ActiveVisitsList alloc] initWithStyle:UITableViewStyleGrouped];
+    activeVisitsVC.activeVisits = [coder decodeObjectForKey:@"activeVisits"];
+    activeVisitsVC.startIndex = [[coder decodeObjectForKey:@"startIndex"] intValue];
+    activeVisitsVC.hasMore = [[coder decodeObjectForKey:@"hasMore"] boolValue];
+    activeVisitsVC.currentIndexPath = [coder decodeObjectForKey:@"currentRow"];
+    NSLog(@"Revisied");
+    return activeVisitsVC;
 }
 
 @end

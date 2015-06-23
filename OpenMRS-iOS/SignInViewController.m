@@ -12,6 +12,9 @@
 @implementation SignInViewController
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
+    self.restorationIdentifier = NSStringFromClass([self class]);
+    self.restorationClass = [self class];
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
     NSLog(@"Password: %@", [wrapper objectForKey:(__bridge id)(kSecValueData)]);
     self.view.backgroundColor = [UIColor whiteColor];
@@ -26,22 +29,22 @@
     self.hostTextField.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth;
     self.hostTextField.keyboardType = UIKeyboardTypeURL;
     self.hostTextField.autocapitalizationType = UITextAutocapitalizationTypeNone;
-    self.hostTextField.placeholder = @"Host (demo.openmrs.org/openmrs)";
+    self.hostTextField.placeholder = [NSString stringWithFormat:@"%@ (demo.openmrs.org/openmrs)", NSLocalizedString(@"Host", @"Label host")];
     [self.view addSubview:self.hostTextField ];
     self.usernameTextField = [[UITextField alloc] initWithFrame:CGRectMake(20, 104, self.view.frame.size.width-40, 44)];
     self.usernameTextField.borderStyle = UITextBorderStyleNone;
     self.usernameTextField.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth;
-    self.usernameTextField.placeholder = @"Username (admin)";
+    self.usernameTextField.placeholder = [NSString stringWithFormat:@"%@ (admin)", NSLocalizedString(@"Username", @"Label username")];
     [self.view addSubview:self.usernameTextField];
     self.passwordTextField = [[UITextField alloc] initWithFrame:CGRectMake(20, 158, self.view.frame.size.width-40, 44)];
     self.passwordTextField.borderStyle = UITextBorderStyleNone;
     self.passwordTextField.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleWidth;
-    self.passwordTextField.placeholder = @"Password (••••••••)";
+    self.passwordTextField.placeholder = [NSString stringWithFormat:@"%@ (••••••••)", NSLocalizedString(@"Password", @"Label password")];
     self.passwordTextField.secureTextEntry = YES;
     [self.view addSubview:self.passwordTextField];
     UIButton *goButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 200, self.view.frame.size.width, 44)];
     goButton.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleBottomMargin;
-    [goButton setTitle:@"Sign in" forState:UIControlStateNormal];
+    [goButton setTitle:NSLocalizedString(@"Sign in", @"Lable -sign- -in") forState:UIControlStateNormal];
     [goButton setTitleColor:self.view.tintColor forState:UIControlStateNormal];
     [goButton addTarget:self action:@selector(signIn:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:goButton];

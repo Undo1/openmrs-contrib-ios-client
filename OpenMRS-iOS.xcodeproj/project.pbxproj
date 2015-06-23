@@ -13,10 +13,13 @@
 		245EDDCE1B21A10B00B8C0EB /* vitals_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDCC1B21A10B00B8C0EB /* vitals_icon@2x.png */; };
 		245EDDD11B21A11800B8C0EB /* user_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDCF1B21A11800B8C0EB /* user_icon@3x.png */; };
 		245EDDD21B21A11800B8C0EB /* vitals_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDD01B21A11800B8C0EB /* vitals_icon@3x.png */; };
+		2432066D1B2E439000B54970 /* EditPatient.m in Sources */ = {isa = PBXBuildFile; fileRef = 2432066C1B2E439000B54970 /* EditPatient.m */; };
+		243206711B30436700B54970 /* MRSHelperFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 243206701B30436700B54970 /* MRSHelperFunctions.m */; };
 		24A8DEC71B18C18A00F5FF84 /* active_visits_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 24A8DEC41B18C18A00F5FF84 /* active_visits_icon@3x.png */; };
 		24A8DEC81B18C18A00F5FF84 /* active_visits_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 24A8DEC51B18C18A00F5FF84 /* active_visits_icon@2x.png */; };
 		24A8DEC91B18C18A00F5FF84 /* active_visits_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 24A8DEC61B18C18A00F5FF84 /* active_visits_icon.png */; };
 		24A8DECC1B18F66E00F5FF84 /* ActiveVisitsList.m in Sources */ = {isa = PBXBuildFile; fileRef = 24A8DECB1B18F66E00F5FF84 /* ActiveVisitsList.m */; };
+		24B974351B3473EF000DD2E7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 24B974371B3473EF000DD2E7 /* Localizable.strings */; };
 		24D127511B0DF6140018AA1D /* MRSDateUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 24D127501B0DF6140018AA1D /* MRSDateUtilities.m */; };
 		65BE2B3E2C5F8BE1FB7090C2 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87CFC2F5FC6F1445E8327AF6 /* libPods.a */; };
 		D3079E751A3D4DED00E308C7 /* add_patient_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D3079E721A3D4DED00E308C7 /* add_patient_icon@2x.png */; };
@@ -87,11 +90,18 @@
 		245EDDCC1B21A10B00B8C0EB /* vitals_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vitals_icon@2x.png"; sourceTree = "<group>"; };
 		245EDDCF1B21A11800B8C0EB /* user_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user_icon@3x.png"; sourceTree = "<group>"; };
 		245EDDD01B21A11800B8C0EB /* vitals_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vitals_icon@3x.png"; sourceTree = "<group>"; };
+		241729061B30C73400BB35F0 /* openmrs-offline 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "openmrs-offline 2.xcdatamodel"; sourceTree = "<group>"; };
+		2432066B1B2E439000B54970 /* EditPatient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditPatient.h; sourceTree = "<group>"; };
+		2432066C1B2E439000B54970 /* EditPatient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditPatient.m; sourceTree = "<group>"; };
+		2432066F1B30436700B54970 /* MRSHelperFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSHelperFunctions.h; sourceTree = "<group>"; };
+		243206701B30436700B54970 /* MRSHelperFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSHelperFunctions.m; sourceTree = "<group>"; };
 		24A8DEC41B18C18A00F5FF84 /* active_visits_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "active_visits_icon@3x.png"; sourceTree = "<group>"; };
 		24A8DEC51B18C18A00F5FF84 /* active_visits_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "active_visits_icon@2x.png"; sourceTree = "<group>"; };
 		24A8DEC61B18C18A00F5FF84 /* active_visits_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = active_visits_icon.png; sourceTree = "<group>"; };
 		24A8DECA1B18F66E00F5FF84 /* ActiveVisitsList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ActiveVisitsList.h; sourceTree = "<group>"; };
 		24A8DECB1B18F66E00F5FF84 /* ActiveVisitsList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActiveVisitsList.m; sourceTree = "<group>"; };
+		24B974361B3473EF000DD2E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
+		24B974381B34740E000DD2E7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		24D1274F1B0DF6140018AA1D /* MRSDateUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSDateUtilities.h; sourceTree = "<group>"; };
 		24D127501B0DF6140018AA1D /* MRSDateUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSDateUtilities.m; sourceTree = "<group>"; };
 		87CFC2F5FC6F1445E8327AF6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -202,9 +212,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2432066E1B2E439C00B54970 /* Edit Patient */ = {
+			isa = PBXGroup;
+			children = (
+				2432066B1B2E439000B54970 /* EditPatient.h */,
+				2432066C1B2E439000B54970 /* EditPatient.m */,
+			);
+			name = "Edit Patient";
+			sourceTree = "<group>";
+		};
 		248FBE2F1B03B9E400569C2C /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				2432066E1B2E439C00B54970 /* Edit Patient */,
 				24A8DECD1B18F67500F5FF84 /* ActiveVisits */,
 				248FBE481B03BC2300569C2C /* Add patient */,
 				248FBE421B03BBAA00569C2C /* Add visit note */,
@@ -350,6 +370,8 @@
 				D317E7F41A4C6BD300E05212 /* OrderedDictionary.m */,
 				24D1274F1B0DF6140018AA1D /* MRSDateUtilities.h */,
 				24D127501B0DF6140018AA1D /* MRSDateUtilities.m */,
+				2432066F1B30436700B54970 /* MRSHelperFunctions.h */,
+				243206701B30436700B54970 /* MRSHelperFunctions.m */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -590,6 +612,7 @@
 		D397396E1A2E082200D0AB69 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				24B974371B3473EF000DD2E7 /* Localizable.strings */,
 				24A8DEC41B18C18A00F5FF84 /* active_visits_icon@3x.png */,
 				24A8DEC51B18C18A00F5FF84 /* active_visits_icon@2x.png */,
 				24A8DEC61B18C18A00F5FF84 /* active_visits_icon.png */,
@@ -733,6 +756,7 @@
 				D3FAEFFE1A51C1CD002B1BF7 /* Images.xcassets in Resources */,
 				245EDDCE1B21A10B00B8C0EB /* vitals_icon@2x.png in Resources */,
 				D3A57DBD1B2E5BF800F25F30 /* active_visits_tab_bar_icon@2x.png in Resources */,
+				24B974351B3473EF000DD2E7 /* Localizable.strings in Resources */,
 				D3079E761A3D4DED00E308C7 /* add_patient_icon.png in Resources */,
 				245EDDD11B21A11800B8C0EB /* user_icon@3x.png in Resources */,
 				D3079E751A3D4DED00E308C7 /* add_patient_icon@2x.png in Resources */,
@@ -809,8 +833,10 @@
 				D38DB4F81A320EF700E2CF23 /* MRSEncounterOb.m in Sources */,
 				D39AD7AE1A3C081000C01540 /* MRSVital.m in Sources */,
 				D317E7F61A4C6BD300E05212 /* OrderedDictionary.m in Sources */,
+				2432066D1B2E439000B54970 /* EditPatient.m in Sources */,
 				D396A52D1A2E09DE00DE6448 /* MRSPatient.m in Sources */,
 				D39AD7AB1A3BFE8600C01540 /* CaptureVitalsTableViewController.m in Sources */,
+				243206711B30436700B54970 /* MRSHelperFunctions.m in Sources */,
 				D396A5281A2E09DE00DE6448 /* SignInViewController.m in Sources */,
 				D396A5441A2E0CEF00DE6448 /* SettingsViewController.m in Sources */,
 				D3E47BA91A3A08EF004B3F95 /* MRSPatientIdentifier.m in Sources */,
@@ -854,6 +880,18 @@
 			targetProxy = D39739851A2E082300D0AB69 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		24B974371B3473EF000DD2E7 /* Localizable.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				24B974361B3473EF000DD2E7 /* Base */,
+				24B974381B34740E000DD2E7 /* en */,
+			);
+			name = Localizable.strings;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
 		D397398C1A2E082300D0AB69 /* Debug */ = {
@@ -1043,9 +1081,10 @@
 		D3A869521A32B42A00D1963F /* openmrs-offline.xcdatamodeld */ = {
 			isa = XCVersionGroup;
 			children = (
+				241729061B30C73400BB35F0 /* openmrs-offline 2.xcdatamodel */,
 				D3A869531A32B42A00D1963F /* openmrs-offline.xcdatamodel */,
 			);
-			currentVersion = D3A869531A32B42A00D1963F /* openmrs-offline.xcdatamodel */;
+			currentVersion = 241729061B30C73400BB35F0 /* openmrs-offline 2.xcdatamodel */;
 			name = "openmrs-offline.xcdatamodeld";
 			path = "../openmrs-offline.xcdatamodeld";
 			sourceTree = "<group>";

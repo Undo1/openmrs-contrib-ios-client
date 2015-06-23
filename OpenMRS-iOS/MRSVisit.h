@@ -10,7 +10,7 @@
 #import "MRSLocation.h"
 
 @class MRSVisitType;
-@interface MRSVisit : NSObject
+@interface MRSVisit : NSObject <NSCoding>
 @property (nonatomic, strong) NSString *displayName;
 @property (nonatomic, strong) NSString *UUID;
 @property (nonatomic, strong) NSString *startDateTime;

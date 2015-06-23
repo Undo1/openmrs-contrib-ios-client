@@ -11,6 +11,8 @@
 #import "KeychainItemWrapper.h"
 #import <CoreData/CoreData.h>
 #import "EncryptedStore.h"
+#import "MRSPatient.h"
+#import "OpenMRSAPIManager.h"
 @interface AppDelegate ()
 
 @end
@@ -20,29 +22,48 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
 // SignInViewController *vc = [[SignInViewController alloc] init];
 //    [[[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil] resetKeychainItem];
-    MainMenuCollectionViewController *menu = [[MainMenuCollectionViewController alloc] initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
-    self.window.rootViewController = [[UINavigationController alloc] initWithRootViewController:menu];
-    [self.window makeKeyAndVisible];
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    if (!self.window.rootViewController) {
+        NSLog(@"Adding a root view controller");
+        MainMenuCollectionViewController *menu = [[MainMenuCollectionViewController alloc] initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
+        UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:menu];
+        navController.restorationIdentifier = NSStringFromClass([navController class]);
+        self.window.rootViewController = navController;
+    }
     NSString *password = [[[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil] objectForKey:(__bridge id)(kSecValueData)];
     if ([password isEqual:@" "] || [password isEqual:@""] || password == nil) {
         //No password stored, go straight to login screen
         SignInViewController *signin = [[SignInViewController alloc] init];
         [self.window.rootViewController presentViewController:signin animated:NO completion:nil];
     }
+
     self.window.tintColor = [UIColor colorWithRed:39/255.0
                                             green:139/255.0
                                              blue:146/255.0
                                             alpha:1];
 
+    //[self updateExistingOutOfDatePatients];
+    return YES;
+}
+
+- (void)applicationWillResignActive:(UIApplication *)application
+{
+    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
+    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+}
+
+- (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+    [[UIView appearance] setTintColor:[UIColor colorWithRed:39/255.0 green:139/255.0 blue:146/255.0 alpha:1]];
     [[UIView appearanceWhenContainedIn:[UINavigationBar class], nil] setTintColor:[UIColor whiteColor]];
     [[UINavigationBar appearance] setBarTintColor:[UIColor colorWithRed:30/255.0 green:130/255.0 blue:112/255.0 alpha:1]];
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     [[UINavigationBar appearance] setTitleTextAttributes:@ { NSForegroundColorAttributeName:[UIColor whiteColor] }];
     [[UISearchBar appearance] setBarTintColor:[UIColor colorWithRed:30/255.0 green:130/255.0 blue:112/255.0 alpha:1]];
+    [self.window makeKeyAndVisible];
+    
     if ([[NSProcessInfo processInfo] respondsToSelector:@selector(operatingSystemVersion)]) {
         if ([[NSProcessInfo processInfo] operatingSystemVersion].majorVersion >= 8) {
             [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];
@@ -53,12 +74,21 @@
     return YES;
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application
-{
-    // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
-    // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+- (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder {
+    return YES;
 }
 
+- (BOOL)application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder {
+    return YES;
+}
+- (UIViewController *)application:(UIApplication *)application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    UIViewController *nc = [[UINavigationController alloc] init];
+    nc.restorationIdentifier = [identifierComponents lastObject];
+    if ([identifierComponents count] == 1) {
+        self.window.rootViewController = nc;
+    }
+    return nc;
+}
 - (void)saveContext
 {
     NSError *error = nil;
@@ -106,7 +136,11 @@
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
     NSDictionary *options = @ { EncryptedStorePassphraseKey: [wrapper objectForKey:(__bridge id)(kSecValueData)] };
     _persistentStoreCoordinator = [EncryptedStore makeStoreWithOptions:options managedObjectModel:[self managedObjectModel]];
-    if (![_persistentStoreCoordinator addPersistentStoreWithType:EncryptedStoreType configuration:nil URL:storeURL options:nil error:&error]) {
+    options = @{
+                NSMigratePersistentStoresAutomaticallyOption : @YES,
+                NSInferMappingModelAutomaticallyOption : @YES
+                };
+    if (![_persistentStoreCoordinator addPersistentStoreWithType:EncryptedStoreType configuration:nil URL:storeURL options:options error:&error]) {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
     }
@@ -127,6 +161,33 @@
     NSPersistentStoreCoordinator *storeCoordinator = self.persistentStoreCoordinator;
     [storeCoordinator removePersistentStore:store error:&error];
     [[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error];
-    [[self.managedObjectContext persistentStoreCoordinator] addPersistentStoreWithType:EncryptedStoreType configuration:nil URL:storeURL options:nil error:&error];//recreates the persistent store
+    NSDictionary *options = @{
+                              NSMigratePersistentStoresAutomaticallyOption : @YES,
+                              NSInferMappingModelAutomaticallyOption : @YES
+                              };
+    [[self.managedObjectContext persistentStoreCoordinator] addPersistentStoreWithType:EncryptedStoreType configuration:nil URL:storeURL options:options error:&error];//recreates the persistent store
+}
+
+- (void)updateExistingOutOfDatePatients {
+    NSLog(@"Updating offline patients...");
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:self.managedObjectContext]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"TRUEPREDICATE", [NSNumber numberWithBool:YES]];
+    [request setPredicate:predicate];
+    NSError *error = nil;
+    NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
+    NSLog(@"unUpdated: %lu", (unsigned long)results.count);
+    for (NSManagedObject *object in results) {
+        MRSPatient *patient = [[MRSPatient alloc] init];
+        patient.UUID = [object valueForKey:@"uuid"];
+        [patient updateFromCoreData];
+        NSLog(@"\tUpdating patient: %@", patient.givenName);
+        [OpenMRSAPIManager EditPatient:patient completion:^(NSError *error) {
+            if (!error) {
+                patient.upToDate = YES;
+                [patient saveToCoreData];
+            }
+        }];
+    }
 }
 @end

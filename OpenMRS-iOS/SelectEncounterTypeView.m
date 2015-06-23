@@ -13,7 +13,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.title = @"Select Type";
+    self.title = NSLocalizedString(@"Select Type", @"Label -select- -type-");
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
     [self refreshEncounterTypes];
 }

@@ -25,6 +25,7 @@
 #import "MRSEncounterType.h"
 #import "OpenMRS_iOS-Swift.h"
 #import "MRSDateUtilities.h"
+#import "MRSHelperFunctions.h"
 #import <CoreData/CoreData.h>
 
 @implementation OpenMRSAPIManager
@@ -96,6 +97,7 @@
             [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
             [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/patient", host] parameters:@ {@"person":createdPerson.UUID, @"identifiers":@[@{@"identifier":identifier.identifier, @"identifierType":identifier.identifierType.UUID}]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
+                NSLog(@"Results for details:\n\n%@", results);
                 MRSPatient *patient = [[MRSPatient alloc] init];
                 patient.displayName = results[@"display"];
                 patient.locationDisplay = results[@"location"][@"display"];
@@ -123,7 +125,6 @@
                 if (results[@"person"][@"age"] != [NSNull null]) {
                     patient.age = [results[@"person"][@"age"] stringValue];
                 }
-                completion(nil, patient);
             }
             failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                 NSLog(@"failure: %@", [[NSString alloc] initWithData:error.userInfo[@"com.alamofire.serialization.response.error.data"] encoding:NSUTF8StringEncoding]);
@@ -593,64 +594,58 @@
         completion(error, nil);
     }];
 }
-+ (void)getPatientListWithSearch:(NSString *)search completion:(void (^)(NSError *error, NSArray *patients))completion
++ (void)getPatientListWithSearch:(NSString *)search online:(BOOL)online  completion:(void (^)(NSError *error, NSArray *patients))completion
 {
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
-    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
-    NSURL *hostUrl = [NSURL URLWithString:host];
-    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
-    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
-    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
-    [self cancelPreviousSearchOperations];
-    delegate.currentSearchOperation = [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/patient?q=%@", host, [search stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-//        NSLog(@"Success, %@", [[NSString alloc] initWithData:operation.responseData encoding:NSUTF8StringEncoding]);
-        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
-//        NSLog(@"array: %@", results[@"results"]);
-        NSMutableArray *patients = [[NSMutableArray alloc] init];
-        for (NSDictionary *patient in results[@"results"]) {
-            MRSPatient *patientObject = [[MRSPatient alloc] init];
-            patientObject.UUID = patient[@"uuid"];
-            patientObject.name = patient[@"display"];
-            [patients addObject:patientObject];
+    if (online) {
+        KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+        NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+        NSURL *hostUrl = [NSURL URLWithString:host];
+        NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+        NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+        [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+        [self cancelPreviousSearchOperations];
+        delegate.currentSearchOperation = [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/patient?q=%@", host, [search stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
+            NSMutableArray *patients = [[NSMutableArray alloc] init];
+            for (NSDictionary *patient in results[@"results"]) {
+                MRSPatient *patientObject = [[MRSPatient alloc] init];
+                patientObject.UUID = patient[@"uuid"];
+                patientObject.name = patient[@"display"];
+                [patients addObject:patientObject];
+            }
+            completion(nil, patients);
+            //        dispatch_async(dispatch_get_main_queue(), ^{
+            //            [SVProgressHUD popActivity];
+            //        });
         }
-        completion(nil, patients);
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [SVProgressHUD popActivity];
-//        });
+        failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            completion(error, nil);
+        }];
+    } else {
+        AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+        NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+        [fetchRequest setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:appDelegate.managedObjectContext]];
+        if (search.length != 0) {
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(name CONTAINS[cd] %@) OR (display CONTAINS[cd] %@)", search, search, search];
+            [fetchRequest setPredicate:predicate];
+        }
+        NSError *error;
+        NSArray *results = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+        NSLog(@"error: %@", error);
+        if (results.count > 0) {
+            NSMutableArray *patients = [[NSMutableArray alloc] init];
+            for (NSManagedObject *object in results) {
+                MRSPatient *patient = [[MRSPatient alloc] init];
+                patient.UUID = [object valueForKey:@"uuid"];
+                [patient updateFromCoreData];
+                [patients addObject:patient];
+            }
+            completion(nil, patients);
+        } else {
+            completion(error, nil);
+        }
     }
-    failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Failure, %@", error);
-        if (error.code == -1011 || error.code == -1002) {
-            [OpenMRSAPIManager presentLoginController];
-        }
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [SVProgressHUD popActivity];
-//        });
-        else {
-            AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-            NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-            [fetchRequest setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:appDelegate.managedObjectContext]];
-            if (search.length != 0) {
-                NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(name CONTAINS[cd] %@) OR (display CONTAINS[cd] %@) OR (display CONTAINS[cd] %@)", search, search, search];
-                [fetchRequest setPredicate:predicate];
-            }
-            NSError *error;
-            NSArray *results = [appDelegate.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-            if (results.count > 0) {
-                NSMutableArray *patients = [[NSMutableArray alloc] init];
-                for (NSManagedObject *object in results) {
-                    MRSPatient *patient = [[MRSPatient alloc] init];
-                    patient.UUID = [object valueForKey:@"uuid"];
-                    [patient updateFromCoreData];
-                    [patients addObject:patient];
-                }
-                completion(nil, patients);
-            } else {
-                completion(error, nil);
-            }
-        }
-    }];
 }
 + (void)getDetailedDataOnPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, MRSPatient *detailedPatient))completion
 {
@@ -663,31 +658,37 @@
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/patient/%@?v=full", host, patient.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
-//        NSLog(@"results: %@", results);
         MRSPatient *detailedPatient = [[MRSPatient alloc] init];
         detailedPatient.displayName = results[@"display"];
         detailedPatient.locationDisplay = results[@"location"][@"display"];
-        if (((NSArray *)results[@"person"][@"addresses"]).count > 0) {
-            detailedPatient.address1 = results[@"person"][@"addresses"][0][@"address1"];
-            detailedPatient.address2 = results[@"person"][@"addresses"][0][@"address2"];
-            detailedPatient.address3 = results[@"person"][@"addresses"][0][@"address3"];
-            detailedPatient.address4 = results[@"person"][@"addresses"][0][@"address4"];
-            detailedPatient.address5 = results[@"person"][@"addresses"][0][@"address5"];
-            detailedPatient.address6 = results[@"person"][@"addresses"][0][@"address6"];
-            detailedPatient.cityVillage = results[@"person"][@"addresses"][0][@"cityVillage"];
-            detailedPatient.country = results[@"person"][@"addresses"][0][@"country"];
-            detailedPatient.latitude = results[@"person"][@"addresses"][0][@"latitude"];
-            detailedPatient.longitude = results[@"person"][@"addresses"][0][@"longitude"];
-            detailedPatient.postalCode = results[@"person"][@"addresses"][0][@"postalCode"];
-            detailedPatient.stateProvince = results[@"person"][@"addresses"][0][@"stateProvince"];
+        if (![MRSHelperFunctions isNull:results[@"person"][@"preferredAddress"]]) {
+            detailedPatient.preferredAddressUUID = results[@"person"][@"preferredAddress"][@"uuid"];
+            detailedPatient.address1 = results[@"person"][@"preferredAddress"][@"address1"];
+            detailedPatient.address2 = results[@"person"][@"preferredAddress"][@"address2"];
+            detailedPatient.address3 = results[@"person"][@"preferredAddress"][@"address3"];
+            detailedPatient.address4 = results[@"person"][@"preferredAddress"][@"address4"];
+            detailedPatient.address5 = results[@"person"][@"preferredAddress"][@"address5"];
+            detailedPatient.address6 = results[@"person"][@"preferredAddress"][@"address6"];
+            detailedPatient.cityVillage = results[@"person"][@"preferredAddress"][@"cityVillage"];
+            detailedPatient.country = results[@"person"][@"preferredAddress"][@"country"];
+            detailedPatient.latitude = results[@"person"][@"preferredAddress"][@"latitude"];
+            detailedPatient.longitude = results[@"person"][@"preferredAddress"][@"longitude"];
+            detailedPatient.postalCode = results[@"person"][@"preferredAddress"][@"postalCode"];
+            detailedPatient.stateProvince = results[@"person"][@"preferredAddress"][@"stateProvince"];
+            detailedPatient.countyDistrict = results[@"person"][@"preferredAddress"][@"countyDistrict"];
         }
         detailedPatient.birthdate = results[@"person"][@"birthdate"];
-        detailedPatient.birthdateEstimated = results[@"person"][@"birthdateEstimated"];
+        detailedPatient.birthdateEstimated = [results[@"person"][@"birthdateEstimated"] boolValue]?@"true":@"false";
         detailedPatient.causeOfDeath = results[@"person"][@"causeOfDeath"];
         detailedPatient.dead = ((int)results[@"person"][@"dead"] == 1);
         detailedPatient.gender = results[@"person"][@"gender"];
         detailedPatient.UUID = results[@"uuid"];
         detailedPatient.name = results[@"display"];
+        detailedPatient.preferredNameUUID = results[@"person"][@"preferredName"][@"uuid"];
+        detailedPatient.familyName = results[@"person"][@"preferredName"][@"familyName"];
+        detailedPatient.familyName2 = results[@"person"][@"preferredName"][@"familyName2"];
+        detailedPatient.givenName = results[@"person"][@"preferredName"][@"givenName"];
+        detailedPatient.middleName = results[@"person"][@"preferredName"][@"middleName"];
         if (results[@"person"][@"age"] != [NSNull null]) {
             detailedPatient.age = [results[@"person"][@"age"] stringValue];
         }
@@ -714,6 +715,108 @@
         }
     }];
 }
+
++ (void)EditPatient:(MRSPatient *)patient completion:(void (^)(NSError *error))completion
+{
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+    
+    NSArray *personKeys = @[@"BirthDate", @"BirthDate Estimated", @"Dead", @"Cause Of Death"];
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithDictionary:@{
+                                                                   @"gender": patient.gender
+                                                                   }];
+    for (NSString *propertyLabel in personKeys) {
+        NSString *property = [MRSHelperFunctions formLabelToJSONLabel:propertyLabel];
+        if ([property isEqualToString:@"dead"]){
+            [parameters setValue:patient.dead?@YES:@NO forKey:property];
+            continue;
+        }
+        if (![MRSHelperFunctions isNull:[patient valueForKey:property]] && ![[patient valueForKey:property] isEqualToString:@""]){
+            [parameters setValue:[patient valueForKey:property] forKey:property];
+        }
+    }
+    NSLog(@"Person parameters: %@", parameters);
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/person/%@", host, patient.UUID] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
+        NSLog(@"Person response: %@", results);
+        [self EditAddressForPatient:patient completion:completion];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Operation failed... with Error: %@", error);
+        completion(error);
+    }];
+}
+
++ (void)EditAddressForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion {
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+    
+    NSMutableDictionary *parameters =[[NSMutableDictionary alloc] init];
+    NSArray *addressKeys = @[@"Address 1", @"Address 2", @"Address 3", @"Address 4", @"Address 5", @"Address 6",
+                             @"City Village", @"State Province", @"Country" ,@"Postal Code", @"Latitude", @"Latitude", @"County District"];
+    for (NSString *key in addressKeys) {
+        NSString *propertyKey = [MRSHelperFunctions formLabelToJSONLabel:key];
+        if (![MRSHelperFunctions isNull:[patient valueForKey:propertyKey]]  && ![[patient valueForKey:propertyKey] isEqualToString:@""]) {
+            if ([propertyKey  isEqual: @"preferred"]) {
+                NSLog(@"propety: %@", propertyKey);
+                NSString *value = [patient valueForKey:propertyKey];
+                [parameters setValue:[value isEqualToString:@"1"]?@"true":@"false" forKey:propertyKey];
+                continue;
+            }
+            [parameters setValue:[patient valueForKey:propertyKey] forKey:propertyKey];
+        }
+    }
+    NSLog(@"Address parameters:\n%@", parameters);
+    if (parameters.count != 0) {
+        NSString *preferredAddressUUID = [MRSHelperFunctions isNull:patient.preferredAddressUUID] ? @"" : [NSString stringWithFormat:@"/%@", patient.preferredAddressUUID];
+        NSLog(@"URL: %@", preferredAddressUUID);
+        [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/person/%@/address%@", host, patient.UUID, preferredAddressUUID] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+            NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
+            NSLog(@"%@", results);
+            patient.preferredAddressUUID = results[@"uuid"];
+            [self EditNameForPatient:patient completion:completion];
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            NSLog(@"Operation failed... with Error: %@", error);
+            completion(error);
+        }];
+    }
+}
+
++ (void)EditNameForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion {
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithDictionary:@{
+                                                                                        @"givenName": patient.givenName?patient.givenName:[NSNull null],
+                                                                                        @"familyName": patient.familyName?patient.familyName:[NSNull null]
+                                                                   }];
+    if (![MRSHelperFunctions isNull:patient.middleName] && ![patient.middleName isEqualToString:@""])
+        [parameters setValue:patient.middleName forKey:@"middleName"];
+    if (![MRSHelperFunctions isNull:patient.familyName2] && ![patient.familyName2 isEqualToString:@""])
+        [parameters setValue:patient.familyName2 forKey:@"familyName2"];
+    
+    NSLog(@"Name parameters: %@", parameters);
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/person/%@/name/%@", host, patient.UUID, patient.preferredNameUUID] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
+        NSLog(@"%@", results);
+        completion(nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Operation failed... with Error: %@", error);
+        completion(error);
+    }];
+}
+
 + (void)presentLoginController
 {
     SignInViewController *vc = [[SignInViewController alloc] init];
