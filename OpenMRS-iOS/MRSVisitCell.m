@@ -170,7 +170,6 @@
 }
 
 + (void)updateTableViewForDynamicTypeSize:(UITableView *) tableview {
-    NSLog(@"Here");
     static NSDictionary *cellHeightDictionary;
     
     if (!cellHeightDictionary) {

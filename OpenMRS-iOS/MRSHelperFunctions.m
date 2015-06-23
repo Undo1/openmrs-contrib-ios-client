@@ -7,6 +7,7 @@
 //
 
 #import "MRSHelperFunctions.h"
+#import <UIKit/UIKit.h>
 #import <objc/runtime.h>
 
 @implementation MRSHelperFunctions
@@ -40,6 +41,27 @@
     }
     words[0] = [words[0] lowercaseString];;
     return [words componentsJoinedByString:@""];
+}
+
++ (void)updateTableViewForDynamicTypeSize:(UITableView *) tableview {
+    static NSDictionary *cellHeightDictionary;
+    
+    if (!cellHeightDictionary) {
+        cellHeightDictionary = @{ UIContentSizeCategoryExtraSmall : @33,
+                                  UIContentSizeCategorySmall : @33,
+                                  UIContentSizeCategoryMedium : @44,
+                                  UIContentSizeCategoryLarge : @44,
+                                  UIContentSizeCategoryExtraLarge : @55,
+                                  UIContentSizeCategoryExtraExtraLarge : @66,
+                                  UIContentSizeCategoryExtraExtraExtraLarge : @70
+                                  };
+    }
+    
+    NSString *userSize = [[UIApplication sharedApplication] preferredContentSizeCategory];
+    
+    NSNumber *cellHeight = cellHeightDictionary[userSize];
+    [tableview setRowHeight:cellHeight.floatValue];
+    [tableview reloadData];
 }
 
 @end

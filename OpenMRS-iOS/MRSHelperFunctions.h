@@ -7,10 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
 @interface MRSHelperFunctions : NSObject
 
 + (NSArray *)allPropertyNames:(id)forClass;
 + (BOOL)isNull:(id)object;
 + (NSString *) formLabelToJSONLabel:(NSString *) label;
++ (void)updateTableViewForDynamicTypeSize:(UITableView *) tableview;
+
 @end
