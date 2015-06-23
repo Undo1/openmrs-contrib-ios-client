@@ -8,6 +8,12 @@
 
 #import <UIKit/UIKit.h>
 
+@class MRSVisit;
 @interface MRSVisitCell : UITableViewCell
+
+@property (nonatomic, strong) MRSVisit *visit;
+@property (nonatomic, strong) NSNumber *index;
+
+- (void)setVisit:(MRSVisit *)visit;
 
 @end
