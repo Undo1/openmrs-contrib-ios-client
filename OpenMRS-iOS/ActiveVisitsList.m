@@ -32,7 +32,7 @@
     [super viewDidLoad];
     
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
-    [defaultCenter addObserver:self selector:@selector(updateTableViewForDynamicTypeSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
+    [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
 
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
@@ -60,33 +60,17 @@
     self.tableView.rowHeight = 100;
 }
 
+- (void)updateFontSize {
+    [MRSVisitCell updateTableViewForDynamicTypeSize:self.tableView];
+}
+
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self updateTableViewForDynamicTypeSize];
+    [MRSVisitCell updateTableViewForDynamicTypeSize:self.tableView];
     [self.tableView reloadData];
     if(![MRSHelperFunctions isNull:self.currentIndexPath]) {
         [self.tableView scrollToRowAtIndexPath:self.currentIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
     }
-}
-
-- (void)updateTableViewForDynamicTypeSize {
-    static NSDictionary *cellHeightDictionary;
-
-    if (!cellHeightDictionary) {
-        cellHeightDictionary = @{ UIContentSizeCategoryExtraSmall : @70,
-                                  UIContentSizeCategorySmall : @77,
-                                  UIContentSizeCategoryMedium : @88,
-                                  UIContentSizeCategoryLarge : @88,
-                                  UIContentSizeCategoryExtraLarge : @100,
-                                  UIContentSizeCategoryExtraExtraLarge : @112,
-                                  UIContentSizeCategoryExtraExtraExtraLarge : @134
-                                  };
-    }
-
-    NSString *userSize = [[UIApplication sharedApplication] preferredContentSizeCategory];
-
-    NSNumber *cellHeight = cellHeightDictionary[userSize];
-    [self.tableView setRowHeight:cellHeight.floatValue];
 }
 
 #pragma mark - Table view data source

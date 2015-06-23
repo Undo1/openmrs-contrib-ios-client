@@ -15,5 +15,6 @@
 @property (nonatomic, strong) NSNumber *index;
 
 - (void)setVisit:(MRSVisit *)visit;
++ (void)updateTableViewForDynamicTypeSize:(UITableView *) tableview;
 
 @end

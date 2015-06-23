@@ -169,6 +169,28 @@
     [super updateConstraints];
 }
 
++ (void)updateTableViewForDynamicTypeSize:(UITableView *) tableview {
+    NSLog(@"Here");
+    static NSDictionary *cellHeightDictionary;
+    
+    if (!cellHeightDictionary) {
+        cellHeightDictionary = @{ UIContentSizeCategoryExtraSmall : @77,
+                                  UIContentSizeCategorySmall : @77,
+                                  UIContentSizeCategoryMedium : @88,
+                                  UIContentSizeCategoryLarge : @88,
+                                  UIContentSizeCategoryExtraLarge : @100,
+                                  UIContentSizeCategoryExtraExtraLarge : @112,
+                                  UIContentSizeCategoryExtraExtraExtraLarge : @134
+                                  };
+    }
+    
+    NSString *userSize = [[UIApplication sharedApplication] preferredContentSizeCategory];
+    
+    NSNumber *cellHeight = cellHeightDictionary[userSize];
+    [tableview setRowHeight:cellHeight.floatValue];
+    [tableview reloadData];
+}
+
 - (void)updateFonts {
     UIFont *title = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
     UIFont *value = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
