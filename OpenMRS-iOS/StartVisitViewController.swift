@@ -30,11 +30,22 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
     override init(style: UITableViewStyle) {
         super.init(style: UITableViewStyle.Grouped)
     }
-    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        MRSHelperFunctions.updateTableViewForDynamicTypeSize(self.tableView)
+    }
+    func updateFontSize() {
+        MRSHelperFunctions.updateTableViewForDynamicTypeSize(self.tableView)
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         self.restorationIdentifier = NSStringFromClass(self.dynamicType);
         self.restorationClass = self.dynamicType;
+
+        var defaultCenter = NSNotificationCenter.defaultCenter()
+        defaultCenter.addObserver(self, selector:"updateFontSize", name: UIContentSizeCategoryDidChangeNotification, object: nil)
+        MRSHelperFunctions.updateTableViewForDynamicTypeSize(self.tableView)
+
         self.title = NSLocalizedString("Start Visit", comment: "Label -start- -visit-")
         
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancel")

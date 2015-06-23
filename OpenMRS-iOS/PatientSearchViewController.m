@@ -32,6 +32,10 @@
 {
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
+    
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
+    [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
     if ([MRSHelperFunctions isNull:self.segmentIndex] || [self.segmentIndex  isEqual: @0]) {
         self.isOnline = YES;
         self.segmentIndex = @0;
@@ -72,6 +76,16 @@
     [self.bar  becomeFirstResponder];
 
     self.searchButtonPressed = NO;
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
+}
+
+- (void)updateFontSize {
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
 }
 
 - (void)reloadDataForSearch:(NSString *)search

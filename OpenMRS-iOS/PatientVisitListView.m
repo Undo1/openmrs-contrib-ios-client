@@ -8,6 +8,7 @@
 
 #import "PatientVisitListView.h"
 #import "MRSVisit.h"
+#import "MRSVisitCell.h"
 
 @implementation PatientVisitListView
 - (void)setVisits:(NSArray *)visits
@@ -20,8 +21,23 @@
     [super viewDidLoad];
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
+
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
+    [MRSVisitCell updateTableViewForDynamicTypeSize:self.tableView];
+
     self.title = NSLocalizedString(@"Visits", @"Label visits");
 }
+
+- (void)updateFontSize {
+    [MRSVisitCell updateTableViewForDynamicTypeSize:self.tableView];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [MRSVisitCell updateTableViewForDynamicTypeSize:self.tableView];
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -32,13 +48,16 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    MRSVisitCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        cell = [[MRSVisitCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
     MRSVisit *visit = self.visits[indexPath.row];
-    cell.textLabel.text = visit.displayName;
-    cell.textLabel.numberOfLines = 0;
+    [cell setVisit:visit];
+    [cell setIndex:[NSNumber numberWithInteger:indexPath.row+1]];
+    [cell setNeedsUpdateConstraints];
+    [cell updateConstraintsIfNeeded];
+    cell.userInteractionEnabled = NO;
     return cell;
 }
 @end

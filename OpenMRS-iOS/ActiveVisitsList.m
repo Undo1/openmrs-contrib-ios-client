@@ -33,6 +33,7 @@
     
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
+    [MRSVisitCell updateTableViewForDynamicTypeSize:self.tableView];
 
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
@@ -126,7 +127,7 @@
         [cell setNeedsUpdateConstraints];
         [cell updateConstraintsIfNeeded];
         [cell setIndex:[NSNumber numberWithInteger:indexPath.row + 1]];
-        cell.contentView.frame = CGRectOffset(cell.frame, 10, 10);
+        //cell.contentView.frame = CGRectOffset(cell.frame, 10, 10);
         cell.userInteractionEnabled = NO;
         return cell;
     }

@@ -23,11 +23,26 @@
     [super viewDidLoad];
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
+    
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
     self.title = NSLocalizedString(@"Add Patient", @"Label -add- -patient-");
     self.selectedGender = @"";
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
 }
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
+}
+
+- (void)updateFontSize {
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
+}
+
 - (void)done
 {
     MRSPatient *patient = [[MRSPatient alloc] init];
@@ -113,6 +128,7 @@
         field.textColor = self.view.tintColor;
         field.textAlignment = NSTextAlignmentRight;
         field.returnKeyType = UIReturnKeyDone;
+        field.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
         [field addTarget:self action:@selector(textFieldDidUpdate:) forControlEvents:UIControlEventEditingChanged];
         switch (indexPath.row) {
         case 0:
@@ -156,6 +172,7 @@
             field.textAlignment = NSTextAlignmentRight;
             field.returnKeyType = UIReturnKeyDone;
             field.keyboardType = UIKeyboardTypeNumberPad;
+            field.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             [field addTarget:self action:@selector(textFieldDidUpdate:) forControlEvents:UIControlEventEditingChanged];
             field.placeholder = NSLocalizedString(@"Age", @"Label age");
             field.text = self.selectedAge;
@@ -188,6 +205,7 @@
             field.textColor = self.view.tintColor;
             field.textAlignment = NSTextAlignmentRight;
             field.returnKeyType = UIReturnKeyDone;
+            field.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
             field.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             [field addTarget:self action:@selector(textFieldDidUpdate:) forControlEvents:UIControlEventEditingChanged];
             field.placeholder = NSLocalizedString(@"Identifier", @"Label identifier");

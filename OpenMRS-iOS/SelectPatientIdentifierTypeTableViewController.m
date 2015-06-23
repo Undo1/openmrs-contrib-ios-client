@@ -9,6 +9,7 @@
 #import "SelectPatientIdentifierTypeTableViewController.h"
 #import "MRSPatientIdentifierType.h"
 #import "OpenMRSAPIManager.h"
+#import "MRSHelperFunctions.h"
 @interface SelectPatientIdentifierTypeTableViewController ()
 
 @end
@@ -20,12 +21,28 @@
     [super viewDidLoad];
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
+
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
+
     self.title = NSLocalizedString(@"Identifier Type", @"Label -identifier- -type-");
     [self reloadData];
     
     //TODO: self-sizing cells
     self.tableView.rowHeight = 77;
 }
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
+}
+
+- (void)updateFontSize {
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
+}
+
 - (void)reloadData
 {
     [OpenMRSAPIManager getPatientIdentifierTypesWithCompletion:^(NSError *error, NSArray *types) {

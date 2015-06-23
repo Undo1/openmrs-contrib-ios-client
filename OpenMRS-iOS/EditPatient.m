@@ -39,6 +39,11 @@
     [super viewDidLoad];
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
+    
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
+
     NSLog(@"uuid: %@" , self.patient.UUID);
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save", @"Save button label")
                                                                               style:UIBarButtonItemStylePlain
@@ -116,6 +121,16 @@
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
+}
+
+- (void)updateFontSize {
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
+}
+
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     NSArray *labels = @[NSLocalizedString(@"Person", @"Label named person"), NSLocalizedString(@"Preferred Name", @"Label named -Preferred- -Name-)"), NSLocalizedString(@"Preferred Address", @"Label named -Preferred- -Address-")];
     return labels[section];
@@ -153,6 +168,7 @@ static id ObjectOrEmpty(id object)
     field.textColor = self.view.tintColor;
     field.textAlignment = NSTextAlignmentRight;
     field.returnKeyType = UIReturnKeyDone;
+    field.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     field.delegate = self;
     if ((indexPath.section == 0 && indexPath.row == 1) || (indexPath.section == 2 && indexPath.row == 14)) {
         UIDatePicker *datePicker = [[UIDatePicker alloc] init];

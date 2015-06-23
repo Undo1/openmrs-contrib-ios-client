@@ -28,10 +28,24 @@ class SelectVisitTypeView : UITableViewController
         super.init(style: .Plain)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        MRSHelperFunctions.updateTableViewForDynamicTypeSize(self.tableView)
+    }
+
+    func updateFontSize() {
+        MRSHelperFunctions.updateTableViewForDynamicTypeSize(self.tableView)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.restorationIdentifier = NSStringFromClass(self.dynamicType);
         self.restorationClass = self.dynamicType;
+        
+        var defaultCenter = NSNotificationCenter.defaultCenter()
+        defaultCenter.addObserver(self, selector:"updateFontSize", name: UIContentSizeCategoryDidChangeNotification, object: nil)
+        MRSHelperFunctions.updateTableViewForDynamicTypeSize(self.tableView)
+        
         self.title = NSLocalizedString("Visit Type", comment: "Label -visit- -type-")
         
         self.reloadData()

@@ -29,12 +29,19 @@
     [super viewDidLoad];
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
+    
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
     [self updateWithDetailedInfo];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [self updateWithDetailedInfo];
+}
+
+- (void)updateFontSize {
+    [self.tableView reloadData];
 }
 - (void)updateWithDetailedInfo
 {
@@ -86,13 +93,29 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    static NSDictionary *cellHeightDictionary;
+    
+    if (!cellHeightDictionary) {
+        cellHeightDictionary = @{ UIContentSizeCategoryExtraSmall : @33,
+                                  UIContentSizeCategorySmall : @33,
+                                  UIContentSizeCategoryMedium : @44,
+                                  UIContentSizeCategoryLarge : @44,
+                                  UIContentSizeCategoryExtraLarge : @55,
+                                  UIContentSizeCategoryExtraExtraLarge : @66,
+                                  UIContentSizeCategoryExtraExtraExtraLarge : @70
+                                  };
+    }
+    
+    NSString *userSize = [[UIApplication sharedApplication] preferredContentSizeCategory];
+    
+    NSNumber *cellHeight = cellHeightDictionary[userSize];
     if (indexPath.section == 0) {
-        return 44;
+        return cellHeight.floatValue;
     }
     UITableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
     NSString *detail = cell.detailTextLabel.text;
     CGRect bounding = [detail boundingRectWithSize:CGSizeMake(self.view.frame.size.width, 1000) options:NSStringDrawingUsesLineFragmentOrigin attributes:@ {NSFontAttributeName:cell.detailTextLabel.font} context:nil];
-    return MAX(44,bounding.size.height+10);
+    return MAX(cellHeight.floatValue,bounding.size.height+10);
 }
 - (id)notNil:(id)thing
 {
@@ -247,22 +270,6 @@
             return editCell;
         }
     }
-    if (indexPath.section == 2) {
-        UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"countCell"];
-        if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"countCell"];
-        }
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        if (indexPath.row == 0) {
-            cell.textLabel.text = NSLocalizedString(@"Visits", @"Label visits");
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)self.visits.count];
-            return cell;
-        } else if (indexPath.row == 1) {
-            cell.textLabel.text = NSLocalizedString(@"Encounters", "Label encounters");
-            cell.detailTextLabel.text = [NSString stringWithFormat:@"%lu", (unsigned long)self.encounters.count];
-            return cell;
-        }
-    }
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
@@ -285,6 +292,7 @@
         }
         if (indexPath.row == 2) {
             [self.patient saveToCoreData];
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
             return;
         }
         if (indexPath.row == 3) {
@@ -373,11 +381,6 @@
     [coder encodeObject:[NSNumber numberWithBool:self.isShowingActions] forKey:@"showingActions"];
     [coder encodeObject:[NSNumber numberWithBool:self.hasActiveVisit] forKey:@"hasActiveVisits"];
     [super encodeRestorableStateWithCoder:coder];
-}
-
-- (void)decodeRestorableStateWithCoder:(NSCoder *)coder {
-    [super decodeRestorableStateWithCoder:coder];
-    NSLog(@"Done deconding and setting");
 }
 
 #pragma mark - UIViewControllerRestortion

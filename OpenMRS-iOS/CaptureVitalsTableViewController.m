@@ -10,6 +10,7 @@
 #import "OpenMRSAPIManager.h"
 #import "LocationListTableViewController.h"
 #import "MRSVital.h"
+#import "MRSHelperFunctions.h"
 
 @interface CaptureVitalsTableViewController ()
 
@@ -22,6 +23,11 @@
     [super viewDidLoad];
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
+
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
+
     self.title = NSLocalizedString(@"Capture Vitals", @"Label -capture- -vitals-");
     self.fields = @[@ { @"label":@"Height", @"units":@"cm", @"uuid":@"5090AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
                     @ { @"label" : @"Weight", @"units" : @"kg", @"uuid" : @"5089AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
@@ -35,6 +41,16 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
     self.navigationItem.rightBarButtonItem.enabled = NO;
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
+}
+
+- (void)updateFontSize {
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
 }
 
 - (void)cancel
@@ -104,6 +120,7 @@
     textField.textAlignment = NSTextAlignmentRight;
     textField.autoresizingMask = UIViewAutoresizingFlexibleWidth;
     textField.returnKeyType = UIReturnKeyDone;
+    textField.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     if (indexPath.row != 3) { //The pulse field.
         textField.keyboardType = UIKeyboardTypeDecimalPad;
     } else {
