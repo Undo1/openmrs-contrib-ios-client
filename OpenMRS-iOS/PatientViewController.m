@@ -190,7 +190,7 @@
             }
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             cell.textLabel.textColor = self.view.tintColor;
-            cell.textLabel.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Add Visit Note", @"Label add visit note")];
+            cell.textLabel.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Add Visit Note", @"Label -add- -visit- -note-")];
             return cell;
         }
         if (indexPath.row == 1) {
@@ -230,7 +230,7 @@
                 if (!cell) {
                     cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"startVisitCell"];
                 }
-                cell.textLabel.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Start Visit", "Label start visit")];
+                cell.textLabel.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Start Visit", "Label -start- -visit-")];
             }
             cell.textLabel.textAlignment = NSTextAlignmentCenter;
             cell.textLabel.textColor = self.view.tintColor;
