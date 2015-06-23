@@ -9,7 +9,8 @@
 #import "SVProgressHUD.h"
 #import "ActiveVisitsList.h"
 #import "MRSHelperFunctions.h"
-
+#import "MRSVisitCell.h"
+#import "MRSVisit.h"
 
 @interface ActiveVisitsList ()
 
@@ -29,6 +30,10 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter addObserver:self selector:@selector(updateTableViewForDynamicTypeSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
+
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
     self.title = @"Active visits";
@@ -48,19 +53,40 @@
         [self loadMore];
     }
 
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
+    [self.tableView registerClass:[MRSVisitCell class] forCellReuseIdentifier:@"cell"];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"transperantCell"];
     
     self.tableView.separatorColor = [UIColor clearColor];
-    self.tableView.rowHeight = 66;
+    self.tableView.rowHeight = 100;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self updateTableViewForDynamicTypeSize];
     [self.tableView reloadData];
     if(![MRSHelperFunctions isNull:self.currentIndexPath]) {
         [self.tableView scrollToRowAtIndexPath:self.currentIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
     }
+}
+
+- (void)updateTableViewForDynamicTypeSize {
+    static NSDictionary *cellHeightDictionary;
+
+    if (!cellHeightDictionary) {
+        cellHeightDictionary = @{ UIContentSizeCategoryExtraSmall : @70,
+                                  UIContentSizeCategorySmall : @77,
+                                  UIContentSizeCategoryMedium : @88,
+                                  UIContentSizeCategoryLarge : @88,
+                                  UIContentSizeCategoryExtraLarge : @100,
+                                  UIContentSizeCategoryExtraExtraLarge : @112,
+                                  UIContentSizeCategoryExtraExtraExtraLarge : @134
+                                  };
+    }
+
+    NSString *userSize = [[UIApplication sharedApplication] preferredContentSizeCategory];
+
+    NSNumber *cellHeight = cellHeightDictionary[userSize];
+    [self.tableView setRowHeight:cellHeight.floatValue];
 }
 
 #pragma mark - Table view data source
@@ -87,8 +113,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell;
     if (indexPath.row == self.activeVisits.count) {
+        UITableViewCell *cell;
         cell = [tableView dequeueReusableCellWithIdentifier:@"transperantCell" forIndexPath:indexPath];
         if (!cell) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"transperantCell"];
@@ -102,17 +128,24 @@
         [loading setFrame:CGRectMake(size.width/2 - SPINNERSIZE/2, 33 - SPINNERSIZE / 2, SPINNERSIZE, SPINNERSIZE)];
         [cell.contentView addSubview:loading];
         [loading startAnimating];
+
+        cell.userInteractionEnabled = NO;
+        return cell;
     } else {
+        MRSVisitCell *cell;
         cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
-        if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        if (!cell || [NSStringFromClass([cell class]) isEqualToString:@"UITableViewCell"]) {
+            cell = [[MRSVisitCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
         }
         MRSVisit *visit = self.activeVisits[indexPath.row];
-        cell.textLabel.text = visit.displayName;
-        cell.textLabel.numberOfLines = 2;
+        [cell setVisit:visit];
+        [cell setNeedsUpdateConstraints];
+        [cell updateConstraintsIfNeeded];
+        [cell setIndex:[NSNumber numberWithInteger:indexPath.row + 1]];
+        cell.contentView.frame = CGRectOffset(cell.frame, 10, 10);
+        cell.userInteractionEnabled = NO;
+        return cell;
     }
-    cell.userInteractionEnabled = NO;
-    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
