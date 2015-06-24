@@ -55,9 +55,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    if ([MRSHelperFunctions isNull:self.visits] || [MRSHelperFunctions isNull:self.encounters]) {
-        [self updateWithDetailedInfo];
-    }
+    [self updateWithDetailedInfo];
 }
 
 - (void)updateFontSize {
@@ -243,7 +241,7 @@
             if (!actionCell) {
                 actionCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"actionCell"];
             }
-            actionCell.textLabel.text = @"Capture Vitals...";
+            actionCell.textLabel.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Capture Vitals", @"Label -capture- -vitals-")];
             actionCell.textLabel.textAlignment = NSTextAlignmentCenter;
             actionCell.textLabel.textColor = self.view.tintColor;
             return actionCell;

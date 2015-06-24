@@ -751,10 +751,38 @@
             [parameters setValue:[patient valueForKey:property] forKey:property];
         }
     }
-    NSLog(@"Person parameters: %@", parameters);
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/person/%@", host, patient.UUID] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
         NSLog(@"Person response: %@", results);
+        [self EditNameForPatient:patient completion:completion];
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"Operation failed... with Error: %@", error);
+        completion(error);
+    }];
+}
+
+
++ (void)EditNameForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion {
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
+    
+    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithDictionary:@{
+                                                                                        @"givenName": patient.givenName?patient.givenName:[NSNull null],
+                                                                                        @"familyName": patient.familyName?patient.familyName:[NSNull null]
+                                                                                        }];
+    if (![MRSHelperFunctions isNull:patient.middleName] && ![patient.middleName isEqualToString:@""])
+        [parameters setValue:patient.middleName forKey:@"middleName"];
+    if (![MRSHelperFunctions isNull:patient.familyName2] && ![patient.familyName2 isEqualToString:@""])
+        [parameters setValue:patient.familyName2 forKey:@"familyName2"];
+    
+    NSLog(@"Name parameters: %@", parameters);
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/person/%@/name/%@", host, patient.UUID, patient.preferredNameUUID] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
+        NSLog(@"%@", results);
         [self EditAddressForPatient:patient completion:completion];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Operation failed... with Error: %@", error);
@@ -793,40 +821,14 @@
             NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
             NSLog(@"%@", results);
             patient.preferredAddressUUID = results[@"uuid"];
-            [self EditNameForPatient:patient completion:completion];
+            completion(nil);
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             NSLog(@"Operation failed... with Error: %@", error);
             completion(error);
         }];
-    }
-}
-
-+ (void)EditNameForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion {
-    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
-    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
-    NSURL *hostUrl = [NSURL URLWithString:host];
-    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
-    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
-    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
-    
-    NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithDictionary:@{
-                                                                                        @"givenName": patient.givenName?patient.givenName:[NSNull null],
-                                                                                        @"familyName": patient.familyName?patient.familyName:[NSNull null]
-                                                                   }];
-    if (![MRSHelperFunctions isNull:patient.middleName] && ![patient.middleName isEqualToString:@""])
-        [parameters setValue:patient.middleName forKey:@"middleName"];
-    if (![MRSHelperFunctions isNull:patient.familyName2] && ![patient.familyName2 isEqualToString:@""])
-        [parameters setValue:patient.familyName2 forKey:@"familyName2"];
-    
-    NSLog(@"Name parameters: %@", parameters);
-    [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/person/%@/name/%@", host, patient.UUID, patient.preferredNameUUID] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
-        NSLog(@"%@", results);
+    } else {
         completion(nil);
-    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Operation failed... with Error: %@", error);
-        completion(error);
-    }];
+    }
 }
 
 + (void)presentLoginController

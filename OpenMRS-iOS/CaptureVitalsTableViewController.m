@@ -102,7 +102,7 @@
 {
     if (indexPath.section == 0) {
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"locCell"];
-        cell.textLabel.text = @"Location";
+        cell.textLabel.text = NSLocalizedString(@"Location", @"Label location");
         if (self.currentLocation) {
             cell.detailTextLabel.text = self.currentLocation.display;
         } else {
