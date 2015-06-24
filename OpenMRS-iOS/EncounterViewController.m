@@ -57,4 +57,15 @@
     cell.textLabel.numberOfLines = 0;
     return cell;
 }
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.encounter forKey:@"encounter"];
+    [super encodeRestorableStateWithCoder:coder];
+}
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    EncounterViewController *encounterVC = [[EncounterViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    encounterVC.encounter = [coder decodeObjectForKey:@"encounter"];
+    return encounterVC;
+}
 @end

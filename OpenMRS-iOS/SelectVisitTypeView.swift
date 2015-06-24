@@ -13,7 +13,7 @@ protocol SelectVisitTypeViewDelegate
     func didSelectVisitType(type: MRSVisitType)
 }
 
-class SelectVisitTypeView : UITableViewController
+class SelectVisitTypeView : UITableViewController, UIViewControllerRestoration
 {
     var visitTypes: [MRSVisitType]! = []
     var delegate: SelectVisitTypeViewDelegate!
@@ -95,5 +95,17 @@ class SelectVisitTypeView : UITableViewController
         let visitType = visitTypes[indexPath.row]
         delegate.didSelectVisitType(visitType)
         self.navigationController?.popToRootViewControllerAnimated(true)
+    }
+    
+    override func encodeRestorableStateWithCoder(coder: NSCoder) {
+        coder.encodeObject(self.delegate as! StartVisitViewController, forKey: "delegate")
+        coder.encodeObject(self.visitTypes, forKey: "visitTypes")
+    }
+    
+    static func viewControllerWithRestorationIdentifierPath(identifierComponents: [AnyObject], coder: NSCoder) -> UIViewController? {
+        let visitTypeList = SelectVisitTypeView(style: UITableViewStyle.Plain)
+        visitTypeList.visitTypes = coder.decodeObjectForKey("visitTypes") as! [MRSVisitType]
+        visitTypeList.delegate = coder.decodeObjectForKey("delegate") as! StartVisitViewController
+        return visitTypeList
     }
 }

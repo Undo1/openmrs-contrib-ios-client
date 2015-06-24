@@ -131,4 +131,21 @@
     [self.navigationController popToViewController:self animated:YES];
     [self.tableView reloadData];
 }
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.patient forKey:@"patient"];
+    [coder encodeObject:self.currentLocation forKey:@"location"];
+    [coder encodeObject:self.currentVisitNote forKey:@"noteText"];
+    [coder encodeObject:self.delegate forKey:@"delegate"];
+}
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    NSLog(@"hirearchy: %@", identifierComponents);
+    AddVisitNoteTableViewController *addnoteVC = [[AddVisitNoteTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    addnoteVC.delegate = [coder decodeObjectForKey:@"delegate"];
+    addnoteVC.currentVisitNote = [coder decodeObjectForKey:@"noteText"];
+    addnoteVC.currentLocation = [coder decodeObjectForKey:@"location"];
+    addnoteVC.patient = [coder decodeObjectForKey:@"patient"];
+    return addnoteVC;
+}
 @end

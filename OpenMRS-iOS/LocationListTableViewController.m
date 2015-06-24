@@ -86,4 +86,17 @@
     MRSLocation *location = self.locations[indexPath.row];
     [self.delegate didChooseLocation:location];
 }
+
+#pragma mark - UIViewRestoration
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.delegate forKey:@"delegate"];
+    [super encodeRestorableStateWithCoder:coder];
+}
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    LocationListTableViewController *locationList = [[LocationListTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    locationList.delegate = [coder decodeObjectForKey:@"delegate"];
+    return locationList;
+}
 @end

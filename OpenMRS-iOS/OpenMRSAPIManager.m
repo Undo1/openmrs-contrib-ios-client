@@ -309,7 +309,6 @@
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/encounter?patient=%@", host, patient.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
-        NSLog(@"encounter array: %@", results);
         NSMutableArray *array = [[NSMutableArray alloc] init];
         for (NSDictionary *visitDict in results[@"results"]) {
             MRSEncounter *visit = [[MRSEncounter alloc] init];
@@ -438,7 +437,6 @@
 
             visit.visitType = visitType;
             visit.location = location;
-            NSLog(@"VISITS!!:\n%@", visitDict);
             [array addObject:visit];
         }
         completion(nil, array);

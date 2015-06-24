@@ -16,8 +16,19 @@
 #import "AddVisitNoteTableViewController.h"
 #import "CaptureVitalsTableViewController.h"
 #import "MRSPatient.h"
+#import "AppDelegate.h"
 
 @implementation PatientViewController
+
+-(id)initWithStyle:(UITableViewStyle)style {
+    self = [super initWithStyle:style];
+    if (self) {
+        self.tabBarItem.title = self.patient.display;
+        self.tabBarItem.image = [UIImage imageNamed:@"user_icon"];
+    }
+    return self;
+}
+
 - (void)setPatient:(MRSPatient *)patient
 {
     _patient = patient;
@@ -27,17 +38,26 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    NSLog(@"View did load self %@", self);
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
-    
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
+    
+    self.navigationItem.title = self.patient.name;
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(close)];
     [self updateWithDetailedInfo];
+}
+
+- (void)close {
+    [self.tabBarController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self updateWithDetailedInfo];
+    if ([MRSHelperFunctions isNull:self.visits] || [MRSHelperFunctions isNull:self.encounters]) {
+        [self updateWithDetailedInfo];
+    }
 }
 
 - (void)updateFontSize {
@@ -66,7 +86,8 @@
             dispatch_async(dispatch_get_main_queue(), ^ {
                 [self.tableView reloadData];
             });
-            PatientEncounterListView *encounterList = self.tabBarController.viewControllers[2];
+            UINavigationController *parentNav = self.tabBarController.viewControllers[2];
+            PatientEncounterListView *encounterList = parentNav.viewControllers[0];
             encounterList.encounters = self.encounters;
         }
     }];
@@ -86,7 +107,8 @@
                     break;
                 }
             }
-            PatientVisitListView *visitsView = self.tabBarController.viewControllers[1];
+            UINavigationController *parentNav = self.tabBarController.viewControllers[1];
+            PatientVisitListView *visitsView = parentNav.viewControllers[0];
             visitsView.visits = self.visits;
         }
     }];
@@ -326,7 +348,6 @@
                 startVisitVC.patient = self.patient;
                 UINavigationController *startVisitNavContrller = [[UINavigationController alloc] initWithRootViewController:startVisitVC];
                 startVisitNavContrller.restorationIdentifier = NSStringFromClass([startVisitNavContrller class]);
-                startVisitNavContrller.restorationClass = [startVisitNavContrller  class];
                 [self presentViewController:startVisitNavContrller animated:YES completion:nil];
             }
             return;
@@ -337,8 +358,7 @@
             addVisitNote.patient = self.patient;
             addVisitNote.delegate = self;
             UINavigationController *addVisitNoteNavContrller = [[UINavigationController alloc] initWithRootViewController:addVisitNote];
-            addVisitNoteNavContrller.restorationIdentifier = NSStringFromClass([addVisitNote class]);
-            addVisitNoteNavContrller.restorationClass = [addVisitNote  class];
+            addVisitNoteNavContrller.restorationIdentifier = NSStringFromClass([addVisitNoteNavContrller class]);
             [self presentViewController:addVisitNoteNavContrller animated:YES completion:nil];
         } else if (indexPath.row == 1) {
             CaptureVitalsTableViewController *vitals = [[CaptureVitalsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
@@ -346,7 +366,6 @@
             vitals.delegate = self;
             UINavigationController *captureVitalsNavContrller = [[UINavigationController alloc] initWithRootViewController:vitals];
             captureVitalsNavContrller.restorationIdentifier = NSStringFromClass([captureVitalsNavContrller class]);
-            captureVitalsNavContrller.restorationClass = [captureVitalsNavContrller  class];
             [self presentViewController:captureVitalsNavContrller animated:YES completion:nil];
         }
         if (indexPath.row == 4) {
@@ -386,7 +405,9 @@
 #pragma mark - UIViewControllerRestortion
 
 + (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    NSLog(@"Restoring patient and hirarchy is %@", identifierComponents);
     PatientViewController *patientVC = [[PatientViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    patientVC.restorationIdentifier = [identifierComponents lastObject];
     MRSPatient *patient = [coder decodeObjectForKey:@"patient"];
     patientVC.patient = patient;
     patientVC.isShowingActions = [[coder decodeObjectForKey:@"showingActions"] boolValue];
@@ -395,7 +416,7 @@
                                 @ {NSLocalizedString(@"Age", @"Label age") : [patientVC notNil:patientVC.patient.age]},
                                 @ {NSLocalizedString(@"Gender", @"Gender of person") : [patientVC notNil:patientVC.patient.gender]},
                                 @ {NSLocalizedString(@"Address", "Address") : [patientVC formatPatientAdress:patientVC.patient]}];
-    NSLog(@"Patient decoded for name %@, age %@, gedder %@", patient.name, patient.age, patient.gender);
+    NSLog(@"tabbar: %@", patientVC.tabBarController);
     return patientVC;
 }
 @end

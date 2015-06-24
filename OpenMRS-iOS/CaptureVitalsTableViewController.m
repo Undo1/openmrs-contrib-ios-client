@@ -37,10 +37,14 @@
                     @ { @"label" : @"Respiratory rate", @"units" : @"/min", @"uuid" : @"5242AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"},
 //                    @{ @"label" : @"Blood Pressure", @"units" : @""},
                     @ { @"label" : @"Blood Oxygen Sat.", @"units" : @"%", @"uuid" : @"5092AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"}];
-    self.textFieldValues = [[NSMutableDictionary alloc] init];
+    if ([MRSHelperFunctions isNull:self.textFieldValues]) {
+        self.textFieldValues = [[NSMutableDictionary alloc] init];
+    }
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(done)];
-    self.navigationItem.rightBarButtonItem.enabled = NO;
+    if ([MRSHelperFunctions isNull:self.currentLocation]) {
+        self.navigationItem.rightBarButtonItem.enabled = NO;
+    }
 }
 
 - (void)viewDidAppear:(BOOL)animated {
@@ -171,4 +175,27 @@
     [self.navigationController popToViewController:self animated:YES];
     [self.tableView reloadData];
 }
+
+#pragma mark - UIViewControllerRestoration
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    NSLog(@"Values at save: %@", self.textFieldValues);
+    [coder encodeObject:self.patient forKey:@"patient"];
+    [coder encodeObject:self.fields forKey:@"fields"];
+    [coder encodeObject:self.textFieldValues forKey:@"values"];
+    [coder encodeObject:self.currentLocation forKey:@"location"];
+    [coder encodeObject:self.delegate forKey:@"delegate"];
+}
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    CaptureVitalsTableViewController *captureVC = [[CaptureVitalsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    captureVC.delegate = [coder decodeObjectForKey:@"delegate"];
+    captureVC.patient = [coder decodeObjectForKey:@"patient"];
+    captureVC.fields = [coder decodeObjectForKey:@"fields"];
+    captureVC.textFieldValues = [coder decodeObjectForKey:@"values"];
+    captureVC.currentLocation = [coder decodeObjectForKey:@"location"];
+    NSLog(@"Values at restore: %@", captureVC.textFieldValues);
+    return captureVC;
+}
+
 @end

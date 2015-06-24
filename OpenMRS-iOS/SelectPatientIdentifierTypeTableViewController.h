@@ -12,7 +12,7 @@
 - (void)didSelectPatientIdentifierType:(MRSPatientIdentifierType *)type;
 @end
 
-@interface SelectPatientIdentifierTypeTableViewController : UITableViewController
+@interface SelectPatientIdentifierTypeTableViewController : UITableViewController <UIViewControllerRestoration>
 @property (nonatomic, strong) NSArray *identifierTypes;
 @property (nonatomic, strong) NSObject<SelectPatientIdentifierTypeTableViewControllerDelegate> *delegate;
 @end

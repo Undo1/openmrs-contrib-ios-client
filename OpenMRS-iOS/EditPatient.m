@@ -280,4 +280,17 @@ static id ObjectOrEmpty(id object)
         [self.patient saveToCoreData];
     }
 }
+
+#pragma mark - UIViewRestoration
+
+- (void) encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.patient forKey:@"patient"];
+    [super decodeRestorableStateWithCoder:coder];
+}
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    EditPatient *editPatient = [[EditPatient alloc] init];
+    editPatient.patient = [coder decodeObjectForKey:@"patient"];
+    return editPatient;
+}
 @end

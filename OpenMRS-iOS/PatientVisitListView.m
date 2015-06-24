@@ -9,8 +9,19 @@
 #import "PatientVisitListView.h"
 #import "MRSVisit.h"
 #import "MRSVisitCell.h"
+#import "AppDelegate.h"
 
 @implementation PatientVisitListView
+
+-(id)initWithStyle:(UITableViewStyle)style {
+    self = [super initWithStyle:style];
+    if (self) {
+        self.tabBarItem.title = @"Visits";
+        self.tabBarItem.image = [UIImage imageNamed:@"active_visits_tab_bar_icon"];
+    }
+    return self;
+}
+
 - (void)setVisits:(NSArray *)visits
 {
     _visits = visits;
@@ -59,5 +70,19 @@
     [cell updateConstraintsIfNeeded];
     cell.userInteractionEnabled = NO;
     return cell;
+}
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.visits forKey:@"visits"];
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+#pragma mark - UIViewControllerRestoration
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    NSLog(@"restoring visits and hirearch: %@", identifierComponents);
+    PatientVisitListView *visitList = [[PatientVisitListView alloc] initWithStyle:UITableViewStyleGrouped];
+    visitList.restorationIdentifier = [identifierComponents lastObject];
+    visitList.visits = [coder decodeObjectForKey:@"visits"];
+    return visitList;
 }
 @end

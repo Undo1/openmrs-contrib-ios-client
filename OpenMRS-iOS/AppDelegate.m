@@ -13,6 +13,9 @@
 #import "EncryptedStore.h"
 #import "MRSPatient.h"
 #import "OpenMRSAPIManager.h"
+#import "PatientViewController.h"
+#import "PatientVisitListView.h"
+#import "PatientEncounterListView.h"
 @interface AppDelegate ()
 
 @end
@@ -82,6 +85,29 @@
     return YES;
 }
 - (UIViewController *)application:(UIApplication *)application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    NSLog(@"Restoring: %@", [identifierComponents lastObject]);
+    if ([[identifierComponents lastObject] isEqualToString:@"UITabBarController"]) {
+        self.tabbar = [[UITabBarController alloc] init];
+        self.tabbar.restorationIdentifier = [identifierComponents lastObject];
+        return self.tabbar;
+    }
+    if ([[identifierComponents lastObject] isEqualToString:@"navController1"]) {
+        self.nav1 = [[UINavigationController alloc] init];
+        self.nav1.restorationIdentifier = [identifierComponents lastObject];
+        return self.nav1;
+    }
+    if ([[identifierComponents lastObject] isEqualToString:@"navController2"]) {
+        self.nav2 = [[UINavigationController alloc] init];
+        self.nav2.restorationIdentifier = [identifierComponents lastObject];
+        return self.nav2;
+    }
+    if ([[identifierComponents lastObject] isEqualToString:@"navContrller3"]) {
+        self.nav3 = [[UINavigationController alloc] init];
+        self.nav3.restorationIdentifier = [identifierComponents lastObject];
+        NSLog(@"Restoring el zft");
+        self.tabbar.viewControllers = [NSArray arrayWithObjects:self.nav1, self.nav2, self.nav3, nil];
+        return self.nav3;
+    }
     UIViewController *nc = [[UINavigationController alloc] init];
     nc.restorationIdentifier = [identifierComponents lastObject];
     if ([identifierComponents count] == 1) {

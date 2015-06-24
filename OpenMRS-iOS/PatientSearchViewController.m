@@ -32,7 +32,7 @@
 {
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
-    
+
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
     [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
@@ -80,7 +80,6 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
     [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
 }
 
@@ -149,22 +148,31 @@
     vc.patient = patient;
     vc.tabBarItem.title = patient.display;
     vc.tabBarItem.image = [UIImage imageNamed:@"user_icon"];
+    UINavigationController *navController1 = [[UINavigationController alloc] initWithRootViewController:vc];
+    navController1.restorationIdentifier = @"navController1";
 
     PatientVisitListView *visitsList = [[PatientVisitListView alloc] initWithStyle:UITableViewStyleGrouped];
     visitsList.tabBarItem.title = @"Visits";
     visitsList.tabBarItem.image = [UIImage imageNamed:@"active_visits_tab_bar_icon"];
+    UINavigationController *navController2 = [[UINavigationController alloc] initWithRootViewController:visitsList];
+    navController2.restorationIdentifier = @"navController2";
 
 
     PatientEncounterListView *encounterList = [[PatientEncounterListView alloc] initWithStyle:UITableViewStyleGrouped];
     encounterList.tabBarItem.title = @"Encounters";
     encounterList.tabBarItem.image = [UIImage imageNamed:@"vitals_icon"];
+    UINavigationController *navController3 = [[UINavigationController alloc] initWithRootViewController:encounterList];
+    navController3.restorationIdentifier = @"navContrller3";
     
     UITabBarController *patientView = [[UITabBarController alloc] init];
-    patientView.viewControllers = @[vc, visitsList, encounterList];
+    NSArray *controllers = [NSArray arrayWithObjects:navController1, navController2, navController3, nil];
+    patientView.viewControllers = controllers;
     patientView.tabBar.translucent = NO;
+    /* We are scraficing restoring from this point ... just for now */
+    patientView.restorationIdentifier = NSStringFromClass([patientView class]);
     
     [patientView setSelectedIndex:0];
-    [self.navigationController pushViewController:patientView animated:YES];
+    [self presentViewController:patientView animated:YES completion:nil];
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText

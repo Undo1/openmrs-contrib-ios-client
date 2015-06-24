@@ -84,4 +84,20 @@
     MRSPatientIdentifierType *type = self.identifierTypes[indexPath.row];
     [self.delegate didSelectPatientIdentifierType:type];
 }
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.delegate forKey:@"delegate"];
+    [coder encodeObject:self.identifierTypes forKey:@"array"];
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+#pragma mark - UIViewRestoration
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    SelectPatientIdentifierTypeTableViewController *idVC = [[SelectPatientIdentifierTypeTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    idVC.delegate = [coder decodeObjectForKey:@"delegate"];
+    idVC.identifierTypes = [coder decodeObjectForKey:@"array"];
+    return idVC;
+}
+
 @end

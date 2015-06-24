@@ -14,7 +14,7 @@
 - (void)didAddVisitNoteToPatient:(MRSPatient *)patient;
 @end
 
-@interface AddVisitNoteTableViewController : UITableViewController <UITextViewDelegate, LocationListTableViewControllerDelegate>
+@interface AddVisitNoteTableViewController : UITableViewController <UITextViewDelegate, LocationListTableViewControllerDelegate, UIViewControllerRestoration>
 @property (nonatomic, strong) MRSPatient *patient;
 @property (nonatomic, strong) NSObject<AddVisitNoteTableViewControllerDelegate> *delegate;
 @property (nonatomic, strong) NSString *currentVisitNote;

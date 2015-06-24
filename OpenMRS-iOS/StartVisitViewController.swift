@@ -13,7 +13,7 @@ import UIKit
     func didCreateVisitForPatient(patient: MRSPatient)
 }
 
-class StartVisitViewController : UITableViewController, SelectVisitTypeViewDelegate, LocationListTableViewControllerDelegate
+class StartVisitViewController : UITableViewController, SelectVisitTypeViewDelegate, LocationListTableViewControllerDelegate, UIViewControllerRestoration
 {
     var visitType: MRSVisitType!
     var cachedVisitTypes: [MRSVisitType]!
@@ -202,5 +202,28 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
     
     func updateDoneButtonState() {
         self.navigationItem.rightBarButtonItem?.enabled = (location != nil && visitType != nil)
+    }
+    
+    override func encodeRestorableStateWithCoder(coder: NSCoder) {
+        coder.encodeObject(self.patient, forKey: "patient")
+        coder.encodeObject(self.delegate, forKey: "delegate")
+        let nils:[Bool] = [self.visitType == nil, self.location == nil]
+        coder.encodeObject(nils, forKey:"nils")
+        coder.encodeObject(self.visitType, forKey: "visitType")
+        coder.encodeObject(self.location, forKey: "location")
+    }
+    
+    static func viewControllerWithRestorationIdentifierPath(identifierComponents: [AnyObject], coder: NSCoder) -> UIViewController? {
+        let startVisit: StartVisitViewController = StartVisitViewController(style: UITableViewStyle.Grouped)
+        startVisit.patient = coder.decodeObjectForKey("patient") as! MRSPatient
+        startVisit.delegate = coder.decodeObjectForKey("delegate") as! StartVisitViewControllerDelegate
+        let nils:[Bool] = coder.decodeObjectForKey("nils") as! Array
+        if (nils[0]==false) {
+            startVisit.visitType = coder.decodeObjectForKey("visitType") as! MRSVisitType;
+        }
+        if (nils[1]==false) {
+            startVisit.location = coder.decodeObjectForKey("location") as! MRSLocation
+        }
+        return startVisit
     }
 }

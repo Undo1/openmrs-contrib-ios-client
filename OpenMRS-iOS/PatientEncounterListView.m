@@ -10,8 +10,19 @@
 #import "MRSEncounter.h"
 #import "EncounterViewController.h"
 #import "MRSHelperFunctions.h"
+#import "AppDelegate.h"
 
 @implementation PatientEncounterListView
+
+-(id)initWithStyle:(UITableViewStyle)style {
+    self = [super initWithStyle:style];
+    if (self) {
+        self.tabBarItem.title = @"Encounters";
+        self.tabBarItem.image = [UIImage imageNamed:@"vitals_icon"];
+    }
+    return self;
+}
+
 - (void)setEncounters:(NSArray *)encounters
 {
     _encounters = encounters;
@@ -66,5 +77,20 @@
     EncounterViewController *vc = [[EncounterViewController alloc] initWithStyle:UITableViewStyleGrouped];
     vc.encounter = encounter;
     [self.navigationController pushViewController:vc animated:YES];
+}
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.encounters forKey:@"encounters"];
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+#pragma mark - UIViewRestoartion
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    NSLog(@"Restoring encounter with hirearch: %@", identifierComponents);
+    PatientEncounterListView *encounterVC = [[PatientEncounterListView alloc] initWithStyle:UITableViewStyleGrouped];
+    encounterVC.restorationIdentifier = [identifierComponents lastObject];
+    encounterVC.encounters = [coder decodeObjectForKey:@"encounters"];
+    return encounterVC;
 }
 @end

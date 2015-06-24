@@ -11,7 +11,7 @@
 @protocol LocationListTableViewControllerDelegate <NSObject>
 - (void)didChooseLocation:(MRSLocation *)location;
 @end
-@interface LocationListTableViewController : UITableViewController
+@interface LocationListTableViewController : UITableViewController <UIViewControllerRestoration>
 @property (nonatomic, strong) NSObject<LocationListTableViewControllerDelegate> *delegate;
 @property (nonatomic, strong) NSArray *locations;
 @end
