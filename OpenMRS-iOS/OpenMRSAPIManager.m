@@ -254,10 +254,8 @@
     NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
     NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
-    NSLog(@"%@", encounter.UUID);
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/encounter/%@?v=full", host, encounter.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
-        NSLog(@"encounter detail array: %@", results);
         NSMutableArray *array = [[NSMutableArray alloc] init];
         for (NSDictionary *obDict in results[@"obs"]) {
             MRSEncounterOb *ob = [[MRSEncounterOb alloc] init];
@@ -688,6 +686,7 @@
             detailedPatient.postalCode = results[@"person"][@"preferredAddress"][@"postalCode"];
             detailedPatient.stateProvince = results[@"person"][@"preferredAddress"][@"stateProvince"];
             detailedPatient.countyDistrict = results[@"person"][@"preferredAddress"][@"countyDistrict"];
+            detailedPatient.preferredAddressUUID = results[@"person"][@"preferredAddress"][@"uuid"];
         }
         detailedPatient.birthdate = results[@"person"][@"birthdate"];
         detailedPatient.birthdateEstimated = [results[@"person"][@"birthdateEstimated"] boolValue]?@"true":@"false";
@@ -701,14 +700,12 @@
         detailedPatient.familyName2 = results[@"person"][@"preferredName"][@"familyName2"];
         detailedPatient.givenName = results[@"person"][@"preferredName"][@"givenName"];
         detailedPatient.middleName = results[@"person"][@"preferredName"][@"middleName"];
+        detailedPatient.preferredNameUUID = results[@"person"][@"preferredName"][@"uuid"];
         if (results[@"person"][@"age"] != [NSNull null]) {
             detailedPatient.age = [results[@"person"][@"age"] stringValue];
         }
         detailedPatient.hasDetailedInfo = YES;
         completion(nil, detailedPatient);
-        dispatch_async(dispatch_get_main_queue(), ^ {
-            [SVProgressHUD showSuccessWithStatus:@""];
-        });
     }
     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Failure, %@", error);
@@ -753,7 +750,7 @@
     }
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/person/%@", host, patient.UUID] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
-        NSLog(@"Person response: %@", results);
+        //NSLog(@"Person response: %@", results);
         [self EditNameForPatient:patient completion:completion];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Operation failed... with Error: %@", error);
@@ -779,10 +776,10 @@
     if (![MRSHelperFunctions isNull:patient.familyName2] && ![patient.familyName2 isEqualToString:@""])
         [parameters setValue:patient.familyName2 forKey:@"familyName2"];
     
-    NSLog(@"Name parameters: %@", parameters);
+    //NSLog(@"Name parameters: %@", parameters);
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/person/%@/name/%@", host, patient.UUID, patient.preferredNameUUID] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
-        NSLog(@"%@", results);
+        //NSLog(@"%@", results);
         [self EditAddressForPatient:patient completion:completion];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Operation failed... with Error: %@", error);
@@ -813,13 +810,12 @@
             [parameters setValue:[patient valueForKey:propertyKey] forKey:propertyKey];
         }
     }
-    NSLog(@"Address parameters:\n%@", parameters);
+    //NSLog(@"Address parameters:\n%@", parameters);
     if (parameters.count != 0) {
         NSString *preferredAddressUUID = [MRSHelperFunctions isNull:patient.preferredAddressUUID] ? @"" : [NSString stringWithFormat:@"/%@", patient.preferredAddressUUID];
-        NSLog(@"URL: %@", preferredAddressUUID);
         [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/person/%@/address%@", host, patient.UUID, preferredAddressUUID] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
             NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
-            NSLog(@"%@", results);
+            //NSLog(@"%@", results);
             patient.preferredAddressUUID = results[@"uuid"];
             completion(nil);
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {

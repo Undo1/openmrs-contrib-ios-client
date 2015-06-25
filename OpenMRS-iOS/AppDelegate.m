@@ -46,7 +46,7 @@
                                              blue:146/255.0
                                             alpha:1];
 
-    //[self updateExistingOutOfDatePatients];
+    [self updateExistingOutOfDatePatients];
     return YES;
 }
 
@@ -85,7 +85,6 @@
     return YES;
 }
 - (UIViewController *)application:(UIApplication *)application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
-    NSLog(@"Restoring: %@", [identifierComponents lastObject]);
     if ([[identifierComponents lastObject] isEqualToString:@"UITabBarController"]) {
         self.tabbar = [[UITabBarController alloc] init];
         self.tabbar.restorationIdentifier = [identifierComponents lastObject];
@@ -104,7 +103,6 @@
     if ([[identifierComponents lastObject] isEqualToString:@"navContrller3"]) {
         self.nav3 = [[UINavigationController alloc] init];
         self.nav3.restorationIdentifier = [identifierComponents lastObject];
-        NSLog(@"Restoring el zft");
         self.tabbar.viewControllers = [NSArray arrayWithObjects:self.nav1, self.nav2, self.nav3, nil];
         return self.nav3;
     }
@@ -195,25 +193,34 @@
 }
 
 - (void)updateExistingOutOfDatePatients {
-    NSLog(@"Updating offline patients...");
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:self.managedObjectContext]];
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"TRUEPREDICATE", [NSNumber numberWithBool:YES]];
+
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"upToDate == %@", [NSNumber numberWithBool:NO]];
     [request setPredicate:predicate];
     NSError *error = nil;
     NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
-    NSLog(@"unUpdated: %lu", (unsigned long)results.count);
-    for (NSManagedObject *object in results) {
-        MRSPatient *patient = [[MRSPatient alloc] init];
-        patient.UUID = [object valueForKey:@"uuid"];
-        [patient updateFromCoreData];
-        NSLog(@"\tUpdating patient: %@", patient.givenName);
-        [OpenMRSAPIManager EditPatient:patient completion:^(NSError *error) {
-            if (!error) {
-                patient.upToDate = YES;
-                [patient saveToCoreData];
-            }
-        }];
-    }
+    if (error)
+        return;
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        for (NSManagedObject *object in results) {
+
+            __block MRSPatient *patient = [[MRSPatient alloc] init];
+            patient.UUID = [object valueForKey:@"uuid"];
+            [patient updateFromCoreData];
+
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            [OpenMRSAPIManager EditPatient:patient completion:^(NSError *error) {
+                if (!error) {
+                    patient.upToDate = YES;
+                    [patient saveToCoreData];
+                }
+                dispatch_semaphore_signal(semaphore);
+            }];
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        }
+    });
+    
 }
 @end
