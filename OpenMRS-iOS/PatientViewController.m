@@ -38,7 +38,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"View did load self %@", self);
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
@@ -403,7 +402,6 @@
 #pragma mark - UIViewControllerRestortion
 
 + (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
-    NSLog(@"Restoring patient and hirarchy is %@", identifierComponents);
     PatientViewController *patientVC = [[PatientViewController alloc] initWithStyle:UITableViewStyleGrouped];
     patientVC.restorationIdentifier = [identifierComponents lastObject];
     MRSPatient *patient = [coder decodeObjectForKey:@"patient"];
@@ -414,7 +412,6 @@
                                 @ {NSLocalizedString(@"Age", @"Label age") : [patientVC notNil:patientVC.patient.age]},
                                 @ {NSLocalizedString(@"Gender", @"Gender of person") : [patientVC notNil:patientVC.patient.gender]},
                                 @ {NSLocalizedString(@"Address", "Address") : [patientVC formatPatientAdress:patientVC.patient]}];
-    NSLog(@"tabbar: %@", patientVC.tabBarController);
     return patientVC;
 }
 @end

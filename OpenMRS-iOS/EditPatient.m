@@ -44,7 +44,6 @@
     [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
     [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
 
-    NSLog(@"uuid: %@" , self.patient.UUID);
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save", @"Save button label")
                                                                               style:UIBarButtonItemStylePlain
                                                                              target:self

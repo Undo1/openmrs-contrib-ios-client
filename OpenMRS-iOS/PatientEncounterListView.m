@@ -87,7 +87,6 @@
 #pragma mark - UIViewRestoartion
 
 + (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
-    NSLog(@"Restoring encounter with hirearch: %@", identifierComponents);
     PatientEncounterListView *encounterVC = [[PatientEncounterListView alloc] initWithStyle:UITableViewStyleGrouped];
     encounterVC.restorationIdentifier = [identifierComponents lastObject];
     encounterVC.encounters = [coder decodeObjectForKey:@"encounters"];

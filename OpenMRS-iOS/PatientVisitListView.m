@@ -79,7 +79,6 @@
 #pragma mark - UIViewControllerRestoration
 
 + (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
-    NSLog(@"restoring visits and hirearch: %@", identifierComponents);
     PatientVisitListView *visitList = [[PatientVisitListView alloc] initWithStyle:UITableViewStyleGrouped];
     visitList.restorationIdentifier = [identifierComponents lastObject];
     visitList.visits = [coder decodeObjectForKey:@"visits"];
