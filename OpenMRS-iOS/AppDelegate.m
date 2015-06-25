@@ -10,12 +10,14 @@
 #import "MainMenuCollectionViewController.h"
 #import "KeychainItemWrapper.h"
 #import <CoreData/CoreData.h>
+#import <UIKit/UIKit.h>
 #import "EncryptedStore.h"
 #import "MRSPatient.h"
 #import "OpenMRSAPIManager.h"
 #import "PatientViewController.h"
 #import "PatientVisitListView.h"
 #import "PatientEncounterListView.h"
+#import "SyncingAtLaunchViewController.h"
 @interface AppDelegate ()
 
 @end
@@ -33,6 +35,11 @@
         UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:menu];
         navController.restorationIdentifier = NSStringFromClass([navController class]);
         self.window.rootViewController = navController;
+        [self.window makeKeyAndVisible];
+        if (![[NSUserDefaults standardUserDefaults] boolForKey:@"patientsAreSynced"]) {
+            SyncingAtLaunchViewController *syncing = [[SyncingAtLaunchViewController alloc] init];
+            [self.window.rootViewController presentViewController:syncing animated:NO completion:nil];
+        }
     }
     NSString *password = [[[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil] objectForKey:(__bridge id)(kSecValueData)];
     if ([password isEqual:@" "] || [password isEqual:@""] || password == nil) {
@@ -40,11 +47,6 @@
         SignInViewController *signin = [[SignInViewController alloc] init];
         [self.window.rootViewController presentViewController:signin animated:NO completion:nil];
     }
-
-    self.window.tintColor = [UIColor colorWithRed:39/255.0
-                                            green:139/255.0
-                                             blue:146/255.0
-                                            alpha:1];
 
     [self updateExistingOutOfDatePatients];
     return YES;
@@ -58,6 +60,11 @@
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    
+    self.window.tintColor = [UIColor colorWithRed:39/255.0
+                                            green:139/255.0
+                                             blue:146/255.0
+                                            alpha:1];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     [self.window setTintColor:[UIColor colorWithRed:39/255.0 green:139/255.0 blue:146/255.0 alpha:1]];
     [[UIView appearanceWhenContainedIn:[UINavigationBar class], nil] setTintColor:[UIColor whiteColor]];
@@ -192,6 +199,43 @@
     [[self.managedObjectContext persistentStoreCoordinator] addPersistentStoreWithType:EncryptedStoreType configuration:nil URL:storeURL options:options error:&error];//recreates the persistent store
 }
 
+- (void)updateExistingPatientsInCoreData:(void (^)(NSError *error))completion {
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:self.managedObjectContext]];
+    
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"upToDate == nil"];
+    [request setPredicate:predicate];
+    NSError *error = nil;
+    NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
+    if (error)
+        return completion(error);
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+         __block NSError *master_error = nil;
+        for (NSManagedObject *object in results) {
+            
+            __block MRSPatient *patient = [[MRSPatient alloc] init];
+            patient.UUID = [object valueForKey:@"uuid"];
+            NSLog(@"Updating patient: %@", patient.UUID);
+            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+            [OpenMRSAPIManager getDetailedDataOnPatient:patient completion:^(NSError *error, MRSPatient *detailedPatient) {
+                if (!error) {
+                    patient.upToDate = YES;
+                    [patient saveToCoreData];
+                } else {
+                    master_error = error;
+                }
+                dispatch_semaphore_signal(semaphore);
+            }];
+            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+            if (master_error) {
+                break;
+            }
+        }
+        completion(master_error);
+    });
+}
+
 - (void)updateExistingOutOfDatePatients {
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:self.managedObjectContext]];
@@ -209,7 +253,6 @@
             __block MRSPatient *patient = [[MRSPatient alloc] init];
             patient.UUID = [object valueForKey:@"uuid"];
             [patient updateFromCoreData];
-
             dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
             [OpenMRSAPIManager EditPatient:patient completion:^(NSError *error) {
                 if (!error) {
@@ -219,6 +262,7 @@
                 dispatch_semaphore_signal(semaphore);
             }];
             dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+
         }
     });
     

@@ -18,6 +18,13 @@
 #import "MRSPatient.h"
 #import "AppDelegate.h"
 
+@interface PatientViewController ()
+
+@property (nonatomic) BOOL encoutersEdited;
+@property (nonatomic) BOOL visitsEdited;
+
+@end
+
 @implementation PatientViewController
 
 -(id)initWithStyle:(UITableViewStyle)style {
@@ -45,6 +52,9 @@
     
     self.navigationItem.title = self.patient.name;
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close" style:UIBarButtonItemStylePlain target:self action:@selector(close)];
+    
+    self.visitsEdited = YES;
+    self.encoutersEdited = YES;
     [self updateWithDetailedInfo];
 }
 
@@ -62,53 +72,78 @@
 }
 - (void)updateWithDetailedInfo
 {
-    [OpenMRSAPIManager getDetailedDataOnPatient:self.patient completion:^(NSError *error, MRSPatient *detailedPatient) {
-        if (error == nil) {
-            self.patient = detailedPatient;
-            self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
-                                 @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
-                                 @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
-                                 @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAdress:self.patient]}];
-            [self.patient isInCoreData];
-            dispatch_async(dispatch_get_main_queue(), ^ {
-                [self.tableView reloadData];
-                self.tabBarController.title = self.patient.name;
-                self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
-            });
-        }
-    }];
-    [OpenMRSAPIManager getEncountersForPatient:self.patient completion:^(NSError *error, NSArray *encounters) {
-        if (error == nil) {
-            self.encounters = encounters;
-            dispatch_async(dispatch_get_main_queue(), ^ {
-                [self.tableView reloadData];
-            });
-            UINavigationController *parentNav = self.tabBarController.viewControllers[2];
-            PatientEncounterListView *encounterList = parentNav.viewControllers[0];
-            encounterList.encounters = self.encounters;
-        }
-    }];
-    [OpenMRSAPIManager getVisitsForPatient:self.patient completion:^(NSError *error, NSArray *visits) {
-        if (error == nil) {
-            self.visits = visits;
-            dispatch_async(dispatch_get_main_queue(), ^ {
-                [self.tableView reloadData];
-            });
-            self.hasActiveVisit = NO;
-            for (MRSVisit *visit in visits) {
-                if (visit.active) {
-                    self.hasActiveVisit = YES;
+    if (!self.patient.hasDetailedInfo) {
+        [OpenMRSAPIManager getDetailedDataOnPatient:self.patient completion:^(NSError *error, MRSPatient *detailedPatient) {
+            if (error == nil) {
+                self.patient = detailedPatient;
+                self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
+                                       @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
+                                       @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
+                                       @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAdress:self.patient]}];
+                if ([self.patient isInCoreData]) {
+                    MRSPatient *savedPatient = [[MRSPatient alloc] init];
+                    savedPatient.UUID = self.patient.UUID;
+                    [savedPatient updateFromCoreData];
+                    if (savedPatient.upToDate) {
+                        savedPatient = self.patient;
+                        [savedPatient saveToCoreData];
+                    }
+                }
+                dispatch_async(dispatch_get_main_queue(), ^ {
+                    [self.tableView reloadData];
+                    self.tabBarController.title = self.patient.name;
+                    self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
+                });
+            } else {
+                if ([self.patient isInCoreData]) {
+                    [self.patient updateFromCoreData];
                     dispatch_async(dispatch_get_main_queue(), ^ {
                         [self.tableView reloadData];
+                        self.tabBarController.title = self.patient.name;
+                        self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
                     });
-                    break;
                 }
             }
-            UINavigationController *parentNav = self.tabBarController.viewControllers[1];
-            PatientVisitListView *visitsView = parentNav.viewControllers[0];
-            visitsView.visits = self.visits;
-        }
-    }];
+        }];
+    }
+    if (self.encoutersEdited) {
+        [OpenMRSAPIManager getEncountersForPatient:self.patient completion:^(NSError *error, NSArray *encounters) {
+            if (error == nil) {
+                self.encounters = encounters;
+                self.encoutersEdited = NO;
+                dispatch_async(dispatch_get_main_queue(), ^ {
+                    [self.tableView reloadData];
+                });
+                UINavigationController *parentNav = self.tabBarController.viewControllers[2];
+                PatientEncounterListView *encounterList = parentNav.viewControllers[0];
+                encounterList.encounters = self.encounters;
+            }
+        }];
+    }
+    if (self.visitsEdited) {
+        [OpenMRSAPIManager getVisitsForPatient:self.patient completion:^(NSError *error, NSArray *visits) {
+            if (error == nil) {
+                self.visits = visits;
+                self.visitsEdited = NO;
+                dispatch_async(dispatch_get_main_queue(), ^ {
+                    [self.tableView reloadData];
+                });
+                self.hasActiveVisit = NO;
+                for (MRSVisit *visit in visits) {
+                    if (visit.active) {
+                        self.hasActiveVisit = YES;
+                        dispatch_async(dispatch_get_main_queue(), ^ {
+                            [self.tableView reloadData];
+                        });
+                        break;
+                    }
+                }
+                UINavigationController *parentNav = self.tabBarController.viewControllers[1];
+                PatientVisitListView *visitsView = parentNav.viewControllers[0];
+                visitsView.visits = self.visits;
+            }
+        }];
+    }
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -375,12 +410,14 @@
 - (void)didAddVisitNoteToPatient:(MRSPatient *)patient
 {
     if ([patient.UUID isEqualToString:self.patient.UUID]) {
+        self.encoutersEdited = YES;
         [self updateWithDetailedInfo];
     }
 }
 - (void)didCaptureVitalsForPatient:(MRSPatient *)patient
 {
     if ([patient.UUID isEqualToString:self.patient.UUID]) {
+        self.encoutersEdited = YES;
         [self updateWithDetailedInfo];
     }
     [self dismissViewControllerAnimated:YES completion:nil];
@@ -388,6 +425,7 @@
 - (void)didCreateVisitForPatient:(MRSPatient *)patient
 {
     if ([patient.UUID isEqualToString:self.patient.UUID]) {
+        self.visitsEdited = YES;
         [self updateWithDetailedInfo];
     }
 }

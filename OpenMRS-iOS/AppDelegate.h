@@ -27,6 +27,7 @@
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
 - (void)clearStore;
+- (void)updateExistingPatientsInCoreData:(void (^)(NSError *error))completion;
 - (void)updateExistingOutOfDatePatients;
 
 @end

@@ -659,7 +659,6 @@
 }
 + (void)getDetailedDataOnPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, MRSPatient *detailedPatient))completion
 {
-    [SVProgressHUD show];
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
     NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
     NSURL *hostUrl = [NSURL URLWithString:host];
@@ -708,20 +707,10 @@
         completion(nil, detailedPatient);
     }
     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Failure, %@", error);
         if (error.code == -1011 || error.code == -1002) {
             [OpenMRSAPIManager presentLoginController];
         }
-        dispatch_async(dispatch_get_main_queue(), ^ {
-            [SVProgressHUD popActivity];
-        });
-        if ([patient isInCoreData]) {
-            [patient updateFromCoreData];
-            patient.hasDetailedInfo = YES;
-            completion(nil, patient);
-        } else {
-            completion(error, nil);
-        }
+        completion(error, nil);
     }];
 }
 
