@@ -193,7 +193,7 @@
 - (void)updateFonts {
     UIFont *title = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
     UIFont *value = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
-    UIFont *footerfont = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
+    UIFont *footerfont = [UIFont preferredFontForTextStyle:UIFontTextStyleFootnote];
     
     self.locationLabel.font = title;
     self.visitTypeLabel.font = title;
