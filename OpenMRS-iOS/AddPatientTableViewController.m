@@ -248,7 +248,7 @@
         [self.tableView reloadData];
     }
     if (indexPath.section == 3 && indexPath.row == 0) {
-        SelectPatientIdentifierTypeTableViewController *selectIdType = [[SelectPatientIdentifierTypeTableViewController alloc] initWithStyle:UITableViewStylePlain];
+        SelectPatientIdentifierTypeTableViewController *selectIdType = [[SelectPatientIdentifierTypeTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
         selectIdType.delegate = self;
         [self.navigationController pushViewController:selectIdType animated:YES];
     } else {
