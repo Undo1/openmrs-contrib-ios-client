@@ -54,7 +54,7 @@
                              @"Gender": ObjectOrEmpty(self.patient.gender),
                              @"BirthDate": ObjectOrEmpty(self.patient.birthdate),
                              @"BirthDate Estimated": ObjectOrEmpty(self.patient.birthdateEstimated),
-                             @"Dead": ObjectOrEmpty(self.patient.dead?NSLocalizedString(@"false", @"False value"):NSLocalizedString(@"true", @"True value")),
+                             @"Dead": ObjectOrEmpty(self.patient.dead?NSLocalizedString(@"true", @"True value"):NSLocalizedString(@"false", @"False value")),
                              @"Cause Of Death": ObjectOrEmpty(self.patient.causeOfDeath)
                              }],
                          [[NSMutableDictionary alloc] initWithDictionary:@{
@@ -290,9 +290,9 @@ static id ObjectOrEmpty(id object)
 #pragma mark - alertview delegate
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 2) {
+    if (buttonIndex == 1) {
         [self updatePatient];
-    } else if (buttonIndex == 1){
+    } else if (buttonIndex == 2){
         self.patient.upToDate = NO;
         [self.patient saveToCoreData];
     }
