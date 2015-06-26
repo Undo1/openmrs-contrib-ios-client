@@ -21,12 +21,6 @@
 
 @implementation SyncingAtLaunchViewController
 
-
-- (void)loadview {
-    self.view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"openmrs-logo"]];
-    self.view.backgroundColor = [UIColor whiteColor];
-}
-
 - (void)viewDidLoad {
     NSLog(@"view did load");
     [super viewDidLoad];
@@ -35,12 +29,13 @@
     self.restorationClass = [self class];
     self.button.hidden = self.isButtonHidden;
     
-    self.view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"openmrs-logo"]];
+    self.view = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"launchImage"]];
     self.view.backgroundColor = [UIColor whiteColor];
 
     self.label = [[UILabel alloc] init];
     self.label.text = NSLocalizedString(@"Syncing your offline saved patients...", @"Syncing with server message");
     [self.label sizeToFit];
+    self.label.font = [UIFont preferredFontForTextStyle:UIFontTextStyleCaption1];
     self.label.translatesAutoresizingMaskIntoConstraints = NO;
     [self.view addSubview:self.label];
 
