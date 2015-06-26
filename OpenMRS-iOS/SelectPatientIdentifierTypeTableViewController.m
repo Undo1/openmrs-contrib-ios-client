@@ -10,6 +10,8 @@
 #import "MRSPatientIdentifierType.h"
 #import "OpenMRSAPIManager.h"
 #import "MRSHelperFunctions.h"
+#import "IdentifierTypeCell.h"
+
 @interface SelectPatientIdentifierTypeTableViewController ()
 
 @end
@@ -24,23 +26,23 @@
 
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
-    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
+    [IdentifierTypeCell updateTableViewForDynamicTypeSize:self.tableView];
 
     self.title = NSLocalizedString(@"Identifier Type", @"Label -identifier- -type-");
     [self reloadData];
     
     //TODO: self-sizing cells
-    self.tableView.rowHeight = 77;
+    [self.tableView registerClass:[IdentifierTypeCell class] forCellReuseIdentifier:@"cell"];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
-    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
+    [IdentifierTypeCell updateTableViewForDynamicTypeSize:self.tableView];
 }
 
 - (void)updateFontSize {
-    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
+    [IdentifierTypeCell updateTableViewForDynamicTypeSize:self.tableView];
 }
 
 - (void)reloadData
@@ -64,19 +66,21 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    NSLog(@"Counter = %d", self.identifierTypes.count);
     return self.identifierTypes.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    IdentifierTypeCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
+        cell = [[IdentifierTypeCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:@"cell"];
     }
     MRSPatientIdentifierType *type = self.identifierTypes[indexPath.row];
-    cell.textLabel.text = type.display;
-    cell.detailTextLabel.text = type.typeDescription;
-    cell.detailTextLabel.numberOfLines = 3;
+    cell.IdentifierType = type;
+    [cell setNeedsUpdateConstraints];
+    [cell updateConstraintsIfNeeded];
+    [cell setIndex:[NSNumber numberWithInteger:indexPath.row + 1]];
     return cell;
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -94,7 +98,7 @@
 #pragma mark - UIViewRestoration
 
 + (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
-    SelectPatientIdentifierTypeTableViewController *idVC = [[SelectPatientIdentifierTypeTableViewController alloc] initWithStyle:UITableViewStylePlain];
+    SelectPatientIdentifierTypeTableViewController *idVC = [[SelectPatientIdentifierTypeTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
     idVC.delegate = [coder decodeObjectForKey:@"delegate"];
     idVC.identifierTypes = [coder decodeObjectForKey:@"array"];
     return idVC;
