@@ -39,8 +39,7 @@
 - (void)setPatient:(MRSPatient *)patient
 {
     _patient = patient;
-    self.information = @[@ {@"Name":patient.name}];
-    [self.tableView reloadData];
+    //self.information = @[@ {@"Name":patient.name}];
 }
 - (void)viewDidLoad
 {
@@ -53,9 +52,14 @@
     self.navigationItem.title = self.patient.name;
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self action:@selector(close)];
     
+    if (self.patient.hasDetailedInfo) {
+        self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
+                               @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
+                               @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
+                               @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAdress:self.patient]}];
+    }
     self.visitsEdited = YES;
     self.encoutersEdited = YES;
-    [self updateWithDetailedInfo];
 }
 
 - (void)close {
@@ -72,40 +76,46 @@
 }
 - (void)updateWithDetailedInfo
 {
-    if (!self.patient.hasDetailedInfo) {
-        [OpenMRSAPIManager getDetailedDataOnPatient:self.patient completion:^(NSError *error, MRSPatient *detailedPatient) {
-            if (error == nil) {
-                self.patient = detailedPatient;
-                self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
-                                       @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
-                                       @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
-                                       @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAdress:self.patient]}];
-                if ([self.patient isInCoreData]) {
-                    MRSPatient *savedPatient = [[MRSPatient alloc] init];
-                    savedPatient.UUID = self.patient.UUID;
-                    [savedPatient updateFromCoreData];
-                    if (savedPatient.upToDate) {
-                        savedPatient = self.patient;
-                        [savedPatient saveToCoreData];
-                    }
+    [OpenMRSAPIManager getDetailedDataOnPatient:self.patient completion:^(NSError *error, MRSPatient *detailedPatient) {
+        if (error == nil) {
+            self.patient = detailedPatient;
+            self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
+                                   @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
+                                   @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
+                                   @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAdress:self.patient]}];
+            if ([self.patient isInCoreData]) {
+                MRSPatient *savedPatient = [[MRSPatient alloc] init];
+                savedPatient.UUID = self.patient.UUID;
+                [savedPatient updateFromCoreData];
+                if (savedPatient.upToDate) {
+                    savedPatient = self.patient;
+                    savedPatient.hasDetailedInfo = YES;
+                    [savedPatient saveToCoreData];
                 }
+            }
+            dispatch_async(dispatch_get_main_queue(), ^ {
+                [self.tableView reloadData];
+                self.tabBarController.title = self.patient.name;
+                self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
+            });
+        } else {
+            if ([self.patient isInCoreData]) {
+                [self.patient updateFromCoreData];
                 dispatch_async(dispatch_get_main_queue(), ^ {
                     [self.tableView reloadData];
                     self.tabBarController.title = self.patient.name;
                     self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
+                    if (self.patient.hasDetailedInfo) {
+                        self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
+                                               @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
+                                               @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
+                                               @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAdress:self.patient]}];
+                    }
                 });
-            } else {
-                if ([self.patient isInCoreData]) {
-                    [self.patient updateFromCoreData];
-                    dispatch_async(dispatch_get_main_queue(), ^ {
-                        [self.tableView reloadData];
-                        self.tabBarController.title = self.patient.name;
-                        self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
-                    });
-                }
             }
-        }];
-    }
+        }
+    }];
+    
     if (self.encoutersEdited) {
         [OpenMRSAPIManager getEncountersForPatient:self.patient completion:^(NSError *error, NSArray *encounters) {
             if (error == nil) {
