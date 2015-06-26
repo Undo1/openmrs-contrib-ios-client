@@ -730,13 +730,14 @@
     for (NSString *propertyLabel in personKeys) {
         NSString *property = [MRSHelperFunctions formLabelToJSONLabel:propertyLabel];
         if ([property isEqualToString:@"dead"]){
-            [parameters setValue:patient.dead?@YES:@NO forKey:property];
+            [parameters setValue:patient.dead?@"true":@"false" forKey:property];
             continue;
         }
         if (![MRSHelperFunctions isNull:[patient valueForKey:property]] && ![[patient valueForKey:property] isEqualToString:@""]){
             [parameters setValue:[patient valueForKey:property] forKey:property];
         }
     }
+    NSLog(@"person parameters %@", parameters);
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/person/%@", host, patient.UUID] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
         //NSLog(@"Person response: %@", results);
