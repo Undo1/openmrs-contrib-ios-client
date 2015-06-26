@@ -168,7 +168,6 @@
     NSArray *controllers = [NSArray arrayWithObjects:navController1, navController2, navController3, nil];
     patientView.viewControllers = controllers;
     patientView.tabBar.translucent = NO;
-    /* We are scraficing restoring from this point ... just for now */
     patientView.restorationIdentifier = NSStringFromClass([patientView class]);
     
     [patientView setSelectedIndex:0];
