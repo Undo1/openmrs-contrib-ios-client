@@ -78,6 +78,7 @@
     NSManagedObjectContext *managedContext = appDelegate.managedObjectContext;
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Patient" inManagedObjectContext:managedContext];
     NSManagedObject *patient = [[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:managedContext];
+    NSLog(@"patient loading...");
     [patient setValue:[self valueNotNullAndIsString:self.UUID] forKey:@"uuid"];
     [patient setValue:[self valueNotNullAndIsString:self.address1] forKey:@"address1"];
     [patient setValue:[self valueNotNullAndIsString:self.address2] forKey:@"address2"];
@@ -180,7 +181,7 @@
         self.cityVillage = [result valueForKey:@"cityVillage"];
         self.country = [result valueForKey:@"country"];
         self.countyDistrict = [result valueForKey:@"countyDistrict"];
-        self.dead = [result valueForKey:@"dead"]?YES:NO;
+        self.dead = [[result valueForKey:@"dead"] boolValue]?YES:NO;
         self.deathDate = [result valueForKey:@"deathDate"];
         self.display = [result valueForKey:@"display"];
         self.displayName = [result valueForKey:@"displayName"];
@@ -189,7 +190,7 @@
         self.familyName2 = [result valueForKey:@"familyName2"];
         self.gender = [result valueForKey:@"gender"];
         self.givenName = [result valueForKey:@"givenName"];
-        self.hasDetailedInfo = [result valueForKey:@"hasDetailedInfo"]?YES:NO;
+        self.hasDetailedInfo = [[result valueForKey:@"hasDetailedInfo"] boolValue]?YES:NO;
         self.latitude = [result valueForKey:@"latitude"];
         self.locationDisplay = [result valueForKey:@"locationDisplay"];
         self.longitude = [result valueForKey:@"longitude"];
@@ -199,7 +200,7 @@
         self.preferredAddressUUID = [result valueForKey:@"preferredAddressUUID"];
         self.preferredNameUUID = [result valueForKey:@"preferredNameUUID"];
         self.stateProvince = [result valueForKey:@"stateProvince"];
-        self.upToDate = [result valueForKey:@"upToDate"]?YES:NO;
+        self.upToDate = [[result valueForKey:@"upToDate"] boolValue]?YES:NO;
         self.fromCoreData = YES;
     }
 }
