@@ -101,7 +101,7 @@
         self.isButtonHidden = YES;
         self.button.hidden = self.isButtonHidden;
         [self.spinner startAnimating];
-        self.label.text = NSLocalizedString(@"Syncing your offline saved patients.", @"Syncing with server message");
+        self.label.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Syncing your offline saved patients", @"Syncing with server message")];
     }
     AppDelegate *app = [UIApplication sharedApplication].delegate;
     
@@ -114,7 +114,8 @@
                 self.isButtonHidden = NO;
                 self.button.hidden = self.isButtonHidden;
                 [self.button becomeFirstResponder];
-                self.label.text = NSLocalizedString(@"Make sure you are connected to the internet.", @"Error syncing with server message");
+                
+                self.label.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Make sure you are connected to the internet", @"Error syncing with server message")];
                 [self.spinner stopAnimating];
             } else {
                 NSLog(@"Done with user defualts: %d", [[NSUserDefaults standardUserDefaults] boolForKey:@"patientsAreSynced"]);

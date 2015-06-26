@@ -37,7 +37,7 @@
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/user", host] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         completion(YES);
         dispatch_async(dispatch_get_main_queue(), ^ {
-            [SVProgressHUD showSuccessWithStatus:@"Logged In"];
+            [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Logged In", @"Message -logged- -in-")];
         });
     }
     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -46,10 +46,10 @@
         dispatch_async(dispatch_get_main_queue(), ^ {
             if (error.code == -1003) //Server with specified hostname not found
             {
-                [SVProgressHUD showErrorWithStatus:@"Couldn't find server"];
+                [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Couldn't find server", @"Message -could- -not- -find- -server-")];
             } else
             {
-                [SVProgressHUD showErrorWithStatus:@"Login failed"];
+                [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Login failed", @"Message -login- -failed-")];
             }
         });
     }];

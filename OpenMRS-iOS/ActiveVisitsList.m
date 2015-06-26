@@ -38,7 +38,7 @@
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
     self.title = NSLocalizedString(@"Active visits", @"Label -active- -visits");
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close"
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close")
                                                                              style:UIBarButtonItemStylePlain
                                                                             target:self
                                                                             action:@selector(close)];

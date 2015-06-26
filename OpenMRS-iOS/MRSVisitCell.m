@@ -103,10 +103,10 @@
     
     if (visit.active) {
         self.activeLabel.textColor = [UIColor greenColor];
-        self.activeLabel.text = @"Active -";
+        self.activeLabel.text = [NSString stringWithFormat:@"%@ -", NSLocalizedString(@"Active", @"Label active")];
     } else {
         self.activeLabel.textColor = [UIColor redColor];
-        self.activeLabel.text = @"Ended - ";
+        self.activeLabel.text = [NSString stringWithFormat:@"%@ -", NSLocalizedString(@"Ended", @"Label ended")];
     }
     _visit = visit;
 }

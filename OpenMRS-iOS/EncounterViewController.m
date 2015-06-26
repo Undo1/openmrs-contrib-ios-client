@@ -35,7 +35,7 @@
             if (self.encounter.obs.count == 0) {
                 UILabel *backgroundLabel = [[UILabel alloc] init];
                 backgroundLabel.textAlignment = NSTextAlignmentCenter;
-                backgroundLabel.text = @"\"0 obs\"";
+                backgroundLabel.text = [NSString stringWithFormat:@"\"%@\"", NSLocalizedString(@"No details", @"Label -no- -details-")];
                 self.tableView.backgroundView = backgroundLabel;
             }
             NSLog(@"obs: %@", self.encounter.obs);
