@@ -16,10 +16,12 @@
 #import "AddVisitNoteTableViewController.h"
 #import "CaptureVitalsTableViewController.h"
 #import "MRSPatient.h"
+#import "MRSDateUtilities.h"
 #import "AppDelegate.h"
 
 @interface PatientViewController ()
 
+@property (nonatomic) BOOL patientEdited;
 @property (nonatomic) BOOL encoutersEdited;
 @property (nonatomic) BOOL visitsEdited;
 
@@ -30,7 +32,9 @@
 -(id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
-        self.tabBarItem.title = self.patient.display;
+        self.restorationIdentifier = NSStringFromClass([self class]);
+        self.restorationClass = [self class];
+
         self.tabBarItem.image = [UIImage imageNamed:@"user_icon"];
     }
     return self;
@@ -39,17 +43,20 @@
 - (void)setPatient:(MRSPatient *)patient
 {
     _patient = patient;
-    //self.information = @[@ {@"Name":patient.name}];
+    self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
+                           @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
+                           @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
+                           @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAdress:self.patient]}];
+    self.navigationItem.title = self.patient.name;
+    self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
+    [self.tableView reloadData];
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.restorationIdentifier = NSStringFromClass([self class]);
-    self.restorationClass = [self class];
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
-    
-    self.navigationItem.title = self.patient.name;
+
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self action:@selector(close)];
     
     if (self.patient.hasDetailedInfo) {
@@ -58,11 +65,16 @@
                                @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
                                @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAdress:self.patient]}];
     }
+    self.patientEdited = YES;
     self.visitsEdited = YES;
     self.encoutersEdited = YES;
+    [self updateWithDetailedInfo];
 }
 
 - (void)close {
+    if ([SVProgressHUD isVisible]) {
+        [SVProgressHUD dismiss];
+    }
     [self.tabBarController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -74,47 +86,59 @@
 - (void)updateFontSize {
     [self.tableView reloadData];
 }
+
+- (id)notNil:(id)thing
+{
+    if (thing == nil || thing == [NSNull null]) {
+        return @"";
+    }
+    return thing;
+}
+
 - (void)updateWithDetailedInfo
 {
-    [OpenMRSAPIManager getDetailedDataOnPatient:self.patient completion:^(NSError *error, MRSPatient *detailedPatient) {
-        if (error == nil) {
-            self.patient = detailedPatient;
-            self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
-                                   @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
-                                   @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
-                                   @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAdress:self.patient]}];
-            if ([self.patient isInCoreData]) {
-                MRSPatient *savedPatient = [[MRSPatient alloc] init];
-                savedPatient.UUID = self.patient.UUID;
-                [savedPatient updateFromCoreData];
-                if (savedPatient.upToDate) {
-                    savedPatient = self.patient;
-                    savedPatient.hasDetailedInfo = YES;
-                    [savedPatient saveToCoreData];
+    if (self.patientEdited) {
+        [OpenMRSAPIManager getDetailedDataOnPatient:self.patient completion:^(NSError *error, MRSPatient *detailedPatient) {
+            if (error == nil) {
+                self.patient = detailedPatient;
+                self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
+                                       @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
+                                       @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
+                                       @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAdress:self.patient]}];
+                if ([self.patient isInCoreData]) {
+                    MRSPatient *savedPatient = [[MRSPatient alloc] init];
+                    savedPatient.UUID = self.patient.UUID;
+                    [savedPatient updateFromCoreData];
+                    if (savedPatient.upToDate) {
+                        savedPatient = self.patient;
+                        savedPatient.hasDetailedInfo = YES;
+                        [savedPatient saveToCoreData];
+                    }
                 }
-            }
-            dispatch_async(dispatch_get_main_queue(), ^ {
-                [self.tableView reloadData];
-                self.tabBarController.title = self.patient.name;
-                self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
-            });
-        } else {
-            if ([self.patient isInCoreData]) {
-                [self.patient updateFromCoreData];
                 dispatch_async(dispatch_get_main_queue(), ^ {
                     [self.tableView reloadData];
                     self.tabBarController.title = self.patient.name;
                     self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
-                    if (self.patient.hasDetailedInfo) {
-                        self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
-                                               @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
-                                               @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
-                                               @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAdress:self.patient]}];
-                    }
                 });
+                self.patientEdited = NO;
+            } else {
+                if ([self.patient isInCoreData]) {
+                    [self.patient updateFromCoreData];
+                    dispatch_async(dispatch_get_main_queue(), ^ {
+                        [self.tableView reloadData];
+                        self.tabBarController.title = self.patient.name;
+                        self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
+                        if (self.patient.hasDetailedInfo) {
+                            self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
+                                                   @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
+                                                   @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
+                                                   @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAdress:self.patient]}];
+                        }
+                    });
+                }
             }
-        }
-    }];
+        }];
+    }
     
     if (self.encoutersEdited) {
         [OpenMRSAPIManager getEncountersForPatient:self.patient completion:^(NSError *error, NSArray *encounters) {
@@ -181,56 +205,21 @@
     CGRect bounding = [detail boundingRectWithSize:CGSizeMake(self.view.frame.size.width, 1000) options:NSStringDrawingUsesLineFragmentOrigin attributes:@ {NSFontAttributeName:cell.detailTextLabel.font} context:nil];
     return MAX(cellHeight.floatValue,bounding.size.height+10);
 }
-- (id)notNil:(id)thing
-{
-    if (thing == nil || thing == [NSNull null]) {
-        return @"";
-    }
-    return thing;
-}
 - (NSString *)formatPatientAdress:(MRSPatient *)patient
 {
     NSString *string = [self notNil:patient.address1];
-    if (![[self notNil:patient.address2] isEqual:@""]) {
-        string = [string stringByAppendingString:[NSString stringWithFormat:@"\n%@", patient.address2]];
-    }
-    if (![[self notNil:patient.address3] isEqual:@""]) {
-        string = [string stringByAppendingString:[NSString stringWithFormat:@"\n%@", patient.address3]];
-    }
-    if (![[self notNil:patient.address4] isEqual:@""]) {
-        string = [string stringByAppendingString:[NSString stringWithFormat:@"\n%@", patient.address4]];
-    }
-    if (![[self notNil:patient.address5] isEqual:@""]) {
-        string = [string stringByAppendingString:[NSString stringWithFormat:@"\n%@", patient.address5]];
-    }
-    if (![[self notNil:patient.address6] isEqual:@""]) {
-        string = [string stringByAppendingString:[NSString stringWithFormat:@"\n%@", patient.address6]];
-    }
-    if (![[self notNil:patient.cityVillage] isEqual:@""]) {
-        string = [string stringByAppendingString:[NSString stringWithFormat:@"\n%@", patient.cityVillage]];
-    }
-    if (![[self notNil:patient.stateProvince] isEqual:@""]) {
-        string = [string stringByAppendingString:[NSString stringWithFormat:@"\n%@", patient.stateProvince]];
-    }
-    if (![[self notNil:patient.country] isEqual:@""]) {
-        string = [string stringByAppendingString:[NSString stringWithFormat:@"\n%@", patient.country]];
-    }
-    if (![[self notNil:patient.postalCode] isEqual:@""]) {
-        string = [string stringByAppendingString:[NSString stringWithFormat:@"\n%@", patient.postalCode]];
+    NSArray *addressAttributes = @[@"address1", @"address2", @"address3", @"address4", @"address5", @"address6",
+                                   @"cityVillage", @"stateProvince", @"country", @"postalCode"];
+    for (NSString *attribute in addressAttributes) {
+        if (![MRSHelperFunctions isNull:[self.patient valueForKey:attribute]]) {
+            string = [string stringByAppendingString:[NSString stringWithFormat:@"\n%@", [patient valueForKey:attribute]]];
+        }
     }
     return string;
 }
 - (NSString *)formatDate:(NSString *)date
 {
-    if (date == nil) {
-        return @"";
-    }
-    NSDateFormatter *stringToDateFormatter = [[NSDateFormatter alloc] init];
-    [stringToDateFormatter setDateFormat:@"Y-MM-dd'T'HH:mm:ss.SSS-Z"];
-    NSDate *newDate = [stringToDateFormatter dateFromString:date];
-//    struct tm  sometime;
-//    const char *formatString = "%Y-%m-%d'T'%H:%M:%S%Z";
-//    (void) strptime_l(date, formatString, &sometime, NULL);
+    NSDate *newDate = [MRSDateUtilities dateFromOpenMRSFormattedString:date];
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     formatter.dateStyle = NSDateFormatterShortStyle;
     formatter.timeStyle = NSDateFormatterNoStyle;
