@@ -142,6 +142,12 @@
     NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
     NSDictionary *parameters;
+    
+    if ([MRSHelperFunctions isNull:person.name] || [MRSHelperFunctions isNull:person.familyName] || [MRSHelperFunctions isNull:person.gender]
+        || [MRSHelperFunctions isNull:person.age]) {
+        completion([[NSError alloc] init], nil);
+    }
+    //Not throwing exception when a value is null but it crash the app.
     @try {
         parameters = @ {@"names":@[@{@"givenName":person.name, @"familyName":person.familyName}],@"gender":person.gender,@"age":person.age};
         NSLog(@"Parameters: %@", parameters);
