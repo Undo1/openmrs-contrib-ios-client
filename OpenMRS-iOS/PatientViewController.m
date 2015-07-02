@@ -58,7 +58,7 @@
     [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
 
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self action:@selector(close)];
-    
+
     if (self.patient.hasDetailedInfo) {
         self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
                                @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
@@ -68,7 +68,6 @@
     self.patientEdited = YES;
     self.visitsEdited = YES;
     self.encoutersEdited = YES;
-    [self updateWithDetailedInfo];
 }
 
 - (void)close {
@@ -139,7 +138,6 @@
             }
         }];
     }
-    
     if (self.encoutersEdited) {
         [OpenMRSAPIManager getEncountersForPatient:self.patient completion:^(NSError *error, NSArray *encounters) {
             if (error == nil) {
@@ -182,7 +180,6 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSDictionary *cellHeightDictionary;
-    
     if (!cellHeightDictionary) {
         cellHeightDictionary = @{ UIContentSizeCategoryExtraSmall : @33,
                                   UIContentSizeCategorySmall : @33,
@@ -193,9 +190,9 @@
                                   UIContentSizeCategoryExtraExtraExtraLarge : @70
                                   };
     }
-    
+
     NSString *userSize = [[UIApplication sharedApplication] preferredContentSizeCategory];
-    
+
     NSNumber *cellHeight = cellHeightDictionary[userSize];
     if (indexPath.section == 0) {
         return cellHeight.floatValue;
@@ -372,7 +369,7 @@
                         }];
                     }
                 }];
-                
+
             } else {
                 StartVisitViewController *startVisitVC = [[StartVisitViewController alloc] initWithStyle:UITableViewStyleGrouped];
                 startVisitVC.delegate = self;
@@ -401,6 +398,7 @@
         }
         if (indexPath.row == 4) {
             EditPatient *editPatient = [[EditPatient alloc] init];
+            self.patientEdited = YES;
             editPatient.patient = self.patient;
             [self.navigationController pushViewController:editPatient animated:YES];
         }
@@ -451,4 +449,5 @@
                                 @ {NSLocalizedString(@"Address", "Address") : [patientVC formatPatientAdress:patientVC.patient]}];
     return patientVC;
 }
+
 @end
