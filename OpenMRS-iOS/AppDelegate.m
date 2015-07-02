@@ -17,7 +17,6 @@
 #import "PatientViewController.h"
 #import "PatientVisitListView.h"
 #import "PatientEncounterListView.h"
-#import "SyncingAtLaunchViewController.h"
 @interface AppDelegate ()
 
 @end
@@ -36,10 +35,6 @@
         navController.restorationIdentifier = NSStringFromClass([navController class]);
         self.window.rootViewController = navController;
         [self.window makeKeyAndVisible];
-        if (![[NSUserDefaults standardUserDefaults] boolForKey:@"patientsAreSynced"]) {
-            SyncingAtLaunchViewController *syncing = [[SyncingAtLaunchViewController alloc] init];
-            [self.window.rootViewController presentViewController:syncing animated:NO completion:nil];
-        }
     }
     NSString *password = [[[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil] objectForKey:(__bridge id)(kSecValueData)];
     if ([password isEqual:@" "] || [password isEqual:@""] || password == nil) {
