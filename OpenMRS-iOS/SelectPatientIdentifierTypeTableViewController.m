@@ -18,6 +18,16 @@
 
 @implementation SelectPatientIdentifierTypeTableViewController
 
+@synthesize rowDescriptor = _rowDescriptor;
+
+- (instancetype)init {
+    self = [super initWithStyle:UITableViewStyleGrouped];
+    if (self) {
+        
+    }
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -31,6 +41,8 @@
     self.title = NSLocalizedString(@"Identifier Type", @"Label -identifier- -type-");
     [self reloadData];
     
+    //Getting the AddPatientForm
+    self.delegate = self.navigationController.viewControllers[0];
     //TODO: self-sizing cells
     [self.tableView registerClass:[IdentifierTypeCell class] forCellReuseIdentifier:@"cell"];
 }
@@ -66,7 +78,6 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    NSLog(@"Counter = %d", self.identifierTypes.count);
     return self.identifierTypes.count;
 }
 
@@ -86,6 +97,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MRSPatientIdentifierType *type = self.identifierTypes[indexPath.row];
+    self.rowDescriptor.value = type.display;
     [self.delegate didSelectPatientIdentifierType:type];
 }
 

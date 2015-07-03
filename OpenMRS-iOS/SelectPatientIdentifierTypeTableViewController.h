@@ -7,12 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "XLFormRowDescriptor.h"
 @class MRSPatientIdentifierType;
 @protocol SelectPatientIdentifierTypeTableViewControllerDelegate <NSObject>
 - (void)didSelectPatientIdentifierType:(MRSPatientIdentifierType *)type;
 @end
 
-@interface SelectPatientIdentifierTypeTableViewController : UITableViewController <UIViewControllerRestoration>
+@interface SelectPatientIdentifierTypeTableViewController : UITableViewController <UIViewControllerRestoration, XLFormRowDescriptorViewController>
 @property (nonatomic, strong) NSArray *identifierTypes;
 @property (nonatomic, strong) NSObject<SelectPatientIdentifierTypeTableViewControllerDelegate> *delegate;
 @end
