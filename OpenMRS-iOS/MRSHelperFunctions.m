@@ -9,6 +9,7 @@
 #import "MRSHelperFunctions.h"
 #import <UIKit/UIKit.h>
 #import <objc/runtime.h>
+#import "MRSPatient.h"
 
 @implementation MRSHelperFunctions
 
@@ -62,6 +63,47 @@
     NSNumber *cellHeight = cellHeightDictionary[userSize];
     [tableview setRowHeight:cellHeight.floatValue];
     [tableview reloadData];
+}
+
++ (MRSPatient *)fillPatientWithResponse:(NSDictionary *)results {
+    MRSPatient *detailedPatient = [[MRSPatient alloc] init];
+    detailedPatient.displayName = results[@"display"];
+    detailedPatient.locationDisplay = results[@"location"][@"display"];
+    if (![MRSHelperFunctions isNull:results[@"person"][@"preferredAddress"]]) {
+        detailedPatient.preferredAddressUUID = results[@"person"][@"preferredAddress"][@"uuid"];
+        detailedPatient.address1 = results[@"person"][@"preferredAddress"][@"address1"];
+        detailedPatient.address2 = results[@"person"][@"preferredAddress"][@"address2"];
+        detailedPatient.address3 = results[@"person"][@"preferredAddress"][@"address3"];
+        detailedPatient.address4 = results[@"person"][@"preferredAddress"][@"address4"];
+        detailedPatient.address5 = results[@"person"][@"preferredAddress"][@"address5"];
+        detailedPatient.address6 = results[@"person"][@"preferredAddress"][@"address6"];
+        detailedPatient.cityVillage = results[@"person"][@"preferredAddress"][@"cityVillage"];
+        detailedPatient.country = results[@"person"][@"preferredAddress"][@"country"];
+        detailedPatient.latitude = results[@"person"][@"preferredAddress"][@"latitude"];
+        detailedPatient.longitude = results[@"person"][@"preferredAddress"][@"longitude"];
+        detailedPatient.postalCode = results[@"person"][@"preferredAddress"][@"postalCode"];
+        detailedPatient.stateProvince = results[@"person"][@"preferredAddress"][@"stateProvince"];
+        detailedPatient.countyDistrict = results[@"person"][@"preferredAddress"][@"countyDistrict"];
+        detailedPatient.preferredAddressUUID = results[@"person"][@"preferredAddress"][@"uuid"];
+    }
+    detailedPatient.birthdate = results[@"person"][@"birthdate"];
+    detailedPatient.birthdateEstimated = [results[@"person"][@"birthdateEstimated"] boolValue]?@"true":@"false";
+    detailedPatient.causeOfDeath = results[@"person"][@"causeOfDeath"];
+    detailedPatient.dead = ((int)results[@"person"][@"dead"] == 1);
+    detailedPatient.gender = results[@"person"][@"gender"];
+    detailedPatient.UUID = results[@"uuid"];
+    detailedPatient.name = results[@"display"];
+    detailedPatient.preferredNameUUID = results[@"person"][@"preferredName"][@"uuid"];
+    detailedPatient.familyName = results[@"person"][@"preferredName"][@"familyName"];
+    detailedPatient.familyName2 = results[@"person"][@"preferredName"][@"familyName2"];
+    detailedPatient.givenName = results[@"person"][@"preferredName"][@"givenName"];
+    detailedPatient.middleName = results[@"person"][@"preferredName"][@"middleName"];
+    detailedPatient.preferredNameUUID = results[@"person"][@"preferredName"][@"uuid"];
+    if (results[@"person"][@"age"] != [NSNull null]) {
+        detailedPatient.age = [results[@"person"][@"age"] stringValue];
+    }
+    detailedPatient.hasDetailedInfo = YES;
+    return detailedPatient;
 }
 
 @end

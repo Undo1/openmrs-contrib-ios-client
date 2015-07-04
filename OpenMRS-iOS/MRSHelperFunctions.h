@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "MRSPatient.h"
 
 @interface MRSHelperFunctions : NSObject
 
@@ -15,5 +16,6 @@
 + (BOOL)isNull:(id)object;
 + (NSString *) formLabelToJSONLabel:(NSString *) label;
 + (void)updateTableViewForDynamicTypeSize:(UITableView *) tableview;
++ (MRSPatient *)fillPatientWithResponse:(NSDictionary *)results;
 
 @end
