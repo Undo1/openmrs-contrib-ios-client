@@ -92,6 +92,7 @@
 
 - (void)close
 {
+    [SVProgressHUD dismiss];
     [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -142,7 +143,7 @@
 
 - (void)loadMore {
     self.loading = YES;
-    [SVProgressHUD showWithStatus:@"Loading more visits.."];
+    [SVProgressHUD showWithStatus:[NSString stringWithFormat:@"%@..", NSLocalizedString(@"Loading more visits", @"Message Loading more visits")]];
     [OpenMRSAPIManager getActiveVisits:self.activeVisits From:self.startIndex withCompletion:^(NSError *error) {
         if (!error) {
             [self.tableView reloadData];
@@ -150,12 +151,15 @@
             self.startIndex = self.activeVisits.count;
             self.loading = NO;
             [self addNewRows:current];
-            [SVProgressHUD showSuccessWithStatus:@"Done"];
+            [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Done", @"Label done")];
         } else {
             if (self.activeVisits.count == 0){
-                [SVProgressHUD showErrorWithStatus:@"Can not load active visits"];
+                [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Can not load active visits", @"Message Can not load active visits")];
+                //To remove the spinning indicator cell.
+                self.hasMore = NO;
+                [self.tableView reloadData];
             } else {
-                [SVProgressHUD showErrorWithStatus:@"Problem loading more active visits"];
+                [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Problem loading more active visits", @"Message Problem loading more active visits")];
             }
         }
     }];
