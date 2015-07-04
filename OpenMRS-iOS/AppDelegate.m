@@ -17,6 +17,7 @@
 #import "PatientViewController.h"
 #import "PatientVisitListView.h"
 #import "PatientEncounterListView.h"
+#import "SyncingEngine.h"
 @interface AppDelegate ()
 
 @end
@@ -42,8 +43,7 @@
         SignInViewController *signin = [[SignInViewController alloc] init];
         [self.window.rootViewController presentViewController:signin animated:NO completion:nil];
     }
-
-    [self updateExistingOutOfDatePatients];
+    [[SyncingEngine sharedEngine] updateExistingOutOfDatePatients];
     return YES;
 }
 
@@ -194,72 +194,4 @@
     [[self.managedObjectContext persistentStoreCoordinator] addPersistentStoreWithType:EncryptedStoreType configuration:nil URL:storeURL options:options error:&error];//recreates the persistent store
 }
 
-- (void)updateExistingPatientsInCoreData:(void (^)(NSError *error))completion {
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:self.managedObjectContext]];
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"upToDate == nil"];
-    [request setPredicate:predicate];
-    NSError *error = nil;
-    NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
-    if (error)
-        return completion(error);
-
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-         __block NSError *master_error = nil;
-        for (NSManagedObject *object in results) {
-            
-            __block MRSPatient *patient = [[MRSPatient alloc] init];
-            patient.UUID = [object valueForKey:@"uuid"];
-            NSLog(@"Updating patient: %@", patient.UUID);
-            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-            [OpenMRSAPIManager getDetailedDataOnPatient:patient completion:^(NSError *error, MRSPatient *detailedPatient) {
-                if (!error) {
-                    patient.upToDate = YES;
-                    [patient saveToCoreData];
-                } else {
-                    master_error = error;
-                }
-                dispatch_semaphore_signal(semaphore);
-            }];
-            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-            if (master_error) {
-                break;
-            }
-        }
-        completion(master_error);
-    });
-}
-
-- (void)updateExistingOutOfDatePatients {
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:self.managedObjectContext]];
-
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"upToDate == %@", [NSNumber numberWithBool:NO]];
-    [request setPredicate:predicate];
-    NSError *error = nil;
-    NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
-    if (error)
-        return;
-
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        for (NSManagedObject *object in results) {
-
-            __block MRSPatient *patient = [[MRSPatient alloc] init];
-            patient.UUID = [object valueForKey:@"uuid"];
-            [patient updateFromCoreData];
-            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-            [OpenMRSAPIManager EditPatient:patient completion:^(NSError *error) {
-                if (!error) {
-                    patient.upToDate = YES;
-                    [patient saveToCoreData];
-                }
-                dispatch_semaphore_signal(semaphore);
-            }];
-            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-
-        }
-    });
-    
-}
 @end

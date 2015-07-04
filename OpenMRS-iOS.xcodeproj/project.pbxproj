@@ -10,6 +10,7 @@
 		2432066D1B2E439000B54970 /* EditPatient.m in Sources */ = {isa = PBXBuildFile; fileRef = 2432066C1B2E439000B54970 /* EditPatient.m */; };
 		243206711B30436700B54970 /* MRSHelperFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 243206701B30436700B54970 /* MRSHelperFunctions.m */; };
 		243786431B46B81A00AB5089 /* AddPatientForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 243786421B46B81A00AB5089 /* AddPatientForm.m */; };
+		243786491B47730900AB5089 /* SyncingEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 243786481B47730900AB5089 /* SyncingEngine.m */; };
 		245EDDC91B21A0F400B8C0EB /* user_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDC71B21A0F400B8C0EB /* user_icon.png */; };
 		245EDDCA1B21A0F400B8C0EB /* vitals_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDC81B21A0F400B8C0EB /* vitals_icon.png */; };
 		245EDDCD1B21A10B00B8C0EB /* user_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDCB1B21A10B00B8C0EB /* user_icon@2x.png */; };
@@ -99,6 +100,8 @@
 		243786401B46A75A00AB5089 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
 		243786411B46B81A00AB5089 /* AddPatientForm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddPatientForm.h; sourceTree = "<group>"; };
 		243786421B46B81A00AB5089 /* AddPatientForm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddPatientForm.m; sourceTree = "<group>"; };
+		243786471B47730900AB5089 /* SyncingEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyncingEngine.h; sourceTree = "<group>"; };
+		243786481B47730900AB5089 /* SyncingEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyncingEngine.m; sourceTree = "<group>"; };
 		243FFBEF1B3AE781007E717D /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
 		245EDDC71B21A0F400B8C0EB /* user_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = user_icon.png; sourceTree = "<group>"; };
 		245EDDC81B21A0F400B8C0EB /* vitals_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vitals_icon.png; sourceTree = "<group>"; };
@@ -255,6 +258,15 @@
 			name = "Add patient";
 			sourceTree = "<group>";
 		};
+		243786461B4772F200AB5089 /* Syncing Engine */ = {
+			isa = PBXGroup;
+			children = (
+				243786471B47730900AB5089 /* SyncingEngine.h */,
+				243786481B47730900AB5089 /* SyncingEngine.m */,
+			);
+			name = "Syncing Engine";
+			sourceTree = "<group>";
+		};
 		248FBE2F1B03B9E400569C2C /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -392,6 +404,7 @@
 		248FBE3B1B03BB3600569C2C /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				243786461B4772F200AB5089 /* Syncing Engine */,
 				248FBE501B03BCAD00569C2C /* Credentials */,
 				248FBE4F1B03BCA100569C2C /* Manager */,
 			);
@@ -910,6 +923,7 @@
 				D396A54D1A2E3E5600DE6448 /* PatientEncounterListView.m in Sources */,
 				D37674271A3BB114003A8005 /* MRSLocation.m in Sources */,
 				D34BF5391A3BA7BE009205C9 /* AddVisitNoteTableViewController.m in Sources */,
+				243786491B47730900AB5089 /* SyncingEngine.m in Sources */,
 				D3DCBBF81A71F4940024D088 /* StartVisitViewController.swift in Sources */,
 				D396A52A1A2E09DE00DE6448 /* KeychainItemWrapper.m in Sources */,
 				D3A4728E1A37794D002A0BBD /* MRSPerson.m in Sources */,

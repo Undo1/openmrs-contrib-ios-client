@@ -11,6 +11,7 @@
 #import "KeychainItemWrapper.h"
 #import "MRSHelperFunctions.h"
 #import "AppDelegate.h"
+#import "SyncingEngine.h"
 @implementation SettingsViewController
 - (void)viewDidLoad
 {
@@ -108,8 +109,7 @@
             [OpenMRSAPIManager logout];
         }];
     } else if (indexPath.section == 1 && indexPath.row == 1) {
-        AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-        [appDelegate updateExistingOutOfDatePatients];
+        [[SyncingEngine sharedEngine] updateExistingOutOfDatePatients];
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
 }
