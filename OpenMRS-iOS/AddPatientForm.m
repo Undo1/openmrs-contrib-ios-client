@@ -11,6 +11,7 @@
 #import "MRSHelperFunctions.h"
 #import "MRSPatientIdentifierType.h"
 #import "MRSPatientIdentifier.h"
+#import "OpenMRSAPIManager.h"
 #import "SelectPatientIdentifierTypeTableViewController.h"
 
 NSString *const kGivenName = @"givenName";
@@ -35,7 +36,7 @@ NSString *const kPostalCode = @"postalCode";
 
 @interface AddPatientForm ()
 
-@property (nonatomic, strong) MRSPatientIdentifier *patientIdentifier;
+@property (nonatomic, strong) MRSPatientIdentifierType *patientIdentifierType;
 
 @end
 
@@ -213,9 +214,7 @@ NSString *const kPostalCode = @"postalCode";
 #pragma mark - SelectPatientIdentifierTypeTableViewControllerDelegate
 
 - (void)didSelectPatientIdentifierType:(MRSPatientIdentifierType *)type {
-    self.patientIdentifier = [[MRSPatientIdentifier alloc] init];
-    self.patientIdentifier.identifierType = type;
-    self.patientIdentifier.identifier = self.formValues[kIdentifier];
+    self.patientIdentifierType = type;
     [self.navigationController popToViewController:self animated:YES];
 }
 
@@ -247,14 +246,34 @@ NSString *const kPostalCode = @"postalCode";
         NSMutableDictionary *parameters = [NSMutableDictionary dictionaryWithDictionary:@{
                                                                                           @"addresses": @[address_parameters],
                                                                                           @"names": @[name_parameters],
-                                                                                          kGender: values[kGender]
                                                                                           }];
+        if ([values[kGender] isEqualToString:NSLocalizedString(@"Male", @"Label female")]) {
+            parameters[kGender] = @"M";
+        } else {
+            parameters[kGender] = @"F";
+        }
         if ([values[kbirthdateEstimated] integerValue] == 1) {
             parameters[kAge] = values[kAge];
         } else {
             parameters[kBirthdate] = [MRSDateUtilities openMRSFormatStringWithDate:values[kBirthdate]];
         }
+        NSLog(@"Param: %@", parameters);
+        [OpenMRSAPIManager addPatient:parameters withIdentifier:self.patientIdentifierType completion:^(NSError *error, MRSPatient *createdPatient) {
+            if (!error) {
+                NSLog(@"WE DID IT WE ARE THE CHAMPIOOOONS");
+            } else {
+                NSLog(@"UGH WE FAILED AGAIN!");
+            }
+        }];
+    } else {
+        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Warning label error")
+                                    message:NSLocalizedString(@"Couldn't save patient. Make sure all required fields are filled out", @"Error message")
+                                   delegate:nil
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles:nil]
+         show];
     }
+    NSLog(@"iden_name %@, iden_UUID: %@", self.patientIdentifierType.display, self.patientIdentifierType.UUID);
     NSLog(@"Values: %@", self.form.formValues);
 }
 
