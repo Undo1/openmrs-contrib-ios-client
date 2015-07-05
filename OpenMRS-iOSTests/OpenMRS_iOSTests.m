@@ -10,8 +10,13 @@
 #import <XCTest/XCTest.h>
 #import "OpenMRSAPIManager.h"
 #import "KeychainItemWrapper.h"
+#import "OHHTTPStubs.h"
+#import "SyncingEngine.h"
+
 
 @interface OpenMRS_iOSTests : XCTestCase
+
+@property (nonatomic, strong) KeychainItemWrapper *wrapper;
 
 @end
 
@@ -20,10 +25,10 @@
 - (void)setUp {
     [super setUp];
     
-    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
-    [wrapper setObject:@"admin123" forKey:(__bridge id)(kSecValueData)];
-    [wrapper setObject:@"admin" forKey:(__bridge id)(kSecAttrAccount)];
-    [wrapper setObject:@"http://demo.openmrs.org/openmrs" forKey:(__bridge id)(kSecAttrService)];
+    self.wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    [self.wrapper setObject:@"Admin123" forKey:(__bridge id)(kSecValueData)];
+    [self.wrapper setObject:@"admin" forKey:(__bridge id)(kSecAttrAccount)];
+    [self.wrapper setObject:@"http://demo.openmrs.org/openmrs" forKey:(__bridge id)(kSecAttrService)];
 }
 
 - (void)tearDown {
@@ -101,6 +106,42 @@
     
     [self waitForExpectationsWithTimeout:5 handler:^(NSError *error) {
         XCTAssertNil(error);
+    }];
+}
+- (void)testSyncingEngine {
+    //given
+    MRSPatient *patient = [[MRSPatient alloc] init];
+    patient.UUID = @"uuid";
+    patient.preferredNameUUID = @"nameuuid";
+    patient.gender = @"M";
+    patient.givenName = @"testG";
+    patient.familyName = @"testF";
+    patient.upToDate = NO;
+    [patient saveToCoreData];
+    
+    [OHHTTPStubs stubRequestsPassingTest:^BOOL(NSURLRequest *request) {
+        return [request.URL.host isEqualToString:@"demo.openmrs.org"];
+    } withStubResponse:^OHHTTPStubsResponse*(NSURLRequest *request) {
+        // Stub it with our "wsresponse.json" stub file (which is in same bundle as self)
+        NSDictionary* obj = @{ @"stubbed": @"true"};
+        return [OHHTTPStubsResponse responseWithJSONObject:obj statusCode:200 headers:nil];
+    }];
+    
+    //when
+    XCTestExpectation *expectation = [self expectationWithDescription:@"syned"];
+    [[SyncingEngine sharedEngine] updateExistingOutOfDatePatients:^(NSError *error) {
+        XCTAssertTrue(error==nil);
+        
+        [expectation fulfill];
+    }];
+    
+    //then
+    [self waitForExpectationsWithTimeout:10 handler:^(NSError *error) {
+        
+        [patient updateFromCoreData];
+        BOOL value = patient.upToDate;
+        [patient cascadingDelete];
+        XCTAssertTrue(value);
     }];
 }
 @end

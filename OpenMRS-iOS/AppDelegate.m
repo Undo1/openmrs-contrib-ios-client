@@ -161,7 +161,8 @@
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
     NSDictionary *options = @ { EncryptedStorePassphraseKey: [wrapper objectForKey:(__bridge id)(kSecValueData)],
                                 NSMigratePersistentStoresAutomaticallyOption : @YES,
-                                NSInferMappingModelAutomaticallyOption : @YES};
+                                NSInferMappingModelAutomaticallyOption : @YES
+    };
     _persistentStoreCoordinator = [EncryptedStore makeStoreWithOptions:options managedObjectModel:[self managedObjectModel]];
     /*if (![_persistentStoreCoordinator addPersistentStoreWithType:EncryptedStoreType configuration:nil URL:storeURL options:options error:&error]) {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);

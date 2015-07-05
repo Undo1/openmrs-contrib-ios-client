@@ -8,6 +8,7 @@ pod "SVProgressHUD"
 pod "EncryptedCoreData", :git => 'https://github.com/project-imas/encrypted-core-data.git'
 pod "UIAlertView+Blocks"
 pod 'XLForm', '~> 3.0.0'
+pod "OHHTTPStubs"
 
 target 'OpenMRS-iOS' do
 
