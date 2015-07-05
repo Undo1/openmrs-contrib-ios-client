@@ -70,6 +70,7 @@
         }
         [managedContext deleteObject:object];
     }
+    [appDelegate saveContext];
 }
 - (void)saveToCoreData
 {
@@ -153,6 +154,7 @@
             NSLog(@"Error saving visit! %@", saveError);
         }
     }];
+    [appDelegate saveContext];
 }
 - (void)updateFromCoreData
 {
