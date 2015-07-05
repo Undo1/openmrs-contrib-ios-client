@@ -104,12 +104,13 @@
     if (indexPath.section == 1 && indexPath.row == 0) {
         AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
         [delegate clearStore];
+        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     } else if (indexPath.section == 0 && indexPath.row == 1) {
         [self dismissViewControllerAnimated:NO completion:^ {
             [OpenMRSAPIManager logout];
         }];
     } else if (indexPath.section == 1 && indexPath.row == 1) {
-        [[SyncingEngine sharedEngine] updateExistingOutOfDatePatients];
+        [[SyncingEngine sharedEngine] updateExistingOutOfDatePatients:nil];
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
 }

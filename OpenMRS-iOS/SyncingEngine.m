@@ -31,8 +31,8 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        AppDelegate *app = [[UIApplication sharedApplication] delegate];
-        self.managedObjectContext = app.managedObjectContext;
+        AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
+        self.managedObjectContext = appDelegate.managedObjectContext;
     }
     return self;
 }
@@ -74,36 +74,59 @@
     });
 }
 
-- (void)updateExistingOutOfDatePatients {
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:self.managedObjectContext]];
-    
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"upToDate == %@", [NSNumber numberWithBool:NO]];
-    [request setPredicate:predicate];
-    NSError *error = nil;
-    NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
-    if (error)
-        return;
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        for (NSManagedObject *object in results) {
+- (void)updateExistingOutOfDatePatients:(void (^)(NSError *error))completion {
+    NSLog(@"Started syncing");
+    [self updateExistingPatientsInCoreData:^(NSError *error) {
+        if (!error) {
+            NSFetchRequest *request = [[NSFetchRequest alloc] init];
+            [request setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:self.managedObjectContext]];
             
-            __block MRSPatient *patient = [[MRSPatient alloc] init];
-            patient.UUID = [object valueForKey:@"uuid"];
-            [patient updateFromCoreData];
-            dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
-            [OpenMRSAPIManager EditPatient:patient completion:^(NSError *error) {
-                if (!error) {
-                    patient.upToDate = YES;
-                    [patient saveToCoreData];
+            NSPredicate *predicate = [NSPredicate predicateWithFormat:@"upToDate == %@", [NSNumber numberWithBool:NO]];
+            [request setPredicate:predicate];
+            NSError *error = nil;
+            NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
+            if (error)
+                return;
+            NSLog(@"To sync %d", results.count);
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                for (NSManagedObject *object in results) {
+                    
+                    __block MRSPatient *patient = [[MRSPatient alloc] init];
+                    patient.UUID = [object valueForKey:@"uuid"];
+                    NSLog(@"Patient UUID syncing: %@", patient.UUID);
+                    [patient updateFromCoreData];
+                    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+                    [OpenMRSAPIManager EditPatient:patient completion:^(NSError *error) {
+                        if (!error) {
+                            patient.upToDate = YES;
+                            [patient saveToCoreData];
+                        }
+                        dispatch_semaphore_signal(semaphore);
+                    }];
+                    dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+                    
                 }
-                dispatch_semaphore_signal(semaphore);
-            }];
-            dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-            
+                if (completion)
+                    completion(nil);
+            });
+        } else {
+            NSLog(@"Failed to sync");
+            if (completion)
+                completion(error);
         }
-    });
-    
+    }];
+}
+
+- (void)SyncPatient:(MRSPatient *)patient completion:(void (^)(NSError *error))completion {
+    [OpenMRSAPIManager EditPatient:patient completion:^(NSError *error) {
+        if (!error) {
+            patient.upToDate = YES;
+            if ([patient isInCoreData]) {
+                [patient saveToCoreData];
+            }
+        }
+        completion(error);
+    }];
 }
 
 @end
