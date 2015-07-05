@@ -42,8 +42,9 @@
         //No password stored, go straight to login screen
         SignInViewController *signin = [[SignInViewController alloc] init];
         [self.window.rootViewController presentViewController:signin animated:NO completion:nil];
+    } else {
+        [[SyncingEngine sharedEngine] updateExistingOutOfDatePatients:nil];
     }
-    [[SyncingEngine sharedEngine] updateExistingOutOfDatePatients];
     return YES;
 }
 
@@ -157,19 +158,15 @@
     if (_persistentStoreCoordinator != nil) {
         return _persistentStoreCoordinator;
     }
-    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"openmrs-offline"];
-    NSError *error = nil;
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
-    NSDictionary *options = @ { EncryptedStorePassphraseKey: [wrapper objectForKey:(__bridge id)(kSecValueData)] };
+    NSDictionary *options = @ { EncryptedStorePassphraseKey: [wrapper objectForKey:(__bridge id)(kSecValueData)],
+                                NSMigratePersistentStoresAutomaticallyOption : @YES,
+                                NSInferMappingModelAutomaticallyOption : @YES};
     _persistentStoreCoordinator = [EncryptedStore makeStoreWithOptions:options managedObjectModel:[self managedObjectModel]];
-    options = @{
-                NSMigratePersistentStoresAutomaticallyOption : @YES,
-                NSInferMappingModelAutomaticallyOption : @YES
-                };
-    if (![_persistentStoreCoordinator addPersistentStoreWithType:EncryptedStoreType configuration:nil URL:storeURL options:options error:&error]) {
+    /*if (![_persistentStoreCoordinator addPersistentStoreWithType:EncryptedStoreType configuration:nil URL:storeURL options:options error:&error]) {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
-    }
+    }*/
     return _persistentStoreCoordinator;
 }
 - (NSURL *)applicationDocumentsDirectory
@@ -181,17 +178,47 @@
     if (self.persistentStoreCoordinator.persistentStores.count == 0) {
         return;
     }
+
+    /*
+     * Well the commnented part is the old clear store which I don't see
+     * it's point while we can just delete exisiting patients.
+     */
+
+    /*NSLog(@"Presitance stores: %@", self.persistentStoreCoordinator.persistentStores);
     NSPersistentStore *store = self.persistentStoreCoordinator.persistentStores[0];
     NSError *error;
     NSURL *storeURL = store.URL;
     NSPersistentStoreCoordinator *storeCoordinator = self.persistentStoreCoordinator;
     [storeCoordinator removePersistentStore:store error:&error];
     [[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error];
-    NSDictionary *options = @{
+    /*NSDictionary *options = @{
                               NSMigratePersistentStoresAutomaticallyOption : @YES,
                               NSInferMappingModelAutomaticallyOption : @YES
                               };
     [[self.managedObjectContext persistentStoreCoordinator] addPersistentStoreWithType:EncryptedStoreType configuration:nil URL:storeURL options:options error:&error];//recreates the persistent store
+    _persistentStoreCoordinator = nil;
+
+    [self persistentStoreCoordinator];*/
+
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:self.managedObjectContext]];
+
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uuid != nil", [NSNumber numberWithBool:NO]];
+    [request setPredicate:predicate];
+    NSError *error = nil;
+    NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
+    if (error)
+        return;
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        for (NSManagedObject *object in results) {
+
+            __block MRSPatient *patient = [[MRSPatient alloc] init];
+            patient.UUID = [object valueForKey:@"uuid"];
+            [patient updateFromCoreData];
+            [patient cascadingDelete];
+        }
+    });
 }
 
 @end
