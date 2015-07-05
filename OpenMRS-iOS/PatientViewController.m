@@ -18,6 +18,7 @@
 #import "MRSPatient.h"
 #import "MRSDateUtilities.h"
 #import "AppDelegate.h"
+#import "SyncingEngine.h"
 
 @interface PatientViewController ()
 
@@ -47,6 +48,7 @@
                            @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
                            @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
                            @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAdress:self.patient]}];
+    NSLog(@"Information: %@", self.information);
     self.navigationItem.title = self.patient.name;
     self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
     [self.tableView reloadData];
@@ -58,16 +60,10 @@
     [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
 
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self action:@selector(close)];
-
-    if (self.patient.hasDetailedInfo) {
-        self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
-                               @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
-                               @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
-                               @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAdress:self.patient]}];
-    }
     self.patientEdited = YES;
     self.visitsEdited = YES;
     self.encoutersEdited = YES;
+    NSLog(@"Finish loading");
 }
 
 - (void)close {
@@ -78,6 +74,7 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated {
+    NSLog(@"will appear");
     [super viewWillAppear:animated];
     [self updateWithDetailedInfo];
 }
@@ -97,46 +94,30 @@
 - (void)updateWithDetailedInfo
 {
     if (self.patientEdited) {
-        [OpenMRSAPIManager getDetailedDataOnPatient:self.patient completion:^(NSError *error, MRSPatient *detailedPatient) {
-            if (error == nil) {
-                self.patient = detailedPatient;
-                self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
-                                       @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
-                                       @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
-                                       @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAdress:self.patient]}];
-                if ([self.patient isInCoreData]) {
-                    MRSPatient *savedPatient = [[MRSPatient alloc] init];
-                    savedPatient.UUID = self.patient.UUID;
-                    [savedPatient updateFromCoreData];
-                    if (savedPatient.upToDate) {
-                        savedPatient = self.patient;
-                        savedPatient.hasDetailedInfo = YES;
-                        [savedPatient saveToCoreData];
+        NSLog(@"update: Editing patient");
+        if ([self.patient isInCoreData]) {
+            NSLog(@"update: In core date");
+            MRSPatient *savedPatient = [[MRSPatient alloc] init];
+            savedPatient.UUID = self.patient.UUID;
+            [savedPatient updateFromCoreData];
+            if (!savedPatient.upToDate) {
+                NSLog(@"will be edited!");
+                self.patient = savedPatient;
+                [[SyncingEngine sharedEngine] SyncPatient:savedPatient completion:^(NSError *error) {
+                    if (!error) {
+                        [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Synced", @"Label synced")];
+                        self.patient = savedPatient;
+                        self.patientEdited = NO;
+                    } else {
+                        [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Error syncing", @"Label error syncing")];
                     }
-                }
-                dispatch_async(dispatch_get_main_queue(), ^ {
-                    [self.tableView reloadData];
-                    self.tabBarController.title = self.patient.name;
-                    self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
-                });
-                self.patientEdited = NO;
+                }];
             } else {
-                if ([self.patient isInCoreData]) {
-                    [self.patient updateFromCoreData];
-                    dispatch_async(dispatch_get_main_queue(), ^ {
-                        [self.tableView reloadData];
-                        self.tabBarController.title = self.patient.name;
-                        self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
-                        if (self.patient.hasDetailedInfo) {
-                            self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
-                                                   @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
-                                                   @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
-                                                   @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAdress:self.patient]}];
-                        }
-                    });
-                }
+                [self fetchPatient];
             }
-        }];
+        } else {
+            [self fetchPatient];
+        }
     }
     if (self.encoutersEdited) {
         [OpenMRSAPIManager getEncountersForPatient:self.patient completion:^(NSError *error, NSArray *encounters) {
@@ -176,6 +157,48 @@
             }
         }];
     }
+}
+-(void)fetchPatient {
+    [OpenMRSAPIManager getDetailedDataOnPatient:self.patient completion:^(NSError *error, MRSPatient *detailedPatient) {
+        if (error == nil) {
+            self.patient = detailedPatient;
+            self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
+                                   @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
+                                   @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
+                                   @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAdress:self.patient]}];
+            if ([self.patient isInCoreData]) {
+                MRSPatient *savedPatient = [[MRSPatient alloc] init];
+                savedPatient.UUID = self.patient.UUID;
+                [savedPatient updateFromCoreData];
+                if (savedPatient.upToDate) {
+                    savedPatient = self.patient;
+                    savedPatient.hasDetailedInfo = YES;
+                    [savedPatient saveToCoreData];
+                }
+            }
+            dispatch_async(dispatch_get_main_queue(), ^ {
+                [self.tableView reloadData];
+                self.tabBarController.title = self.patient.name;
+                self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
+            });
+            self.patientEdited = NO;
+        } else {
+            if ([self.patient isInCoreData]) {
+                [self.patient updateFromCoreData];
+                dispatch_async(dispatch_get_main_queue(), ^ {
+                    [self.tableView reloadData];
+                    self.tabBarController.title = self.patient.name;
+                    self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
+                    if (self.patient.hasDetailedInfo) {
+                        self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
+                                               @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
+                                               @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
+                                               @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAdress:self.patient]}];
+                    }
+                });
+            }
+        }
+    }];
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -234,7 +257,13 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (section == 0) {
-        return (self.isShowingActions) ? 5 : 1;
+        if (self.isShowingActions)
+            if (![MRSHelperFunctions isNull:self.patient] && [self.patient isInCoreData])
+                return 6;
+            else
+                return 5;
+        else
+            return 1;
     } else if (section == 1) {
         return self.information.count;
     } else if (section == 2) {
@@ -243,6 +272,7 @@
         return 1;
     }
 }
+
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
@@ -290,7 +320,21 @@
             saveToCoreDataCell.textLabel.textColor = self.view.tintColor;
             return saveToCoreDataCell;
         }
-        if (indexPath.row == 3) {
+        //Conditional cell if patient is already saved in CoreDate
+        if (indexPath.row == 3 && ![MRSHelperFunctions isNull:self.patient] && [self.patient isInCoreData]) {
+            UITableViewCell *deleteFromCoreData = [tableView dequeueReusableCellWithIdentifier:@"coredata"];
+            if (!deleteFromCoreData) {
+                deleteFromCoreData = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"coredata"];
+            }
+            deleteFromCoreData.textLabel.text = NSLocalizedString(@"Remove Offline Record", @"Label remove offline record");
+            deleteFromCoreData.textLabel.textAlignment = NSTextAlignmentCenter;
+            deleteFromCoreData.textLabel.textColor = self.view.tintColor;
+            return deleteFromCoreData;
+        }
+        
+        /* Cascading the conditional cell */
+        if ((indexPath.row == 3 && !(![MRSHelperFunctions isNull:self.patient] && [self.patient isInCoreData])) ||
+            ((indexPath.row == 4) && (![MRSHelperFunctions isNull:self.patient] && [self.patient isInCoreData])) ) {
             UITableViewCell *cell = nil;
             if (self.hasActiveVisit) {
                 cell = [tableView dequeueReusableCellWithIdentifier:@"stopVisitCell"];
@@ -309,7 +353,9 @@
             cell.textLabel.textColor = self.view.tintColor;
             return cell;
         }
-        if (indexPath.row == 4) {
+        /* Cascading the conditional cell */
+        if ((indexPath.row == 4 && !(![MRSHelperFunctions isNull:self.patient] && [self.patient isInCoreData])) ||
+            ((indexPath.row == 5) && (![MRSHelperFunctions isNull:self.patient] && [self.patient isInCoreData])) ) {
             UITableViewCell *editCell = [tableView dequeueReusableCellWithIdentifier:@"actionCell"];
             if (!editCell) {
                 editCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"actionCell"];
@@ -332,6 +378,7 @@
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
@@ -340,12 +387,53 @@
             [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:0] withRowAnimation:UITableViewRowAnimationFade];
             return;
         }
+        if (indexPath.row == 0) {
+            AddVisitNoteTableViewController *addVisitNote = [[AddVisitNoteTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            addVisitNote.delegate = self;
+            addVisitNote.patient = self.patient;
+            addVisitNote.delegate = self;
+            UINavigationController *addVisitNoteNavContrller = [[UINavigationController alloc] initWithRootViewController:addVisitNote];
+            addVisitNoteNavContrller.restorationIdentifier = NSStringFromClass([addVisitNoteNavContrller class]);
+            [self presentViewController:addVisitNoteNavContrller animated:YES completion:nil];
+        } else if (indexPath.row == 1) {
+            CaptureVitalsTableViewController *vitals = [[CaptureVitalsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            vitals.patient = self.patient;
+            vitals.delegate = self;
+            UINavigationController *captureVitalsNavContrller = [[UINavigationController alloc] initWithRootViewController:vitals];
+            captureVitalsNavContrller.restorationIdentifier = NSStringFromClass([captureVitalsNavContrller class]);
+            [self presentViewController:captureVitalsNavContrller animated:YES completion:nil];
+        }
         if (indexPath.row == 2) {
+            if ([self.patient isInCoreData]) {
+                MRSPatient *savedPatient = [[MRSPatient alloc] init];
+                savedPatient.UUID = self.patient.UUID;
+                [savedPatient updateFromCoreData];
+                if (!self.patient.upToDate) {
+                    [[SyncingEngine sharedEngine] SyncPatient:savedPatient completion:^(NSError *error) {
+                        if (!error) {
+                            [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Synced", @"Label synced")];
+                            self.patient = savedPatient;
+                            self.patientEdited = NO;
+                        } else {
+                            NSLog(@"ERROR");
+                            [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Error syncing", @"Label error syncing")];
+                        }
+                    }];
+                    return;
+                }
+            }
             [self.patient saveToCoreData];
             [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+            [self performSelector:@selector(reload) withObject:nil afterDelay:1.0];
             return;
         }
-        if (indexPath.row == 3) {
+        if (indexPath.row == 3 && ![MRSHelperFunctions isNull:self.patient] && [self.patient isInCoreData]) {
+            [self.patient cascadingDelete];
+            [self performSelector:@selector(reload) withObject:nil afterDelay:1.0];
+            return;
+        }
+        if ((indexPath.row == 3 && !(![MRSHelperFunctions isNull:self.patient] && [self.patient isInCoreData])) ||
+            ((indexPath.row == 4) && (![MRSHelperFunctions isNull:self.patient] && [self.patient isInCoreData])) ) {
             if (self.hasActiveVisit) {
                 MRSVisit *activeVisit;
                 for (MRSVisit *visit in self.visits) {
@@ -380,23 +468,8 @@
             }
             return;
         }
-        if (indexPath.row == 0) {
-            AddVisitNoteTableViewController *addVisitNote = [[AddVisitNoteTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-            addVisitNote.delegate = self;
-            addVisitNote.patient = self.patient;
-            addVisitNote.delegate = self;
-            UINavigationController *addVisitNoteNavContrller = [[UINavigationController alloc] initWithRootViewController:addVisitNote];
-            addVisitNoteNavContrller.restorationIdentifier = NSStringFromClass([addVisitNoteNavContrller class]);
-            [self presentViewController:addVisitNoteNavContrller animated:YES completion:nil];
-        } else if (indexPath.row == 1) {
-            CaptureVitalsTableViewController *vitals = [[CaptureVitalsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-            vitals.patient = self.patient;
-            vitals.delegate = self;
-            UINavigationController *captureVitalsNavContrller = [[UINavigationController alloc] initWithRootViewController:vitals];
-            captureVitalsNavContrller.restorationIdentifier = NSStringFromClass([captureVitalsNavContrller class]);
-            [self presentViewController:captureVitalsNavContrller animated:YES completion:nil];
-        }
-        if (indexPath.row == 4) {
+        if ((indexPath.row == 4&& !(![MRSHelperFunctions isNull:self.patient] && [self.patient isInCoreData])) ||
+            ((indexPath.row == 5) && (![MRSHelperFunctions isNull:self.patient] && [self.patient isInCoreData])) ) {
             EditPatient *editPatient = [[EditPatient alloc] init];
             self.patientEdited = YES;
             editPatient.patient = self.patient;
@@ -404,6 +477,13 @@
         }
     }
 }
+
+-(void)reload {
+    [self.tableView reloadData];
+}
+
+#pragma mark - Delegates
+
 - (void)didAddVisitNoteToPatient:(MRSPatient *)patient
 {
     if ([patient.UUID isEqualToString:self.patient.UUID]) {
