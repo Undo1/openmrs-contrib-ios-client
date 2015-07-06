@@ -109,9 +109,8 @@
     if (self.patient.causeOfDeath) {
         row.value = self.patient.causeOfDeath;
     }
-    row.hidden = @NO;
+    row.hidden = [NSString stringWithFormat:@"$%@!=1", kDead];
     [section addFormRow:row];
-    row.hidden = [NSString stringWithFormat:@"$%@==1", kDead];
 
     /* =========================================== Name Section =====================================*/
     section = [XLFormSectionDescriptor formSectionWithTitle:NSLocalizedString(@"Preferred Name", @"Label named -Preferred- -Name-)")];
@@ -170,8 +169,6 @@
                                                 rowType:XLFormRowDescriptorTypeText
                                                   title:[NSString stringWithFormat:@"%@ 1", NSLocalizedString(@"Address", "Address")]];
     [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
-    [row.cellConfigAtConfigure setObject:[NSString stringWithFormat:@"%@...", NSLocalizedString(@"Required", @"Place holder -required-")] forKey:@"textField.placeholder"];
-    row.required = YES;
     if (self.patient.address1) {
         row.value = self.patient.address1;
     }
