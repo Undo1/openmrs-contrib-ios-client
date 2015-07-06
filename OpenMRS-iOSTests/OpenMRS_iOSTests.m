@@ -143,5 +143,6 @@
         [patient cascadingDelete];
         XCTAssertTrue(value);
     }];
+    [OHHTTPStubs removeAllStubs];
 }
 @end
