@@ -19,6 +19,7 @@
 #import "MRSDateUtilities.h"
 #import "AppDelegate.h"
 #import "SyncingEngine.h"
+#import "EditPatientForm.h"
 
 @interface PatientViewController ()
 
@@ -473,7 +474,8 @@
             EditPatient *editPatient = [[EditPatient alloc] init];
             self.patientEdited = YES;
             editPatient.patient = self.patient;
-            [self.navigationController pushViewController:editPatient animated:YES];
+            EditPatientForm *pf = [[EditPatientForm alloc] initWithPatient:self.patient];
+            [self.navigationController pushViewController:pf animated:YES];
         }
     }
 }
