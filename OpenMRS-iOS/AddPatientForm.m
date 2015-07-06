@@ -14,6 +14,7 @@
 #import "OpenMRSAPIManager.h"
 #import "SelectPatientIdentifierTypeTableViewController.h"
 #import "Constants.h"
+#import "SVProgressHUD.h"
 
 
 @interface AddPatientForm ()
@@ -133,8 +134,19 @@
     row.hidden = [NSString stringWithFormat:@"$%@==1", kbirthdateEstimated];
     
     // Identifier Type
-    row = [XLFormRowDescriptor formRowDescriptorWithTag:kIdentifier rowType:XLFormRowDescriptorTypeSelectorPush title:NSLocalizedString(@"Identifier", @"Label identifier")];
+    row = [XLFormRowDescriptor formRowDescriptorWithTag:kIdentifierType
+                                                rowType:XLFormRowDescriptorTypeSelectorPush
+                                                  title:NSLocalizedString(@"Identifier Type", @"Label -identifier- -type-")];
     row.action.viewControllerClass = [SelectPatientIdentifierTypeTableViewController class];
+    row.required = YES;
+    [section addFormRow:row];
+    
+    //Identifier
+    row = [XLFormRowDescriptor formRowDescriptorWithTag:kIdentifier
+                                                rowType:XLFormRowDescriptorTypeText
+                                                  title:NSLocalizedString(@"Identifier", @"Label identifier")];
+    [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
+    [row.cellConfigAtConfigure setObject:[NSString stringWithFormat:@"%@...", NSLocalizedString(@"Required", @"Place holder -required-")] forKey:@"textField.placeholder"];
     row.required = YES;
     [section addFormRow:row];
     
@@ -237,12 +249,14 @@
         } else {
             parameters[kBirthdate] = [MRSDateUtilities openMRSFormatStringWithDate:values[kBirthdate]];
         }
-        NSLog(@"Param: %@", parameters);
-        [OpenMRSAPIManager addPatient:parameters withIdentifier:self.patientIdentifierType completion:^(NSError *error, MRSPatient *createdPatient) {
+        NSArray *identifiers = @[@{@"identifier":values[kIdentifier], @"identifierType":self.patientIdentifierType.UUID}];
+        NSLog(@"Identifiers: %@", identifiers);
+        [SVProgressHUD show];
+        [OpenMRSAPIManager addPatient:parameters withIdentifier:identifiers completion:^(NSError *error, MRSPatient *createdPatient) {
             if (!error) {
-                NSLog(@"WE DID IT WE ARE THE CHAMPIOOOONS");
+                [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Done", @"Label done")];
             } else {
-                NSLog(@"UGH WE FAILED AGAIN!");
+                [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Error", @"Warning label error")];
             }
         }];
     } else {
@@ -253,8 +267,6 @@
                           otherButtonTitles:nil]
          show];
     }
-    NSLog(@"iden_name %@, iden_UUID: %@", self.patientIdentifierType.display, self.patientIdentifierType.UUID);
-    NSLog(@"Values: %@", self.form.formValues);
 }
 
 - (BOOL)validateForm {
