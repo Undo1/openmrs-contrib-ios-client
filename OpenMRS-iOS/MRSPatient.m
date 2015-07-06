@@ -70,6 +70,7 @@
         }
         [managedContext deleteObject:object];
     }
+    [appDelegate saveContext];
 }
 - (void)saveToCoreData
 {
@@ -78,7 +79,7 @@
     NSManagedObjectContext *managedContext = appDelegate.managedObjectContext;
     NSEntityDescription *entity = [NSEntityDescription entityForName:@"Patient" inManagedObjectContext:managedContext];
     NSManagedObject *patient = [[NSManagedObject alloc] initWithEntity:entity insertIntoManagedObjectContext:managedContext];
-    NSLog(@"Saving to core data with dead= %@", [NSNumber numberWithBool:self.dead]);
+    NSLog(@"patient loading...");
     [patient setValue:[self valueNotNullAndIsString:self.UUID] forKey:@"uuid"];
     [patient setValue:[self valueNotNullAndIsString:self.address1] forKey:@"address1"];
     [patient setValue:[self valueNotNullAndIsString:self.address2] forKey:@"address2"];
@@ -93,7 +94,7 @@
     [patient setValue:[self valueNotNullAndIsString:self.cityVillage] forKey:@"cityVillage"];
     [patient setValue:[self valueNotNullAndIsString:self.country] forKey:@"country"];
     [patient setValue:[self valueNotNullAndIsString:self.countyDistrict] forKey:@"countyDistrict"];
-    [patient setValue:[self valueNotNullAndIsString:[NSNumber numberWithBool:self.dead]] forKey:@"dead"];
+    [patient setValue:self.dead?@YES:@NO forKey:@"dead"];
     [patient setValue:[self valueNotNullAndIsString:self.deathDate] forKey:@"deathDate"];
     [patient setValue:[self valueNotNullAndIsString:self.display] forKey:@"display"];
     [patient setValue:[self valueNotNullAndIsString:self.displayName] forKey:@"displayName"];
@@ -102,7 +103,7 @@
     [patient setValue:[self valueNotNullAndIsString:self.familyName2] forKey:@"familyName2"];
     [patient setValue:[self valueNotNullAndIsString:self.gender] forKey:@"gender"];
     [patient setValue:[self valueNotNullAndIsString:self.givenName] forKey:@"givenName"];
-    [patient setValue:[self valueNotNullAndIsString:[NSNumber numberWithBool:self.hasDetailedInfo]] forKey:@"hasDetailedInfo"];
+    [patient setValue:self.hasDetailedInfo?@YES:@NO forKey:@"hasDetailedInfo"];
     [patient setValue:[self valueNotNullAndIsString:self.latitude] forKey:@"latitude"];
     [patient setValue:[self valueNotNullAndIsString:self.locationDisplay] forKey:@"locationDisplay"];
     [patient setValue:[self valueNotNullAndIsString:self.longitude] forKey:@"longitude"];
@@ -112,13 +113,12 @@
     [patient setValue:[self valueNotNullAndIsString:self.preferredNameUUID] forKey:@"preferredNameUUID"];
     [patient setValue:[self valueNotNullAndIsString:self.preferredAddressUUID] forKey:@"preferredAddressUUID"];
     [patient setValue:[self valueNotNullAndIsString:self.stateProvince] forKey:@"stateProvince"];
-    [patient setValue:[self valueNotNullAndIsString:[NSNumber numberWithBool:self.upToDate]] forKey:@"upToDate"];
+    [patient setValue:self.upToDate?@YES:@NO forKey:@"upToDate"];
     NSError *error;
     if (![managedContext save:&error]) {
         NSLog(@"Error saving patient! %@", error);
     }
 //   Save Encounters
-    NSLog(@"uuid: %@", self.UUID);
     [OpenMRSAPIManager getEncountersForPatient:self completion:^(NSError *error, NSArray *encounters) {
         for (MRSEncounter *encounter in encounters) {
             [OpenMRSAPIManager getDetailedDataOnEncounter:encounter completion:^(NSError *fetchError, MRSEncounter *detailedEncounter) {
@@ -154,6 +154,7 @@
             NSLog(@"Error saving visit! %@", saveError);
         }
     }];
+    [appDelegate saveContext];
 }
 - (void)updateFromCoreData
 {
@@ -182,7 +183,7 @@
         self.cityVillage = [result valueForKey:@"cityVillage"];
         self.country = [result valueForKey:@"country"];
         self.countyDistrict = [result valueForKey:@"countyDistrict"];
-        self.dead = [[result valueForKey:@"dead"] boolValue];
+        self.dead = [[result valueForKey:@"dead"] boolValue]?YES:NO;
         self.deathDate = [result valueForKey:@"deathDate"];
         self.display = [result valueForKey:@"display"];
         self.displayName = [result valueForKey:@"displayName"];
@@ -191,7 +192,7 @@
         self.familyName2 = [result valueForKey:@"familyName2"];
         self.gender = [result valueForKey:@"gender"];
         self.givenName = [result valueForKey:@"givenName"];
-        self.hasDetailedInfo = [[result valueForKey:@"hasDetailedInfo"] boolValue];
+        self.hasDetailedInfo = [[result valueForKey:@"hasDetailedInfo"] boolValue]?YES:NO;
         self.latitude = [result valueForKey:@"latitude"];
         self.locationDisplay = [result valueForKey:@"locationDisplay"];
         self.longitude = [result valueForKey:@"longitude"];
@@ -201,7 +202,7 @@
         self.preferredAddressUUID = [result valueForKey:@"preferredAddressUUID"];
         self.preferredNameUUID = [result valueForKey:@"preferredNameUUID"];
         self.stateProvince = [result valueForKey:@"stateProvince"];
-        self.upToDate = [[result valueForKey:@"upToDate"] boolValue];
+        self.upToDate = [[result valueForKey:@"upToDate"] boolValue]?YES:NO;
         self.fromCoreData = YES;
     }
 }
@@ -214,7 +215,6 @@
     [request setPredicate:predicate];
     NSError *error = nil;
     NSArray *results = [appDelegate.managedObjectContext executeFetchRequest:request error:&error];
-    NSLog(@"results count: %lu", (unsigned long)results.count);
     if (results.count > 0) {
         return YES;
     } else {

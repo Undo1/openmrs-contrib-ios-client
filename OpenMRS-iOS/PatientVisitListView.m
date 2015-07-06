@@ -8,8 +8,20 @@
 
 #import "PatientVisitListView.h"
 #import "MRSVisit.h"
+#import "MRSVisitCell.h"
+#import "AppDelegate.h"
 
 @implementation PatientVisitListView
+
+-(id)initWithStyle:(UITableViewStyle)style {
+    self = [super initWithStyle:style];
+    if (self) {
+        self.tabBarItem.title = @"Visits";
+        self.tabBarItem.image = [UIImage imageNamed:@"active_visits_tab_bar_icon"];
+    }
+    return self;
+}
+
 - (void)setVisits:(NSArray *)visits
 {
     _visits = visits;
@@ -20,8 +32,23 @@
     [super viewDidLoad];
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
+
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
+    [MRSVisitCell updateTableViewForDynamicTypeSize:self.tableView];
+
     self.title = NSLocalizedString(@"Visits", @"Label visits");
 }
+
+- (void)updateFontSize {
+    [MRSVisitCell updateTableViewForDynamicTypeSize:self.tableView];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [MRSVisitCell updateTableViewForDynamicTypeSize:self.tableView];
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
     return 1;
@@ -32,13 +59,29 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+    MRSVisitCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        cell = [[MRSVisitCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
     }
     MRSVisit *visit = self.visits[indexPath.row];
-    cell.textLabel.text = visit.displayName;
-    cell.textLabel.numberOfLines = 0;
+    [cell setVisit:visit];
+    [cell setIndex:[NSNumber numberWithInteger:indexPath.row+1]];
+    [cell setNeedsUpdateConstraints];
+    [cell updateConstraintsIfNeeded];
+    cell.userInteractionEnabled = NO;
     return cell;
+}
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.visits forKey:@"visits"];
+    [super encodeRestorableStateWithCoder:coder];
+}
+
+#pragma mark - UIViewControllerRestoration
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    PatientVisitListView *visitList = [[PatientVisitListView alloc] initWithStyle:UITableViewStyleGrouped];
+    visitList.restorationIdentifier = [identifierComponents lastObject];
+    visitList.visits = [coder decodeObjectForKey:@"visits"];
+    return visitList;
 }
 @end

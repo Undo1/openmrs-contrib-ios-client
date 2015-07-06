@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 #import "MRSEncounter.h"
-@interface EncounterViewController : UITableViewController
+@interface EncounterViewController : UITableViewController <UIViewControllerRestoration>
 @property (nonatomic, strong) MRSEncounter *encounter;
 @end

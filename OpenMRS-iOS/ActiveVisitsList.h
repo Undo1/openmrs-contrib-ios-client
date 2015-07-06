@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface ActiveVisitsList : UITableViewController <UIViewControllerRestoration, UIDataSourceModelAssociation>
+@interface ActiveVisitsList : UITableViewController <UIViewControllerRestoration>
 
 @end

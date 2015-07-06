@@ -23,7 +23,7 @@
 + (void)getEncounterTypesWithCompletion:(void (^)(NSError *, NSArray *))completion;
 + (void)getEncountersForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *encounters))completion;
 + (void)getPatientIdentifierTypesWithCompletion:(void (^)(NSError *error, NSArray *types))completion;
-+ (void)addPatient:(MRSPatient *)patient withIdentifier:(MRSPatientIdentifier *)identifier completion:(void (^)(NSError *error, MRSPatient *createdPatient))completion;
++ (void)addPatient:(NSDictionary *)parameters withIdentifier:(MRSPatientIdentifierType *)identifier completion:(void (^)(NSError *error, MRSPatient *createdPatient))completion;
 + (void)addVisitNote:(NSString *)note toPatient:(MRSPatient *)patient atLocation:(MRSLocation *)location completion:(void (^)(NSError *error))completion;
 + (void)captureVitals:(NSArray *)vitals toPatient:(MRSPatient *)patient atLocation:(MRSLocation *)location completion:(void (^)(NSError *error))completion;
 + (void)startVisitWithLocation:(MRSLocation *)location visitType:(MRSVisitType *)visitType forPatient:(MRSPatient *)patient completion:(void (^)(NSError *error))completion;

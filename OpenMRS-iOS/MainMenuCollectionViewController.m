@@ -11,6 +11,7 @@
 #import "SettingsViewController.h"
 #import "AddPatientTableViewController.h"
 #import "ActiveVisitsList.h"
+#import "AddPatientForm.h"
 
 @implementation MainMenuCollectionViewController
 
@@ -135,7 +136,8 @@ static NSString * const reuseIdentifier = @"Cell";
         [self.navigationController pushViewController:search animated:YES];
     } else if (indexPath.item == 1) {
         AddPatientTableViewController *addPatient = [[AddPatientTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-        UINavigationController *addPatientNavController = [[UINavigationController alloc] initWithRootViewController:addPatient];
+        AddPatientForm *addPatientForm = [[AddPatientForm alloc] init];
+        UINavigationController *addPatientNavController = [[UINavigationController alloc] initWithRootViewController:addPatientForm];
         addPatientNavController.restorationIdentifier = NSStringFromClass([addPatientNavController class]);
         [self presentViewController:addPatientNavController animated:YES completion:nil];
     } else if (indexPath.item == 2) {

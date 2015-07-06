@@ -16,7 +16,7 @@
 - (void)didCaptureVitalsForPatient:(MRSPatient *)patient;
 @end
 
-@interface CaptureVitalsTableViewController : UITableViewController <LocationListTableViewControllerDelegate>
+@interface CaptureVitalsTableViewController : UITableViewController <LocationListTableViewControllerDelegate, UIViewControllerRestoration>
 @property (nonatomic, strong) NSArray *fields;
 @property (nonatomic, strong) NSMutableDictionary *textFieldValues;
 @property (nonatomic, strong) MRSPatient *patient;

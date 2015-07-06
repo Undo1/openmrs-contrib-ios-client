@@ -39,41 +39,45 @@
     [super viewDidLoad];
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
-    NSLog(@"uuid: %@" , self.patient.UUID);
+    
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
+
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save", @"Save button label")
                                                                               style:UIBarButtonItemStylePlain
                                                                              target:self
                                                                             action:@selector(updatePatient)];
     self.navigationItem.title = NSLocalizedString(@"Edit patient", @"Title -Edit- -patient-");
     self.patientData = @[
-                         @{
+                         [[NSMutableDictionary alloc] initWithDictionary:@{
                              @"Gender": ObjectOrEmpty(self.patient.gender),
                              @"BirthDate": ObjectOrEmpty(self.patient.birthdate),
                              @"BirthDate Estimated": ObjectOrEmpty(self.patient.birthdateEstimated),
-                             @"Dead": ObjectOrEmpty(self.patient.dead?@"true":@"false"),
+                             @"Dead": ObjectOrEmpty(self.patient.dead?NSLocalizedString(@"true", @"True value"):NSLocalizedString(@"false", @"False value")),
                              @"Cause Of Death": ObjectOrEmpty(self.patient.causeOfDeath)
-                             },
-                         @{
-                             @"Given Name": ObjectOrEmpty(self.patient.givenName),
-                             @"Middle Name": ObjectOrEmpty(self.patient.middleName),
-                             @"Family Name": ObjectOrEmpty(self.patient.familyName),
-                             @"Family Name2": ObjectOrEmpty(self.patient.familyName2)
-                             },
-                         @{
-                             @"Address 1": ObjectOrEmpty(self.patient.address1),
-                             @"Address 2": ObjectOrEmpty(self.patient.address2),
-                             @"Address 3": ObjectOrEmpty(self.patient.address3),
-                             @"Address 4": ObjectOrEmpty(self.patient.address4),
-                             @"Address 5": ObjectOrEmpty(self.patient.address5),
-                             @"Address 6": ObjectOrEmpty(self.patient.address6),
-                             @"City Village": ObjectOrEmpty(self.patient.cityVillage),
-                             @"State Province": ObjectOrEmpty(self.patient.stateProvince),
-                             @"Country": ObjectOrEmpty(self.patient.country),
-                             @"Postal Code": ObjectOrEmpty(self.patient.postalCode),
-                             @"Longitude": ObjectOrEmpty(self.patient.longitude),
-                             @"Latitude": ObjectOrEmpty(self.patient.latitude),
-                             @"County District": ObjectOrEmpty(self.patient.countyDistrict)
-                             }
+                             }],
+                         [[NSMutableDictionary alloc] initWithDictionary:@{
+                            @"Given Name": ObjectOrEmpty(self.patient.givenName),
+                            @"Middle Name": ObjectOrEmpty(self.patient.middleName),
+                            @"Family Name": ObjectOrEmpty(self.patient.familyName),
+                            @"Family Name2": ObjectOrEmpty(self.patient.familyName2)
+                            }],
+                         [[NSMutableDictionary alloc] initWithDictionary:@{
+                            @"Address 1": ObjectOrEmpty(self.patient.address1),
+                            @"Address 2": ObjectOrEmpty(self.patient.address2),
+                            @"Address 3": ObjectOrEmpty(self.patient.address3),
+                            @"Address 4": ObjectOrEmpty(self.patient.address4),
+                            @"Address 5": ObjectOrEmpty(self.patient.address5),
+                            @"Address 6": ObjectOrEmpty(self.patient.address6),
+                            @"City Village": ObjectOrEmpty(self.patient.cityVillage),
+                            @"State Province": ObjectOrEmpty(self.patient.stateProvince),
+                            @"Country": ObjectOrEmpty(self.patient.country),
+                            @"Postal Code": ObjectOrEmpty(self.patient.postalCode),
+                            @"Longitude": ObjectOrEmpty(self.patient.longitude),
+                            @"Latitude": ObjectOrEmpty(self.patient.latitude),
+                            @"County District": ObjectOrEmpty(self.patient.countyDistrict)
+                            }]
                          ];
     self.personKeys = @[@"Gender", @"BirthDate", @"BirthDate Estimated", @"Dead", @"Cause Of Death"];
     self.nameKeys = @[@"Given Name", @"Middle Name", @"Family Name", @"Family Name2"];
@@ -116,6 +120,16 @@
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
 }
 
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
+}
+
+- (void)updateFontSize {
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
+}
+
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
     NSArray *labels = @[NSLocalizedString(@"Person", @"Label named person"), NSLocalizedString(@"Preferred Name", @"Label named -Preferred- -Name-)"), NSLocalizedString(@"Preferred Address", @"Label named -Preferred- -Address-")];
     return labels[section];
@@ -153,8 +167,9 @@ static id ObjectOrEmpty(id object)
     field.textColor = self.view.tintColor;
     field.textAlignment = NSTextAlignmentRight;
     field.returnKeyType = UIReturnKeyDone;
+    field.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     field.delegate = self;
-    if ((indexPath.section == 0 && indexPath.row == 1) || (indexPath.section == 2 && indexPath.row == 14)) {
+    if ((indexPath.section == 0 && indexPath.row == 1)) {
         UIDatePicker *datePicker = [[UIDatePicker alloc] init];
         if (indexPath.row == 1) {
             if (self.patient.birthdate != nil) {
@@ -163,11 +178,10 @@ static id ObjectOrEmpty(id object)
                 datePicker.date = [NSDate date];
             }
         }
-        //[datePicker addTarget:self action:@selector(dateChanged) forControlEvents:UIControlEventValueChanged];
         datePicker.datePickerMode = UIDatePickerModeDate;
         [field setInputView:datePicker];
     }
-    field.text = self.patientData[indexPath.section][label];
+    field.text = self.patientData[indexPath.section][self.translatedToOriginal[label]];
     [cell addSubview:field];
     return cell;
 }
@@ -183,7 +197,7 @@ static id ObjectOrEmpty(id object)
     NSString *fieldName = self.translatedToOriginal[cellForTextField.textLabel.text];
 
     if ([fieldName isEqualToString:@"Dead"] || [fieldName isEqualToString:@"BirthDate Estimated"]) {
-        if ([textField.text isEqualToString:@"true"] || [textField.text isEqualToString:@""] ) {
+        if ([textField.text isEqualToString:NSLocalizedString(@"true", @"True value")] || [textField.text isEqualToString:@""] ) {
             textField.text = NSLocalizedString(@"false", @"False value");
         } else {
             textField.text = NSLocalizedString(@"true", @"True value");
@@ -205,29 +219,48 @@ static id ObjectOrEmpty(id object)
     NSString *property = self.translatedToOriginal[cellForTextField.textLabel.text];
     NSString *newValue = textField.text;
     
+    NSLog(@"set property: %@", property);
     if([property isEqualToString:@"Dead"]) {
         if ([newValue isEqualToString:NSLocalizedString(@"true", @"True value")]) {
             self.patient.dead = YES;
         } else {
             self.patient.dead = NO;
         }
+        self.patientData[0][@"Dead"]= self.patient.dead?NSLocalizedString(@"false", @"False value"):NSLocalizedString(@"true", @"True value");
+
     } else if ([property isEqualToString:@"BirthDate Estimated"]) {
-        [self.patient setValue:newValue forKey:[MRSHelperFunctions formLabelToJSONLabel:property]];
+        if ([newValue isEqualToString:NSLocalizedString(@"true", @"True value")]) {
+            self.patient.birthdateEstimated = @"true";
+            [self.patientData[0] setObject:NSLocalizedString(@"true", @"True value") forKey:property];
+        } else {
+            self.patient.birthdateEstimated = @"false";
+            [self.patientData[0] setObject:NSLocalizedString(@"false", @"False value") forKey:property];
+        }
 
     } else if ([property isEqualToString:@"BirthDate"]){
         UIDatePicker *picker = (UIDatePicker *)self.currentTextField.inputView;
         NSString *openmrsDate = [MRSDateUtilities openMRSFormatStringWithDate:picker.date];
         textField.text = openmrsDate;
+        self.patientData[0][@"BirthDate"] = openmrsDate;
         [self.patient setValue:openmrsDate forKey:[MRSHelperFunctions formLabelToJSONLabel:property]];
     } else if ([property isEqualToString:@"Gender"]) {
         if ([newValue isEqualToString:NSLocalizedString(@"M", @"First character of gender -male-")]){
             self.patient.gender = @"M";
+            [self.patientData[0] setObject:NSLocalizedString(@"M", @"First character of gender -male-") forKey:property];
         } else {
             self.patient.gender = @"F";
+            [self.patientData[0] setObject:NSLocalizedString(@"F", @"First character of gender -female-") forKey:property];
         }
     } else {
+        for (NSDictionary *dict in self.patientData) {
+            if ([dict objectForKey:property]) {
+                [dict setValue:newValue forKey:property];
+                break;
+            }
+        }
         [self.patient setValue:newValue forKey:[MRSHelperFunctions formLabelToJSONLabel:property]];
     }
+    NSLog(@"Set for: %@", [self.patient valueForKey:[MRSHelperFunctions formLabelToJSONLabel:property]]);
 }
 
 #pragma mark - barbuttonitem Action
@@ -257,11 +290,26 @@ static id ObjectOrEmpty(id object)
 #pragma mark - alertview delegate
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) {
+    if (buttonIndex == 1) {
         [self updatePatient];
-    } else {
+    } else if (buttonIndex == 2){
         self.patient.upToDate = NO;
         [self.patient saveToCoreData];
     }
+}
+
+- (void)alertViewCancel:(UIAlertView *)alertView {}
+
+#pragma mark - UIViewRestoration
+
+- (void) encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.patient forKey:@"patient"];
+    [super decodeRestorableStateWithCoder:coder];
+}
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    EditPatient *editPatient = [[EditPatient alloc] init];
+    editPatient.patient = [coder decodeObjectForKey:@"patient"];
+    return editPatient;
 }
 @end

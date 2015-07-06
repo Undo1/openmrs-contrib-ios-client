@@ -59,8 +59,24 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    static NSDictionary *cellHeightDictionary;
+    
+    if (!cellHeightDictionary) {
+        cellHeightDictionary = @{ UIContentSizeCategoryExtraSmall : @44,
+                                  UIContentSizeCategorySmall : @44,
+                                  UIContentSizeCategoryMedium : @44,
+                                  UIContentSizeCategoryLarge : @44,
+                                  UIContentSizeCategoryExtraLarge : @55,
+                                  UIContentSizeCategoryExtraExtraLarge : @65,
+                                  UIContentSizeCategoryExtraExtraExtraLarge : @75 };
+    }
+    
+    NSString *userSize =
+    [[UIApplication sharedApplication] preferredContentSizeCategory];
+    
+    NSNumber *cellHeight = cellHeightDictionary[userSize];
     if (indexPath.section == 1) {
-        return 44;
+        return cellHeight.floatValue;
     }
     return 120;
 }
@@ -83,6 +99,7 @@
     textView.font = [UIFont fontWithName:textView.font.fontName size:cell.textLabel.font.pointSize];
     textView.text = self.currentVisitNote;
     textView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    textView.font = [UIFont preferredFontForTextStyle:UIFontTextStyleBody];
     [cell addSubview:textView];
     return cell;
 }
@@ -113,5 +130,22 @@
     }
     [self.navigationController popToViewController:self animated:YES];
     [self.tableView reloadData];
+}
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.patient forKey:@"patient"];
+    [coder encodeObject:self.currentLocation forKey:@"location"];
+    [coder encodeObject:self.currentVisitNote forKey:@"noteText"];
+    [coder encodeObject:self.delegate forKey:@"delegate"];
+}
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    NSLog(@"hirearchy: %@", identifierComponents);
+    AddVisitNoteTableViewController *addnoteVC = [[AddVisitNoteTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    addnoteVC.delegate = [coder decodeObjectForKey:@"delegate"];
+    addnoteVC.currentVisitNote = [coder decodeObjectForKey:@"noteText"];
+    addnoteVC.currentLocation = [coder decodeObjectForKey:@"location"];
+    addnoteVC.patient = [coder decodeObjectForKey:@"patient"];
+    return addnoteVC;
 }
 @end

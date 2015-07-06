@@ -9,7 +9,8 @@
 #import "SVProgressHUD.h"
 #import "ActiveVisitsList.h"
 #import "MRSHelperFunctions.h"
-
+#import "MRSVisitCell.h"
+#import "MRSVisit.h"
 
 @interface ActiveVisitsList ()
 
@@ -29,10 +30,15 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
+    [MRSVisitCell updateTableViewForDynamicTypeSize:self.tableView];
+
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
-    self.title = @"Active visits";
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Close"
+    self.title = NSLocalizedString(@"Active visits", @"Label -active- -visits");
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close")
                                                                              style:UIBarButtonItemStylePlain
                                                                             target:self
                                                                             action:@selector(close)];
@@ -48,15 +54,20 @@
         [self loadMore];
     }
 
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"cell"];
+    [self.tableView registerClass:[MRSVisitCell class] forCellReuseIdentifier:@"cell"];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"transperantCell"];
     
     self.tableView.separatorColor = [UIColor clearColor];
-    self.tableView.rowHeight = 66;
+    self.tableView.rowHeight = 100;
+}
+
+- (void)updateFontSize {
+    [MRSVisitCell updateTableViewForDynamicTypeSize:self.tableView];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [MRSVisitCell updateTableViewForDynamicTypeSize:self.tableView];
     [self.tableView reloadData];
     if(![MRSHelperFunctions isNull:self.currentIndexPath]) {
         [self.tableView scrollToRowAtIndexPath:self.currentIndexPath atScrollPosition:UITableViewScrollPositionBottom animated:NO];
@@ -81,14 +92,15 @@
 
 - (void)close
 {
+    [SVProgressHUD dismiss];
     [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell;
     if (indexPath.row == self.activeVisits.count) {
+        UITableViewCell *cell;
         cell = [tableView dequeueReusableCellWithIdentifier:@"transperantCell" forIndexPath:indexPath];
         if (!cell) {
             cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"transperantCell"];
@@ -102,17 +114,24 @@
         [loading setFrame:CGRectMake(size.width/2 - SPINNERSIZE/2, 33 - SPINNERSIZE / 2, SPINNERSIZE, SPINNERSIZE)];
         [cell.contentView addSubview:loading];
         [loading startAnimating];
+
+        cell.userInteractionEnabled = NO;
+        return cell;
     } else {
+        MRSVisitCell *cell;
         cell = [tableView dequeueReusableCellWithIdentifier:@"cell" forIndexPath:indexPath];
-        if (!cell) {
-            cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+        if (!cell || [NSStringFromClass([cell class]) isEqualToString:@"UITableViewCell"]) {
+            cell = [[MRSVisitCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
         }
         MRSVisit *visit = self.activeVisits[indexPath.row];
-        cell.textLabel.text = visit.displayName;
-        cell.textLabel.numberOfLines = 2;
+        [cell setVisit:visit];
+        [cell setNeedsUpdateConstraints];
+        [cell updateConstraintsIfNeeded];
+        [cell setIndex:[NSNumber numberWithInteger:indexPath.row + 1]];
+        //cell.contentView.frame = CGRectOffset(cell.frame, 10, 10);
+        cell.userInteractionEnabled = NO;
+        return cell;
     }
-    cell.userInteractionEnabled = NO;
-    return cell;
 }
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -124,7 +143,7 @@
 
 - (void)loadMore {
     self.loading = YES;
-    [SVProgressHUD showWithStatus:@"Loading more visits.."];
+    [SVProgressHUD showWithStatus:[NSString stringWithFormat:@"%@..", NSLocalizedString(@"Loading more visits", @"Message Loading more visits")]];
     [OpenMRSAPIManager getActiveVisits:self.activeVisits From:self.startIndex withCompletion:^(NSError *error) {
         if (!error) {
             [self.tableView reloadData];
@@ -132,12 +151,15 @@
             self.startIndex = self.activeVisits.count;
             self.loading = NO;
             [self addNewRows:current];
-            [SVProgressHUD showSuccessWithStatus:@"Done"];
+            [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Done", @"Label done")];
         } else {
             if (self.activeVisits.count == 0){
-                [SVProgressHUD showErrorWithStatus:@"Can not load active visits"];
+                [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Can not load active visits", @"Message Can not load active visits")];
+                //To remove the spinning indicator cell.
+                self.hasMore = NO;
+                [self.tableView reloadData];
             } else {
-                [SVProgressHUD showErrorWithStatus:@"Problem loading more active visits"];
+                [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Problem loading more active visits", @"Message Problem loading more active visits")];
             }
         }
     }];

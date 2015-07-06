@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface PatientEncounterListView : UITableViewController
+@interface PatientEncounterListView : UITableViewController <UIViewControllerRestoration>
 @property (nonatomic, strong) NSArray *encounters;
 @end

@@ -46,6 +46,7 @@
 @property (nonatomic) BOOL hasDetailedInfo;
 @property (nonatomic) BOOL upToDate;
 
+- (void)cascadingDelete;
 - (void)saveToCoreData;
 - (void)updateFromCoreData;
 - (BOOL)isInCoreData;

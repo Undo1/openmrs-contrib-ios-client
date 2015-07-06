@@ -13,7 +13,7 @@ protocol SelectVisitTypeViewDelegate
     func didSelectVisitType(type: MRSVisitType)
 }
 
-class SelectVisitTypeView : UITableViewController
+class SelectVisitTypeView : UITableViewController, UIViewControllerRestoration
 {
     var visitTypes: [MRSVisitType]! = []
     var delegate: SelectVisitTypeViewDelegate!
@@ -28,10 +28,24 @@ class SelectVisitTypeView : UITableViewController
         super.init(style: .Plain)
     }
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        MRSHelperFunctions.updateTableViewForDynamicTypeSize(self.tableView)
+    }
+
+    func updateFontSize() {
+        MRSHelperFunctions.updateTableViewForDynamicTypeSize(self.tableView)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.restorationIdentifier = NSStringFromClass(self.dynamicType);
         self.restorationClass = self.dynamicType;
+        
+        var defaultCenter = NSNotificationCenter.defaultCenter()
+        defaultCenter.addObserver(self, selector:"updateFontSize", name: UIContentSizeCategoryDidChangeNotification, object: nil)
+        MRSHelperFunctions.updateTableViewForDynamicTypeSize(self.tableView)
+        
         self.title = NSLocalizedString("Visit Type", comment: "Label -visit- -type-")
         
         self.reloadData()
@@ -81,5 +95,17 @@ class SelectVisitTypeView : UITableViewController
         let visitType = visitTypes[indexPath.row]
         delegate.didSelectVisitType(visitType)
         self.navigationController?.popToRootViewControllerAnimated(true)
+    }
+    
+    override func encodeRestorableStateWithCoder(coder: NSCoder) {
+        coder.encodeObject(self.delegate as! StartVisitViewController, forKey: "delegate")
+        coder.encodeObject(self.visitTypes, forKey: "visitTypes")
+    }
+    
+    static func viewControllerWithRestorationIdentifierPath(identifierComponents: [AnyObject], coder: NSCoder) -> UIViewController? {
+        let visitTypeList = SelectVisitTypeView(style: UITableViewStyle.Plain)
+        visitTypeList.visitTypes = coder.decodeObjectForKey("visitTypes") as! [MRSVisitType]
+        visitTypeList.delegate = coder.decodeObjectForKey("delegate") as! StartVisitViewController
+        return visitTypeList
     }
 }

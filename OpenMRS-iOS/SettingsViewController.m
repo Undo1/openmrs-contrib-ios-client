@@ -9,15 +9,31 @@
 #import "SettingsViewController.h"
 #import "OpenMRSAPIManager.h"
 #import "KeychainItemWrapper.h"
+#import "MRSHelperFunctions.h"
 #import "AppDelegate.h"
+#import "SyncingEngine.h"
 @implementation SettingsViewController
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
+
+    NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
+    [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
     self.title = NSLocalizedString(@"Settings", @"Label settings");
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissView)];
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
+}
+
+- (void)updateFontSize {
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
 }
 - (void)dismissView
 {
@@ -88,13 +104,13 @@
     if (indexPath.section == 1 && indexPath.row == 0) {
         AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
         [delegate clearStore];
+        [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     } else if (indexPath.section == 0 && indexPath.row == 1) {
         [self dismissViewControllerAnimated:NO completion:^ {
             [OpenMRSAPIManager logout];
         }];
     } else if (indexPath.section == 1 && indexPath.row == 1) {
-        AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
-        [appDelegate updateExistingOutOfDatePatients];
+        [[SyncingEngine sharedEngine] updateExistingOutOfDatePatients:nil];
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
     }
 }

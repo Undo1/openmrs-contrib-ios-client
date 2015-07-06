@@ -7,13 +7,17 @@
 //
 
 #import "MRSDateUtilities.h"
+#import "MRSHelperFunctions.h"
 
 @implementation MRSDateUtilities
 
 + (NSString *)openMRSFormatStringWithDate:(NSDate *)date
 {
+    if ([MRSHelperFunctions isNull:date]) {
+        return @"";
+    }
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-d'T'HH:mm:ss.SSS-ZZZZ"];
+    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZ"];
     NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
     [formatter setTimeZone:timeZone];
     NSString *stringFromDate = [formatter stringFromDate:date];
@@ -21,10 +25,13 @@
 }
 
 + (NSDate *)dateFromOpenMRSFormattedString:(NSString *) openmrsDate {
+    if ([MRSHelperFunctions isNull:openmrsDate]) {
+        return nil;
+    }
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-d'T'HH:mm:ss.SSSZ"];
-    NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
-    [formatter setTimeZone:timeZone];
+    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZ"];
+    //NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+    //[formatter setTimeZone:timeZone];
     NSDate *date = [formatter dateFromString:openmrsDate];
     return date;
 }

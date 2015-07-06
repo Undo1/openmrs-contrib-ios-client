@@ -14,6 +14,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     self.restorationIdentifier = NSStringFromClass([self class]);
+
     self.restorationClass = [self class];
 }
 - (void)setEncounter:(MRSEncounter *)encounter
@@ -31,6 +32,12 @@
         }
         else {
             self.encounter = detailedEncounter;
+            if (self.encounter.obs.count == 0) {
+                UILabel *backgroundLabel = [[UILabel alloc] init];
+                backgroundLabel.textAlignment = NSTextAlignmentCenter;
+                backgroundLabel.text = [NSString stringWithFormat:@"\"%@\"", NSLocalizedString(@"No details", @"Label -no- -details-")];
+                self.tableView.backgroundView = backgroundLabel;
+            }
             NSLog(@"obs: %@", self.encounter.obs);
             dispatch_async(dispatch_get_main_queue(), ^ {
                 [self.tableView reloadData];
@@ -56,5 +63,16 @@
     cell.textLabel.text = ob.display;
     cell.textLabel.numberOfLines = 0;
     return cell;
+}
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.encounter forKey:@"encounter"];
+    [super encodeRestorableStateWithCoder:coder];
+}
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    EncounterViewController *encounterVC = [[EncounterViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    encounterVC.encounter = [coder decodeObjectForKey:@"encounter"];
+    return encounterVC;
 }
 @end

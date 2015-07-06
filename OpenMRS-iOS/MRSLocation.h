@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MRSLocation : NSObject
+@interface MRSLocation : NSObject <NSCoding>
 @property (nonatomic, strong) NSString *UUID;
 @property (nonatomic, strong) NSString *display;
 @end

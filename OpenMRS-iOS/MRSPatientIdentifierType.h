@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-@interface MRSPatientIdentifierType : NSObject
+@interface MRSPatientIdentifierType : NSObject <NSCoding>
 @property (nonatomic, strong) NSString *UUID;
 @property (nonatomic, strong) NSString *display;
 @property (nonatomic, strong) NSString *typeDescription;
