@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		2432066D1B2E439000B54970 /* EditPatient.m in Sources */ = {isa = PBXBuildFile; fileRef = 2432066C1B2E439000B54970 /* EditPatient.m */; };
 		243206711B30436700B54970 /* MRSHelperFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 243206701B30436700B54970 /* MRSHelperFunctions.m */; };
+		2436F2B11B49A01000294B4C /* EditPatientForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 2436F2B01B49A01000294B4C /* EditPatientForm.m */; };
+		2436F2B51B49D56C00294B4C /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 2436F2B41B49D56C00294B4C /* Constants.m */; };
 		243786431B46B81A00AB5089 /* AddPatientForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 243786421B46B81A00AB5089 /* AddPatientForm.m */; };
 		243786491B47730900AB5089 /* SyncingEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 243786481B47730900AB5089 /* SyncingEngine.m */; };
 		245EDDC91B21A0F400B8C0EB /* user_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDC71B21A0F400B8C0EB /* user_icon.png */; };
@@ -94,6 +96,10 @@
 		2432066C1B2E439000B54970 /* EditPatient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditPatient.m; sourceTree = "<group>"; };
 		2432066F1B30436700B54970 /* MRSHelperFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSHelperFunctions.h; sourceTree = "<group>"; };
 		243206701B30436700B54970 /* MRSHelperFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSHelperFunctions.m; sourceTree = "<group>"; };
+		2436F2AF1B49A01000294B4C /* EditPatientForm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditPatientForm.h; sourceTree = "<group>"; };
+		2436F2B01B49A01000294B4C /* EditPatientForm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditPatientForm.m; sourceTree = "<group>"; };
+		2436F2B31B49D56C00294B4C /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
+		2436F2B41B49D56C00294B4C /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		2437863D1B46A2B600AB5089 /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2437863E1B46A64200AB5089 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2437863F1B46A6C900AB5089 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -241,9 +247,19 @@
 			name = "Edit Patient";
 			sourceTree = "<group>";
 		};
+		2436F2B21B49A01900294B4C /* Edit patient Form */ = {
+			isa = PBXGroup;
+			children = (
+				2436F2AF1B49A01000294B4C /* EditPatientForm.h */,
+				2436F2B01B49A01000294B4C /* EditPatientForm.m */,
+			);
+			name = "Edit patient Form";
+			sourceTree = "<group>";
+		};
 		243786441B46B82000AB5089 /* Forms */ = {
 			isa = PBXGroup;
 			children = (
+				2436F2B21B49A01900294B4C /* Edit patient Form */,
 				243786451B46B82700AB5089 /* Add patient */,
 			);
 			name = Forms;
@@ -422,6 +438,8 @@
 				24D127501B0DF6140018AA1D /* MRSDateUtilities.m */,
 				2432066F1B30436700B54970 /* MRSHelperFunctions.h */,
 				243206701B30436700B54970 /* MRSHelperFunctions.m */,
+				2436F2B31B49D56C00294B4C /* Constants.h */,
+				2436F2B41B49D56C00294B4C /* Constants.m */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -909,6 +927,7 @@
 				D38DB4F81A320EF700E2CF23 /* MRSEncounterOb.m in Sources */,
 				243786431B46B81A00AB5089 /* AddPatientForm.m in Sources */,
 				D39AD7AE1A3C081000C01540 /* MRSVital.m in Sources */,
+				2436F2B51B49D56C00294B4C /* Constants.m in Sources */,
 				D317E7F61A4C6BD300E05212 /* OrderedDictionary.m in Sources */,
 				2432066D1B2E439000B54970 /* EditPatient.m in Sources */,
 				D396A52D1A2E09DE00DE6448 /* MRSPatient.m in Sources */,
@@ -922,6 +941,7 @@
 				D396A52C1A2E09DE00DE6448 /* PatientSearchViewController.m in Sources */,
 				D396A54D1A2E3E5600DE6448 /* PatientEncounterListView.m in Sources */,
 				D37674271A3BB114003A8005 /* MRSLocation.m in Sources */,
+				2436F2B11B49A01000294B4C /* EditPatientForm.m in Sources */,
 				D34BF5391A3BA7BE009205C9 /* AddVisitNoteTableViewController.m in Sources */,
 				243786491B47730900AB5089 /* SyncingEngine.m in Sources */,
 				D3DCBBF81A71F4940024D088 /* StartVisitViewController.swift in Sources */,

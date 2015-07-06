@@ -13,26 +13,8 @@
 #import "MRSPatientIdentifier.h"
 #import "OpenMRSAPIManager.h"
 #import "SelectPatientIdentifierTypeTableViewController.h"
+#import "Constants.h"
 
-NSString *const kGivenName = @"givenName";
-NSString *const kMiddleName = @"middleName";
-NSString *const kFamilyName = @"familyName";
-NSString *const kFamilyName2 = @"familyName2";
-NSString *const kGender = @"gender";
-NSString *const kbirthdateEstimated = @"birthdateEstimated";
-NSString *const kAge = @"age";
-NSString *const kBirthdate = @"birthdate";
-NSString *const kIdentifier = @"identifier";
-NSString *const kAddress1 = @"address1";
-NSString *const kAddress2 = @"address2";
-NSString *const kAddress3 = @"address3";
-NSString *const kAddress4 = @"address4";
-NSString *const kAddress5 = @"address5";
-NSString *const kAddress6 = @"address6";
-NSString *const kCityVillage = @"cityVillage";
-NSString *const kStateProvince = @"stateProvince";
-NSString *const kCountry = @"country";
-NSString *const kPostalCode = @"postalCode";
 
 @interface AddPatientForm ()
 
@@ -59,6 +41,13 @@ NSString *const kPostalCode = @"postalCode";
         [self initializeForm];
     }
     return self;
+}
+
+-(void)viewDidLoad {
+    [super viewDidLoad];
+    
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(processForm)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
 }
 
 - (void)initializeForm {
@@ -202,15 +191,6 @@ NSString *const kPostalCode = @"postalCode";
     self.form = form;
 }
 
--(void)viewDidLoad {
-    [super viewDidLoad];
-    
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close")
-                                                                              style:UIBarButtonItemStylePlain
-                                                                             target:self
-                                                                             action:@selector(processForm)];
-}
-
 #pragma mark - SelectPatientIdentifierTypeTableViewControllerDelegate
 
 - (void)didSelectPatientIdentifierType:(MRSPatientIdentifierType *)type {
@@ -296,5 +276,8 @@ NSString *const kPostalCode = @"postalCode";
         }
     }
     return valid;
+}
+- (void)cancel {
+    [self dismissViewControllerAnimated:YES completion:nil];
 }
 @end
