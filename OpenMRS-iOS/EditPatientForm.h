@@ -12,7 +12,8 @@
 
 @interface EditPatientForm : XLFormViewController <UIAlertViewDelegate>
 
-- (instancetype)initWithPatient:(MRSPatient *)patient;
 @property (nonatomic, strong) MRSPatient *patient;
+
+- (instancetype)initWithPatient:(MRSPatient *)patient;
 
 @end
