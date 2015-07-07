@@ -24,7 +24,10 @@ static NSString * const reuseIdentifier = @"Cell";
     self.restorationClass = [self class];
     self.title = NSLocalizedString(@"OpenMRS", @"Orgnaization name");
     self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Settings", @"Label settings") style:UIBarButtonItemStyleBordered target:self action:@selector(showSettings)];
+    if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Settings", @"Label settings") style:UIBarButtonItemStyleBordered target:self action:@selector(showSettings)];
+    }
+
     self.collectionView.backgroundColor = [UIColor whiteColor];
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
 }
@@ -58,6 +61,9 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        return 4;
+    }
     return 3;
 }
 
@@ -75,6 +81,9 @@ static NSString * const reuseIdentifier = @"Cell";
         break;
     case 2:
         image = [UIImage imageNamed:@"active_visits_icon"];
+        break;
+    case 3:
+        image = [UIImage imageNamed:@"settings-icon"];
     default:
         break;
     }
@@ -95,6 +104,9 @@ static NSString * const reuseIdentifier = @"Cell";
         break;
     case 2:
         label.text = NSLocalizedString(@"Active visits", @"Label -active- -visits");
+        break;
+    case 3:
+        label.text = NSLocalizedString(@"Settings", @"Label settings");
     default:
         break;
     }
@@ -145,6 +157,12 @@ static NSString * const reuseIdentifier = @"Cell";
         UINavigationController *activeVisitsNavController = [[UINavigationController alloc] initWithRootViewController:activeVisits];
         activeVisitsNavController.restorationIdentifier = NSStringFromClass([activeVisitsNavController class]);
         [self presentViewController:activeVisitsNavController animated:YES completion:nil];
+    } else {
+        SettingsViewController *settings = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        UINavigationController *navcon = [[UINavigationController alloc] initWithRootViewController:settings];
+        navcon.restorationIdentifier = NSStringFromClass([navcon class]);
+        navcon.modalPresentationStyle = UIModalPresentationFormSheet;
+        [self presentViewController:navcon animated:YES completion:nil];
     }
 }
 
