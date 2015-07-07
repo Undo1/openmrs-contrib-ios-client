@@ -44,6 +44,11 @@
 
 - (void)setPatient:(MRSPatient *)patient
 {
+    if (![MRSHelperFunctions isNull:_patient]) {
+        self.patientEdited = YES;
+        self.visitsEdited = YES;
+        self.encoutersEdited = YES;
+    }
     _patient = patient;
     self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
                            @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
@@ -53,18 +58,21 @@
     self.navigationItem.title = self.patient.name;
     self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
     [self.tableView reloadData];
+    if (!_patient.hasDetailedInfo) {
+        [self updateWithDetailedInfo];
+    }
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
-
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self action:@selector(close)];
+    if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self action:@selector(close)];
+    }
     self.patientEdited = YES;
     self.visitsEdited = YES;
     self.encoutersEdited = YES;
-    NSLog(@"Finish loading");
 }
 
 - (void)close {
@@ -257,6 +265,9 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if ([MRSHelperFunctions isNull:self.patient]) {
+        return 0;
+    }
     if (section == 0) {
         if (self.isShowingActions)
             if (![MRSHelperFunctions isNull:self.patient] && [self.patient isInCoreData])
@@ -509,14 +520,14 @@
     }
 }
 
+#pragma mark - UIViewControllerRestortion
+
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
     [coder encodeObject:self.patient forKey:@"patient"];
     [coder encodeObject:[NSNumber numberWithBool:self.isShowingActions] forKey:@"showingActions"];
     [coder encodeObject:[NSNumber numberWithBool:self.hasActiveVisit] forKey:@"hasActiveVisits"];
     [super encodeRestorableStateWithCoder:coder];
 }
-
-#pragma mark - UIViewControllerRestortion
 
 + (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
     PatientViewController *patientVC = [[PatientViewController alloc] initWithStyle:UITableViewStyleGrouped];
