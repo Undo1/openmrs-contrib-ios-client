@@ -27,6 +27,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.restorationIdentifier = NSStringFromClass([self class]);
+    self.restorationClass = [self class];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save", @"Save button label")
                                                                               style:UIBarButtonItemStylePlain
                                                                              target:self
@@ -363,6 +365,7 @@
     }];
 }
 
+#pragma mark - UIAlertViewDelegate
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1) {
@@ -375,5 +378,17 @@
 
 - (void)alertViewCancel:(UIAlertView *)alertView {
     [SVProgressHUD dismiss];
+}
+
+#pragma mark - UIViewStateRestoration
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.patient forKey:@"patient"];
+}
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    MRSPatient *patient = [coder decodeObjectForKey:@"patient"];
+    EditPatientForm *editPatient = [[EditPatientForm alloc] initWithPatient:patient];
+    return editPatient;
 }
 @end

@@ -10,7 +10,7 @@
 #import "XLFormViewController.h"
 #import "MRSPatient.h"
 
-@interface EditPatientForm : XLFormViewController <UIAlertViewDelegate>
+@interface EditPatientForm : XLFormViewController <UIAlertViewDelegate, UIViewControllerRestoration>
 
 - (instancetype)initWithPatient:(MRSPatient *)patient;
 @property (nonatomic, strong) MRSPatient *patient;

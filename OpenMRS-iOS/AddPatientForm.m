@@ -29,8 +29,6 @@
 {
     self = [super initWithCoder:coder];
     if (self) {
-        self.restorationIdentifier = NSStringFromClass([self class]);
-        self.restorationClass = [self class];
         [self initializeForm];
     }
     return self;
@@ -47,6 +45,9 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
     
+    self.restorationIdentifier = NSStringFromClass([self class]);
+    self.restorationClass = [self class];
+
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(processForm)];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
 }
@@ -289,7 +290,26 @@
     }
     return valid;
 }
+#pragma mark - UIBarButtonItemSelector
+
 - (void)cancel {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - UIViewstateRestoration
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.formValues forKey:@"form"];
+}
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    AddPatientForm *addPatientForm = [[AddPatientForm alloc] init];
+    NSDictionary *formValues = [coder decodeObjectForKey:@"form"];
+    for (XLFormSectionDescriptor *section in addPatientForm.form.formSections) {
+        for (XLFormRowDescriptor *row in section.formRows) {
+            row.value = formValues[row.tag];
+        }
+    }
+    return addPatientForm;
 }
 @end

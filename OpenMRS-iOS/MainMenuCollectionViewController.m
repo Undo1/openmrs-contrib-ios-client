@@ -135,8 +135,9 @@ static NSString * const reuseIdentifier = @"Cell";
         PatientSearchViewController *search = [[PatientSearchViewController alloc] initWithStyle:UITableViewStylePlain];
         [self.navigationController pushViewController:search animated:YES];
     } else if (indexPath.item == 1) {
-        AddPatientTableViewController *addPatient = [[AddPatientTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
         AddPatientForm *addPatientForm = [[AddPatientForm alloc] init];
+        addPatientForm.restorationIdentifier = NSStringFromClass([addPatientForm class]);
+        addPatientForm.restorationClass = [addPatientForm class];
         UINavigationController *addPatientNavController = [[UINavigationController alloc] initWithRootViewController:addPatientForm];
         addPatientNavController.restorationIdentifier = NSStringFromClass([addPatientNavController class]);
         [self presentViewController:addPatientNavController animated:YES completion:nil];
@@ -151,6 +152,7 @@ static NSString * const reuseIdentifier = @"Cell";
 #pragma mark - <UIViewControllerRestoration>
 
 + (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    NSLog(@"@mainmenu :%@", identifierComponents);
     return [[self alloc] initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];
 }
 
