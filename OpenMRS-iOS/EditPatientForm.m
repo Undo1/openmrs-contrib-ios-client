@@ -27,6 +27,10 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close")
+                                                                              style:UIBarButtonItemStylePlain
+                                                                             target:self
+                                                                             action:@selector(close)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save", @"Save button label")
                                                                               style:UIBarButtonItemStylePlain
                                                                              target:self
@@ -375,5 +379,9 @@
 
 - (void)alertViewCancel:(UIAlertView *)alertView {
     [SVProgressHUD dismiss];
+}
+
+- (void)close {
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 @end
