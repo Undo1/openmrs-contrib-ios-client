@@ -84,7 +84,7 @@
         completion(error, nil);
     }];
 }
-+ (void)addPatient:(NSDictionary *)parameters withIdentifier:(MRSPatientIdentifierType *)identifier completion:(void (^)(NSError *error, MRSPatient *createdPatient))completion
++ (void)addPatient:(NSDictionary *)parameters withIdentifier:(NSArray *)identifier completion:(void (^)(NSError *error, MRSPatient *createdPatient))completion
 {
     [self addPerson:parameters completion:^(NSError *error, MRSPerson *createdPerson) {
         if (error != nil) {
@@ -94,7 +94,7 @@
             NSURL *hostUrl = [self setUpCredentialsLayer];
 
             [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/patient", [hostUrl absoluteString]]
-                                                             parameters:@ {@"person":createdPerson.UUID, @"identifiers":@[@{@"identifier":identifier.display, @"identifierType":identifier.UUID}]} success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                                                             parameters:@ {@"person":createdPerson.UUID, @"identifiers":identifier} success:^(AFHTTPRequestOperation *operation, id responseObject) {
                 NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
                 NSLog(@"Results for details:\n\n%@", results);
                 MRSPatient *patient = [MRSHelperFunctions fillPatientWithResponse:results];

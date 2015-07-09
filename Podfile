@@ -9,6 +9,7 @@ pod "EncryptedCoreData", :git => 'https://github.com/project-imas/encrypted-core
 pod "UIAlertView+Blocks"
 pod 'XLForm', '~> 3.0.0'
 pod "OHHTTPStubs"
+pod 'Instabug'
 
 target 'OpenMRS-iOS' do
 
