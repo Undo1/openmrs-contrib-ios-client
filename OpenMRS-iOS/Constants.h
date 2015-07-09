@@ -21,6 +21,7 @@ extern NSString *const kBirthdate;
 extern NSString *const kDead;
 extern NSString *const kCauseOfDeath;
 extern NSString *const kIdentifier;
+extern NSString *const kIdentifierType;
 extern NSString *const kAddress1;
 extern NSString *const kAddress2;
 extern NSString *const kAddress3;

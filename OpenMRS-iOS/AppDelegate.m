@@ -18,6 +18,7 @@
 #import "PatientVisitListView.h"
 #import "PatientEncounterListView.h"
 #import "SyncingEngine.h"
+#import <Instabug/Instabug.h>
 @interface AppDelegate ()
 
 @end
@@ -29,6 +30,7 @@
 {
 // SignInViewController *vc = [[SignInViewController alloc] init];
 //    [[[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil] resetKeychainItem];
+    [Instabug startWithToken:@"9827bbb908adffd0d628b2b1f6890899" captureSource:IBGCaptureSourceUIKit invocationEvent:IBGInvocationEventShake];
     if (!self.window.rootViewController) {
         NSLog(@"Adding a root view controller");
         MainMenuCollectionViewController *menu = [[MainMenuCollectionViewController alloc] initWithCollectionViewLayout:[[UICollectionViewFlowLayout alloc] init]];

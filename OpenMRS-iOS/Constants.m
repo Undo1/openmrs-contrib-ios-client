@@ -19,6 +19,7 @@ NSString *const kbirthdateEstimated = @"birthdateEstimated";
 NSString *const kAge = @"age";
 NSString *const kBirthdate = @"birthdate";
 NSString *const kIdentifier = @"identifier";
+NSString *const kIdentifierType = @"identifierType";
 NSString *const kDead = @"dead";
 NSString *const kCauseOfDeath = @"causeOfDeath";
 NSString *const kAddress1 = @"address1";

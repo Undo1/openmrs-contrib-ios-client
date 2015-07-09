@@ -10,7 +10,7 @@
 #import "XLFormViewController.h"
 #import "SelectPatientIdentifierTypeTableViewController.h"
 
-@interface AddPatientForm : XLFormViewController <SelectPatientIdentifierTypeTableViewControllerDelegate>
+@interface AddPatientForm : XLFormViewController <SelectPatientIdentifierTypeTableViewControllerDelegate, UIViewControllerRestoration>
 
 
 

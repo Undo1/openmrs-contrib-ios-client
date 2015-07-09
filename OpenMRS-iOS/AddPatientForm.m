@@ -14,6 +14,7 @@
 #import "OpenMRSAPIManager.h"
 #import "SelectPatientIdentifierTypeTableViewController.h"
 #import "Constants.h"
+#import "SVProgressHUD.h"
 
 
 @interface AddPatientForm ()
@@ -28,8 +29,6 @@
 {
     self = [super initWithCoder:coder];
     if (self) {
-        self.restorationIdentifier = NSStringFromClass([self class]);
-        self.restorationClass = [self class];
         [self initializeForm];
     }
     return self;
@@ -46,6 +45,9 @@
 -(void)viewDidLoad {
     [super viewDidLoad];
     
+    self.restorationIdentifier = NSStringFromClass([self class]);
+    self.restorationClass = [self class];
+
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(processForm)];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancel)];
 }
@@ -133,8 +135,19 @@
     row.hidden = [NSString stringWithFormat:@"$%@==1", kbirthdateEstimated];
     
     // Identifier Type
-    row = [XLFormRowDescriptor formRowDescriptorWithTag:kIdentifier rowType:XLFormRowDescriptorTypeSelectorPush title:NSLocalizedString(@"Identifier", @"Label identifier")];
+    row = [XLFormRowDescriptor formRowDescriptorWithTag:kIdentifierType
+                                                rowType:XLFormRowDescriptorTypeSelectorPush
+                                                  title:NSLocalizedString(@"Identifier Type", @"Label -identifier- -type-")];
     row.action.viewControllerClass = [SelectPatientIdentifierTypeTableViewController class];
+    row.required = YES;
+    [section addFormRow:row];
+    
+    //Identifier
+    row = [XLFormRowDescriptor formRowDescriptorWithTag:kIdentifier
+                                                rowType:XLFormRowDescriptorTypeText
+                                                  title:NSLocalizedString(@"Identifier", @"Label identifier")];
+    [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
+    [row.cellConfigAtConfigure setObject:[NSString stringWithFormat:@"%@...", NSLocalizedString(@"Required", @"Place holder -required-")] forKey:@"textField.placeholder"];
     row.required = YES;
     [section addFormRow:row];
     
@@ -237,12 +250,14 @@
         } else {
             parameters[kBirthdate] = [MRSDateUtilities openMRSFormatStringWithDate:values[kBirthdate]];
         }
-        NSLog(@"Param: %@", parameters);
-        [OpenMRSAPIManager addPatient:parameters withIdentifier:self.patientIdentifierType completion:^(NSError *error, MRSPatient *createdPatient) {
+        NSArray *identifiers = @[@{@"identifier":values[kIdentifier], @"identifierType":self.patientIdentifierType.UUID}];
+        NSLog(@"Identifiers: %@", identifiers);
+        [SVProgressHUD show];
+        [OpenMRSAPIManager addPatient:parameters withIdentifier:identifiers completion:^(NSError *error, MRSPatient *createdPatient) {
             if (!error) {
-                NSLog(@"WE DID IT WE ARE THE CHAMPIOOOONS");
+                [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Done", @"Label done")];
             } else {
-                NSLog(@"UGH WE FAILED AGAIN!");
+                [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Error", @"Warning label error")];
             }
         }];
     } else {
@@ -253,8 +268,6 @@
                           otherButtonTitles:nil]
          show];
     }
-    NSLog(@"iden_name %@, iden_UUID: %@", self.patientIdentifierType.display, self.patientIdentifierType.UUID);
-    NSLog(@"Values: %@", self.form.formValues);
 }
 
 - (BOOL)validateForm {
@@ -277,7 +290,26 @@
     }
     return valid;
 }
+#pragma mark - UIBarButtonItemSelector
+
 - (void)cancel {
     [self dismissViewControllerAnimated:YES completion:nil];
+}
+
+#pragma mark - UIViewstateRestoration
+
+- (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
+    [coder encodeObject:self.formValues forKey:@"form"];
+}
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    AddPatientForm *addPatientForm = [[AddPatientForm alloc] init];
+    NSDictionary *formValues = [coder decodeObjectForKey:@"form"];
+    for (XLFormSectionDescriptor *section in addPatientForm.form.formSections) {
+        for (XLFormRowDescriptor *row in section.formRows) {
+            row.value = formValues[row.tag];
+        }
+    }
+    return addPatientForm;
 }
 @end
