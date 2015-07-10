@@ -36,6 +36,11 @@
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
     [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self action:@selector(close)];
+    }
+    
     if ([MRSHelperFunctions isNull:self.segmentIndex] || [self.segmentIndex  isEqual: @0]) {
         self.isOnline = YES;
         self.segmentIndex = @0;
@@ -143,6 +148,7 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
     MRSPatient *patient = self.currentSearchResults[indexPath.row];
     PatientViewController *vc = [[PatientViewController alloc] initWithStyle:UITableViewStyleGrouped];
     vc.patient = patient;
@@ -150,17 +156,13 @@
     vc.tabBarItem.image = [UIImage imageNamed:@"user_icon"];
     UINavigationController *navController1 = [[UINavigationController alloc] initWithRootViewController:vc];
     navController1.restorationIdentifier = @"navController1";
-
+    
     PatientVisitListView *visitsList = [[PatientVisitListView alloc] initWithStyle:UITableViewStyleGrouped];
-    visitsList.tabBarItem.title = @"Visits";
-    visitsList.tabBarItem.image = [UIImage imageNamed:@"active_visits_tab_bar_icon"];
     UINavigationController *navController2 = [[UINavigationController alloc] initWithRootViewController:visitsList];
     navController2.restorationIdentifier = @"navController2";
-
-
+    
+    
     PatientEncounterListView *encounterList = [[PatientEncounterListView alloc] initWithStyle:UITableViewStyleGrouped];
-    encounterList.tabBarItem.title = @"Encounters";
-    encounterList.tabBarItem.image = [UIImage imageNamed:@"vitals_icon"];
     UINavigationController *navController3 = [[UINavigationController alloc] initWithRootViewController:encounterList];
     navController3.restorationIdentifier = @"navContrller3";
     
@@ -169,9 +171,18 @@
     patientView.viewControllers = controllers;
     patientView.tabBar.translucent = NO;
     patientView.restorationIdentifier = NSStringFromClass([patientView class]);
-    
     [patientView setSelectedIndex:0];
-    [self presentViewController:patientView animated:YES completion:nil];
+
+    if (!self.splitViewController) {
+        [self presentViewController:patientView animated:YES completion:nil];
+    } else {
+        /* Getting the patient view controller already existed */
+        NSArray *vcs = @[self.splitViewController.viewControllers[0], patientView];
+        self.splitViewController.viewControllers = vcs;
+        PatientViewController *vc = [(UINavigationController *)(patientView.viewControllers[0]) viewControllers][0];
+        
+        vc.patient =  self.currentSearchResults[indexPath.row];
+    }
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
@@ -199,6 +210,9 @@
     [coder encodeObject:self.barText forKey:@"searchtext"];
     [coder encodeObject:self.segmentIndex forKey:@"segmentIndex"];
     [super encodeRestorableStateWithCoder:coder];
+}
+- (void)close {
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - UIViewcontrollerRestortion

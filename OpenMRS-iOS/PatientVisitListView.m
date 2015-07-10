@@ -16,7 +16,7 @@
 -(id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
-        self.tabBarItem.title = @"Visits";
+        self.tabBarItem.title = NSLocalizedString(@"Visits", @"Label visits");
         self.tabBarItem.image = [UIImage imageNamed:@"active_visits_tab_bar_icon"];
     }
     return self;
