@@ -12,6 +12,9 @@
 #import "AddPatientTableViewController.h"
 #import "ActiveVisitsList.h"
 #import "AddPatientForm.h"
+#import "PatientViewController.h"
+#import "PatientVisitListView.h"
+#import "PatientEncounterListView.h"
 
 @implementation MainMenuCollectionViewController
 
@@ -24,7 +27,10 @@ static NSString * const reuseIdentifier = @"Cell";
     self.restorationClass = [self class];
     self.title = NSLocalizedString(@"OpenMRS", @"Orgnaization name");
     self.view.backgroundColor = [UIColor whiteColor];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Settings", @"Label settings") style:UIBarButtonItemStyleBordered target:self action:@selector(showSettings)];
+    if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Settings", @"Label settings") style:UIBarButtonItemStyleBordered target:self action:@selector(showSettings)];
+    }
+
     self.collectionView.backgroundColor = [UIColor whiteColor];
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
 }
@@ -58,6 +64,9 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        return 4;
+    }
     return 3;
 }
 
@@ -75,6 +84,9 @@ static NSString * const reuseIdentifier = @"Cell";
         break;
     case 2:
         image = [UIImage imageNamed:@"active_visits_icon"];
+        break;
+    case 3:
+        image = [UIImage imageNamed:@"settings-icon"];
     default:
         break;
     }
@@ -95,6 +107,9 @@ static NSString * const reuseIdentifier = @"Cell";
         break;
     case 2:
         label.text = NSLocalizedString(@"Active visits", @"Label -active- -visits");
+        break;
+    case 3:
+        label.text = NSLocalizedString(@"Settings", @"Label settings");
     default:
         break;
     }
@@ -132,20 +147,67 @@ static NSString * const reuseIdentifier = @"Cell";
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.item == 0) {
-        PatientSearchViewController *search = [[PatientSearchViewController alloc] initWithStyle:UITableViewStylePlain];
-        [self.navigationController pushViewController:search animated:YES];
+        if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+            PatientSearchViewController *search = [[PatientSearchViewController alloc] initWithStyle:UITableViewStylePlain];
+            
+            /* Image VC */
+            UIViewController *vc = [[UIViewController alloc] init];
+            UIView *view = [[UIView alloc] init];
+            view.backgroundColor = [UIColor whiteColor];
+            vc.view = view;
+            UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"launchImage"]];
+            imageView.translatesAutoresizingMaskIntoConstraints = NO;
+            [view addSubview:imageView];
+            
+            // Center horizontally
+            [view addConstraint:[NSLayoutConstraint constraintWithItem:imageView
+                                                                  attribute:NSLayoutAttributeCenterX
+                                                                  relatedBy:NSLayoutRelationEqual
+                                                                     toItem:view
+                                                                  attribute:NSLayoutAttributeCenterX
+                                                                 multiplier:1.0
+                                                                   constant:0.0]];
+            
+            // Center vertically
+            [view addConstraint:[NSLayoutConstraint constraintWithItem:imageView
+                                                                  attribute:NSLayoutAttributeCenterY
+                                                                  relatedBy:NSLayoutRelationEqual
+                                                                     toItem:view
+                                                                  attribute:NSLayoutAttributeCenterY
+                                                                 multiplier:1.0
+                                                                   constant:0.0]];
+            
+            UINavigationController *masterNav = [[UINavigationController alloc] initWithRootViewController:search];
+            UINavigationController *vcNav = [[UINavigationController alloc] initWithRootViewController:vc];
+            UISplitViewController *splitView = [[UISplitViewController alloc] init];
+            splitView.viewControllers = @[masterNav, vcNav];
+            splitView.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
+            [self presentViewController:splitView animated:YES completion:nil];
+            
+        } else {
+            PatientSearchViewController *search = [[PatientSearchViewController alloc] initWithStyle:UITableViewStylePlain];
+            [self.navigationController pushViewController:search animated:YES];
+        }
     } else if (indexPath.item == 1) {
         AddPatientForm *addPatientForm = [[AddPatientForm alloc] init];
         addPatientForm.restorationIdentifier = NSStringFromClass([addPatientForm class]);
         addPatientForm.restorationClass = [addPatientForm class];
         UINavigationController *addPatientNavController = [[UINavigationController alloc] initWithRootViewController:addPatientForm];
         addPatientNavController.restorationIdentifier = NSStringFromClass([addPatientNavController class]);
+        addPatientNavController.modalPresentationStyle = UIModalPresentationPageSheet;
         [self presentViewController:addPatientNavController animated:YES completion:nil];
     } else if (indexPath.item == 2) {
         ActiveVisitsList *activeVisits = [[ActiveVisitsList alloc] initWithStyle:UITableViewStyleGrouped];
         UINavigationController *activeVisitsNavController = [[UINavigationController alloc] initWithRootViewController:activeVisits];
         activeVisitsNavController.restorationIdentifier = NSStringFromClass([activeVisitsNavController class]);
+        activeVisitsNavController.modalPresentationStyle = UIModalPresentationPageSheet;
         [self presentViewController:activeVisitsNavController animated:YES completion:nil];
+    } else {
+        SettingsViewController *settings = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        UINavigationController *navcon = [[UINavigationController alloc] initWithRootViewController:settings];
+        navcon.restorationIdentifier = NSStringFromClass([navcon class]);
+        navcon.modalPresentationStyle = UIModalPresentationFormSheet;
+        [self presentViewController:navcon animated:YES completion:nil];
     }
 }
 

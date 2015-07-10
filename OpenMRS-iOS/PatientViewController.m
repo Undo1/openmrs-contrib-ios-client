@@ -44,6 +44,11 @@
 
 - (void)setPatient:(MRSPatient *)patient
 {
+    if (![MRSHelperFunctions isNull:_patient]) {
+        self.patientEdited = YES;
+        self.visitsEdited = YES;
+        self.encoutersEdited = YES;
+    }
     _patient = patient;
     self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
                            @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
@@ -53,18 +58,21 @@
     self.navigationItem.title = self.patient.name;
     self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
     [self.tableView reloadData];
+    if (!_patient.hasDetailedInfo) {
+        [self updateWithDetailedInfo];
+    }
 }
 - (void)viewDidLoad
 {
     [super viewDidLoad];
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
-
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self action:@selector(close)];
+    if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self action:@selector(close)];
+    }
     self.patientEdited = YES;
     self.visitsEdited = YES;
     self.encoutersEdited = YES;
-    NSLog(@"Finish loading");
 }
 
 - (void)close {
@@ -257,6 +265,9 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if ([MRSHelperFunctions isNull:self.patient]) {
+        return 0;
+    }
     if (section == 0) {
         if (self.isShowingActions)
             if (![MRSHelperFunctions isNull:self.patient] && [self.patient isInCoreData])
@@ -395,6 +406,7 @@
             addVisitNote.delegate = self;
             UINavigationController *addVisitNoteNavContrller = [[UINavigationController alloc] initWithRootViewController:addVisitNote];
             addVisitNoteNavContrller.restorationIdentifier = NSStringFromClass([addVisitNoteNavContrller class]);
+            addVisitNoteNavContrller.modalPresentationStyle = UIModalPresentationFormSheet;
             [self presentViewController:addVisitNoteNavContrller animated:YES completion:nil];
         } else if (indexPath.row == 1) {
             CaptureVitalsTableViewController *vitals = [[CaptureVitalsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
@@ -402,6 +414,8 @@
             vitals.delegate = self;
             UINavigationController *captureVitalsNavContrller = [[UINavigationController alloc] initWithRootViewController:vitals];
             captureVitalsNavContrller.restorationIdentifier = NSStringFromClass([captureVitalsNavContrller class]);
+            captureVitalsNavContrller.modalPresentationStyle = UIModalPresentationFormSheet;
+            [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
             [self presentViewController:captureVitalsNavContrller animated:YES completion:nil];
         }
         if (indexPath.row == 2) {
@@ -465,17 +479,20 @@
                 startVisitVC.patient = self.patient;
                 UINavigationController *startVisitNavContrller = [[UINavigationController alloc] initWithRootViewController:startVisitVC];
                 startVisitNavContrller.restorationIdentifier = NSStringFromClass([startVisitNavContrller class]);
+                startVisitNavContrller.modalPresentationStyle = UIModalPresentationFormSheet;
+                [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
                 [self presentViewController:startVisitNavContrller animated:YES completion:nil];
             }
             return;
         }
         if ((indexPath.row == 4&& !(![MRSHelperFunctions isNull:self.patient] && [self.patient isInCoreData])) ||
             ((indexPath.row == 5) && (![MRSHelperFunctions isNull:self.patient] && [self.patient isInCoreData])) ) {
-            EditPatient *editPatient = [[EditPatient alloc] init];
-            self.patientEdited = YES;
-            editPatient.patient = self.patient;
             EditPatientForm *pf = [[EditPatientForm alloc] initWithPatient:self.patient];
-            [self.navigationController pushViewController:pf animated:YES];
+            UINavigationController *editPatientNavController = [[UINavigationController alloc] initWithRootViewController:pf];
+            editPatientNavController.restorationIdentifier = NSStringFromClass([editPatientNavController class]);
+            editPatientNavController.modalPresentationStyle = UIModalPresentationFormSheet;
+            [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+            [self presentViewController:editPatientNavController animated:YES completion:nil];
         }
     }
 }
@@ -509,14 +526,14 @@
     }
 }
 
+#pragma mark - UIViewControllerRestortion
+
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder {
     [coder encodeObject:self.patient forKey:@"patient"];
     [coder encodeObject:[NSNumber numberWithBool:self.isShowingActions] forKey:@"showingActions"];
     [coder encodeObject:[NSNumber numberWithBool:self.hasActiveVisit] forKey:@"hasActiveVisits"];
     [super encodeRestorableStateWithCoder:coder];
 }
-
-#pragma mark - UIViewControllerRestortion
 
 + (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
     PatientViewController *patientVC = [[PatientViewController alloc] initWithStyle:UITableViewStyleGrouped];
