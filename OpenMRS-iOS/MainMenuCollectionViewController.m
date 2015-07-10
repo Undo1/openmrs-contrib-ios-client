@@ -101,7 +101,7 @@ static NSString * const reuseIdentifier = @"Cell";
         image = [UIImage imageNamed:@"active_visits_icon"];
         break;
     case 3:
-        image = [UIImage imageNamed:@"settings-icon"];
+        image = [UIImage imageNamed:@"settings_icon"];
     default:
         break;
     }

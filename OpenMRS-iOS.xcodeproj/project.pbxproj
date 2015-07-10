@@ -27,9 +27,9 @@
 		24A8DECC1B18F66E00F5FF84 /* ActiveVisitsList.m in Sources */ = {isa = PBXBuildFile; fileRef = 24A8DECB1B18F66E00F5FF84 /* ActiveVisitsList.m */; };
 		24B974351B3473EF000DD2E7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 24B974371B3473EF000DD2E7 /* Localizable.strings */; };
 		24D127511B0DF6140018AA1D /* MRSDateUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 24D127501B0DF6140018AA1D /* MRSDateUtilities.m */; };
-		24D5CECC1B4B4DB500F1D660 /* settings-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 24D5CEC91B4B4DB500F1D660 /* settings-icon.png */; };
-		24D5CECD1B4B4DB500F1D660 /* settings-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 24D5CECA1B4B4DB500F1D660 /* settings-icon@2x.png */; };
-		24D5CECE1B4B4DB500F1D660 /* settings-icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 24D5CECB1B4B4DB500F1D660 /* settings-icon@3x.png */; };
+		24D5CECC1B4B4DB500F1D660 /* settings_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 24D5CEC91B4B4DB500F1D660 /* settings_icon.png */; };
+		24D5CECD1B4B4DB500F1D660 /* settings_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 24D5CECA1B4B4DB500F1D660 /* settings_icon@2x.png */; };
+		24D5CECE1B4B4DB500F1D660 /* settings_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 24D5CECB1B4B4DB500F1D660 /* settings_icon@3x.png */; };
 		24DAC0D71B397F680089AD12 /* MRSVisitCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DAC0D61B397F680089AD12 /* MRSVisitCell.m */; };
 		65BE2B3E2C5F8BE1FB7090C2 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87CFC2F5FC6F1445E8327AF6 /* libPods.a */; };
 		D3079E751A3D4DED00E308C7 /* add_patient_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D3079E721A3D4DED00E308C7 /* add_patient_icon@2x.png */; };
@@ -131,9 +131,9 @@
 		24B974381B34740E000DD2E7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		24D1274F1B0DF6140018AA1D /* MRSDateUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSDateUtilities.h; sourceTree = "<group>"; };
 		24D127501B0DF6140018AA1D /* MRSDateUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSDateUtilities.m; sourceTree = "<group>"; };
-		24D5CEC91B4B4DB500F1D660 /* settings-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings-icon.png"; sourceTree = "<group>"; };
-		24D5CECA1B4B4DB500F1D660 /* settings-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings-icon@2x.png"; sourceTree = "<group>"; };
-		24D5CECB1B4B4DB500F1D660 /* settings-icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings-icon@3x.png"; sourceTree = "<group>"; };
+		24D5CEC91B4B4DB500F1D660 /* settings_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings_icon.png; sourceTree = "<group>"; };
+		24D5CECA1B4B4DB500F1D660 /* settings_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings_icon@2x.png"; sourceTree = "<group>"; };
+		24D5CECB1B4B4DB500F1D660 /* settings_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "settings_icon@3x.png"; sourceTree = "<group>"; };
 		24DAC0D51B397F680089AD12 /* MRSVisitCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSVisitCell.h; sourceTree = "<group>"; };
 		24DAC0D61B397F680089AD12 /* MRSVisitCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSVisitCell.m; sourceTree = "<group>"; };
 		87CFC2F5FC6F1445E8327AF6 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -704,9 +704,9 @@
 		D397396E1A2E082200D0AB69 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				24D5CEC91B4B4DB500F1D660 /* settings-icon.png */,
-				24D5CECA1B4B4DB500F1D660 /* settings-icon@2x.png */,
-				24D5CECB1B4B4DB500F1D660 /* settings-icon@3x.png */,
+				24D5CEC91B4B4DB500F1D660 /* settings_icon.png */,
+				24D5CECA1B4B4DB500F1D660 /* settings_icon@2x.png */,
+				24D5CECB1B4B4DB500F1D660 /* settings_icon@3x.png */,
 				2494E8ED1B3CDCF300ABFE53 /* launchImage.png */,
 				24B974371B3473EF000DD2E7 /* Localizable.strings */,
 				24A8DEC41B18C18A00F5FF84 /* active_visits_icon@3x.png */,
@@ -854,7 +854,7 @@
 				2494E8EE1B3CDCF300ABFE53 /* launchImage.png in Resources */,
 				D3A57DBC1B2E5BF800F25F30 /* active_visits_tab_bar_icon.png in Resources */,
 				24A8DEC71B18C18A00F5FF84 /* active_visits_icon@3x.png in Resources */,
-				24D5CECC1B4B4DB500F1D660 /* settings-icon.png in Resources */,
+				24D5CECC1B4B4DB500F1D660 /* settings_icon.png in Resources */,
 				D3A57DBE1B2E5BF800F25F30 /* active_visits_tab_bar_icon@3x.png in Resources */,
 				D396EAF51A36460500191F50 /* search_icon.png in Resources */,
 				D3FAEFFE1A51C1CD002B1BF7 /* Images.xcassets in Resources */,
@@ -863,7 +863,7 @@
 				24B974351B3473EF000DD2E7 /* Localizable.strings in Resources */,
 				D3079E761A3D4DED00E308C7 /* add_patient_icon.png in Resources */,
 				245EDDD11B21A11800B8C0EB /* user_icon@3x.png in Resources */,
-				24D5CECD1B4B4DB500F1D660 /* settings-icon@2x.png in Resources */,
+				24D5CECD1B4B4DB500F1D660 /* settings_icon@2x.png in Resources */,
 				D3079E751A3D4DED00E308C7 /* add_patient_icon@2x.png in Resources */,
 				245EDDC91B21A0F400B8C0EB /* user_icon.png in Resources */,
 				245EDDCD1B21A10B00B8C0EB /* user_icon@2x.png in Resources */,
@@ -874,7 +874,7 @@
 				24A8DEC91B18C18A00F5FF84 /* active_visits_icon.png in Resources */,
 				D396A5401A2E0B5A00DE6448 /* openmrs-logo@3x.png in Resources */,
 				D3079E771A3D4DED00E308C7 /* add_patient_icon@3x.png in Resources */,
-				24D5CECE1B4B4DB500F1D660 /* settings-icon@3x.png in Resources */,
+				24D5CECE1B4B4DB500F1D660 /* settings_icon@3x.png in Resources */,
 				245EDDCA1B21A0F400B8C0EB /* vitals_icon.png in Resources */,
 				D396EAF71A36460500191F50 /* search_icon@3x.png in Resources */,
 				D396A5411A2E0B5A00DE6448 /* openmrs-logo.png in Resources */,
