@@ -58,6 +58,7 @@
             dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
             [OpenMRSAPIManager getDetailedDataOnPatient:patient completion:^(NSError *error, MRSPatient *detailedPatient) {
                 if (!error) {
+                    patient = detailedPatient;
                     patient.upToDate = YES;
                     [patient saveToCoreData];
                 } else {
