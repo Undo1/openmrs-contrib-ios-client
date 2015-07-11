@@ -89,7 +89,7 @@
     //Family name2
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kFamilyName2
                                                 rowType:XLFormRowDescriptorTypeText
-                                                  title:[NSString stringWithFormat:@"%@2", NSLocalizedString(@"Family Name", @"Family name")]];
+                                                  title:[NSString stringWithFormat:@"2nd %@", NSLocalizedString(@"Family Name", @"Family name")]];
     [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
     [section addFormRow:row];
     
