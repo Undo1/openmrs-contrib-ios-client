@@ -152,7 +152,7 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (CGFloat)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout minimumLineSpacingForSectionAtIndex:(NSInteger)section
 {
-    return 0;
+    return 25;
 }
 
 // Layout: Set Edges
