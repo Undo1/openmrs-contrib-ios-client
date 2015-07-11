@@ -58,7 +58,12 @@
     self.navigationItem.title = self.patient.name;
     self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
     [self.tableView reloadData];
-    if (!_patient.hasDetailedInfo) {
+    /* This is a just checking a random detailed value that will 
+     * tell us if this is a detailed patient or not, because the old
+     * loading from coredata will return .hasdetailedinfo as nill
+     * and the app will be caught in an infintie loop.
+     */
+    if (!_patient.gender) {
         [self updateWithDetailedInfo];
     }
 }
