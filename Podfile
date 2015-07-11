@@ -10,6 +10,7 @@ pod "UIAlertView+Blocks"
 pod 'XLForm', '~> 3.0.0'
 pod "OHHTTPStubs"
 pod 'Instabug'
+pod 'FlurrySDK'
 
 target 'OpenMRS-iOS' do
 

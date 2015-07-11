@@ -55,6 +55,14 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (self.visits.count) {
+        UILabel *backgroundLabel = [[UILabel alloc] init];
+        backgroundLabel.textAlignment = NSTextAlignmentCenter;
+        backgroundLabel.text = [NSString stringWithFormat:@"\"%@\"", NSLocalizedString(@"No Visits", @"Label -no- -visits-")];
+        self.tableView.backgroundView = backgroundLabel;
+    } else {
+        self.tableView.backgroundView = nil;
+    }
     return self.visits.count;
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
