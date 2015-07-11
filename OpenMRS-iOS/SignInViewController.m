@@ -16,7 +16,7 @@
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
-    NSLog(@"Password: %@", [wrapper objectForKey:(__bridge id)(kSecValueData)]);
+
     self.view.backgroundColor = [UIColor whiteColor];
     UIImage *openMrsLogo = [UIImage imageNamed:@"openmrs-logo"];
     UIImageView *imageView = [[UIImageView alloc] initWithImage:openMrsLogo];
