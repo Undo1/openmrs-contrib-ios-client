@@ -125,7 +125,7 @@
     //DeathDate
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kDeathDate
                                                 rowType:XLFormRowDescriptorTypeDate
-                                                  title:NSLocalizedString(@"Death Date", @"Label dead")];
+                                                  title:NSLocalizedString(@"Death Date", @"Label death date")];
     if (self.patient.deathDate) {
         row.value = [MRSDateUtilities dateFromOpenMRSFormattedString:self.patient.deathDate];
     }
