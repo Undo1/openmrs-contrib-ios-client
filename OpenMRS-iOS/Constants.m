@@ -22,6 +22,7 @@ NSString *const kIdentifier = @"identifier";
 NSString *const kIdentifierType = @"identifierType";
 NSString *const kDead = @"dead";
 NSString *const kCauseOfDeath = @"causeOfDeath";
+NSString *const kDeathDate = @"DeathDate";
 NSString *const kAddress1 = @"address1";
 NSString *const kAddress2 = @"address2";
 NSString *const kAddress3 = @"address3";
