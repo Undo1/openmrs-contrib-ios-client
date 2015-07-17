@@ -108,17 +108,30 @@
         row.value = @1;
     }
     [section addFormRow:row];
-    
+
     //Cause of Death
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kCauseOfDeath
                                                 rowType:XLFormRowDescriptorTypeText
                                                   title:NSLocalizedString(@"Cause Of Death", @"Cause of death")];
     [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
+    [row.cellConfigAtConfigure setObject:[NSString stringWithFormat:@"%@...", NSLocalizedString(@"Required", @"Place holder -required-")] forKey:@"textField.placeholder"];
     if (self.patient.causeOfDeath) {
         row.value = self.patient.causeOfDeath;
     }
-    row.hidden = [NSString stringWithFormat:@"$%@!=1", kDead];
+    row.required = YES;
     [section addFormRow:row];
+    row.hidden = [NSString stringWithFormat:@"$%@!=1", kDead];
+
+    //DeathDate
+    row = [XLFormRowDescriptor formRowDescriptorWithTag:kDeathDate
+                                                rowType:XLFormRowDescriptorTypeDate
+                                                  title:NSLocalizedString(@"Death Date", @"Label death date")];
+    if (self.patient.deathDate) {
+        row.value = [MRSDateUtilities dateFromOpenMRSFormattedString:self.patient.deathDate];
+    }
+    row.required = YES;
+    [section addFormRow:row];
+    row.hidden = [NSString stringWithFormat:@"$%@!=1", kDead];
 
     /* =========================================== Name Section =====================================*/
     section = [XLFormSectionDescriptor formSectionWithTitle:NSLocalizedString(@"Preferred Name", @"Label named -Preferred- -Name-)")];
@@ -336,8 +349,8 @@
         XLFormValidationStatus * validationStatus = [[obj userInfo] objectForKey:XLValidationStatusErrorKey];
         NSString *tag = validationStatus.rowDescriptor.tag;
         if ([tag isEqualToString:kGivenName] || [tag isEqualToString:kFamilyName] || [tag isEqualToString:kAddress1] ||
-            [tag isEqualToString:kAge] || [tag isEqualToString:kBirthdate]){
-            
+            [tag isEqualToString:kAge] || [tag isEqualToString:kBirthdate] || [tag isEqualToString:kCauseOfDeath] ||
+            [tag isEqualToString:kDeathDate]){
             UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[self.form indexPathOfFormRow:validationStatus.rowDescriptor]];
             cell.backgroundColor = [UIColor orangeColor];
             [UIView animateWithDuration:0.5 animations:^{
