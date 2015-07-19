@@ -11,6 +11,7 @@ pod 'XLForm', '~> 3.0.0'
 pod "OHHTTPStubs"
 pod 'Instabug'
 pod 'FlurrySDK'
+pod 'XMLDictionary'
 
 target 'OpenMRS-iOS' do
 

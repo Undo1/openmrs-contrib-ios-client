@@ -26,6 +26,8 @@
 #import "OpenMRS_iOS-Swift.h"
 #import "MRSDateUtilities.h"
 #import "MRSHelperFunctions.h"
+#import "XMLDictionary.h"
+#import "XForms.h"
 #import <CoreData/CoreData.h>
 
 @implementation OpenMRSAPIManager
@@ -684,6 +686,48 @@
     } else {
         completion(nil);
     }
+}
+
+#pragma mark - XForms APIs
+
++ (void)getXFormsList: (void (^)(NSArray *forms, NSError *error))completion {
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host andRequestSerializer:[AFXMLParserResponseSerializer new]] GET:[NSString stringWithFormat:@"%@/moduleServlet/xforms/xformDownload?target=xformslist&uname=%@&pw=%@", [hostUrl absoluteString], username, password] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        XMLDictionaryParser *parser  = [[XMLDictionaryParser alloc] init];
+        NSDictionary *results = [parser dictionaryWithData:operation.responseData];
+        NSMutableArray *forms = [[NSMutableArray alloc] init];
+        
+        if ([MRSHelperFunctions isNull:results[@"xform"]]) {
+             completion(forms, nil);
+        }
+        /*
+         * This is a check if the response contain only one object.
+         * Because in this case the xforms element is a dictionary, but if
+         * there is more than one the xforms element is an array.
+         */
+        else if ([results[@"xform"] isKindOfClass:[NSDictionary class]]) {
+            XForms *xform = [[XForms alloc] init];
+            xform.name = results[@"xform"][@"name"];
+            xform.XFormsID = results[@"xform"][@"id"];
+            [forms addObject:xform];
+            completion(forms, nil);
+        } else {
+            for (NSDictionary *dict in results[@"xform"]) {
+                XForms *xform = [[XForms alloc] init];
+                xform.name = dict[@"name"];
+                xform.XFormsID = dict[@"id"];
+                [forms addObject:xform];
+            }
+            completion(forms, nil);
+        }
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        completion(nil, error);
+    }];
 }
 
 + (void)presentLoginController

@@ -35,5 +35,6 @@
 + (void)EditPatient:(MRSPatient *)patient completion:(void (^)(NSError *error))completion;
 + (void)EditAddressForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion;
 + (void)EditNameForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion;
++ (void)getXFormsList: (void (^)(NSArray *forms, NSError *error))completion;
 + (void)logout;
 @end

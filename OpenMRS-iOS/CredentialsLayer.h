@@ -7,5 +7,6 @@
 - (void)setUsername:(NSString *)username andPassword:(NSString *)password;
 
 + (CredentialsLayer *)sharedManagerWithHost:(NSString *)host;
++ (CredentialsLayer *)sharedManagerWithHost:(NSString *)host andRequestSerializer:(AFHTTPResponseSerializer *)serializer;
 
 @end
