@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		240F4EDC1B5BAFF100E943FC /* form-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 240F4ED91B5BAFF100E943FC /* form-icon@2x.png */; };
+		240F4EDD1B5BAFF100E943FC /* form-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 240F4EDA1B5BAFF100E943FC /* form-icon.png */; };
+		240F4EDF1B5BB00C00E943FC /* form-icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 240F4EDE1B5BB00C00E943FC /* form-icon@3x.png */; };
+		240F4EE31B5BB22900E943FC /* XFormsList.m in Sources */ = {isa = PBXBuildFile; fileRef = 240F4EE21B5BB22900E943FC /* XFormsList.m */; };
+		240F4EE71B5BB31600E943FC /* XForms.m in Sources */ = {isa = PBXBuildFile; fileRef = 240F4EE61B5BB31600E943FC /* XForms.m */; };
 		2432066D1B2E439000B54970 /* EditPatient.m in Sources */ = {isa = PBXBuildFile; fileRef = 2432066C1B2E439000B54970 /* EditPatient.m */; };
 		243206711B30436700B54970 /* MRSHelperFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 243206701B30436700B54970 /* MRSHelperFunctions.m */; };
 		2436F2B11B49A01000294B4C /* EditPatientForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 2436F2B01B49A01000294B4C /* EditPatientForm.m */; };
@@ -94,6 +99,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		240F4ED91B5BAFF100E943FC /* form-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon@2x.png"; sourceTree = "<group>"; };
+		240F4EDA1B5BAFF100E943FC /* form-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon.png"; sourceTree = "<group>"; };
+		240F4EDE1B5BB00C00E943FC /* form-icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon@3x.png"; sourceTree = "<group>"; };
+		240F4EE11B5BB22900E943FC /* XFormsList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFormsList.h; sourceTree = "<group>"; };
+		240F4EE21B5BB22900E943FC /* XFormsList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFormsList.m; sourceTree = "<group>"; };
+		240F4EE51B5BB31600E943FC /* XForms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XForms.h; sourceTree = "<group>"; };
+		240F4EE61B5BB31600E943FC /* XForms.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XForms.m; sourceTree = "<group>"; };
 		241729061B30C73400BB35F0 /* openmrs-offline 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "openmrs-offline 2.xcdatamodel"; sourceTree = "<group>"; };
 		2432066B1B2E439000B54970 /* EditPatient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditPatient.h; sourceTree = "<group>"; };
 		2432066C1B2E439000B54970 /* EditPatient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditPatient.m; sourceTree = "<group>"; };
@@ -244,6 +256,24 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		240F4EE01B5BB20800E943FC /* XForms list */ = {
+			isa = PBXGroup;
+			children = (
+				240F4EE11B5BB22900E943FC /* XFormsList.h */,
+				240F4EE21B5BB22900E943FC /* XFormsList.m */,
+			);
+			name = "XForms list";
+			sourceTree = "<group>";
+		};
+		240F4EE41B5BB30200E943FC /* XForms */ = {
+			isa = PBXGroup;
+			children = (
+				240F4EE51B5BB31600E943FC /* XForms.h */,
+				240F4EE61B5BB31600E943FC /* XForms.m */,
+			);
+			name = XForms;
+			sourceTree = "<group>";
+		};
 		2432066E1B2E439C00B54970 /* Edit Patient */ = {
 			isa = PBXGroup;
 			children = (
@@ -292,6 +322,7 @@
 		248FBE2F1B03B9E400569C2C /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				240F4EE01B5BB20800E943FC /* XForms list */,
 				243786441B46B82000AB5089 /* Forms */,
 				2494E8E91B3CC1CC00ABFE53 /* Identifier Type Cell */,
 				24DAC0D81B397F6D0089AD12 /* Visit Cell */,
@@ -338,6 +369,7 @@
 		248FBE321B03BA2600569C2C /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				240F4EE41B5BB30200E943FC /* XForms */,
 				248FBE4E1B03BC9100569C2C /* Visit */,
 				248FBE4D1B03BC7D00569C2C /* Patient */,
 				248FBE471B03BC0900569C2C /* Patient identifier */,
@@ -704,6 +736,9 @@
 		D397396E1A2E082200D0AB69 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				240F4EDE1B5BB00C00E943FC /* form-icon@3x.png */,
+				240F4ED91B5BAFF100E943FC /* form-icon@2x.png */,
+				240F4EDA1B5BAFF100E943FC /* form-icon.png */,
 				24D5CEC91B4B4DB500F1D660 /* settings_icon.png */,
 				24D5CECA1B4B4DB500F1D660 /* settings_icon@2x.png */,
 				24D5CECB1B4B4DB500F1D660 /* settings_icon@3x.png */,
@@ -851,6 +886,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				240F4EDC1B5BAFF100E943FC /* form-icon@2x.png in Resources */,
 				2494E8EE1B3CDCF300ABFE53 /* launchImage.png in Resources */,
 				D3A57DBC1B2E5BF800F25F30 /* active_visits_tab_bar_icon.png in Resources */,
 				24A8DEC71B18C18A00F5FF84 /* active_visits_icon@3x.png in Resources */,
@@ -863,12 +899,14 @@
 				24B974351B3473EF000DD2E7 /* Localizable.strings in Resources */,
 				D3079E761A3D4DED00E308C7 /* add_patient_icon.png in Resources */,
 				245EDDD11B21A11800B8C0EB /* user_icon@3x.png in Resources */,
+				240F4EDD1B5BAFF100E943FC /* form-icon.png in Resources */,
 				24D5CECD1B4B4DB500F1D660 /* settings_icon@2x.png in Resources */,
 				D3079E751A3D4DED00E308C7 /* add_patient_icon@2x.png in Resources */,
 				245EDDC91B21A0F400B8C0EB /* user_icon.png in Resources */,
 				245EDDCD1B21A10B00B8C0EB /* user_icon@2x.png in Resources */,
 				D396EAF61A36460500191F50 /* search_icon@2x.png in Resources */,
 				245EDDD21B21A11800B8C0EB /* vitals_icon@3x.png in Resources */,
+				240F4EDF1B5BB00C00E943FC /* form-icon@3x.png in Resources */,
 				D396A53F1A2E0B5A00DE6448 /* openmrs-logo@2x.png in Resources */,
 				24A8DEC81B18C18A00F5FF84 /* active_visits_icon@2x.png in Resources */,
 				24A8DEC91B18C18A00F5FF84 /* active_visits_icon.png in Resources */,
@@ -937,6 +975,7 @@
 				D38DB4FB1A3216A300E2CF23 /* SelectEncounterTypeView.m in Sources */,
 				D38DB4FE1A3216CF00E2CF23 /* MRSEncounterType.m in Sources */,
 				D38DB4F81A320EF700E2CF23 /* MRSEncounterOb.m in Sources */,
+				240F4EE31B5BB22900E943FC /* XFormsList.m in Sources */,
 				243786431B46B81A00AB5089 /* AddPatientForm.m in Sources */,
 				D39AD7AE1A3C081000C01540 /* MRSVital.m in Sources */,
 				2436F2B51B49D56C00294B4C /* Constants.m in Sources */,
@@ -969,6 +1008,7 @@
 				24D127511B0DF6140018AA1D /* MRSDateUtilities.m in Sources */,
 				D396A54A1A2E3CBC00DE6448 /* MRSEncounter.m in Sources */,
 				D3E47BA31A3A00C0004B3F95 /* MRSPatientIdentifierType.m in Sources */,
+				240F4EE71B5BB31600E943FC /* XForms.m in Sources */,
 				D396EAF11A363E4000191F50 /* MainMenuCollectionViewController.m in Sources */,
 				D376742A1A3BB254003A8005 /* LocationListTableViewController.m in Sources */,
 				24A8DECC1B18F66E00F5FF84 /* ActiveVisitsList.m in Sources */,

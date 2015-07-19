@@ -15,6 +15,7 @@
 #import "PatientViewController.h"
 #import "PatientVisitListView.h"
 #import "PatientEncounterListView.h"
+#import "XFormsList.h"
 
 @implementation MainMenuCollectionViewController
 
@@ -74,9 +75,9 @@ static NSString * const reuseIdentifier = @"Cell";
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        return 4;
+        return 5;
     }
-    return 3;
+    return 4;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -101,6 +102,9 @@ static NSString * const reuseIdentifier = @"Cell";
         image = [UIImage imageNamed:@"active_visits_icon"];
         break;
     case 3:
+        image = [UIImage imageNamed:@"form-icon"];
+        break;
+    case 4:
         image = [UIImage imageNamed:@"settings_icon"];
     default:
         break;
@@ -124,6 +128,9 @@ static NSString * const reuseIdentifier = @"Cell";
         label.text = NSLocalizedString(@"Active visits", @"Label -active- -visits");
         break;
     case 3:
+        label.text = NSLocalizedString(@"Forms", @"No comment for now!");
+        break;
+    case 4:
         label.text = NSLocalizedString(@"Settings", @"Label settings");
     default:
         break;
@@ -223,6 +230,21 @@ static NSString * const reuseIdentifier = @"Cell";
         activeVisitsNavController.restorationIdentifier = NSStringFromClass([activeVisitsNavController class]);
         activeVisitsNavController.modalPresentationStyle = UIModalPresentationPageSheet;
         [self presentViewController:activeVisitsNavController animated:YES completion:nil];
+    } else if (indexPath.item == 3) {
+        [OpenMRSAPIManager getXFormsList:^(NSArray *forms, NSError *error) {
+            if (!error) {
+                XFormsList *formsList = [[XFormsList alloc] initWithForms:forms];
+                UINavigationController *formListNavigationController = [[UINavigationController alloc] initWithRootViewController:formsList];
+                [self presentViewController:formListNavigationController animated:YES completion:nil];
+            } else {
+                UIAlertView *formsAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"XForms error", @"Error label xforms error")
+                                                                     message:NSLocalizedString(@"Error loading XForms check XForms support", @"XForms error message")
+                                                                    delegate:self
+                                                           cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel button label ")
+                                                           otherButtonTitles:nil];
+                [formsAlert show];
+            }
+        }];
     } else {
         SettingsViewController *settings = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
         UINavigationController *navcon = [[UINavigationController alloc] initWithRootViewController:settings];
