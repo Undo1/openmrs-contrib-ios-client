@@ -12,6 +12,7 @@ pod "OHHTTPStubs"
 pod 'Instabug'
 pod 'FlurrySDK'
 pod 'XMLDictionary'
+pod 'GDataXML-HTML', '~> 1.2.0'
 
 target 'OpenMRS-iOS' do
 
