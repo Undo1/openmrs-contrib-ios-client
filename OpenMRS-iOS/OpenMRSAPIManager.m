@@ -334,17 +334,21 @@
             newVisit.displayName = visit[@"display"];
             newVisit.UUID = visit[@"uuid"];
             newVisit.startDateTime = visit[@"startDatetime"];
-
-            MRSLocation *location = [[MRSLocation alloc] init];
-            location.display = visit[@"location"][@"display"];
-            location.UUID = visit[@"location"][@"uuid"];
-            newVisit.location = location;
-
-            MRSVisitType *type = [[MRSVisitType alloc] init];
-            type.uuid = visit[@"visitType"][@"uuid"];
-            type.display = visit[@"visitType"][@"display"];
-            newVisit.visitType = type;
             
+            if (![MRSHelperFunctions isNull:visit[@"location"]]) {
+                MRSLocation *location = [[MRSLocation alloc] init];
+                location.display = visit[@"location"][@"display"];
+                location.UUID = visit[@"location"][@"uuid"];
+                newVisit.location = location;
+            }
+
+            if (![MRSHelperFunctions isNull:visit[@"visitType"]]) {
+                MRSVisitType *type = [[MRSVisitType alloc] init];
+                type.uuid = visit[@"visitType"][@"uuid"];
+                type.display = visit[@"visitType"][@"display"];
+                newVisit.visitType = type;
+            }
+
             newVisit.active = [MRSHelperFunctions isNull:visit[@"stopDatetime"]]?YES:NO;
 
             [activeVisits addObject:newVisit];

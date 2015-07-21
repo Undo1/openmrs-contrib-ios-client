@@ -93,9 +93,17 @@
 }
 
 - (void)setVisit:(MRSVisit *)visit {
-    self.location.text = visit.location.display;
+    if (visit.location) {
+        self.location.text = visit.location.display;
+    } else {
+        self.location.text = NSLocalizedString(@"Unavailable", @"Label unavailable");
+    }
     
-    self.visitType.text = visit.visitType.display;
+    if (visit.visitType) {
+        self.visitType.text = visit.visitType.display;
+    } else {
+        self.visitType.text = NSLocalizedString(@"Unavailable", @"Label unavailable");
+    }
     
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"dd-MM-yyyy HH:mm"];
