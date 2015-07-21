@@ -277,8 +277,9 @@
         XLFormValidationStatus * validationStatus = [[obj userInfo] objectForKey:XLValidationStatusErrorKey];
         NSString *tag = validationStatus.rowDescriptor.tag;
         if ([tag isEqualToString:kGivenName] || [tag isEqualToString:kFamilyName] ||
-            [tag isEqualToString:kIdentifier] || [tag isEqualToString:kAddress1] ||
-            [tag isEqualToString:kAge] || [tag isEqualToString:kBirthdate]){
+            [tag isEqualToString:kIdentifier] || [tag isEqualToString:kIdentifierType] ||
+            [tag isEqualToString:kAddress1] || [tag isEqualToString:kAge] ||
+            [tag isEqualToString:kBirthdate]){
 
             UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[self.form indexPathOfFormRow:validationStatus.rowDescriptor]];
             cell.backgroundColor = [UIColor orangeColor];
