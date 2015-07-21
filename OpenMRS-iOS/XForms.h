@@ -7,10 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <XLForm.h>
 
 @interface XForms : NSObject
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *XFormsID;
+@property (nonatomic, strong) XLFormDescriptor *form;
+@property (nonatomic, strong) NSMutableDictionary *formElements;
 
 @end
