@@ -34,4 +34,23 @@ extern NSString *const kStateProvince;
 extern NSString *const kCountry;
 extern NSString *const kPostalCode;
 
+
+extern NSString *const kXFormsString;
+extern NSString *const kXFormsNumber;
+extern NSString *const kXFormsDecimal;
+extern NSString *const kXFormsDate;
+extern NSString *const kXFormsTime;
+extern NSString *const kXFormsDateTime;
+extern NSString *const kXFormsBoolean;
+
+extern NSString *const kXFormsSelect;
+extern NSString *const kXFormsMutlipleSelect;
+extern NSString *const kXFormsRepeat;
+extern NSString *const kXFormBase64;
+
+extern NSString *const kXFormsImage;
+extern NSString *const kXFormsAudio;
+extern NSString *const kXFormsGPS;
+
++ (NSDictionary *)MAPPING_TYPES;
 @end

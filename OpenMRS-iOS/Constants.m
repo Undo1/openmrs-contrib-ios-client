@@ -7,6 +7,7 @@
 //
 
 #import "Constants.h"
+#import <XLForm.h>
 
 @implementation Constants
 
@@ -33,5 +34,39 @@ NSString *const kCityVillage = @"cityVillage";
 NSString *const kStateProvince = @"stateProvince";
 NSString *const kCountry = @"country";
 NSString *const kPostalCode = @"postalCode";
+
+
+NSString *const kXFormsString = @"xsd:string";
+NSString *const kXFormsNumber = @"xsd:int";
+NSString *const kXFormsDecimal = @"xsd:decimal";
+NSString *const kXFormsDate = @"xsd:date";
+NSString *const kXFormsTime = @"xsd:time";
+NSString *const kXFormsDateTime = @"xsd:dateTime";
+NSString *const kXFormsBoolean = @"xsd:boolean";
+
+NSString *const kXFormsSelect = @"xf:select1";
+NSString *const kXFormsMutlipleSelect = @"xf:select";
+NSString *const kXFormsRepeat = @"xf:repeat";
+NSString *const kXFormBase64 = @"base64Binary";
+
+NSString *const kXFormsImage = @"image";
+NSString *const kXFormsAudio = @"audio";
+NSString *const kXFormsGPS = @"gps";
+
+
++ (NSDictionary *)MAPPING_TYPES {
+    return @{
+             kXFormsString: XLFormRowDescriptorTypeText,
+             kXFormsNumber: XLFormRowDescriptorTypeNumber,
+             kXFormsDecimal: XLFormRowDescriptorTypeDecimal,
+             kXFormsDate: XLFormRowDescriptorTypeDate,
+             kXFormsTime: XLFormRowDescriptorTypeTime,
+             kXFormsDateTime: XLFormRowDescriptorTypeDateTime,
+             kXFormsBoolean: XLFormRowDescriptorTypeBooleanSwitch,
+             kXFormsImage: XLFormRowDescriptorTypeSelectorPush,
+             kXFormsAudio: XLFormRowDescriptorTypeSelectorPush,
+             kXFormsGPS: XLFormRowDescriptorTypeSelectorPush
+             };
+}
 
 @end
