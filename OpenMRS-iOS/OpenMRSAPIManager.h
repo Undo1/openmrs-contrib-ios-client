@@ -13,6 +13,7 @@
 #import "MRSVisit.h"
 #import "MRSLocation.h"
 @class MRSVisitType;
+@class XForms;
 
 @interface OpenMRSAPIManager : NSObject
 + (void)getPatientListWithSearch:(NSString *)search online:(BOOL)online completion:(void (^)(NSError *error, NSArray *patients))completion;
@@ -36,5 +37,6 @@
 + (void)EditAddressForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion;
 + (void)EditNameForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion;
 + (void)getXFormsList: (void (^)(NSArray *forms, NSError *error))completion;
++ (void)getXformWithID:(NSString *)xformID completion:(void (^)(XForms *form, NSError *error))completion;
 + (void)logout;
 @end

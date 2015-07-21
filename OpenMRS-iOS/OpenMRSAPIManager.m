@@ -28,6 +28,8 @@
 #import "MRSHelperFunctions.h"
 #import "XMLDictionary.h"
 #import "XForms.h"
+#import "GDataXMLNode.h"
+#import "XFormsParser.h"
 #import <CoreData/CoreData.h>
 
 @implementation OpenMRSAPIManager
@@ -728,6 +730,31 @@
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         completion(nil, error);
     }];
+}
+
++ (void)getXformWithID:(NSString *)xformID completion:(void (^)(XForms* form, NSError *error))completion {
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+    
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host andRequestSerializer:[AFXMLParserResponseSerializer new]]
+     GET:[NSString stringWithFormat:@"%@/moduleServlet/xforms/xformDownload?target=xform&uname=%@&pw=%@&formId=%@&contentType=xml&excludeLayout=true", [hostUrl absoluteString], username, password, xformID]
+     parameters:nil
+     success:^(AFHTTPRequestOperation *operation, id responseObject) {
+         NSError *error = nil;
+         GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithData:operation.responseData error:&error];
+         if (!error) {
+             XForms *form = [XFormsParser parseXFormsXML:doc withID:@"2" andName:@"Basic form"];
+             completion(form, nil);
+         } else {
+             completion(nil, error);
+         }
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+         completion(nil, error);
+     }];
 }
 
 + (void)presentLoginController
