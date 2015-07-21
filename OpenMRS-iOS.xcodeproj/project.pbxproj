@@ -12,6 +12,9 @@
 		240F4EDF1B5BB00C00E943FC /* form-icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 240F4EDE1B5BB00C00E943FC /* form-icon@3x.png */; };
 		240F4EE31B5BB22900E943FC /* XFormsList.m in Sources */ = {isa = PBXBuildFile; fileRef = 240F4EE21B5BB22900E943FC /* XFormsList.m */; };
 		240F4EE71B5BB31600E943FC /* XForms.m in Sources */ = {isa = PBXBuildFile; fileRef = 240F4EE61B5BB31600E943FC /* XForms.m */; };
+		240F4EEB1B5D401000E943FC /* XFormsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 240F4EEA1B5D401000E943FC /* XFormsParser.m */; };
+		240F4EEF1B5D415100E943FC /* XFormElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 240F4EEE1B5D415100E943FC /* XFormElement.m */; };
+		240F4EF31B5D852700E943FC /* XFormViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 240F4EF21B5D852700E943FC /* XFormViewController.m */; };
 		2432066D1B2E439000B54970 /* EditPatient.m in Sources */ = {isa = PBXBuildFile; fileRef = 2432066C1B2E439000B54970 /* EditPatient.m */; };
 		243206711B30436700B54970 /* MRSHelperFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 243206701B30436700B54970 /* MRSHelperFunctions.m */; };
 		2436F2B11B49A01000294B4C /* EditPatientForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 2436F2B01B49A01000294B4C /* EditPatientForm.m */; };
@@ -106,6 +109,12 @@
 		240F4EE21B5BB22900E943FC /* XFormsList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFormsList.m; sourceTree = "<group>"; };
 		240F4EE51B5BB31600E943FC /* XForms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XForms.h; sourceTree = "<group>"; };
 		240F4EE61B5BB31600E943FC /* XForms.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XForms.m; sourceTree = "<group>"; };
+		240F4EE91B5D401000E943FC /* XFormsParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFormsParser.h; sourceTree = "<group>"; };
+		240F4EEA1B5D401000E943FC /* XFormsParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFormsParser.m; sourceTree = "<group>"; };
+		240F4EED1B5D415100E943FC /* XFormElement.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFormElement.h; sourceTree = "<group>"; };
+		240F4EEE1B5D415100E943FC /* XFormElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFormElement.m; sourceTree = "<group>"; };
+		240F4EF11B5D852700E943FC /* XFormViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFormViewController.h; sourceTree = "<group>"; };
+		240F4EF21B5D852700E943FC /* XFormViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFormViewController.m; sourceTree = "<group>"; };
 		241729061B30C73400BB35F0 /* openmrs-offline 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "openmrs-offline 2.xcdatamodel"; sourceTree = "<group>"; };
 		2432066B1B2E439000B54970 /* EditPatient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditPatient.h; sourceTree = "<group>"; };
 		2432066C1B2E439000B54970 /* EditPatient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditPatient.m; sourceTree = "<group>"; };
@@ -274,6 +283,33 @@
 			name = XForms;
 			sourceTree = "<group>";
 		};
+		240F4EE81B5D3FFA00E943FC /* XForms Parser */ = {
+			isa = PBXGroup;
+			children = (
+				240F4EE91B5D401000E943FC /* XFormsParser.h */,
+				240F4EEA1B5D401000E943FC /* XFormsParser.m */,
+			);
+			name = "XForms Parser";
+			sourceTree = "<group>";
+		};
+		240F4EEC1B5D414000E943FC /* XFormElement */ = {
+			isa = PBXGroup;
+			children = (
+				240F4EED1B5D415100E943FC /* XFormElement.h */,
+				240F4EEE1B5D415100E943FC /* XFormElement.m */,
+			);
+			name = XFormElement;
+			sourceTree = "<group>";
+		};
+		240F4EF01B5D851300E943FC /* XForm */ = {
+			isa = PBXGroup;
+			children = (
+				240F4EF11B5D852700E943FC /* XFormViewController.h */,
+				240F4EF21B5D852700E943FC /* XFormViewController.m */,
+			);
+			name = XForm;
+			sourceTree = "<group>";
+		};
 		2432066E1B2E439C00B54970 /* Edit Patient */ = {
 			isa = PBXGroup;
 			children = (
@@ -322,6 +358,7 @@
 		248FBE2F1B03B9E400569C2C /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				240F4EF01B5D851300E943FC /* XForm */,
 				240F4EE01B5BB20800E943FC /* XForms list */,
 				243786441B46B82000AB5089 /* Forms */,
 				2494E8E91B3CC1CC00ABFE53 /* Identifier Type Cell */,
@@ -369,6 +406,7 @@
 		248FBE321B03BA2600569C2C /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				240F4EEC1B5D414000E943FC /* XFormElement */,
 				240F4EE41B5BB30200E943FC /* XForms */,
 				248FBE4E1B03BC9100569C2C /* Visit */,
 				248FBE4D1B03BC7D00569C2C /* Patient */,
@@ -468,6 +506,7 @@
 		248FBE3C1B03BB4E00569C2C /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				240F4EE81B5D3FFA00E943FC /* XForms Parser */,
 				D396A51A1A2E09DE00DE6448 /* KeychainItemWrapper.h */,
 				D396A51B1A2E09DE00DE6448 /* KeychainItemWrapper.m */,
 				D317E7F51A4C6BD300E05212 /* OrderedDictionary.h */,
@@ -981,6 +1020,7 @@
 				2436F2B51B49D56C00294B4C /* Constants.m in Sources */,
 				D317E7F61A4C6BD300E05212 /* OrderedDictionary.m in Sources */,
 				2432066D1B2E439000B54970 /* EditPatient.m in Sources */,
+				240F4EEF1B5D415100E943FC /* XFormElement.m in Sources */,
 				D396A52D1A2E09DE00DE6448 /* MRSPatient.m in Sources */,
 				D39AD7AB1A3BFE8600C01540 /* CaptureVitalsTableViewController.m in Sources */,
 				243206711B30436700B54970 /* MRSHelperFunctions.m in Sources */,
@@ -988,6 +1028,7 @@
 				D396A5441A2E0CEF00DE6448 /* SettingsViewController.m in Sources */,
 				2494E8E81B3CC1BC00ABFE53 /* IdentifierTypeCell.m in Sources */,
 				D3E47BA91A3A08EF004B3F95 /* MRSPatientIdentifier.m in Sources */,
+				240F4EF31B5D852700E943FC /* XFormViewController.m in Sources */,
 				D396A5261A2E09DE00DE6448 /* PatientViewController.m in Sources */,
 				D396A52C1A2E09DE00DE6448 /* PatientSearchViewController.m in Sources */,
 				D396A54D1A2E3E5600DE6448 /* PatientEncounterListView.m in Sources */,
@@ -1004,6 +1045,7 @@
 				D3F797BA1A71F690008E6064 /* SelectVisitTypeView.swift in Sources */,
 				D39739711A2E082300D0AB69 /* main.m in Sources */,
 				D396A5501A2E3F7600DE6448 /* PatientVisitListView.m in Sources */,
+				240F4EEB1B5D401000E943FC /* XFormsParser.m in Sources */,
 				D396A5271A2E09DE00DE6448 /* AppDelegate.m in Sources */,
 				24D127511B0DF6140018AA1D /* MRSDateUtilities.m in Sources */,
 				D396A54A1A2E3CBC00DE6448 /* MRSEncounter.m in Sources */,
