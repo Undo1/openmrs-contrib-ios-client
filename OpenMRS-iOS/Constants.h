@@ -43,6 +43,7 @@ extern NSString *const kXFormsTime;
 extern NSString *const kXFormsDateTime;
 extern NSString *const kXFormsBoolean;
 
+extern NSString *const kXFormsGroup;
 extern NSString *const kXFormsSelect;
 extern NSString *const kXFormsMutlipleSelect;
 extern NSString *const kXFormsRepeat;

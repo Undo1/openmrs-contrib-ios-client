@@ -44,6 +44,7 @@ NSString *const kXFormsTime = @"xsd:time";
 NSString *const kXFormsDateTime = @"xsd:dateTime";
 NSString *const kXFormsBoolean = @"xsd:boolean";
 
+NSString *const kXFormsGroup = @"group";
 NSString *const kXFormsSelect = @"select1";
 NSString *const kXFormsMutlipleSelect = @"select";
 NSString *const kXFormsRepeat = @"repeat";

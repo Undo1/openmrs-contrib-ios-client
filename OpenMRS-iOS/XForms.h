@@ -13,7 +13,7 @@
 
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *XFormsID;
-@property (nonatomic, strong) XLFormDescriptor *form;
-@property (nonatomic, strong) NSMutableDictionary *formElements;
+@property (nonatomic, strong) NSMutableArray *forms;
+@property (nonatomic, strong) NSMutableArray *groups;
 
 @end
