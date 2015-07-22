@@ -12,6 +12,6 @@
 
 @interface XFormViewController : XLFormViewController
 
-- (instancetype)initWithForm:(XForms *)form;
+- (instancetype)initWithForm:(XForms *)form WithIndex:(int)index;
 
 @end
