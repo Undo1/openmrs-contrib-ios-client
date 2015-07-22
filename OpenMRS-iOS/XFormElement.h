@@ -13,7 +13,7 @@
 
 @property (nonatomic, strong) NSString *bindID;
 @property (nonatomic, strong) NSString *type;
-@property (nonatomic, strong) NSDictionary *items;
+@property (nonatomic, strong) NSMutableArray *items;
 @property (nonatomic) BOOL locked;
 @property (nonatomic) BOOL visible;
 @property (nonatomic) BOOL required;

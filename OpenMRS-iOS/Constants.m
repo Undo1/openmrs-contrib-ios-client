@@ -44,9 +44,9 @@ NSString *const kXFormsTime = @"xsd:time";
 NSString *const kXFormsDateTime = @"xsd:dateTime";
 NSString *const kXFormsBoolean = @"xsd:boolean";
 
-NSString *const kXFormsSelect = @"xf:select1";
-NSString *const kXFormsMutlipleSelect = @"xf:select";
-NSString *const kXFormsRepeat = @"xf:repeat";
+NSString *const kXFormsSelect = @"select1";
+NSString *const kXFormsMutlipleSelect = @"select";
+NSString *const kXFormsRepeat = @"repeat";
 NSString *const kXFormBase64 = @"base64Binary";
 
 NSString *const kXFormsImage = @"image";
@@ -63,6 +63,8 @@ NSString *const kXFormsGPS = @"gps";
              kXFormsTime: XLFormRowDescriptorTypeTime,
              kXFormsDateTime: XLFormRowDescriptorTypeDateTime,
              kXFormsBoolean: XLFormRowDescriptorTypeBooleanSwitch,
+             kXFormsSelect: XLFormRowDescriptorTypeSelectorPush,
+             kXFormsMutlipleSelect: XLFormRowDescriptorTypeMultipleSelector,
              kXFormsImage: XLFormRowDescriptorTypeSelectorPush,
              kXFormsAudio: XLFormRowDescriptorTypeSelectorPush,
              kXFormsGPS: XLFormRowDescriptorTypeSelectorPush
