@@ -19,9 +19,9 @@
     XForms *form = [[XForms alloc] init];
     form.name = name;
     form.XFormsID = formID;
-    form.formElements = [[NSMutableDictionary alloc] init];
+    form.forms = [[NSMutableArray alloc] init];
+    form.groups = [[NSMutableArray alloc] init];;
     
-    form.form = [XLFormDescriptor formDescriptorWithTitle:name];
     GDataXMLElement *model = [doc.rootElement elementsForName:@"xf:model"][0];
     GDataXMLElement *instance = [model elementsForName:@"xf:instance"][0];
 
@@ -35,31 +35,86 @@
 
 + (void)parseGroup:(GDataXMLElement *)group toForm:(XForms *)form bindings:(NSArray *)bindings instance:(GDataXMLElement *)instance doc:(GDataXMLDocument *)doc {
     XLFormSectionDescriptor *section = [XLFormSectionDescriptor formSection];
+    NSMutableDictionary *groupDict = [[NSMutableDictionary alloc] init];
+    NSString *groupLabel = @"";
+    
+    
+    
+    //labels and hints
+    if ([group elementsForName:@"xf:label"]) {
+        groupLabel = [(GDataXMLElement *)([group elementsForName:@"xf:label"][0]) stringValue];
+    }
+    if ([group elementsForName:@"xf:hint"]) {
+        section.title = [(GDataXMLElement *)([group elementsForName:@"xf:hint"][0]) stringValue];
+    }
+    XLFormDescriptor *formDescriptor = [XLFormDescriptor formDescriptorWithTitle:groupLabel];
+    
+    [formDescriptor addFormSection:section];
+    [form.forms addObject:formDescriptor];
+    [form.groups addObject:groupDict];
 
     for (GDataXMLElement *element in [group children]) {
-
-        //handling label
-        if ([element.localName isEqual:@"label"]) {
-            section.title = element.stringValue;
-        }
-        //handling hints
-        if ([element.localName isEqualToString:@"hint"]) {
-            section.footerTitle = element.stringValue;
-        }
         //handling input
-        if ([element.localName isEqualToString:@"input"]) {
-            [XFormsParser parseInput:element bindings:bindings instance:instance Section:section Form:form Document:doc];
+        if ([element.localName isEqualToString:@"input"] ||
+            [element.localName isEqualToString:kXFormsSelect] ||
+            [element.localName isEqualToString:kXFormsMutlipleSelect]) {
+            [XFormsParser parseInput:element bindings:bindings instance:instance Section:section Group:groupDict Document:doc];
         }
-        if ([element.localName isEqualToString:kXFormsSelect]) {
-            [XFormsParser parseInput:element bindings:bindings instance:instance Section:section Form:form Document:doc];
+        //handling repeat
+        if ([element.localName isEqualToString:kXFormsRepeat]) {
+            [XFormsParser parseRepeat:element bindings:bindings instance:instance Section:section Group:groupDict Form:form Document:doc];
         }
-    }
-    if (section.formRows.count > 0) {
-        [form.form addFormSection:section];
+        // handling group
+        if ([element.localName isEqualToString:kXFormsGroup]) {
+            [XFormsParser parseGroup:element toForm:form bindings:bindings instance:instance doc:doc];
+        }
     }
 }
 
-+ (void)parseInput:(GDataXMLElement *)input bindings:(NSArray *)bindings instance:(GDataXMLElement* )instance Section:(XLFormSectionDescriptor *)section Form:(XForms *)form Document:(GDataXMLDocument *)doc {
++ (void)parseRepeat:(GDataXMLElement *)repeat bindings:(NSArray *)bindings instance:(GDataXMLElement* )instance Section:(XLFormSectionDescriptor *)section Group:(NSMutableDictionary *)group Form:(XForms *)form Document:(GDataXMLDocument *)doc {
+    XFormElement *formElement = [[XFormElement alloc] init];
+    formElement.type = kXFormsRepeat;
+    
+    //labels and hints
+    if ([repeat elementsForName:@"xf:label"]) {
+        formElement.label = [(GDataXMLElement *)([repeat elementsForName:@"xf:label"][0]) stringValue];
+        section.title = formElement.label;
+    }
+    if ([repeat elementsForName:@"xf:hint"]) {
+        formElement.hint = [(GDataXMLElement *)([repeat elementsForName:@"xf:hint"][0]) stringValue];
+        section.footerTitle = formElement.hint;
+    }
+    
+    //bind ID -- used also as a tag for the row in the view.
+    formElement.bindID = [(GDataXMLElement *)[repeat attributeForName:@"bind"] stringValue];
+    GDataXMLElement *bindingForInput;
+    for (GDataXMLElement *element in bindings) {
+        if ([[[element attributeForName:@"id"] stringValue] isEqualToString:formElement.bindID]) {
+            bindingForInput = element;
+            break;
+        }
+    }
+
+    //XMLNode
+    NSString *nodeXPath = [[bindingForInput attributeForName:@"nodeset"] stringValue];
+    GDataXMLElement *instanceNode = [instance nodesForXPath:[NSString stringWithFormat:@"/%@", nodeXPath] error:nil][0];
+    formElement.XMLnode = instanceNode;
+    
+    //Sub elements
+    formElement.subElements = [[NSMutableDictionary alloc] init];
+    for (GDataXMLElement *element in [repeat children]) {
+        if ([element.localName isEqualToString:@"input"] ||
+            [element.localName isEqualToString:kXFormsSelect] ||
+            [element.localName isEqualToString:kXFormsMutlipleSelect]) {
+            //It adds the new row to the new section
+            [XFormsParser parseInput:element bindings:bindings instance:instance Section:section Group:formElement.subElements Document:doc];
+        }
+    }
+    [group setObject:formElement forKey:formElement.bindID];
+    NSLog(@"Group: %@", formElement.subElements);
+}
+
++ (void)parseInput:(GDataXMLElement *)input bindings:(NSArray *)bindings instance:(GDataXMLElement* )instance Section:(XLFormSectionDescriptor *)section Group:(NSMutableDictionary *)group Document:(GDataXMLDocument *)doc {
     XFormElement *formElement = [[XFormElement alloc] init];
     
     //labels and hints
@@ -117,7 +172,6 @@
         for (GDataXMLElement *item in [input elementsForName:@"xf:item"]) {
             NSString *label = [(GDataXMLElement *)([item elementsForName:@"xf:label"][0]) stringValue];
             NSString *value =[(GDataXMLElement *)([item elementsForName:@"xf:value"][0]) stringValue];
-            NSLog(@"Label %@, key %@", label, value);
             [labels addObject:label];
             [formElement.items addObject:[XLFormOptionsObject formOptionsObjectWithValue:value displayText:label]];
         }
@@ -173,8 +227,7 @@
             }
         }
     }
-
-    [form.formElements setObject:formElement forKey:formElement.bindID];
+    [group setObject:formElement forKey:formElement.bindID];
     [section addFormRow:row];
 }
 
