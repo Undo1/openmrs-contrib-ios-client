@@ -15,6 +15,12 @@
 		240F4EEB1B5D401000E943FC /* XFormsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 240F4EEA1B5D401000E943FC /* XFormsParser.m */; };
 		240F4EEF1B5D415100E943FC /* XFormElement.m in Sources */ = {isa = PBXBuildFile; fileRef = 240F4EEE1B5D415100E943FC /* XFormElement.m */; };
 		240F4EF31B5D852700E943FC /* XFormViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 240F4EF21B5D852700E943FC /* XFormViewController.m */; };
+		2412409D1B626B63009E172B /* SimpleAudioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2412409C1B626B63009E172B /* SimpleAudioViewController.m */; };
+		2412409F1B627766009E172B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2412409E1B627766009E172B /* AVFoundation.framework */; };
+		241240A61B62854B009E172B /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 241240A21B62854B009E172B /* MapViewController.m */; };
+		241240A71B62854B009E172B /* CLLocationValueTrasformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 241240A41B62854B009E172B /* CLLocationValueTrasformer.m */; };
+		241240A81B62854B009E172B /* MapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 241240A51B62854B009E172B /* MapViewController.xib */; };
+		2417346E1B623AAA0032C45B /* ImageTypeMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2417346D1B623AAA0032C45B /* ImageTypeMenu.m */; };
 		2432066D1B2E439000B54970 /* EditPatient.m in Sources */ = {isa = PBXBuildFile; fileRef = 2432066C1B2E439000B54970 /* EditPatient.m */; };
 		243206711B30436700B54970 /* MRSHelperFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 243206701B30436700B54970 /* MRSHelperFunctions.m */; };
 		2436F2B11B49A01000294B4C /* EditPatientForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 2436F2B01B49A01000294B4C /* EditPatientForm.m */; };
@@ -115,7 +121,17 @@
 		240F4EEE1B5D415100E943FC /* XFormElement.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFormElement.m; sourceTree = "<group>"; };
 		240F4EF11B5D852700E943FC /* XFormViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFormViewController.h; sourceTree = "<group>"; };
 		240F4EF21B5D852700E943FC /* XFormViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFormViewController.m; sourceTree = "<group>"; };
+		2412409B1B626B63009E172B /* SimpleAudioViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleAudioViewController.h; sourceTree = "<group>"; };
+		2412409C1B626B63009E172B /* SimpleAudioViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleAudioViewController.m; sourceTree = "<group>"; };
+		2412409E1B627766009E172B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		241240A11B62854B009E172B /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
+		241240A21B62854B009E172B /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
+		241240A31B62854B009E172B /* CLLocationValueTrasformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLLocationValueTrasformer.h; sourceTree = "<group>"; };
+		241240A41B62854B009E172B /* CLLocationValueTrasformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLLocationValueTrasformer.m; sourceTree = "<group>"; };
+		241240A51B62854B009E172B /* MapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapViewController.xib; sourceTree = "<group>"; };
 		241729061B30C73400BB35F0 /* openmrs-offline 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "openmrs-offline 2.xcdatamodel"; sourceTree = "<group>"; };
+		2417346C1B623AAA0032C45B /* ImageTypeMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageTypeMenu.h; sourceTree = "<group>"; };
+		2417346D1B623AAA0032C45B /* ImageTypeMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageTypeMenu.m; sourceTree = "<group>"; };
 		2432066B1B2E439000B54970 /* EditPatient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditPatient.h; sourceTree = "<group>"; };
 		2432066C1B2E439000B54970 /* EditPatient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditPatient.m; sourceTree = "<group>"; };
 		2432066F1B30436700B54970 /* MRSHelperFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSHelperFunctions.h; sourceTree = "<group>"; };
@@ -250,6 +266,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2412409F1B627766009E172B /* AVFoundation.framework in Frameworks */,
 				D3A869511A32B3D400D1963F /* CoreData.framework in Frameworks */,
 				65BE2B3E2C5F8BE1FB7090C2 /* libPods.a in Frameworks */,
 			);
@@ -304,10 +321,44 @@
 		240F4EF01B5D851300E943FC /* XForm */ = {
 			isa = PBXGroup;
 			children = (
+				241240A01B62850F009E172B /* GPSChooserViewController */,
+				2412409A1B626B4C009E172B /* SimpleAudioViewController */,
+				240F4EE01B5BB20800E943FC /* XForms list */,
+				2417346B1B623A830032C45B /* XFormsImagePicker */,
 				240F4EF11B5D852700E943FC /* XFormViewController.h */,
 				240F4EF21B5D852700E943FC /* XFormViewController.m */,
 			);
 			name = XForm;
+			sourceTree = "<group>";
+		};
+		2412409A1B626B4C009E172B /* SimpleAudioViewController */ = {
+			isa = PBXGroup;
+			children = (
+				2412409B1B626B63009E172B /* SimpleAudioViewController.h */,
+				2412409C1B626B63009E172B /* SimpleAudioViewController.m */,
+			);
+			name = SimpleAudioViewController;
+			sourceTree = "<group>";
+		};
+		241240A01B62850F009E172B /* GPSChooserViewController */ = {
+			isa = PBXGroup;
+			children = (
+				241240A11B62854B009E172B /* MapViewController.h */,
+				241240A21B62854B009E172B /* MapViewController.m */,
+				241240A31B62854B009E172B /* CLLocationValueTrasformer.h */,
+				241240A41B62854B009E172B /* CLLocationValueTrasformer.m */,
+				241240A51B62854B009E172B /* MapViewController.xib */,
+			);
+			name = GPSChooserViewController;
+			sourceTree = "<group>";
+		};
+		2417346B1B623A830032C45B /* XFormsImagePicker */ = {
+			isa = PBXGroup;
+			children = (
+				2417346C1B623AAA0032C45B /* ImageTypeMenu.h */,
+				2417346D1B623AAA0032C45B /* ImageTypeMenu.m */,
+			);
+			name = XFormsImagePicker;
 			sourceTree = "<group>";
 		};
 		2432066E1B2E439C00B54970 /* Edit Patient */ = {
@@ -359,7 +410,6 @@
 			isa = PBXGroup;
 			children = (
 				240F4EF01B5D851300E943FC /* XForm */,
-				240F4EE01B5BB20800E943FC /* XForms list */,
 				243786441B46B82000AB5089 /* Forms */,
 				2494E8E91B3CC1CC00ABFE53 /* Identifier Type Cell */,
 				24DAC0D81B397F6D0089AD12 /* Visit Cell */,
@@ -731,6 +781,7 @@
 		7E3ED26108E7D20D7E5E58E4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2412409E1B627766009E172B /* AVFoundation.framework */,
 				D3A869501A32B3D400D1963F /* CoreData.framework */,
 				87CFC2F5FC6F1445E8327AF6 /* libPods.a */,
 			);
@@ -932,6 +983,7 @@
 				24D5CECC1B4B4DB500F1D660 /* settings_icon.png in Resources */,
 				D3A57DBE1B2E5BF800F25F30 /* active_visits_tab_bar_icon@3x.png in Resources */,
 				D396EAF51A36460500191F50 /* search_icon.png in Resources */,
+				241240A81B62854B009E172B /* MapViewController.xib in Resources */,
 				D3FAEFFE1A51C1CD002B1BF7 /* Images.xcassets in Resources */,
 				245EDDCE1B21A10B00B8C0EB /* vitals_icon@2x.png in Resources */,
 				D3A57DBD1B2E5BF800F25F30 /* active_visits_tab_bar_icon@2x.png in Resources */,
@@ -1012,11 +1064,13 @@
 				D3A869541A32B42A00D1963F /* openmrs-offline.xcdatamodeld in Sources */,
 				D38DB4F51A316FAA00E2CF23 /* EncounterViewController.m in Sources */,
 				D38DB4FB1A3216A300E2CF23 /* SelectEncounterTypeView.m in Sources */,
+				241240A61B62854B009E172B /* MapViewController.m in Sources */,
 				D38DB4FE1A3216CF00E2CF23 /* MRSEncounterType.m in Sources */,
 				D38DB4F81A320EF700E2CF23 /* MRSEncounterOb.m in Sources */,
 				240F4EE31B5BB22900E943FC /* XFormsList.m in Sources */,
 				243786431B46B81A00AB5089 /* AddPatientForm.m in Sources */,
 				D39AD7AE1A3C081000C01540 /* MRSVital.m in Sources */,
+				2417346E1B623AAA0032C45B /* ImageTypeMenu.m in Sources */,
 				2436F2B51B49D56C00294B4C /* Constants.m in Sources */,
 				D317E7F61A4C6BD300E05212 /* OrderedDictionary.m in Sources */,
 				2432066D1B2E439000B54970 /* EditPatient.m in Sources */,
@@ -1031,6 +1085,7 @@
 				240F4EF31B5D852700E943FC /* XFormViewController.m in Sources */,
 				D396A5261A2E09DE00DE6448 /* PatientViewController.m in Sources */,
 				D396A52C1A2E09DE00DE6448 /* PatientSearchViewController.m in Sources */,
+				2412409D1B626B63009E172B /* SimpleAudioViewController.m in Sources */,
 				D396A54D1A2E3E5600DE6448 /* PatientEncounterListView.m in Sources */,
 				D37674271A3BB114003A8005 /* MRSLocation.m in Sources */,
 				2436F2B11B49A01000294B4C /* EditPatientForm.m in Sources */,
@@ -1043,6 +1098,7 @@
 				D3E47BA61A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m in Sources */,
 				D396A5291A2E09DE00DE6448 /* OpenMRSAPIManager.m in Sources */,
 				D3F797BA1A71F690008E6064 /* SelectVisitTypeView.swift in Sources */,
+				241240A71B62854B009E172B /* CLLocationValueTrasformer.m in Sources */,
 				D39739711A2E082300D0AB69 /* main.m in Sources */,
 				D396A5501A2E3F7600DE6448 /* PatientVisitListView.m in Sources */,
 				240F4EEB1B5D401000E943FC /* XFormsParser.m in Sources */,
