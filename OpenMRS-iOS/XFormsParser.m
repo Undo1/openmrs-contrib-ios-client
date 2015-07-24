@@ -11,6 +11,11 @@
 #import "GDataXMLNode.h"
 #import "XFormElement.h"
 #import "Constants.h"
+#import "ImageTypeMenu.h"
+#import "SimpleAudioViewController.h"
+#import "MapViewController.h"
+#import "CLLocationValueTrasformer.h"
+#import <MapKit/MapKit.h>
 #import <XLForm.h>
 
 @implementation XFormsParser
@@ -57,7 +62,8 @@
         //handling input
         if ([element.localName isEqualToString:@"input"] ||
             [element.localName isEqualToString:kXFormsSelect] ||
-            [element.localName isEqualToString:kXFormsMutlipleSelect]) {
+            [element.localName isEqualToString:kXFormsMutlipleSelect] ||
+            [element.localName isEqualToString:kXFormsUpload]) {
             [XFormsParser parseInput:element bindings:bindings instance:instance Section:section Group:groupDict Document:doc];
         }
         //handling repeat
@@ -103,9 +109,11 @@
     //Sub elements
     formElement.subElements = [[NSMutableDictionary alloc] init];
     for (GDataXMLElement *element in [repeat children]) {
+        NSLog(@"element id: %@", [element localName]);
         if ([element.localName isEqualToString:@"input"] ||
             [element.localName isEqualToString:kXFormsSelect] ||
-            [element.localName isEqualToString:kXFormsMutlipleSelect]) {
+            [element.localName isEqualToString:kXFormsMutlipleSelect] ||
+            [element.localName isEqualToString:kXFormsUpload]) {
             //It adds the new row to the new section
             [XFormsParser parseInput:element bindings:bindings instance:instance Section:section Group:formElement.subElements Document:doc];
         }
@@ -116,7 +124,6 @@
 
 + (void)parseInput:(GDataXMLElement *)input bindings:(NSArray *)bindings instance:(GDataXMLElement* )instance Section:(XLFormSectionDescriptor *)section Group:(NSMutableDictionary *)group Document:(GDataXMLDocument *)doc {
     XFormElement *formElement = [[XFormElement alloc] init];
-    
     //labels and hints
     if ([input elementsForName:@"xf:label"]) {
         formElement.label = [(GDataXMLElement *)([input elementsForName:@"xf:label"][0]) stringValue];
@@ -148,16 +155,14 @@
         }
         
     } else if ([[[bindingForInput attributeForName:@"type"] stringValue] isEqualToString:kXFormBase64]) {
-        if ([[[bindingForInput attributeForName:@"type"] stringValue] isEqualToString:kXFormsAudio]) {
+        if ([[[bindingForInput attributeForName:@"format"] stringValue] isEqualToString:kXFormsAudio]) {
             formElement.type = kXFormsAudio;
-        } else {
+        } else if ([[[bindingForInput attributeForName:@"format"] stringValue] isEqualToString:kXFormsImage]) {
             formElement.type = kXFormsImage;
         }
     } else {
         formElement.type = [[bindingForInput attributeForName:@"type"] stringValue];
     }
-    
-    
     /* Sufficent data here to create the row */
     XLFormRowDescriptor *row = [XLFormRowDescriptor formRowDescriptorWithTag:formElement.bindID
                                                                      rowType:[[Constants MAPPING_TYPES] objectForKey:formElement.type]
@@ -165,6 +170,18 @@
     /* #TODO:That breaks it some investigation has to be done here */
     //[row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
     
+    if ([formElement.type isEqualToString:kXFormsImage]) {
+        row.action.viewControllerClass = [ImageTypeMenu class];
+    }
+    if ([formElement.type isEqualToString:kXFormsAudio]) {
+        row.action.viewControllerClass = [SimpleAudioViewController class];
+    }
+    if ([formElement.type isEqualToString:kXFormsGPS]) {
+        row.action.viewControllerClass = [MapViewController class];
+        row.valueTransformer = [CLLocationValueTrasformer class];
+        row.value = [[CLLocation alloc] initWithLatitude:-33 longitude:-56];
+    }
+
     // Items
     if ([formElement.type isEqualToString:kXFormsSelect] || [formElement.type isEqualToString:kXFormsMutlipleSelect]) {
         formElement.items = [[NSMutableArray alloc] init];
