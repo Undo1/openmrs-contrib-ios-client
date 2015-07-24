@@ -44,11 +44,12 @@ NSString *const kXFormsTime = @"xsd:time";
 NSString *const kXFormsDateTime = @"xsd:dateTime";
 NSString *const kXFormsBoolean = @"xsd:boolean";
 
+NSString *const kXFormsUpload = @"upload";
 NSString *const kXFormsGroup = @"group";
 NSString *const kXFormsSelect = @"select1";
 NSString *const kXFormsMutlipleSelect = @"select";
 NSString *const kXFormsRepeat = @"repeat";
-NSString *const kXFormBase64 = @"base64Binary";
+NSString *const kXFormBase64 = @"xsd:base64Binary";
 
 NSString *const kXFormsImage = @"image";
 NSString *const kXFormsAudio = @"audio";
