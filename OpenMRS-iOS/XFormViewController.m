@@ -10,6 +10,7 @@
 #import "XFormViewController.h"
 #import "XFormElement.h"
 #import "Constants.h"
+#import "XFormsParser.h"
 
 @interface XFormViewController ()
 
@@ -61,7 +62,7 @@
         XFormViewController *nextForm = [[XFormViewController alloc] initWithForm:self.XForm WithIndex:self.index+1];
         [self.navigationController pushViewController:nextForm animated:YES];
     } else {
-        NSLog(@"Submitted!");
+        [XFormsParser InjecValues:self.XForm];
     }
 }
 
@@ -121,11 +122,11 @@
                 type = subElement.type;
             }
         }
-        XLFormRowDescriptor *newRow = [XLFormRowDescriptor formRowDescriptorWithTag:[NSString stringWithFormat:@"%@" , row.tag, count]
+        XLFormRowDescriptor *newRow = [XLFormRowDescriptor formRowDescriptorWithTag:[NSString stringWithFormat:@"%@~NEW" , row.tag, count]
                                                                               rowType:[[Constants MAPPING_TYPES] objectForKey:type]
                                                                                 title:row.title];
         if (subElement.defaultValue) {
-            row.value = subElement.defaultValue;
+            newRow.value = subElement.defaultValue;
         }
         if (row.selectorOptions) {
             newRow.selectorOptions = row.selectorOptions;
