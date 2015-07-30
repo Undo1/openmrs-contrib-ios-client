@@ -68,7 +68,7 @@
     [super viewWillDisappear:animated];
     if (self.recorded) {
         NSData *data  = [NSData dataWithContentsOfURL:self.outputFileURL];
-        _rowDescriptor.value = [XLFormOptionsObject formOptionsObjectWithValue:[data base64EncodedDataWithOptions:NSDataBase64Encoding64CharacterLineLength] displayText:self.outputFileURL.lastPathComponent];
+        _rowDescriptor.value = [XLFormOptionsObject formOptionsObjectWithValue:[data base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength] displayText:self.outputFileURL.lastPathComponent];
     }
 }
 

@@ -39,6 +39,9 @@
     
     row = [XLFormRowDescriptor formRowDescriptorWithTag:@"Camera" rowType:XLFormRowDescriptorTypeButton title:@"Camera"];
     row.action.formSelector = @selector(initCamera);
+    if (_rowDescriptor.value) {
+        row.value = _rowDescriptor.value;
+    }
     [section addFormRow:row];
     
     row = [XLFormRowDescriptor formRowDescriptorWithTag:@"CameraRoll" rowType:XLFormRowDescriptorTypeButton title:@"Camera Roll"];
@@ -78,7 +81,7 @@
     [self reloadFormRow:row];
     
     NSData *imageData = UIImagePNGRepresentation(self.image);
-    _rowDescriptor.value = [XLFormOptionsObject formOptionsObjectWithValue:[imageData base64EncodedDataWithOptions:NSDataBase64Encoding64CharacterLineLength] displayText:filename];
+    _rowDescriptor.value = [XLFormOptionsObject formOptionsObjectWithValue:[imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength] displayText:filename];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
