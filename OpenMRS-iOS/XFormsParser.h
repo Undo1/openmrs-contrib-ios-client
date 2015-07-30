@@ -13,5 +13,6 @@
 @interface XFormsParser : NSObject
 
 + (XForms *)parseXFormsXML:(GDataXMLDocument *)doc withID:(NSString *)formID andName:(NSString *)name;
++ (GDataXMLDocument *)InjecValues:(XForms *)form;
 
 @end

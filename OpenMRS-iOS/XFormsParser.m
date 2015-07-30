@@ -15,6 +15,7 @@
 #import "SimpleAudioViewController.h"
 #import "MapViewController.h"
 #import "CLLocationValueTrasformer.h"
+#import "MRSDateUtilities.h"
 #import <MapKit/MapKit.h>
 #import <XLForm.h>
 
@@ -23,6 +24,7 @@
 + (XForms *)parseXFormsXML:(GDataXMLDocument *)doc withID:(NSString *)formID andName:(NSString *)name {
     XForms *form = [[XForms alloc] init];
     form.name = name;
+    form.doc = doc;
     form.XFormsID = formID;
     form.forms = [[NSMutableArray alloc] init];
     form.groups = [[NSMutableArray alloc] init];;
@@ -104,6 +106,7 @@
     //XMLNode
     NSString *nodeXPath = [[bindingForInput attributeForName:@"nodeset"] stringValue];
     GDataXMLElement *instanceNode = [instance nodesForXPath:[NSString stringWithFormat:@"/%@", nodeXPath] error:nil][0];
+    formElement.XPathNode = nodeXPath;
     formElement.XMLnode = instanceNode;
     
     //Sub elements
@@ -119,7 +122,6 @@
         }
     }
     [group setObject:formElement forKey:formElement.bindID];
-    NSLog(@"Group: %@", formElement.subElements);
 }
 
 + (void)parseInput:(GDataXMLElement *)input bindings:(NSArray *)bindings instance:(GDataXMLElement* )instance Section:(XLFormSectionDescriptor *)section Group:(NSMutableDictionary *)group Document:(GDataXMLDocument *)doc {
@@ -167,8 +169,6 @@
     XLFormRowDescriptor *row = [XLFormRowDescriptor formRowDescriptorWithTag:formElement.bindID
                                                                      rowType:[[Constants MAPPING_TYPES] objectForKey:formElement.type]
                                                                        title:formElement.label];
-    /* #TODO:That breaks it some investigation has to be done here */
-    //[row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
     
     if ([formElement.type isEqualToString:kXFormsImage]) {
         row.action.viewControllerClass = [ImageTypeMenu class];
@@ -220,6 +220,7 @@
         if ([[[bindingForInput attributeForName:@"required"] stringValue] isEqualToString:@"true()"]) {
             formElement.required = YES;
             row.required = @YES;
+            [XFormsParser addRedAssertres:row];
         } else {
             formElement.required = NO;
             row.required = @NO;
@@ -228,6 +229,7 @@
     
     NSString *nodeXPath = [[bindingForInput attributeForName:@"nodeset"] stringValue];
     GDataXMLElement *instanceNode = [instance nodesForXPath:[NSString stringWithFormat:@"/%@", nodeXPath] error:nil][0];
+    formElement.XPathNode = nodeXPath;
     formElement.XMLnode = instanceNode;
     
     
@@ -248,4 +250,97 @@
     [section addFormRow:row];
 }
 
++ (GDataXMLDocument *)InjecValues:(XForms *)form {
+    GDataXMLElement *model = [form.doc.rootElement elementsForName:@"xf:model"][0];
+    GDataXMLElement *instance = [model elementsForName:@"xf:instance"][0];
+
+    for (int i = 0;i < form.forms.count; i++) {
+        XLFormDescriptor *formDescriptor = form.forms[i];
+        NSDictionary *elements = form.groups[i];
+        int index = 0;
+        for (XLFormSectionDescriptor *section in formDescriptor.formSections) {
+            for (XLFormRowDescriptor *row in section.formRows) {
+                if ([row.tag isEqualToString:@"add"] || [row.tag isEqualToString:@"delete"]) {
+                    break;
+                }
+                XFormElement *element = elements[row.tag];
+                //Second or futther repeat block
+                if (!element) {
+                    XFormElement *superElement;
+                    for (NSString *key in elements) {
+                        superElement = elements[key];
+                    }
+                    if (index) {
+                        [[superElement parentNodeFromDoc:form.doc] addChild:superElement.XMLnode];
+                        superElement.XMLnode = [[superElement parentNodeFromDoc:form.doc] elementsForName:superElement.XMLnode.name][index];
+                    }
+                    for (NSString *subelementKey in superElement.subElements) {
+                        XFormElement *subelement = [superElement.subElements objectForKey:subelementKey];
+                        NSLog(@"row tag: %@, bindID %@", row.tag, subelement.bindID);
+                        if ([row.tag isEqualToString:subelement.bindID]) {
+                            NSLog(@"MATCHED!: %@.", row.value);
+                            [XFormsParser modifyElement:subelement Value:row.value];
+                            break;
+                        } else if ([row.tag isEqualToString:[NSString stringWithFormat:@"%@~NEW", subelement.bindID]] && index) {
+                            subelement.XMLnode = [superElement.XMLnode elementsForName:subelement.XMLnode.name][0];
+                            [XFormsParser modifyElement:subelement Value:row.value];
+                            break;
+                        }
+                    }
+                    
+                } else {
+                    [XFormsParser modifyElement:element Value:row.value];
+                }
+            }
+            index++;
+        }
+    }
+    NSLog(@"%@", instance);
+    return nil;
+}
+
++ (void)modifyElement:(XFormElement *)element Value:(id)value {
+    NSLog(@"ID: %@, xml node :%@, val: %@", element.bindID, element.XMLnode, value);
+    if (element && value) {
+        GDataXMLElement *elementNode = element.XMLnode;
+        elementNode.stringValue = [XFormsParser stringFromValue:value Type:element.type];
+    }
+    NSLog(@"ID: %@, xml node :%@", element.bindID, element.XMLnode);
+}
+
++ (NSString *)stringFromValue:(id)value Type:(NSString *)type {
+    if ([type isEqualToString:kXFormsString]) {
+        return value;
+    } else if ([type isEqualToString:kXFormsNumber] ||
+               [type isEqualToString:kXFormsDecimal]) {
+        return [value stringValue];
+    } else if ([type isEqualToString:kXFormsBoolean]) {
+        if (value) {
+            return @"Yes";
+        } else {
+            return @"NO";
+        }
+    } else if ([type isEqualToString:kXFormsDate] ||
+               [type isEqualToString:kXFormsTime] ||
+               [type isEqualToString:kXFormsDateTime]) {
+        return [MRSDateUtilities openMRSFormatStringWithDate:value];
+    } else if ([type isEqualToString:kXFormsSelect] ||
+               [type isEqualToString:kXFormsImage] ||
+               [type isEqualToString:kXFormsAudio] ||
+               [type isEqualToString:kXFormsGPS] ||
+               [type isEqualToString:kXFormsMutlipleSelect]) {
+        XLFormOptionsObject *obj = value;
+        return obj.valueData;
+    }
+    else {
+        NSLog(@"Unsupported type");
+        @throw @"NOT SUPPORTED TYPE!";
+    }
+}
+
++ (void)addRedAssertres:(XLFormRowDescriptor *)row {
+    NSMutableAttributedString *requiredLabel = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"*%@", row.title]];
+    [requiredLabel addAttribute:NSForegroundColorAttributeName value:[UIColor redColor] range:NSMakeRange(0, 1)];
+    [row.cellConfig setObject:requiredLabel forKey:@"textLabel.attributedText"];
+}
 @end

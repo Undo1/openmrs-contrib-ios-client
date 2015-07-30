@@ -21,8 +21,11 @@
 @property (nonatomic, strong) NSString *label;
 @property (nonatomic, strong) NSString *hint;
 @property (nonatomic, strong) GDataXMLElement *XMLnode;
+@property (nonatomic, strong) NSString *XPathNode;
 
 @property (nonatomic, strong) NSMutableDictionary *subElements;
 @property (nonatomic) BOOL isNew; //not already added to the xml model
+
+- (GDataXMLElement *)parentNodeFromDoc:(GDataXMLDocument *)doc;
 
 @end
