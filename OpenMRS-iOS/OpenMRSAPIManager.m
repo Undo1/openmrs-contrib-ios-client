@@ -626,7 +626,7 @@
         //NSLog(@"Person response: %@", results);
         [self EditNameForPatient:patient completion:completion];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Operation failed... with Error: %@", error);
+        NSLog(@"Edit patient failed... with Error: %@", error);
         completion(error);
     }];
 }
@@ -650,7 +650,7 @@
         //NSLog(@"%@", results);
         [self EditAddressForPatient:patient completion:completion];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        NSLog(@"Operation failed... with Error: %@", error);
+        NSLog(@"Edit name.. with Error: %@", error);
         completion(error);
     }];
 }
@@ -682,7 +682,7 @@
             patient.preferredAddressUUID = results[@"uuid"];
             completion(nil);
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-            NSLog(@"Operation failed... with Error: %@", error);
+            NSLog(@"Edit address... with Error: %@", error);
             completion(error);
         }];
     } else {
@@ -746,6 +746,7 @@
      success:^(AFHTTPRequestOperation *operation, id responseObject) {
          NSError *error = nil;
          GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithData:operation.responseData error:&error];
+         NSLog(@"%@", doc.rootElement);
          if (!error) {
              XForms *form = [XFormsParser parseXFormsXML:doc withID:@"2" andName:@"Basic form"];
              completion(form, nil);
@@ -757,12 +758,47 @@
      }];
 }
 
++ (void)uploadXForms:(XForms *)form completion:(void (^)(NSError *error))completion {
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+
+    NSURL *hostUrl = [NSURL URLWithString:host];
+
+    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/module/xforms/xformDataUpload.form?uname=%@&pw=%@", [hostUrl absoluteString], username, password]]];
+    [request setHTTPBody:[form getModelFromDocument]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:@"application/xml" forHTTPHeaderField:@"Content-Type"];
+    [request setValue:@"application/xml" forHTTPHeaderField:@"Accept"];
+
+    NSOperation *operation = [[CredentialsLayer sharedManagerWithHost:hostUrl.host andRequestSerializer:[AFXMLParserResponseSerializer new]] HTTPRequestOperationWithRequest:request success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"Upload XForms Sucess %@", operation.request.HTTPBody);
+        completion(nil);
+    } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSLog(@"^%@", [error userInfo]);
+        /* Yea that happens... */
+        if (operation.response.statusCode == 201 ||
+            operation.response.statusCode == 200) {
+            completion(nil);
+        }
+        NSXMLParser *parser = operation.responseObject;
+        [parser parse];
+        NSLog(@"Upload XForm Failure %@.", operation.responseString);
+        completion(error);
+    }];
+
+    [[[CredentialsLayer sharedManagerWithHost:hostUrl.host andRequestSerializer:[AFXMLParserResponseSerializer new]]
+      operationQueue] addOperation:operation];
+}
+
 + (void)presentLoginController
 {
     SignInViewController *vc = [[SignInViewController alloc] init];
     AppDelegate *delegate = [UIApplication sharedApplication].delegate;
     [delegate.window.rootViewController presentViewController:vc animated:YES completion:nil];
 }
+
 + (void)logout
 {
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
