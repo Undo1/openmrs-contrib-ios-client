@@ -8,6 +8,8 @@
 
 #import "XFormsList.h"
 #import "XForms.h"
+#import "OpenMRSAPIManager.h"
+#import "XFormViewController.h"
 
 @interface XFormsList ()
 
@@ -56,6 +58,22 @@
     XForms *form = self.forms[indexPath.row];
     cell.textLabel.text = form.name;
     return cell;
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+    XForms *selectedForm = self.forms[indexPath.row];
+    NSString *formID = selectedForm.XFormsID;
+    if (indexPath.row == 1) {
+        formID = @"3";
+    }
+    [OpenMRSAPIManager getXformWithID:formID completion:^(XForms *form, NSError *error) {
+        if (!error) {
+            UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:[[XFormViewController alloc] initWithForm:form WithIndex:0]];
+            [self presentViewController:nc animated:YES completion:nil];
+        } else {
+            NSLog(@"can't get error");
+        }
+    }];
 }
 
 - (void)close {
