@@ -214,6 +214,8 @@
             formElement.visible = NO;
             row.hidden = @YES;
         }
+    } else {
+        formElement.visible = YES;
     }
     //Required
     if ([bindingForInput attributeForName:@"required"]) {
@@ -246,6 +248,18 @@
             }
         }
     }
+
+    if (formElement.hint && formElement.visible) {
+        XLFormRowDescriptor *infoRow = [XLFormRowDescriptor formRowDescriptorWithTag:@"info" rowType:XLFormRowDescriptorTypeInfo title:formElement.hint];
+        [infoRow.cellConfig setObject:[UIColor colorWithRed:39/255.0
+                                                      green:139/255.0
+                                                       blue:146/255.0
+                                                      alpha:1] forKey:@"backgroundColor"];
+        [infoRow.cellConfig setObject:[UIColor whiteColor] forKey:@"textLabel.textColor"];
+        [infoRow.cellConfig setObject:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote] forKey:@"textLabel.font"];
+        [section addFormRow:infoRow];
+    }
+
     [group setObject:formElement forKey:formElement.bindID];
     [section addFormRow:row];
 }
@@ -260,8 +274,8 @@
         int index = 0;
         for (XLFormSectionDescriptor *section in formDescriptor.formSections) {
             for (XLFormRowDescriptor *row in section.formRows) {
-                if ([row.tag isEqualToString:@"add"] || [row.tag isEqualToString:@"delete"]) {
-                    break;
+                if ([row.tag isEqualToString:@"add"] || [row.tag isEqualToString:@"delete"] || [row.tag isEqualToString:@"info"]) {
+                    continue;
                 }
                 XFormElement *element = elements[row.tag];
                 //Second or futther repeat block
@@ -278,11 +292,12 @@
                         XFormElement *subelement = [superElement.subElements objectForKey:subelementKey];
                         NSLog(@"row tag: %@, bindID %@", row.tag, subelement.bindID);
                         if ([row.tag isEqualToString:subelement.bindID]) {
-                            NSLog(@"MATCHED!: %@.", row.value);
                             [XFormsParser modifyElement:subelement Value:row.value];
                             break;
                         } else if ([row.tag isEqualToString:[NSString stringWithFormat:@"%@~NEW", subelement.bindID]] && index) {
                             subelement.XMLnode = [superElement.XMLnode elementsForName:subelement.XMLnode.name][0];
+                            GDataXMLNode *attrNode = [GDataXMLNode attributeWithName:@"new" stringValue:@"true()"];
+                            [subelement.XMLnode addAttribute:attrNode];
                             [XFormsParser modifyElement:subelement Value:row.value];
                             break;
                         }
@@ -323,7 +338,7 @@
     } else if ([type isEqualToString:kXFormsDate] ||
                [type isEqualToString:kXFormsTime] ||
                [type isEqualToString:kXFormsDateTime]) {
-        return [MRSDateUtilities openMRSFormatStringWithDate:value];
+        return [MRSDateUtilities XFormformatStringwithDate:value type:type];
     } else if ([type isEqualToString:kXFormsSelect] ||
                [type isEqualToString:kXFormsImage] ||
                [type isEqualToString:kXFormsAudio] ||
