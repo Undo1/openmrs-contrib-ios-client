@@ -8,6 +8,7 @@
 
 #import "MRSDateUtilities.h"
 #import "MRSHelperFunctions.h"
+#import "Constants.h"
 
 @implementation MRSDateUtilities
 
@@ -18,6 +19,21 @@
     }
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZ"];
+    NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+    [formatter setTimeZone:timeZone];
+    NSString *stringFromDate = [formatter stringFromDate:date];
+    return stringFromDate;
+}
+
++ (NSString *)XFormformatStringwithDate:(NSDate *)date type:(NSString *)type {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    if ([type isEqualToString:kXFormsDate]) {
+        [formatter setDateFormat:@"yyyy-MM-dd"];
+    } else if ([type isEqualToString:kXFormsDateTime]) {
+        [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+    } else {
+        [formatter setDateFormat:@"hh:mm"];
+    }
     NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
     [formatter setTimeZone:timeZone];
     NSString *stringFromDate = [formatter stringFromDate:date];

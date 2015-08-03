@@ -11,6 +11,7 @@
 @interface MRSDateUtilities : NSObject
 
 + (NSDate *)dateFromOpenMRSFormattedString:(NSString *) openmrsDate;
++ (NSString *)XFormformatStringwithDate:(NSDate *)date type:(NSString *)type;
 + (NSString *)openMRSFormatStringWithDate:(NSDate *)date;
 
 @end
