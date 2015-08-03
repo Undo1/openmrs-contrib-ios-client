@@ -18,4 +18,6 @@
 @property (nonatomic, strong) NSMutableArray *forms;
 @property (nonatomic, strong) NSMutableArray *groups;
 
+- (NSData *)getModelFromDocument;
+
 @end
