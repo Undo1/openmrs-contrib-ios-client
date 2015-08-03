@@ -11,6 +11,7 @@
 #import "XFormElement.h"
 #import "Constants.h"
 #import "XFormsParser.h"
+#import "OpenMRSAPIManager.h"
 
 @interface XFormViewController ()
 
@@ -49,6 +50,15 @@
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:rightLabel style:UIBarButtonItemStylePlain target:self action:@selector(next)];
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    // change cell height of a particular cell
+    if ([[self.form formRowAtIndex:indexPath].tag isEqualToString:@"info"]){
+        return 30.0;
+    }
+    return [super tableView:tableView heightForRowAtIndexPath:indexPath];
+}
+
 - (void)pervious {
     if (self.index > 0) {
         [self.navigationController popViewControllerAnimated:YES];
@@ -59,11 +69,33 @@
 
 - (void)next {
     if (self.index < (self.XForm.forms.count - 1)) {
-        XFormViewController *nextForm = [[XFormViewController alloc] initWithForm:self.XForm WithIndex:self.index+1];
-        [self.navigationController pushViewController:nextForm animated:YES];
+        if ([self isValid]) {
+            XFormViewController *nextForm = [[XFormViewController alloc] initWithForm:self.XForm WithIndex:self.index+1];
+            [self.navigationController pushViewController:nextForm animated:YES];
+        } else {
+            [self showValidationWarning];
+        }
     } else {
-        [XFormsParser InjecValues:self.XForm];
+        if ([self isValid]) {
+            [XFormsParser InjecValues:self.XForm];
+            [OpenMRSAPIManager uploadXForms:self.XForm completion:nil];
+        } else {
+            [self showValidationWarning];
+        }
     }
+}
+
+- (BOOL)isValid {
+    return [self formValidationErrors].count == 0;
+}
+
+- (void)showValidationWarning {
+    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Warning label error")
+                                message:NSLocalizedString(@"Plese fill out all the required fields", @"Error message")
+                               delegate:nil
+                      cancelButtonTitle:@"OK"
+                      otherButtonTitles:nil]
+     show];
 }
 
 - (BOOL)isRepeat {
@@ -121,6 +153,17 @@
                 subElement = element.subElements[tag];
                 type = subElement.type;
             }
+        }
+        if ([row.tag isEqualToString:@"info"]) {
+            XLFormRowDescriptor *infoRow = [XLFormRowDescriptor formRowDescriptorWithTag:@"info" rowType:XLFormRowDescriptorTypeInfo title:row.title];
+            [infoRow.cellConfig setObject:[UIColor colorWithRed:39/255.0
+                                                          green:139/255.0
+                                                           blue:146/255.0
+                                                          alpha:1] forKey:@"backgroundColor"];
+            [infoRow.cellConfig setObject:[UIColor whiteColor] forKey:@"textLabel.textColor"];
+            [infoRow.cellConfig setObject:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote] forKey:@"textLabel.font"];
+            [newSection addFormRow:infoRow];
+            continue;
         }
         XLFormRowDescriptor *newRow = [XLFormRowDescriptor formRowDescriptorWithTag:[NSString stringWithFormat:@"%@~NEW" , row.tag, count]
                                                                               rowType:[[Constants MAPPING_TYPES] objectForKey:type]
