@@ -32,7 +32,7 @@
     } else if ([type isEqualToString:kXFormsDateTime]) {
         [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
     } else {
-        [formatter setDateFormat:@"hh:mm"];
+        [formatter setDateFormat:@"HH:mm:ss"];
     }
     NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
     [formatter setTimeZone:timeZone];
