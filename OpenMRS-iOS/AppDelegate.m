@@ -49,6 +49,10 @@
     } else {
         [[SyncingEngine sharedEngine] updateExistingOutOfDatePatients:nil];
     }
+
+    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"isWizard"]) {
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isWizard"];
+    }
     return YES;
 }
 

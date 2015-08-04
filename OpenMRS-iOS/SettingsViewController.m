@@ -41,12 +41,12 @@
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0) {
-        return 2;
+    if (section == 2) {
+        return 1;
     } else {
         return 2;
     }
@@ -97,6 +97,22 @@
 
         }
     }
+    if (indexPath.section == 2) {
+        if (indexPath.row == 0) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
+            }
+            cell.textLabel.textColor = [UIColor blackColor];
+            cell.textLabel.textAlignment = NSTextAlignmentLeft;
+            cell.textLabel.text = @"XForms Wizard";
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"isWizard"]) {
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                cell.selected = YES;
+            }
+            return cell;
+        }
+    }
     return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
@@ -112,6 +128,16 @@
     } else if (indexPath.section == 1 && indexPath.row == 1) {
         [[SyncingEngine sharedEngine] updateExistingOutOfDatePatients:nil];
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
+    } else if (indexPath.section == 2 && indexPath.row == 0) {
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        BOOL isWizard = [[NSUserDefaults standardUserDefaults] boolForKey:@"isWizard"];
+        [[NSUserDefaults standardUserDefaults] setBool:!isWizard forKey:@"isWizard"];
+        if (isWizard) {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
 #pragma mark - UIViewControllerRestoration

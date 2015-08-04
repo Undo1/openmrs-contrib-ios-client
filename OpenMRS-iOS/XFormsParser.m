@@ -42,10 +42,7 @@
 
 + (void)parseGroup:(GDataXMLElement *)group toForm:(XForms *)form bindings:(NSArray *)bindings instance:(GDataXMLElement *)instance doc:(GDataXMLDocument *)doc {
     XLFormSectionDescriptor *section = [XLFormSectionDescriptor formSection];
-    NSMutableDictionary *groupDict = [[NSMutableDictionary alloc] init];
     NSString *groupLabel = @"";
-    
-    
     
     //labels and hints
     if ([group elementsForName:@"xf:label"]) {
@@ -55,11 +52,13 @@
         section.title = [(GDataXMLElement *)([group elementsForName:@"xf:hint"][0]) stringValue];
     }
     XLFormDescriptor *formDescriptor = [XLFormDescriptor formDescriptorWithTitle:groupLabel];
-    
-    [formDescriptor addFormSection:section];
-    [form.forms addObject:formDescriptor];
-    [form.groups addObject:groupDict];
-
+    NSMutableDictionary *groupDict = [[NSMutableDictionary alloc] init];
+    BOOL isWizard = [[NSUserDefaults standardUserDefaults] boolForKey:@"isWizard"];
+    if (!isWizard) {
+        [formDescriptor addFormSection:section];
+        [form.forms addObject:formDescriptor];
+        [form.groups addObject:groupDict];
+    }
     for (GDataXMLElement *element in [group children]) {
         //handling input
         if ([element.localName isEqualToString:@"input"] ||
@@ -75,6 +74,18 @@
         // handling group
         if ([element.localName isEqualToString:kXFormsGroup]) {
             [XFormsParser parseGroup:element toForm:form bindings:bindings instance:instance doc:doc];
+        }
+        if (isWizard) {
+            if (section.formRows.count > 0) {
+                [formDescriptor addFormSection:section];
+                [form.forms addObject:formDescriptor];
+                [form.groups addObject:groupDict];
+                /* Re-initializing */
+                groupDict = [[NSMutableDictionary alloc] init];
+                formDescriptor = [XLFormDescriptor formDescriptorWithTitle:groupLabel];
+                section = [XLFormSectionDescriptor formSection];
+            }
+            
         }
     }
 }
@@ -248,6 +259,10 @@
             }
         }
     }
+    if (!formElement.visible) {
+        NSLog(@"caught here");
+        return;
+    }
 
     if (formElement.hint && formElement.visible) {
         XLFormRowDescriptor *infoRow = [XLFormRowDescriptor formRowDescriptorWithTag:@"info" rowType:XLFormRowDescriptorTypeInfo title:formElement.hint];
@@ -259,9 +274,9 @@
         [infoRow.cellConfig setObject:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote] forKey:@"textLabel.font"];
         [section addFormRow:infoRow];
     }
-
     [group setObject:formElement forKey:formElement.bindID];
     [section addFormRow:row];
+    NSLog(@"Added to section: %@, element: %@", section, input);
 }
 
 + (GDataXMLDocument *)InjecValues:(XForms *)form {
