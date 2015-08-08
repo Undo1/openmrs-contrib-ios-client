@@ -38,6 +38,8 @@
 - (void)initView {
     XLFormDescriptor *formDescriptor = self.XForm.forms[self.index];
     self.form = formDescriptor;
+    XLFormSectionDescriptor *section = formDescriptor.formSections[0];
+    XLFormRowDescriptor *row = section.formRows[0];
     if ([self isRepeat]) {
         [self addButtons];
     }
@@ -59,6 +61,23 @@
         return 30.0;
     }
     return [super tableView:tableView heightForRowAtIndexPath:indexPath];
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    
+    UILabel *myLabel = [[UILabel alloc] init];
+    if (section == 0) {
+        myLabel.frame = CGRectMake(10, 25, 999, 20);
+    } else {
+        
+        myLabel.frame = CGRectMake(10, 10, 999, 20);
+    }
+    myLabel.font = [UIFont boldSystemFontOfSize:14];
+    myLabel.text = [self tableView:tableView titleForHeaderInSection:section];
+    
+    UIView *headerView = [[UIView alloc] init];
+    [headerView addSubview:myLabel];
+    return headerView;
 }
 
 - (void)pervious {

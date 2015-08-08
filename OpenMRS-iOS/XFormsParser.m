@@ -77,6 +77,26 @@
         }
         if (isWizard) {
             if (section.formRows.count > 0) {
+                if (section.formRows.count == 1 ||
+                    (section.formRows.count == 2 && [[(XLFormRowDescriptor *)(section.formRows[0]) tag] isEqualToString:@"info"])) {
+                    XLFormRowDescriptor *rowInSection = section.formRows[0];
+                    if ([rowInSection.tag isEqualToString:@"info"]) {
+                        rowInSection = section.formRows[1];
+                    }
+                    section.title = rowInSection.title;
+                    rowInSection.title = @"";
+
+                    
+                    if (rowInSection.isDisabled) {
+                        section.title = [NSString stringWithFormat:@"%@ (%@)", section.title, NSLocalizedString(@"Locked", @"Label locked")];
+                    }
+                    if (rowInSection.isRequired) {
+                        NSAttributedString *requiredLabel = [[NSAttributedString alloc] initWithString:@""];
+                        [rowInSection.cellConfig setObject:requiredLabel forKey:@"textLabel.attributedText"];
+
+                        section.title = [NSString stringWithFormat:@"%@ (%@)", section.title, NSLocalizedString(@"Required", @"Label required")];
+                    }
+                }
                 [formDescriptor addFormSection:section];
                 [form.forms addObject:formDescriptor];
                 [form.groups addObject:groupDict];
@@ -177,9 +197,22 @@
         formElement.type = [[bindingForInput attributeForName:@"type"] stringValue];
     }
     /* Sufficent data here to create the row */
-    XLFormRowDescriptor *row = [XLFormRowDescriptor formRowDescriptorWithTag:formElement.bindID
-                                                                     rowType:[[Constants MAPPING_TYPES] objectForKey:formElement.type]
-                                                                       title:formElement.label];
+
+    XLFormRowDescriptor *row = nil;
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"isWizard"]) {
+        if ([formElement.type isEqualToString:kXFormsBoolean]) {
+            row = [XLFormRowDescriptor formRowDescriptorWithTag:formElement.bindID
+                                                        rowType:XLFormRowDescriptorTypePicker
+                                                          title:formElement.label];
+        }
+        row.selectorOptions = @[@"Yes", @"No"];
+    }
+    if (!row) {
+        row = [XLFormRowDescriptor formRowDescriptorWithTag:formElement.bindID
+                                                                         rowType:[[Constants MAPPING_TYPES] objectForKey:formElement.type]
+                                                                           title:formElement.label];
+    }
+    
     
     if ([formElement.type isEqualToString:kXFormsImage]) {
         row.action.viewControllerClass = [ImageTypeMenu class];
@@ -356,10 +389,17 @@
                [type isEqualToString:kXFormsDecimal]) {
         return [value stringValue];
     } else if ([type isEqualToString:kXFormsBoolean]) {
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"isWizard"]) {
+            if ([value isEqualToString:@"Yes"]) {
+                return @"true";
+            } else {
+                return @"false";
+            }
+        }
         if (value) {
-            return @"Yes";
+            return @"true";
         } else {
-            return @"NO";
+            return @"false";
         }
     } else if ([type isEqualToString:kXFormsDate] ||
                [type isEqualToString:kXFormsTime] ||
