@@ -250,6 +250,14 @@
     if ([formElement.type isEqualToString:kXFormsString]) {
         formElement.defaultValue = instanceNode.stringValue;
         row.value = formElement.defaultValue;
+    } else if ([formElement.type isEqualToString:kXFormsNumber]) {
+        if (![instanceNode.stringValue isEqualToString:@""]) {
+            row.value = [NSNumber numberWithInteger:[instanceNode.stringValue integerValue]];
+        }
+    } else if ([formElement.type isEqualToString:kXFormsDecimal]) {
+        if (![instanceNode.stringValue isEqualToString:@""]) {
+            row.value = [NSNumber numberWithInteger:[instanceNode.stringValue integerValue]];
+        }
     } else if ([formElement.type isEqualToString:kXFormsSelect] || [formElement.type isEqualToString:kXFormsMutlipleSelect]) {
         for (XLFormOptionsObject *opObj in formElement.items) {
             NSString *value = opObj.valueData;
@@ -258,9 +266,13 @@
                 break;
             }
         }
+    } else if ([formElement.type isEqualToString:kXFormsDate] ||
+               [formElement.type isEqualToString:kXFormsTime] ||
+               [formElement.type isEqualToString:kXFormsDateTime]) {
+        row.value = [MRSDateUtilities DatefromXFormsString:instanceNode.stringValue
+                                                      type:formElement.type];
     }
     if (!formElement.visible) {
-        NSLog(@"caught here");
         return;
     }
 
@@ -276,7 +288,6 @@
     }
     [group setObject:formElement forKey:formElement.bindID];
     [section addFormRow:row];
-    NSLog(@"Added to section: %@, element: %@", section, input);
 }
 
 + (GDataXMLDocument *)InjecValues:(XForms *)form {

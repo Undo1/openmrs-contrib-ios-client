@@ -25,6 +25,18 @@
     return stringFromDate;
 }
 
++ (NSDate *)dateFromOpenMRSFormattedString:(NSString *) openmrsDate {
+    if ([MRSHelperFunctions isNull:openmrsDate]) {
+        return nil;
+    }
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZ"];
+    //NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+    //[formatter setTimeZone:timeZone];
+    NSDate *date = [formatter dateFromString:openmrsDate];
+    return date;
+}
+
 + (NSString *)XFormformatStringwithDate:(NSDate *)date type:(NSString *)type {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     if ([type isEqualToString:kXFormsDate]) {
@@ -40,16 +52,18 @@
     return stringFromDate;
 }
 
-+ (NSDate *)dateFromOpenMRSFormattedString:(NSString *) openmrsDate {
-    if ([MRSHelperFunctions isNull:openmrsDate]) {
-        return nil;
-    }
++ (NSDate *)DatefromXFormsString:(NSString *)dateString type:(NSString *)type {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSZZZZ"];
-    //NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
-    //[formatter setTimeZone:timeZone];
-    NSDate *date = [formatter dateFromString:openmrsDate];
-    return date;
+    if ([type isEqualToString:kXFormsDate]) {
+        [formatter setDateFormat:@"yyyy-MM-dd"];
+    } else if ([type isEqualToString:kXFormsDateTime]) {
+        [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+    } else {
+        [formatter setDateFormat:@"HH:mm:ss"];
+    }
+    NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+    [formatter setTimeZone:timeZone];
+    return [formatter dateFromString:dateString];
 }
 
 @end
