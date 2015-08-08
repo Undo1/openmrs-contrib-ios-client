@@ -54,7 +54,7 @@
     /* Setting user defaults */
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     if (![userDefaults objectForKey:UDisWizard]) {
-        [userDefaults setBool:NO forKey:UDisWizard];
+        [userDefaults setBool:YES forKey:UDisWizard];
     }
 
     /* Setting paths for offline savingf of XForms */

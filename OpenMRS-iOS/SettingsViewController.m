@@ -12,6 +12,8 @@
 #import "MRSHelperFunctions.h"
 #import "AppDelegate.h"
 #import "SyncingEngine.h"
+#import "Constants.h"
+
 @implementation SettingsViewController
 - (void)viewDidLoad
 {
@@ -106,10 +108,14 @@
             cell.textLabel.textColor = [UIColor blackColor];
             cell.textLabel.textAlignment = NSTextAlignmentLeft;
             cell.textLabel.text = @"XForms Wizard";
-            if ([[NSUserDefaults standardUserDefaults] boolForKey:@"isWizard"]) {
-                cell.accessoryType = UITableViewCellAccessoryCheckmark;
-                cell.selected = YES;
+            UISwitch *switchWizard = [[UISwitch alloc] initWithFrame:CGRectZero];
+            if ([[NSUserDefaults standardUserDefaults] boolForKey:UDisWizard]) {
+                switchWizard.on = YES;
+            } else {
+                switchWizard.on = NO;
             }
+            cell.accessoryView = switchWizard;
+            [switchWizard addTarget:self action:@selector(updateSwitch:) forControlEvents:UIControlEventValueChanged];
             return cell;
         }
     }
@@ -130,16 +136,24 @@
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
     } else if (indexPath.section == 2 && indexPath.row == 0) {
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        BOOL isWizard = [[NSUserDefaults standardUserDefaults] boolForKey:@"isWizard"];
-        [[NSUserDefaults standardUserDefaults] setBool:!isWizard forKey:@"isWizard"];
-        if (isWizard) {
-            cell.accessoryType = UITableViewCellAccessoryNone;
-        } else {
-            cell.accessoryType = UITableViewCellAccessoryCheckmark;
-        }
+        UISwitch *wizardSwitch = cell.accessoryView;
+        wizardSwitch.on = !wizardSwitch.isOn;
+        BOOL isWizard = [[NSUserDefaults standardUserDefaults] boolForKey:UDisWizard];
+        [[NSUserDefaults standardUserDefaults] setBool:!isWizard forKey:UDisWizard];
         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
     }
 }
+
+- (void)updateSwitch:(UISwitch *)wizardSwitch {
+    if (wizardSwitch.isOn) {
+        NSLog(@"YES");
+        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UDisWizard];
+    } else {
+        NSLog(@"NO");
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UDisWizard];
+    }
+}
+
 #pragma mark - UIViewControllerRestoration
 
 + (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
