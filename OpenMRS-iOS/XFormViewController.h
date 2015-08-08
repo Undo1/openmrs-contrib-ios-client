@@ -10,7 +10,7 @@
 #import "XLForm.h"
 #import "XForms.h"
 
-@interface XFormViewController : XLFormViewController
+@interface XFormViewController : XLFormViewController <UIAlertViewDelegate>
 
 - (instancetype)initWithForm:(XForms *)form WithIndex:(int)index;
 

@@ -12,6 +12,8 @@
 #import "Constants.h"
 #import "XFormsParser.h"
 #import "OpenMRSAPIManager.h"
+#import "SVProgressHUD.h"
+#import "XFormsStore.h"
 
 @interface XFormViewController ()
 
@@ -78,7 +80,22 @@
     } else {
         if ([self isValid]) {
             [XFormsParser InjecValues:self.XForm];
-            [OpenMRSAPIManager uploadXForms:self.XForm completion:nil];
+            [OpenMRSAPIManager uploadXForms:self.XForm completion:^(NSError *error) {
+                if (!error) {
+                    [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Sent", @"Label sent")];
+                    [self.navigationController popToRootViewControllerAnimated:YES];
+                } else {
+                    UIAlertView *errorUploading = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error uploading", @"Title error uploading")
+                                                                             message:NSLocalizedString(@"If you are connected review the form agian, else save it for offline usage", @"Message for error submitting form")
+                                                                            delegate:self
+                                                                   cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel button label")
+                                                                   otherButtonTitles:NSLocalizedString(@"Save Offline", @"Label save offline"), nil];
+                    if (!self.XForm.loadedLocaly) {
+                        errorUploading.alertViewStyle = UIAlertViewStylePlainTextInput;
+                    }
+                    [errorUploading show];
+                }
+            }];
         } else {
             [self showValidationWarning];
         }
@@ -196,5 +213,32 @@
         [form removeFormSectionAtIndex:count-2];
     }
     [self deselectFormRow:sender];
+}
+
+- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
+    NSLog(@"index pressed %d", buttonIndex);
+    if (buttonIndex == 1) {
+        NSString *filename = [alertView textFieldAtIndex:0].text;
+        if (self.XForm.loadedLocaly) {
+            filename = self.XForm.name;
+        }
+        self.XForm.name = filename;
+        filename = [[NSString stringWithFormat:@"%@~%@", filename, self.XForm.XFormsID] stringByAppendingPathExtension:@"xml"];
+        NSString *filledPath = [[NSUserDefaults standardUserDefaults] objectForKey:UDfilledForms];
+        filledPath = [filledPath stringByAppendingPathComponent:filename];
+        NSLog(@"name: %@", self.XForm.name);
+        if (self.XForm.loadedLocaly) {
+            [[XFormsStore sharedStore] saveFilledForm:self.XForm];
+            [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+            return;
+        }
+
+        if ([[NSFileManager defaultManager] fileExistsAtPath:filledPath]) {
+            [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"File already exist", @"Label file already exist")];
+        } else {
+            [[XFormsStore sharedStore] saveFilledForm:self.XForm];
+            [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        }
+    }
 }
 @end
