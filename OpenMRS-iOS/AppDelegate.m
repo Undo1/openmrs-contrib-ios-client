@@ -20,6 +20,7 @@
 #import "SyncingEngine.h"
 #import <Instabug/Instabug.h>
 #import "Flurry.h"
+#import "Constants.h"
 @interface AppDelegate ()
 
 @end
@@ -50,9 +51,35 @@
         [[SyncingEngine sharedEngine] updateExistingOutOfDatePatients:nil];
     }
 
-    if (![[NSUserDefaults standardUserDefaults] objectForKey:@"isWizard"]) {
-        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"isWizard"];
+    /* Setting user defaults */
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if (![userDefaults objectForKey:UDisWizard]) {
+        [userDefaults setBool:NO forKey:UDisWizard];
     }
+
+    /* Setting paths for offline savingf of XForms */
+    NSString * resourcePath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *blankFormsPath = [resourcePath stringByAppendingPathComponent:@"blank_forms"];
+    NSError *error;
+    if (![[NSFileManager defaultManager] createDirectoryAtPath:blankFormsPath
+                                    withIntermediateDirectories:NO
+                                                    attributes:nil
+                                                            error:&error])
+    {
+        NSLog(@"Create directory error: %@", error);
+    }
+    [userDefaults setObject:blankFormsPath forKey:UDblankForms];
+
+    NSString *filledFormsPath = [resourcePath  stringByAppendingPathComponent:@"filled_forms"];
+    error = nil;
+    if (![[NSFileManager defaultManager] createDirectoryAtPath:filledFormsPath
+                                    withIntermediateDirectories:NO
+                                                    attributes:nil
+                                                        error:&error])
+    {
+        NSLog(@"Create directory error: %@", error);
+    }
+    [userDefaults setObject:filledFormsPath forKey:UDfilledForms];
     return YES;
 }
 

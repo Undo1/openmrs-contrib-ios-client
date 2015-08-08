@@ -55,4 +55,9 @@ extern NSString *const kXFormsAudio;
 extern NSString *const kXFormsGPS;
 
 + (NSDictionary *)MAPPING_TYPES;
+
+
+extern NSString *const UDisWizard;
+extern NSString *const UDblankForms;
+extern NSString *const UDfilledForms;
 @end
