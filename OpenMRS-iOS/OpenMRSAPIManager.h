@@ -37,7 +37,7 @@
 + (void)EditAddressForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion;
 + (void)EditNameForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion;
 + (void)getXFormsList: (void (^)(NSArray *forms, NSError *error))completion;
-+ (void)getXformWithID:(NSString *)xformID completion:(void (^)(XForms *form, NSError *error))completion;
++ (void)getXformWithID:(NSString *)xformID andName:(NSString *)name completion:(void (^)(XForms* form, NSError *error))completion;
 + (void)uploadXForms:(XForms *)form completion:(void (^)(NSError *error))completion;
 + (void)logout;
 @end

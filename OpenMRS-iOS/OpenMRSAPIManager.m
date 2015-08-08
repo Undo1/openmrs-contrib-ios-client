@@ -732,7 +732,7 @@
     }];
 }
 
-+ (void)getXformWithID:(NSString *)xformID completion:(void (^)(XForms* form, NSError *error))completion {
++ (void)getXformWithID:(NSString *)xformID andName:(NSString *)name completion:(void (^)(XForms* form, NSError *error))completion {
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
     NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
     NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
@@ -748,7 +748,7 @@
          GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithData:operation.responseData error:&error];
          NSLog(@"%@", doc.rootElement);
          if (!error) {
-             XForms *form = [XFormsParser parseXFormsXML:doc withID:@"2" andName:@"Basic form"];
+             XForms *form = [XFormsParser parseXFormsXML:doc withID:xformID andName:name];
              completion(form, nil);
          } else {
              completion(nil, error);
