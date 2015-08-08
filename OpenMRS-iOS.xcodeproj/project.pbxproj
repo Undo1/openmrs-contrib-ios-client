@@ -33,6 +33,7 @@
 		245EDDCE1B21A10B00B8C0EB /* vitals_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDCC1B21A10B00B8C0EB /* vitals_icon@2x.png */; };
 		245EDDD11B21A11800B8C0EB /* user_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDCF1B21A11800B8C0EB /* user_icon@3x.png */; };
 		245EDDD21B21A11800B8C0EB /* vitals_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDD01B21A11800B8C0EB /* vitals_icon@3x.png */; };
+		247B747C1B70B86C00BD3D3A /* XFormsStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 247B747B1B70B86C00BD3D3A /* XFormsStore.m */; };
 		2494E8E81B3CC1BC00ABFE53 /* IdentifierTypeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2494E8E71B3CC1BC00ABFE53 /* IdentifierTypeCell.m */; };
 		2494E8EE1B3CDCF300ABFE53 /* launchImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 2494E8ED1B3CDCF300ABFE53 /* launchImage.png */; };
 		24A8DEC71B18C18A00F5FF84 /* active_visits_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 24A8DEC41B18C18A00F5FF84 /* active_visits_icon@3x.png */; };
@@ -155,6 +156,8 @@
 		245EDDCC1B21A10B00B8C0EB /* vitals_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vitals_icon@2x.png"; sourceTree = "<group>"; };
 		245EDDCF1B21A11800B8C0EB /* user_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user_icon@3x.png"; sourceTree = "<group>"; };
 		245EDDD01B21A11800B8C0EB /* vitals_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vitals_icon@3x.png"; sourceTree = "<group>"; };
+		247B747A1B70B86C00BD3D3A /* XFormsStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFormsStore.h; sourceTree = "<group>"; };
+		247B747B1B70B86C00BD3D3A /* XFormsStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFormsStore.m; sourceTree = "<group>"; };
 		2494E8E61B3CC1BC00ABFE53 /* IdentifierTypeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentifierTypeCell.h; sourceTree = "<group>"; };
 		2494E8E71B3CC1BC00ABFE53 /* IdentifierTypeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentifierTypeCell.m; sourceTree = "<group>"; };
 		2494E8EA1B3CD37100ABFE53 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -406,6 +409,15 @@
 			name = "Syncing Engine";
 			sourceTree = "<group>";
 		};
+		247B74791B70B85300BD3D3A /* XFormsStore */ = {
+			isa = PBXGroup;
+			children = (
+				247B747A1B70B86C00BD3D3A /* XFormsStore.h */,
+				247B747B1B70B86C00BD3D3A /* XFormsStore.m */,
+			);
+			name = XFormsStore;
+			sourceTree = "<group>";
+		};
 		248FBE2F1B03B9E400569C2C /* View Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -556,6 +568,7 @@
 		248FBE3C1B03BB4E00569C2C /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				247B74791B70B85300BD3D3A /* XFormsStore */,
 				240F4EE81B5D3FFA00E943FC /* XForms Parser */,
 				D396A51A1A2E09DE00DE6448 /* KeychainItemWrapper.h */,
 				D396A51B1A2E09DE00DE6448 /* KeychainItemWrapper.m */,
@@ -1076,6 +1089,7 @@
 				2432066D1B2E439000B54970 /* EditPatient.m in Sources */,
 				240F4EEF1B5D415100E943FC /* XFormElement.m in Sources */,
 				D396A52D1A2E09DE00DE6448 /* MRSPatient.m in Sources */,
+				247B747C1B70B86C00BD3D3A /* XFormsStore.m in Sources */,
 				D39AD7AB1A3BFE8600C01540 /* CaptureVitalsTableViewController.m in Sources */,
 				243206711B30436700B54970 /* MRSHelperFunctions.m in Sources */,
 				D396A5281A2E09DE00DE6448 /* SignInViewController.m in Sources */,
