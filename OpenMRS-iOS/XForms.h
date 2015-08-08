@@ -17,7 +17,9 @@
 @property (nonatomic, strong) GDataXMLDocument *doc;
 @property (nonatomic, strong) NSMutableArray *forms;
 @property (nonatomic, strong) NSMutableArray *groups;
+@property (nonatomic)BOOL loadedLocaly;
 
+- (instancetype)initFormFromFile:(NSString *)fileName andURL:(NSURL *)url;
 - (NSData *)getModelFromDocument;
 
 @end

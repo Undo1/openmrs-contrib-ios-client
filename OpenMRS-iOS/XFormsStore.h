@@ -8,6 +8,13 @@
 
 #import <Foundation/Foundation.h>
 
-@interface XFormsLoader : NSObject
+@class XForms;
+@interface XFormsStore : NSObject
 
++ (instancetype)sharedStore;
+- (void)loadForms:(void (^)(NSArray *forms, NSError *error))completion;
+- (void)loadForm:(NSString *)formID andFormName:(NSString *)formName completion:(void (^)(XForms *xform, NSError *error))completion;
+- (void)saveFilledForm:(XForms *)form;
+- (NSArray *)loadFilledFiles;
+- (void)deleteFilledForm:(XForms *)form;
 @end
