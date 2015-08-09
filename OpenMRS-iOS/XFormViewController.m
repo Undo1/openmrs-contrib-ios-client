@@ -14,6 +14,7 @@
 #import "OpenMRSAPIManager.h"
 #import "SVProgressHUD.h"
 #import "XFormsStore.h"
+#import "XFormImageCell.h"
 
 @interface XFormViewController ()
 
@@ -40,7 +41,6 @@
 - (void)initView {
     XLFormDescriptor *formDescriptor = self.XForm.forms[self.index];
     self.form = formDescriptor;
-    XLFormSectionDescriptor *section = formDescriptor.formSections[0];
     if ([self isRepeat]) {
         [self addButtons];
     }
@@ -78,7 +78,7 @@
     self.tutorialView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8];
     
     UILabel *swipeLabel = [[UILabel alloc] init];
-    swipeLabel.text = @"Swipe left or right to navigate";
+    swipeLabel.text = NSLocalizedString(@"Swipe left or right to navigate", @"Message for user to swipe");
     swipeLabel.textColor = [UIColor whiteColor];
     swipeLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
     [swipeLabel sizeToFit];
