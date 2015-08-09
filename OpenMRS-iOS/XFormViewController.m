@@ -21,6 +21,8 @@
 @property (nonatomic) int index;
 @property (nonatomic, strong) XFormElement *repeatElement;
 
+@property (nonatomic, strong) UIView *tutorialView;
+
 @end
 
 @implementation XFormViewController
@@ -39,7 +41,6 @@
     XLFormDescriptor *formDescriptor = self.XForm.forms[self.index];
     self.form = formDescriptor;
     XLFormSectionDescriptor *section = formDescriptor.formSections[0];
-    XLFormRowDescriptor *row = section.formRows[0];
     if ([self isRepeat]) {
         [self addButtons];
     }
@@ -52,6 +53,84 @@
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:leftLabel style:UIBarButtonItemStylePlain target:self action:@selector(pervious)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:rightLabel style:UIBarButtonItemStylePlain target:self action:@selector(next)];
+    
+    self.navigationItem.title = [NSString stringWithFormat:@"%@ (%d/%u)", self.navigationItem.title, self.index + 1, self.XForm.forms.count];
+    
+    UISwipeGestureRecognizer * swipeleft=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(next)];
+    swipeleft.direction=UISwipeGestureRecognizerDirectionLeft;
+    [self.view addGestureRecognizer:swipeleft];
+    
+    UISwipeGestureRecognizer * swiperight=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(pervious)];
+    swiperight.direction=UISwipeGestureRecognizerDirectionRight;
+    [self.view addGestureRecognizer:swiperight];
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:UDnewSession] &&
+        [[NSUserDefaults standardUserDefaults] boolForKey:UDisWizard]) {
+        [self addTutorialView];
+        [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UDnewSession];
+    }
+}
+
+- (void)addTutorialView {
+    CGRect screenRect = [[UIScreen mainScreen] bounds];
+    self.tutorialView = [[UIView alloc] initWithFrame:screenRect];
+    self.tutorialView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+    self.tutorialView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8];
+    
+    UILabel *swipeLabel = [[UILabel alloc] init];
+    swipeLabel.text = @"Swipe left or right to navigate";
+    swipeLabel.textColor = [UIColor whiteColor];
+    swipeLabel.font = [UIFont preferredFontForTextStyle:UIFontTextStyleHeadline];
+    [swipeLabel sizeToFit];
+    swipeLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.tutorialView addSubview:swipeLabel];
+    
+    UIImageView *imageView = [[UIImageView alloc] initWithFrame:self.tutorialView.bounds];
+    imageView.image = [UIImage imageNamed:@"swipe-icon"];
+    imageView.contentMode = UIViewContentModeScaleAspectFill;
+    imageView.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.tutorialView addSubview:imageView];
+    
+    [self.tutorialView addConstraint:[NSLayoutConstraint constraintWithItem:swipeLabel
+                                                     attribute:NSLayoutAttributeCenterX
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:self.tutorialView
+                                                     attribute:NSLayoutAttributeCenterX
+                                                    multiplier:1
+                                                      constant:0]];
+    [self.tutorialView addConstraint:[NSLayoutConstraint constraintWithItem:swipeLabel
+                                                     attribute:NSLayoutAttributeCenterX
+                                                     relatedBy:NSLayoutRelationEqual
+                                                        toItem:self.tutorialView
+                                                     attribute:NSLayoutAttributeCenterX
+                                                    multiplier:1
+                                                      constant:0]];
+    NSDictionary *viewsDictionary = @{
+                                      @"label": swipeLabel,
+                                      @"image": imageView
+                                      };
+    [self.tutorialView addConstraints:[NSLayoutConstraint
+                          constraintsWithVisualFormat:@"V:|-100-[label]"
+                          options:0
+                          metrics:nil
+                          views:viewsDictionary]];
+    [self.tutorialView addConstraints:[NSLayoutConstraint
+                                       constraintsWithVisualFormat:@"V:[image]-100-|"
+                                       options:0
+                                       metrics:nil
+                                       views:viewsDictionary]];
+    [self.tutorialView addConstraints:[NSLayoutConstraint
+                          constraintsWithVisualFormat:@"H:|-0-[image]-0-|"
+                          options:0
+                          metrics:nil
+                          views:viewsDictionary]];
+    UITapGestureRecognizer *tab = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(removeTutorial)];
+    [self.tutorialView addGestureRecognizer:tab];
+    [self.navigationController.view addSubview:self.tutorialView];
+}
+
+- (void)removeTutorial {
+    [self.tutorialView removeFromSuperview];
 }
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath

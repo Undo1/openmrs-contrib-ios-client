@@ -60,4 +60,5 @@ extern NSString *const kXFormsGPS;
 extern NSString *const UDisWizard;
 extern NSString *const UDblankForms;
 extern NSString *const UDfilledForms;
+extern NSString *const UDnewSession;
 @end

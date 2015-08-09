@@ -25,6 +25,7 @@
 		243206711B30436700B54970 /* MRSHelperFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 243206701B30436700B54970 /* MRSHelperFunctions.m */; };
 		2436F2B11B49A01000294B4C /* EditPatientForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 2436F2B01B49A01000294B4C /* EditPatientForm.m */; };
 		2436F2B51B49D56C00294B4C /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 2436F2B41B49D56C00294B4C /* Constants.m */; };
+		2437140E1B77422500CB9687 /* swipe-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2437140D1B77422500CB9687 /* swipe-icon.png */; };
 		243786431B46B81A00AB5089 /* AddPatientForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 243786421B46B81A00AB5089 /* AddPatientForm.m */; };
 		243786491B47730900AB5089 /* SyncingEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 243786481B47730900AB5089 /* SyncingEngine.m */; };
 		245EDDC91B21A0F400B8C0EB /* user_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDC71B21A0F400B8C0EB /* user_icon.png */; };
@@ -141,6 +142,7 @@
 		2436F2B01B49A01000294B4C /* EditPatientForm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditPatientForm.m; sourceTree = "<group>"; };
 		2436F2B31B49D56C00294B4C /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		2436F2B41B49D56C00294B4C /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
+		2437140D1B77422500CB9687 /* swipe-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "swipe-icon.png"; sourceTree = "<group>"; };
 		2437863D1B46A2B600AB5089 /* ms */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ms; path = ms.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2437863E1B46A64200AB5089 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Localizable.strings; sourceTree = "<group>"; };
 		2437863F1B46A6C900AB5089 /* ca */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ca; path = ca.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -839,6 +841,7 @@
 		D397396E1A2E082200D0AB69 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2437140D1B77422500CB9687 /* swipe-icon.png */,
 				240F4EDE1B5BB00C00E943FC /* form-icon@3x.png */,
 				240F4ED91B5BAFF100E943FC /* form-icon@2x.png */,
 				240F4EDA1B5BAFF100E943FC /* form-icon.png */,
@@ -1020,6 +1023,7 @@
 				245EDDCA1B21A0F400B8C0EB /* vitals_icon.png in Resources */,
 				D396EAF71A36460500191F50 /* search_icon@3x.png in Resources */,
 				D396A5411A2E0B5A00DE6448 /* openmrs-logo.png in Resources */,
+				2437140E1B77422500CB9687 /* swipe-icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -76,5 +76,6 @@ NSString *const kXFormsGPS = @"gps";
 NSString *const UDisWizard = @"isWizard";
 NSString *const UDblankForms = @"blankForms";
 NSString *const UDfilledForms = @"filledForms";
+NSString *const UDnewSession = @"newSession";
 
 @end

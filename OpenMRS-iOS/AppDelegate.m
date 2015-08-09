@@ -51,35 +51,6 @@
         [[SyncingEngine sharedEngine] updateExistingOutOfDatePatients:nil];
     }
 
-    /* Setting user defaults */
-    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-    if (![userDefaults objectForKey:UDisWizard]) {
-        [userDefaults setBool:YES forKey:UDisWizard];
-    }
-
-    /* Setting paths for offline savingf of XForms */
-    NSString * resourcePath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
-    NSString *blankFormsPath = [resourcePath stringByAppendingPathComponent:@"blank_forms"];
-    NSError *error;
-    if (![[NSFileManager defaultManager] createDirectoryAtPath:blankFormsPath
-                                    withIntermediateDirectories:NO
-                                                    attributes:nil
-                                                            error:&error])
-    {
-        NSLog(@"Create directory error: %@", error);
-    }
-    [userDefaults setObject:blankFormsPath forKey:UDblankForms];
-
-    NSString *filledFormsPath = [resourcePath  stringByAppendingPathComponent:@"filled_forms"];
-    error = nil;
-    if (![[NSFileManager defaultManager] createDirectoryAtPath:filledFormsPath
-                                    withIntermediateDirectories:NO
-                                                    attributes:nil
-                                                        error:&error])
-    {
-        NSLog(@"Create directory error: %@", error);
-    }
-    [userDefaults setObject:filledFormsPath forKey:UDfilledForms];
     return YES;
 }
 
@@ -104,6 +75,40 @@
     [[UINavigationBar appearance] setTitleTextAttributes:@ { NSForegroundColorAttributeName:[UIColor whiteColor] }];
     [[UISearchBar appearance] setBarTintColor:[UIColor colorWithRed:30/255.0 green:130/255.0 blue:112/255.0 alpha:1]];
     [self.window makeKeyAndVisible];
+    
+    /* Setting user defaults */
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if (![userDefaults objectForKey:UDisWizard]) {
+        [userDefaults setBool:NO forKey:UDisWizard];
+    }
+    
+    /* Setting paths for offline savingf of XForms */
+    NSString * resourcePath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *blankFormsPath = [resourcePath stringByAppendingPathComponent:@"blank_forms"];
+    NSError *error;
+    if (![[NSFileManager defaultManager] createDirectoryAtPath:blankFormsPath
+                                   withIntermediateDirectories:NO
+                                                    attributes:nil
+                                                         error:&error])
+    {
+        NSLog(@"Create directory error: %@", error);
+    }
+    [userDefaults setObject:blankFormsPath forKey:UDblankForms];
+    
+    NSString *filledFormsPath = [resourcePath  stringByAppendingPathComponent:@"filled_forms"];
+    error = nil;
+    if (![[NSFileManager defaultManager] createDirectoryAtPath:filledFormsPath
+                                   withIntermediateDirectories:NO
+                                                    attributes:nil
+                                                         error:&error])
+    {
+        NSLog(@"Create directory error: %@", error);
+    }
+    [userDefaults setObject:filledFormsPath forKey:UDfilledForms];
+    
+    if (![userDefaults objectForKey:UDnewSession]) {
+        [userDefaults setBool:YES forKey:UDnewSession];
+    }
     
     if ([[NSProcessInfo processInfo] respondsToSelector:@selector(operatingSystemVersion)]) {
         if ([[NSProcessInfo processInfo] operatingSystemVersion].majorVersion >= 8) {
