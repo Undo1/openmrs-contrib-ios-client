@@ -11,7 +11,6 @@
 #import "GDataXMLNode.h"
 #import "XFormElement.h"
 #import "Constants.h"
-#import "ImageTypeMenu.h"
 #import "SimpleAudioViewController.h"
 #import "MapViewController.h"
 #import "CLLocationValueTrasformer.h"
@@ -143,7 +142,6 @@
     //Sub elements
     formElement.subElements = [[NSMutableDictionary alloc] init];
     for (GDataXMLElement *element in [repeat children]) {
-        NSLog(@"element id: %@", [element localName]);
         if ([element.localName isEqualToString:@"input"] ||
             [element.localName isEqualToString:kXFormsSelect] ||
             [element.localName isEqualToString:kXFormsMutlipleSelect] ||
@@ -213,10 +211,7 @@
                                                                            title:formElement.label];
     }
     
-    
-    if ([formElement.type isEqualToString:kXFormsImage]) {
-        row.action.viewControllerClass = [ImageTypeMenu class];
-    }
+
     if ([formElement.type isEqualToString:kXFormsAudio]) {
         row.action.viewControllerClass = [SimpleAudioViewController class];
     }
@@ -363,6 +358,7 @@
                     }
                     
                 } else {
+                    NSLog(@"element: %@, value: %@", element, row.value);
                     [XFormsParser modifyElement:element Value:row.value];
                 }
             }
@@ -415,7 +411,8 @@
     }
     else {
         NSLog(@"Unsupported type");
-        @throw @"NOT SUPPORTED TYPE!";
+        [NSException raise:@"Invalid foo value" format:@"foo of %@ is invalid", type];
+        return nil;
     }
 }
 

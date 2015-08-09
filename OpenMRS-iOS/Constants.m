@@ -7,6 +7,7 @@
 //
 
 #import "Constants.h"
+#import "XFormImageCell.h"
 #import <XLForm.h>
 
 @implementation Constants
@@ -67,7 +68,7 @@ NSString *const kXFormsGPS = @"gps";
              kXFormsBoolean: XLFormRowDescriptorTypeBooleanSwitch,
              kXFormsSelect: XLFormRowDescriptorTypeSelectorPush,
              kXFormsMutlipleSelect: XLFormRowDescriptorTypeMultipleSelector,
-             kXFormsImage: XLFormRowDescriptorTypeSelectorPush,
+             kXFormsImage: XLFormRowDescriptorTypeImageInLine,
              kXFormsAudio: XLFormRowDescriptorTypeSelectorPush,
              kXFormsGPS: XLFormRowDescriptorTypeSelectorPush
              };
