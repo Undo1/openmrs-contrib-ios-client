@@ -9,10 +9,11 @@
 #import "XForms.h"
 #import "Constants.h"
 #import "XFormsParser.h"
+#import "MRSPatient.h"
 
 @implementation XForms
 
-- (instancetype)initFormFromFile:(NSString *)fileName andURL:(NSURL *)url {
+- (instancetype)initFormFromFile:(NSString *)fileName andURL:(NSURL *)url Patient:(MRSPatient *)patient {
     self = [super init];
     if (self) {
         NSString *form = [fileName stringByDeletingPathExtension];
@@ -28,7 +29,7 @@
         NSLog(@"Reading errror: %@", error);
         error = nil;
         GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithData:fileData encoding:NSUTF8StringEncoding error:&error];
-        self = [XFormsParser parseXFormsXML:doc withID:self.XFormsID andName:self.name];
+        self = [XFormsParser parseXFormsXML:doc withID:self.XFormsID andName:self.name Patient:patient];
     }
     return self;
 }

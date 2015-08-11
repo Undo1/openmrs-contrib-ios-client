@@ -7,8 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MRSPatient.h"
 
 @interface XFormsList : UITableViewController
+
+@property (nonatomic, strong) MRSPatient *patient;
 
 - (instancetype)initWithForms:(NSArray *)forms;
 

@@ -22,8 +22,17 @@
 
 @implementation XFormsList
 
-- (instancetype)initWithForms:(NSArray *)forms {
+- (instancetype)init {
     self = [super init];
+    if (self) {
+        self.tabBarItem.title = NSLocalizedString(@"Form Entry", "Label form entry");
+        self.tabBarItem.image = [UIImage imageNamed:@"form-icon"];
+    }
+    return self;
+}
+
+- (instancetype)initWithForms:(NSArray *)forms {
+    self = [self init];
     if (self) {
         self.forms = [NSMutableArray arrayWithArray:forms];
     }
@@ -60,6 +69,20 @@
     
     [headerView addSubview:self.filledOrBlank];
     self.tableView.tableHeaderView = headerView;
+    
+    [[XFormsStore sharedStore] loadForms:^(NSArray *forms, NSError *error) {
+        if (!error) {
+            self.forms = [NSMutableArray arrayWithArray:forms];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.tableView reloadData];
+            });
+        }
+    }];
+}
+
+- (void)setPatient:(MRSPatient *)patient {
+    _patient = patient;
+    [[XFormsStore sharedStore] setPatient:patient];
 }
 
 #pragma mark - Table view data source

@@ -7,9 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MRSPatient.h"
 
 @class XForms;
 @interface XFormsStore : NSObject
+
+@property (nonatomic, strong) MRSPatient *patient;
 
 + (instancetype)sharedStore;
 - (void)loadForms:(void (^)(NSArray *forms, NSError *error))completion;

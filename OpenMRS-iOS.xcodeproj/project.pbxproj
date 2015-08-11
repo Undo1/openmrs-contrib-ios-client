@@ -7,9 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		240F4EDC1B5BAFF100E943FC /* form-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 240F4ED91B5BAFF100E943FC /* form-icon@2x.png */; };
-		240F4EDD1B5BAFF100E943FC /* form-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 240F4EDA1B5BAFF100E943FC /* form-icon.png */; };
-		240F4EDF1B5BB00C00E943FC /* form-icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 240F4EDE1B5BB00C00E943FC /* form-icon@3x.png */; };
 		240F4EE31B5BB22900E943FC /* XFormsList.m in Sources */ = {isa = PBXBuildFile; fileRef = 240F4EE21B5BB22900E943FC /* XFormsList.m */; };
 		240F4EE71B5BB31600E943FC /* XForms.m in Sources */ = {isa = PBXBuildFile; fileRef = 240F4EE61B5BB31600E943FC /* XForms.m */; };
 		240F4EEB1B5D401000E943FC /* XFormsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 240F4EEA1B5D401000E943FC /* XFormsParser.m */; };
@@ -20,7 +17,6 @@
 		241240A61B62854B009E172B /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 241240A21B62854B009E172B /* MapViewController.m */; };
 		241240A71B62854B009E172B /* CLLocationValueTrasformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 241240A41B62854B009E172B /* CLLocationValueTrasformer.m */; };
 		241240A81B62854B009E172B /* MapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 241240A51B62854B009E172B /* MapViewController.xib */; };
-		2417346E1B623AAA0032C45B /* ImageTypeMenu.m in Sources */ = {isa = PBXBuildFile; fileRef = 2417346D1B623AAA0032C45B /* ImageTypeMenu.m */; };
 		2432066D1B2E439000B54970 /* EditPatient.m in Sources */ = {isa = PBXBuildFile; fileRef = 2432066C1B2E439000B54970 /* EditPatient.m */; };
 		243206711B30436700B54970 /* MRSHelperFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 243206701B30436700B54970 /* MRSHelperFunctions.m */; };
 		2436F2B11B49A01000294B4C /* EditPatientForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 2436F2B01B49A01000294B4C /* EditPatientForm.m */; };
@@ -34,7 +30,13 @@
 		245EDDCE1B21A10B00B8C0EB /* vitals_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDCC1B21A10B00B8C0EB /* vitals_icon@2x.png */; };
 		245EDDD11B21A11800B8C0EB /* user_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDCF1B21A11800B8C0EB /* user_icon@3x.png */; };
 		245EDDD21B21A11800B8C0EB /* vitals_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDD01B21A11800B8C0EB /* vitals_icon@3x.png */; };
+		246BAB2B1B77969B00979E50 /* no-image.png in Resources */ = {isa = PBXBuildFile; fileRef = 246BAB2A1B77969B00979E50 /* no-image.png */; };
+		246BAB2F1B77A95700979E50 /* XFormAudioCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 246BAB2E1B77A95700979E50 /* XFormAudioCell.m */; };
+		2475ACA51B7761FB0008094B /* XFormImageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2475ACA41B7761FB0008094B /* XFormImageCell.m */; };
 		247B747C1B70B86C00BD3D3A /* XFormsStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 247B747B1B70B86C00BD3D3A /* XFormsStore.m */; };
+		248A46171B7A64A400E9F098 /* form-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 248A46141B7A64A400E9F098 /* form-icon.png */; };
+		248A46181B7A64A400E9F098 /* form-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 248A46151B7A64A400E9F098 /* form-icon@2x.png */; };
+		248A46191B7A64A400E9F098 /* form-icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 248A46161B7A64A400E9F098 /* form-icon@3x.png */; };
 		2494E8E81B3CC1BC00ABFE53 /* IdentifierTypeCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 2494E8E71B3CC1BC00ABFE53 /* IdentifierTypeCell.m */; };
 		2494E8EE1B3CDCF300ABFE53 /* launchImage.png in Resources */ = {isa = PBXBuildFile; fileRef = 2494E8ED1B3CDCF300ABFE53 /* launchImage.png */; };
 		24A8DEC71B18C18A00F5FF84 /* active_visits_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 24A8DEC41B18C18A00F5FF84 /* active_visits_icon@3x.png */; };
@@ -42,6 +44,9 @@
 		24A8DEC91B18C18A00F5FF84 /* active_visits_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 24A8DEC61B18C18A00F5FF84 /* active_visits_icon.png */; };
 		24A8DECC1B18F66E00F5FF84 /* ActiveVisitsList.m in Sources */ = {isa = PBXBuildFile; fileRef = 24A8DECB1B18F66E00F5FF84 /* ActiveVisitsList.m */; };
 		24B974351B3473EF000DD2E7 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 24B974371B3473EF000DD2E7 /* Localizable.strings */; };
+		24C1E0E01B793953003A13A9 /* play_button_active.png in Resources */ = {isa = PBXBuildFile; fileRef = 24C1E0DE1B793953003A13A9 /* play_button_active.png */; };
+		24C1E0E11B793953003A13A9 /* play_button_disabled.png in Resources */ = {isa = PBXBuildFile; fileRef = 24C1E0DF1B793953003A13A9 /* play_button_disabled.png */; };
+		24C1E0E31B793AF2003A13A9 /* reocrd_plain.png in Resources */ = {isa = PBXBuildFile; fileRef = 24C1E0E21B793AF2003A13A9 /* reocrd_plain.png */; };
 		24D127511B0DF6140018AA1D /* MRSDateUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 24D127501B0DF6140018AA1D /* MRSDateUtilities.m */; };
 		24D5CECC1B4B4DB500F1D660 /* settings_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 24D5CEC91B4B4DB500F1D660 /* settings_icon.png */; };
 		24D5CECD1B4B4DB500F1D660 /* settings_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 24D5CECA1B4B4DB500F1D660 /* settings_icon@2x.png */; };
@@ -110,9 +115,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		240F4ED91B5BAFF100E943FC /* form-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon@2x.png"; sourceTree = "<group>"; };
-		240F4EDA1B5BAFF100E943FC /* form-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon.png"; sourceTree = "<group>"; };
-		240F4EDE1B5BB00C00E943FC /* form-icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon@3x.png"; sourceTree = "<group>"; };
 		240F4EE11B5BB22900E943FC /* XFormsList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFormsList.h; sourceTree = "<group>"; };
 		240F4EE21B5BB22900E943FC /* XFormsList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFormsList.m; sourceTree = "<group>"; };
 		240F4EE51B5BB31600E943FC /* XForms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XForms.h; sourceTree = "<group>"; };
@@ -132,8 +134,6 @@
 		241240A41B62854B009E172B /* CLLocationValueTrasformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLLocationValueTrasformer.m; sourceTree = "<group>"; };
 		241240A51B62854B009E172B /* MapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapViewController.xib; sourceTree = "<group>"; };
 		241729061B30C73400BB35F0 /* openmrs-offline 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "openmrs-offline 2.xcdatamodel"; sourceTree = "<group>"; };
-		2417346C1B623AAA0032C45B /* ImageTypeMenu.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageTypeMenu.h; sourceTree = "<group>"; };
-		2417346D1B623AAA0032C45B /* ImageTypeMenu.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ImageTypeMenu.m; sourceTree = "<group>"; };
 		2432066B1B2E439000B54970 /* EditPatient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditPatient.h; sourceTree = "<group>"; };
 		2432066C1B2E439000B54970 /* EditPatient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditPatient.m; sourceTree = "<group>"; };
 		2432066F1B30436700B54970 /* MRSHelperFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSHelperFunctions.h; sourceTree = "<group>"; };
@@ -158,8 +158,16 @@
 		245EDDCC1B21A10B00B8C0EB /* vitals_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vitals_icon@2x.png"; sourceTree = "<group>"; };
 		245EDDCF1B21A11800B8C0EB /* user_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user_icon@3x.png"; sourceTree = "<group>"; };
 		245EDDD01B21A11800B8C0EB /* vitals_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "vitals_icon@3x.png"; sourceTree = "<group>"; };
+		246BAB2A1B77969B00979E50 /* no-image.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "no-image.png"; sourceTree = "<group>"; };
+		246BAB2D1B77A95700979E50 /* XFormAudioCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFormAudioCell.h; sourceTree = "<group>"; };
+		246BAB2E1B77A95700979E50 /* XFormAudioCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFormAudioCell.m; sourceTree = "<group>"; };
+		2475ACA31B7761FB0008094B /* XFormImageCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFormImageCell.h; sourceTree = "<group>"; };
+		2475ACA41B7761FB0008094B /* XFormImageCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFormImageCell.m; sourceTree = "<group>"; };
 		247B747A1B70B86C00BD3D3A /* XFormsStore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFormsStore.h; sourceTree = "<group>"; };
 		247B747B1B70B86C00BD3D3A /* XFormsStore.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFormsStore.m; sourceTree = "<group>"; };
+		248A46141B7A64A400E9F098 /* form-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon.png"; sourceTree = "<group>"; };
+		248A46151B7A64A400E9F098 /* form-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon@2x.png"; sourceTree = "<group>"; };
+		248A46161B7A64A400E9F098 /* form-icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon@3x.png"; sourceTree = "<group>"; };
 		2494E8E61B3CC1BC00ABFE53 /* IdentifierTypeCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IdentifierTypeCell.h; sourceTree = "<group>"; };
 		2494E8E71B3CC1BC00ABFE53 /* IdentifierTypeCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IdentifierTypeCell.m; sourceTree = "<group>"; };
 		2494E8EA1B3CD37100ABFE53 /* de */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = de; path = de.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -171,6 +179,9 @@
 		24A8DECB1B18F66E00F5FF84 /* ActiveVisitsList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ActiveVisitsList.m; sourceTree = "<group>"; };
 		24B974361B3473EF000DD2E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = Base; path = Base.lproj/Localizable.strings; sourceTree = "<group>"; };
 		24B974381B34740E000DD2E7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
+		24C1E0DE1B793953003A13A9 /* play_button_active.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play_button_active.png; sourceTree = "<group>"; };
+		24C1E0DF1B793953003A13A9 /* play_button_disabled.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = play_button_disabled.png; sourceTree = "<group>"; };
+		24C1E0E21B793AF2003A13A9 /* reocrd_plain.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = reocrd_plain.png; sourceTree = "<group>"; };
 		24D1274F1B0DF6140018AA1D /* MRSDateUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSDateUtilities.h; sourceTree = "<group>"; };
 		24D127501B0DF6140018AA1D /* MRSDateUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSDateUtilities.m; sourceTree = "<group>"; };
 		24D5CEC91B4B4DB500F1D660 /* settings_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = settings_icon.png; sourceTree = "<group>"; };
@@ -326,10 +337,11 @@
 		240F4EF01B5D851300E943FC /* XForm */ = {
 			isa = PBXGroup;
 			children = (
+				246BAB2C1B77A94300979E50 /* XFormAudioCell */,
+				2475ACA21B7761E70008094B /* XFormImageCell */,
 				241240A01B62850F009E172B /* GPSChooserViewController */,
 				2412409A1B626B4C009E172B /* SimpleAudioViewController */,
 				240F4EE01B5BB20800E943FC /* XForms list */,
-				2417346B1B623A830032C45B /* XFormsImagePicker */,
 				240F4EF11B5D852700E943FC /* XFormViewController.h */,
 				240F4EF21B5D852700E943FC /* XFormViewController.m */,
 			);
@@ -355,15 +367,6 @@
 				241240A51B62854B009E172B /* MapViewController.xib */,
 			);
 			name = GPSChooserViewController;
-			sourceTree = "<group>";
-		};
-		2417346B1B623A830032C45B /* XFormsImagePicker */ = {
-			isa = PBXGroup;
-			children = (
-				2417346C1B623AAA0032C45B /* ImageTypeMenu.h */,
-				2417346D1B623AAA0032C45B /* ImageTypeMenu.m */,
-			);
-			name = XFormsImagePicker;
 			sourceTree = "<group>";
 		};
 		2432066E1B2E439C00B54970 /* Edit Patient */ = {
@@ -409,6 +412,24 @@
 				243786481B47730900AB5089 /* SyncingEngine.m */,
 			);
 			name = "Syncing Engine";
+			sourceTree = "<group>";
+		};
+		246BAB2C1B77A94300979E50 /* XFormAudioCell */ = {
+			isa = PBXGroup;
+			children = (
+				246BAB2D1B77A95700979E50 /* XFormAudioCell.h */,
+				246BAB2E1B77A95700979E50 /* XFormAudioCell.m */,
+			);
+			name = XFormAudioCell;
+			sourceTree = "<group>";
+		};
+		2475ACA21B7761E70008094B /* XFormImageCell */ = {
+			isa = PBXGroup;
+			children = (
+				2475ACA31B7761FB0008094B /* XFormImageCell.h */,
+				2475ACA41B7761FB0008094B /* XFormImageCell.m */,
+			);
+			name = XFormImageCell;
 			sourceTree = "<group>";
 		};
 		247B74791B70B85300BD3D3A /* XFormsStore */ = {
@@ -841,10 +862,14 @@
 		D397396E1A2E082200D0AB69 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				248A46141B7A64A400E9F098 /* form-icon.png */,
+				248A46151B7A64A400E9F098 /* form-icon@2x.png */,
+				248A46161B7A64A400E9F098 /* form-icon@3x.png */,
+				24C1E0E21B793AF2003A13A9 /* reocrd_plain.png */,
+				24C1E0DE1B793953003A13A9 /* play_button_active.png */,
+				24C1E0DF1B793953003A13A9 /* play_button_disabled.png */,
+				246BAB2A1B77969B00979E50 /* no-image.png */,
 				2437140D1B77422500CB9687 /* swipe-icon.png */,
-				240F4EDE1B5BB00C00E943FC /* form-icon@3x.png */,
-				240F4ED91B5BAFF100E943FC /* form-icon@2x.png */,
-				240F4EDA1B5BAFF100E943FC /* form-icon.png */,
 				24D5CEC91B4B4DB500F1D660 /* settings_icon.png */,
 				24D5CECA1B4B4DB500F1D660 /* settings_icon@2x.png */,
 				24D5CECB1B4B4DB500F1D660 /* settings_icon@3x.png */,
@@ -992,34 +1017,38 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				240F4EDC1B5BAFF100E943FC /* form-icon@2x.png in Resources */,
 				2494E8EE1B3CDCF300ABFE53 /* launchImage.png in Resources */,
 				D3A57DBC1B2E5BF800F25F30 /* active_visits_tab_bar_icon.png in Resources */,
+				24C1E0E11B793953003A13A9 /* play_button_disabled.png in Resources */,
 				24A8DEC71B18C18A00F5FF84 /* active_visits_icon@3x.png in Resources */,
 				24D5CECC1B4B4DB500F1D660 /* settings_icon.png in Resources */,
 				D3A57DBE1B2E5BF800F25F30 /* active_visits_tab_bar_icon@3x.png in Resources */,
 				D396EAF51A36460500191F50 /* search_icon.png in Resources */,
 				241240A81B62854B009E172B /* MapViewController.xib in Resources */,
 				D3FAEFFE1A51C1CD002B1BF7 /* Images.xcassets in Resources */,
+				246BAB2B1B77969B00979E50 /* no-image.png in Resources */,
 				245EDDCE1B21A10B00B8C0EB /* vitals_icon@2x.png in Resources */,
 				D3A57DBD1B2E5BF800F25F30 /* active_visits_tab_bar_icon@2x.png in Resources */,
 				24B974351B3473EF000DD2E7 /* Localizable.strings in Resources */,
 				D3079E761A3D4DED00E308C7 /* add_patient_icon.png in Resources */,
 				245EDDD11B21A11800B8C0EB /* user_icon@3x.png in Resources */,
-				240F4EDD1B5BAFF100E943FC /* form-icon.png in Resources */,
 				24D5CECD1B4B4DB500F1D660 /* settings_icon@2x.png in Resources */,
 				D3079E751A3D4DED00E308C7 /* add_patient_icon@2x.png in Resources */,
 				245EDDC91B21A0F400B8C0EB /* user_icon.png in Resources */,
+				248A46171B7A64A400E9F098 /* form-icon.png in Resources */,
 				245EDDCD1B21A10B00B8C0EB /* user_icon@2x.png in Resources */,
+				248A46191B7A64A400E9F098 /* form-icon@3x.png in Resources */,
+				248A46181B7A64A400E9F098 /* form-icon@2x.png in Resources */,
 				D396EAF61A36460500191F50 /* search_icon@2x.png in Resources */,
 				245EDDD21B21A11800B8C0EB /* vitals_icon@3x.png in Resources */,
-				240F4EDF1B5BB00C00E943FC /* form-icon@3x.png in Resources */,
 				D396A53F1A2E0B5A00DE6448 /* openmrs-logo@2x.png in Resources */,
 				24A8DEC81B18C18A00F5FF84 /* active_visits_icon@2x.png in Resources */,
 				24A8DEC91B18C18A00F5FF84 /* active_visits_icon.png in Resources */,
+				24C1E0E01B793953003A13A9 /* play_button_active.png in Resources */,
 				D396A5401A2E0B5A00DE6448 /* openmrs-logo@3x.png in Resources */,
 				D3079E771A3D4DED00E308C7 /* add_patient_icon@3x.png in Resources */,
 				24D5CECE1B4B4DB500F1D660 /* settings_icon@3x.png in Resources */,
+				24C1E0E31B793AF2003A13A9 /* reocrd_plain.png in Resources */,
 				245EDDCA1B21A0F400B8C0EB /* vitals_icon.png in Resources */,
 				D396EAF71A36460500191F50 /* search_icon@3x.png in Resources */,
 				D396A5411A2E0B5A00DE6448 /* openmrs-logo.png in Resources */,
@@ -1078,6 +1107,7 @@
 				D3A4728B1A3770B4002A0BBD /* AddPatientTableViewController.m in Sources */,
 				D3F797BC1A71F72B008E6064 /* MRSVisitType.swift in Sources */,
 				D396A52E1A2E09DE00DE6448 /* CredentialsLayer.m in Sources */,
+				246BAB2F1B77A95700979E50 /* XFormAudioCell.m in Sources */,
 				D3A869541A32B42A00D1963F /* openmrs-offline.xcdatamodeld in Sources */,
 				D38DB4F51A316FAA00E2CF23 /* EncounterViewController.m in Sources */,
 				D38DB4FB1A3216A300E2CF23 /* SelectEncounterTypeView.m in Sources */,
@@ -1087,7 +1117,6 @@
 				240F4EE31B5BB22900E943FC /* XFormsList.m in Sources */,
 				243786431B46B81A00AB5089 /* AddPatientForm.m in Sources */,
 				D39AD7AE1A3C081000C01540 /* MRSVital.m in Sources */,
-				2417346E1B623AAA0032C45B /* ImageTypeMenu.m in Sources */,
 				2436F2B51B49D56C00294B4C /* Constants.m in Sources */,
 				D317E7F61A4C6BD300E05212 /* OrderedDictionary.m in Sources */,
 				2432066D1B2E439000B54970 /* EditPatient.m in Sources */,
@@ -1108,6 +1137,7 @@
 				D37674271A3BB114003A8005 /* MRSLocation.m in Sources */,
 				2436F2B11B49A01000294B4C /* EditPatientForm.m in Sources */,
 				D34BF5391A3BA7BE009205C9 /* AddVisitNoteTableViewController.m in Sources */,
+				2475ACA51B7761FB0008094B /* XFormImageCell.m in Sources */,
 				243786491B47730900AB5089 /* SyncingEngine.m in Sources */,
 				D3DCBBF81A71F4940024D088 /* StartVisitViewController.swift in Sources */,
 				D396A52A1A2E09DE00DE6448 /* KeychainItemWrapper.m in Sources */,

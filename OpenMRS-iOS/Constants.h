@@ -56,9 +56,11 @@ extern NSString *const kXFormsGPS;
 
 + (NSDictionary *)MAPPING_TYPES;
 
-
 extern NSString *const UDisWizard;
 extern NSString *const UDblankForms;
 extern NSString *const UDfilledForms;
 extern NSString *const UDnewSession;
+
++ (NSDictionary *)PATIENT_ATTRIBUTES;
++ (NSDictionary *)PATIENT_ATTRIBUTES_TYPES;
 @end

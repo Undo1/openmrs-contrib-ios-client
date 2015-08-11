@@ -15,21 +15,30 @@
 #import "MapViewController.h"
 #import "CLLocationValueTrasformer.h"
 #import "MRSDateUtilities.h"
+#import "MRSPatient.h"
+#import "MRSHelperFunctions.h"
 #import <MapKit/MapKit.h>
 #import <XLForm.h>
 
 @implementation XFormsParser
 
-+ (XForms *)parseXFormsXML:(GDataXMLDocument *)doc withID:(NSString *)formID andName:(NSString *)name {
++ (XForms *)parseXFormsXML:(GDataXMLDocument *)doc withID:(NSString *)formID andName:(NSString *)name Patient:(MRSPatient *)patient {
     XForms *form = [[XForms alloc] init];
     form.name = name;
     form.doc = doc;
     form.XFormsID = formID;
     form.forms = [[NSMutableArray alloc] init];
-    form.groups = [[NSMutableArray alloc] init];;
+    form.groups = [[NSMutableArray alloc] init];
     
     GDataXMLElement *model = [doc.rootElement elementsForName:@"xf:model"][0];
     GDataXMLElement *instance = [model elementsForName:@"xf:instance"][0];
+    GDataXMLElement *formNode = [instance elementsForName:@"form"][0];
+
+    if ([formNode elementsForName:@"patient"].count > 0 && patient != nil) {
+        NSLog(@"It's for patient!%@", patient.birthdateEstimated);
+        form.isForPatient = YES;
+        [XFormsParser fillFormDataTo:[formNode elementsForName:@"patient"][0] fromPatient:patient];
+    }
 
     NSArray *bindings = [model elementsForName:@"xf:bind"];
 
@@ -37,6 +46,41 @@
         [XFormsParser parseGroup:group toForm:form bindings:bindings instance:instance doc:doc];
     }
     return form;
+}
+
++ (void)fillFormDataTo:(GDataXMLElement *)patientNode fromPatient:(MRSPatient *)patient {
+    NSDictionary *attributeDict = [Constants PATIENT_ATTRIBUTES];
+    NSDictionary *attributeTypeDict = [Constants PATIENT_ATTRIBUTES_TYPES];
+    for (GDataXMLElement *patientElement in [patientNode children]) {
+        NSLog(@"element :%@", patientElement.name);
+        /* If key not recognized continue */
+        if (![attributeDict objectForKey:patientElement.name]) {
+            continue;
+        }
+        id value = [patient valueForKey:attributeDict[patientElement.name]];
+        NSLog(@"key: %@, value:%@", attributeDict[patientElement.name], value);
+        if ([MRSHelperFunctions isNull:value]) {
+            continue;
+        }
+
+        if ([[Constants PATIENT_ATTRIBUTES_TYPES][patientElement.name] isEqualToString:kXFormsString]) {
+
+            patientElement.stringValue = [patient valueForKey:attributeDict[patientElement.name]];
+            if ([patientElement.name isEqualToString:@"patient.patient_id"]) {
+                NSString *display = [patient valueForKey:attributeDict[patientElement.name]];
+                patientElement.stringValue = @"4";
+            }
+        } else if ([attributeTypeDict[patientElement.name] isEqualToString:kXFormsDate]) {
+            
+            NSDate *date = [MRSDateUtilities dateFromOpenMRSFormattedString:[patient valueForKey:attributeDict[patientElement.name]]];
+            
+            patientElement.stringValue = [MRSDateUtilities XFormformatStringwithDate:date type:kXFormsDate];
+        } else if ([attributeTypeDict[patientElement.name] isEqualToString:kXFormsBoolean]) {
+
+            /* Only birthdate estimate for now, and it's set to "true" and "false" so no need to change that*/
+            patientElement.stringValue = [patient valueForKey:attributeDict[patientElement.name]];
+        }
+    }
 }
 
 + (void)parseGroup:(GDataXMLElement *)group toForm:(XForms *)form bindings:(NSArray *)bindings instance:(GDataXMLElement *)instance doc:(GDataXMLDocument *)doc {
@@ -211,6 +255,13 @@
                                                                            title:formElement.label];
     }
     
+    /* Other elements than these handles alighnment fine */
+    if (!([[NSUserDefaults standardUserDefaults] boolForKey:UDisWizard]) &&
+        ([formElement.type isEqualToString:kXFormsString] ||
+        [formElement.type isEqualToString:kXFormsNumber] ||
+        [formElement.type isEqualToString:kXFormsDecimal])) {
+        [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
+    }
 
     if ([formElement.type isEqualToString:kXFormsAudio]) {
         row.action.viewControllerClass = [SimpleAudioViewController class];
@@ -275,34 +326,7 @@
     
     
     //Adding default value.. now only strings
-    if ([formElement.type isEqualToString:kXFormsString]) {
-        formElement.defaultValue = instanceNode.stringValue;
-        row.value = formElement.defaultValue;
-    } else if ([formElement.type isEqualToString:kXFormsNumber]) {
-        if (![instanceNode.stringValue isEqualToString:@""]) {
-            row.value = [NSNumber numberWithInteger:[instanceNode.stringValue integerValue]];
-        }
-    } else if ([formElement.type isEqualToString:kXFormsDecimal]) {
-        if (![instanceNode.stringValue isEqualToString:@""]) {
-            row.value = [NSNumber numberWithInteger:[instanceNode.stringValue integerValue]];
-        }
-    } else if ([formElement.type isEqualToString:kXFormsSelect] || [formElement.type isEqualToString:kXFormsMutlipleSelect]) {
-        for (XLFormOptionsObject *opObj in formElement.items) {
-            NSString *value = opObj.valueData;
-            if ([value isEqualToString:instanceNode.stringValue]) {
-                row.value = opObj;
-                break;
-            }
-        }
-    } else if ([formElement.type isEqualToString:kXFormsDate] ||
-               [formElement.type isEqualToString:kXFormsTime] ||
-               [formElement.type isEqualToString:kXFormsDateTime]) {
-        row.value = [MRSDateUtilities DatefromXFormsString:instanceNode.stringValue
-                                                      type:formElement.type];
-    }
-    if (!formElement.visible) {
-        return;
-    }
+    row.value = [XFormsParser getRowValueFromElement:formElement andValue:instanceNode.stringValue];
 
     if (formElement.hint && formElement.visible) {
         XLFormRowDescriptor *infoRow = [XLFormRowDescriptor formRowDescriptorWithTag:@"info" rowType:XLFormRowDescriptorTypeInfo title:formElement.hint];
@@ -369,6 +393,46 @@
     return nil;
 }
 
++ (id) getRowValueFromElement:(XFormElement *)formElement andValue:(NSString *) value {
+    if ([formElement.type isEqualToString:kXFormsString]) {
+        return value;
+    } else if ([formElement.type isEqualToString:kXFormsNumber]) {
+        if (![value isEqualToString:@""]) {
+            return [NSNumber numberWithInteger:[value integerValue]];
+        } else {
+            return nil;
+        }
+    } else if ([formElement.type isEqualToString:kXFormsDecimal]) {
+        if (![value isEqualToString:@""]) {
+            return [NSNumber numberWithFloat:[value floatValue]];
+        } else {
+            return nil;
+        }
+    } else if ([formElement.type isEqualToString:kXFormsSelect] ||
+               [formElement.type isEqualToString:kXFormsMutlipleSelect]) {
+        for (XLFormOptionsObject *opObj in formElement.items) {
+            NSString *valueOb = opObj.valueData;
+            if ([valueOb isEqualToString:value]) {
+                return opObj;
+            }
+        }
+        return nil;
+    } else if ([formElement.type isEqualToString:kXFormsDate] ||
+               [formElement.type isEqualToString:kXFormsTime] ||
+               [formElement.type isEqualToString:kXFormsDateTime]) {
+         return [MRSDateUtilities DatefromXFormsString:value
+                                                      type:formElement.type];
+    } else if ([formElement.type isEqualToString:kXFormsBoolean]) {
+        if ([value isEqualToString:@"true"]) {
+            return @1;
+        } else {
+            return @0;
+        }
+    } else {
+        return nil;
+    }
+}
+
 + (void)modifyElement:(XFormElement *)element Value:(id)value {
     NSLog(@"ID: %@, xml node :%@, val: %@", element.bindID, element.XMLnode, value);
     if (element && value) {
@@ -385,7 +449,7 @@
                [type isEqualToString:kXFormsDecimal]) {
         return [value stringValue];
     } else if ([type isEqualToString:kXFormsBoolean]) {
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:@"isWizard"]) {
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:UDisWizard]) {
             if ([value isEqualToString:@"Yes"]) {
                 return @"true";
             } else {

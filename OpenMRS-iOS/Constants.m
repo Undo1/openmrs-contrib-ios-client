@@ -8,6 +8,7 @@
 
 #import "Constants.h"
 #import "XFormImageCell.h"
+#import "XFormAudioCell.h"
 #import <XLForm.h>
 
 @implementation Constants
@@ -69,7 +70,7 @@ NSString *const kXFormsGPS = @"gps";
              kXFormsSelect: XLFormRowDescriptorTypeSelectorPush,
              kXFormsMutlipleSelect: XLFormRowDescriptorTypeMultipleSelector,
              kXFormsImage: XLFormRowDescriptorTypeImageInLine,
-             kXFormsAudio: XLFormRowDescriptorTypeSelectorPush,
+             kXFormsAudio: XLFormRowDescriptorTypeAudioInLine,
              kXFormsGPS: XLFormRowDescriptorTypeSelectorPush
              };
 }
@@ -78,5 +79,33 @@ NSString *const UDisWizard = @"isWizard";
 NSString *const UDblankForms = @"blankForms";
 NSString *const UDfilledForms = @"filledForms";
 NSString *const UDnewSession = @"newSession";
+
++ (NSDictionary *)PATIENT_ATTRIBUTES {
+    return @{
+             @"patient.birthdate": @"birthdate",
+             @"patient.birthdate_estimated": @"birthdateEstimated",
+             @"patient.family_name": @"familyName",
+             @"patient.given_name": @"givenName",
+             @"patient.middle_name": @"middleName",
+             @"patient.patient_id": @"UUID",
+             @"patient.sex": @"gender",
+             @"patient_address.address1": @"address1",
+             @"patient_address.address2": @"address2"
+             };
+}
+
++ (NSDictionary *)PATIENT_ATTRIBUTES_TYPES {
+    return @{
+             @"patient.birthdate": kXFormsDate,
+             @"patient.birthdate_estimated": kXFormsBoolean,
+             @"patient.family_name": kXFormsString,
+             @"patient.given_name": kXFormsString,
+             @"patient.middle_name": kXFormsString,
+             @"patient.patient_id": kXFormsString,
+             @"patient.sex": kXFormsString,
+             @"patient_address.address1": kXFormsString,
+             @"patient_address.address2": kXFormsString
+             };
+}
 
 @end

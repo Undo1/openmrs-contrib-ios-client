@@ -53,7 +53,7 @@
             NSLog(@"Blank forms found %lu at documents directory %@", (unsigned long)directoryContent.count, self.blank_path);
             for (int i=0;i<directoryContent.count;i++) {
                 NSString *fileName = directoryContent[i];
-                XForms *xforms = [[XForms alloc] initFormFromFile:fileName andURL:blankFormsURL];
+                XForms *xforms = [[XForms alloc] initFormFromFile:fileName andURL:blankFormsURL Patient:self.patient];
                 [blankForms addObject:xforms];
                 NSLog(@"blank form: %@", directoryContent[i]);
             }
@@ -63,7 +63,7 @@
 }
 
 - (void)loadForm:(NSString *)formID andFormName:(NSString *)formName completion:(void (^)(XForms *xform, NSError *error))completion {
-    [OpenMRSAPIManager getXformWithID:formID andName:formName completion:^(XForms *form, NSError *error) {
+    [OpenMRSAPIManager getXformWithID:formID andName:formName Patient:self.patient completion:^(XForms *form, NSError *error) {
         NSString *fileName = [NSString stringWithFormat:@"%@~%@", formName, formID];
         fileName = [fileName stringByAppendingPathExtension:@"xml"];
         NSString *absFileName = [self.blank_path stringByAppendingPathComponent:fileName];
@@ -79,7 +79,7 @@
             completion(form, nil);
         } else {
             if ([fileManager fileExistsAtPath:absFileName]) {
-                XForms *form = [[XForms alloc] initFormFromFile:fileName andURL:blankFormsURL];
+                XForms *form = [[XForms alloc] initFormFromFile:fileName andURL:blankFormsURL Patient:self.patient];
                 if (form.doc)
                     completion(form, nil);
                 else
@@ -118,7 +118,7 @@
     }
     for (NSString *fileName in filledFormsFiles) {
         NSLog(@"Filled form: %@", fileName);
-        XForms *form = [[XForms alloc] initFormFromFile:fileName andURL:filledFormsURL];
+        XForms *form = [[XForms alloc] initFormFromFile:fileName andURL:filledFormsURL Patient:self.patient];
         form.loadedLocaly = YES;
         [forms addObject:form];
     }

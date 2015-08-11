@@ -14,6 +14,7 @@
 #import "PatientViewController.h"
 #import "SVProgressHUD.h"
 #import "MRSHelperFunctions.h"
+#import "XFormsList.h"
 
 @interface PatientSearchViewController ()
 
@@ -166,8 +167,12 @@
     UINavigationController *navController3 = [[UINavigationController alloc] initWithRootViewController:encounterList];
     navController3.restorationIdentifier = @"navContrller3";
     
+    XFormsList *formsList = [[XFormsList alloc] init];
+    UINavigationController *formListNavigationController = [[UINavigationController alloc] initWithRootViewController:formsList];
+    formsList.patient = vc.patient;
+
     UITabBarController *patientView = [[UITabBarController alloc] init];
-    NSArray *controllers = [NSArray arrayWithObjects:navController1, navController2, navController3, nil];
+    NSArray *controllers = [NSArray arrayWithObjects:navController1, navController2, navController3, formListNavigationController, nil];
     patientView.viewControllers = controllers;
     patientView.tabBar.translucent = NO;
     patientView.restorationIdentifier = NSStringFromClass([patientView class]);

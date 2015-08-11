@@ -20,6 +20,7 @@
 #import "AppDelegate.h"
 #import "SyncingEngine.h"
 #import "EditPatientForm.h"
+#import "XFormsList.h"
 
 @interface PatientViewController ()
 
@@ -44,11 +45,14 @@
 
 - (void)setPatient:(MRSPatient *)patient
 {
+    NSLog(@"tabbar: views: %@", [(UINavigationController *)(self.tabBarController.viewControllers[3]) viewControllers]);
     if (![MRSHelperFunctions isNull:_patient]) {
         self.patientEdited = YES;
         self.visitsEdited = YES;
         self.encoutersEdited = YES;
     }
+    XFormsList *formsList = [(UINavigationController *)(self.tabBarController.viewControllers[3]) viewControllers][0];
+    [formsList setPatient:patient];
     _patient = patient;
     self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
                            @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},

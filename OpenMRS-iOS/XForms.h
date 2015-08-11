@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <XLForm.h>
 #import "GDataXMLNode.h"
+#import "MRSPatient.h"
 
 @interface XForms : NSObject
 
@@ -17,9 +18,10 @@
 @property (nonatomic, strong) GDataXMLDocument *doc;
 @property (nonatomic, strong) NSMutableArray *forms;
 @property (nonatomic, strong) NSMutableArray *groups;
-@property (nonatomic)BOOL loadedLocaly;
+@property (nonatomic) BOOL loadedLocaly;
+@property (nonatomic) BOOL isForPatient;
 
-- (instancetype)initFormFromFile:(NSString *)fileName andURL:(NSURL *)url;
+- (instancetype)initFormFromFile:(NSString *)fileName andURL:(NSURL *)url Patient:(MRSPatient *)patient;
 - (NSData *)getModelFromDocument;
 
 @end

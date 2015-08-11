@@ -12,7 +12,7 @@
 @class GDataXMLDocument;
 @interface XFormsParser : NSObject
 
-+ (XForms *)parseXFormsXML:(GDataXMLDocument *)doc withID:(NSString *)formID andName:(NSString *)name;
++ (XForms *)parseXFormsXML:(GDataXMLDocument *)doc withID:(NSString *)formID andName:(NSString *)name Patient:(MRSPatient *)patient;
 + (GDataXMLDocument *)InjecValues:(XForms *)form;
 
 @end
