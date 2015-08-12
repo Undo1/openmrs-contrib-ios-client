@@ -87,7 +87,7 @@ NSString *const UDnewSession = @"newSession";
              @"patient.family_name": @"familyName",
              @"patient.given_name": @"givenName",
              @"patient.middle_name": @"middleName",
-             @"patient.patient_id": @"UUID",
+             @"patient.medical_record_number": @"displayName",
              @"patient.sex": @"gender",
              @"patient_address.address1": @"address1",
              @"patient_address.address2": @"address2"
@@ -101,7 +101,7 @@ NSString *const UDnewSession = @"newSession";
              @"patient.family_name": kXFormsString,
              @"patient.given_name": kXFormsString,
              @"patient.middle_name": kXFormsString,
-             @"patient.patient_id": kXFormsString,
+             @"patient.medical_record_number": kXFormsString,
              @"patient.sex": kXFormsString,
              @"patient_address.address1": kXFormsString,
              @"patient_address.address2": kXFormsString
