@@ -65,20 +65,24 @@
 
         if ([[Constants PATIENT_ATTRIBUTES_TYPES][patientElement.name] isEqualToString:kXFormsString]) {
 
-            patientElement.stringValue = [patient valueForKey:attributeDict[patientElement.name]];
-            if ([patientElement.name isEqualToString:@"patient.patient_id"]) {
-                NSString *display = [patient valueForKey:attributeDict[patientElement.name]];
-                patientElement.stringValue = @"4";
+            patientElement.stringValue = value;
+            if ([patientElement.name isEqualToString:@"patient.medical_record_number"]) {
+                NSString *display = value;
+                patientElement.stringValue = [display componentsSeparatedByString:@" "].firstObject;
+                NSLog(@"medical element: %@", patientElement);
             }
         } else if ([attributeTypeDict[patientElement.name] isEqualToString:kXFormsDate]) {
             
-            NSDate *date = [MRSDateUtilities dateFromOpenMRSFormattedString:[patient valueForKey:attributeDict[patientElement.name]]];
+            NSDate *date = [MRSDateUtilities dateFromOpenMRSFormattedString:value];
             
             patientElement.stringValue = [MRSDateUtilities XFormformatStringwithDate:date type:kXFormsDate];
         } else if ([attributeTypeDict[patientElement.name] isEqualToString:kXFormsBoolean]) {
 
             /* Only birthdate estimate for now, and it's set to "true" and "false" so no need to change that*/
-            patientElement.stringValue = [patient valueForKey:attributeDict[patientElement.name]];
+            NSString *booleanValue = value;
+            if (booleanValue  && ![booleanValue isEqualToString:@""]) {
+                patientElement.stringValue = value;
+            }
         }
     }
 }
@@ -241,13 +245,11 @@
     /* Sufficent data here to create the row */
 
     XLFormRowDescriptor *row = nil;
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:@"isWizard"]) {
-        if ([formElement.type isEqualToString:kXFormsBoolean]) {
-            row = [XLFormRowDescriptor formRowDescriptorWithTag:formElement.bindID
-                                                        rowType:XLFormRowDescriptorTypePicker
-                                                          title:formElement.label];
-        }
-        row.selectorOptions = @[@"Yes", @"No"];
+    if ([formElement.type isEqualToString:kXFormsBoolean]) {
+        row = [XLFormRowDescriptor formRowDescriptorWithTag:formElement.bindID
+                                                    rowType:XLFormRowDescriptorTypePicker
+                                                        title:formElement.label];
+        row.selectorOptions = @[@"", @"Yes", @"No"];
     }
     if (!row) {
         row = [XLFormRowDescriptor formRowDescriptorWithTag:formElement.bindID
@@ -424,9 +426,11 @@
                                                       type:formElement.type];
     } else if ([formElement.type isEqualToString:kXFormsBoolean]) {
         if ([value isEqualToString:@"true"]) {
-            return @1;
+            return @"Yes";
+        } else if ([value isEqualToString:@"false"]){
+            return @"No";
         } else {
-            return @0;
+            return @"";
         }
     } else {
         return nil;
@@ -449,17 +453,13 @@
                [type isEqualToString:kXFormsDecimal]) {
         return [value stringValue];
     } else if ([type isEqualToString:kXFormsBoolean]) {
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:UDisWizard]) {
-            if ([value isEqualToString:@"Yes"]) {
-                return @"true";
-            } else {
-                return @"false";
-            }
-        }
-        if (value) {
+        NSLog(@"boolean value:%@", [value class]);
+        if ([value isEqualToString:@"Yes"]) {
             return @"true";
-        } else {
+        } else  if ([value isEqualToString:@"NO"]){
             return @"false";
+        } else {
+            return @"";
         }
     } else if ([type isEqualToString:kXFormsDate] ||
                [type isEqualToString:kXFormsTime] ||
