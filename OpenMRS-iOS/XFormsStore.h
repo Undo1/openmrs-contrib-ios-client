@@ -20,4 +20,7 @@
 - (void)saveFilledForm:(XForms *)form;
 - (NSArray *)loadFilledFiles;
 - (void)deleteFilledForm:(XForms *)form;
+- (void)clearFilledForms;
+- (void)clearBlankForms;
+
 @end

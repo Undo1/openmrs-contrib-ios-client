@@ -13,6 +13,7 @@
 #import "AppDelegate.h"
 #import "SyncingEngine.h"
 #import "Constants.h"
+#import "XFormsStore.h"
 
 @implementation SettingsViewController
 - (void)viewDidLoad
@@ -130,6 +131,8 @@
     } else if (indexPath.section == 0 && indexPath.row == 1) {
         [self dismissViewControllerAnimated:NO completion:^ {
             [OpenMRSAPIManager logout];
+            [[XFormsStore sharedStore] clearFilledForms];
+            [[XFormsStore sharedStore] clearBlankForms];
         }];
     } else if (indexPath.section == 1 && indexPath.row == 1) {
         [[SyncingEngine sharedEngine] updateExistingOutOfDatePatients:nil];

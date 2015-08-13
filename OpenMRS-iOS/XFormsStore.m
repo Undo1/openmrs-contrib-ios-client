@@ -129,8 +129,33 @@
     NSString *fileName = [[NSString stringWithFormat:@"%@~%@", form.name, form.XFormsID] stringByAppendingPathExtension:@"xml"];
     NSString *absFileName = [self.filled_path stringByAppendingPathComponent:fileName];
     NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *directoryContent = [fileManager contentsOfDirectoryAtPath:self.filled_path error:NULL];
+    for (int count = 0; count < (int)[directoryContent count]; count++)
+    {
+        NSLog(@"File %d: %@", (count + 1), [directoryContent objectAtIndex:count]);
+    }
     if ([fileManager fileExistsAtPath:absFileName]) {
         [fileManager removeItemAtPath:absFileName error:nil];
+    }
+}
+
+- (void)clearFilledForms {
+    
+    [self clearAtDir:self.filled_path];
+}
+
+- (void)clearBlankForms {
+    
+    [self clearAtDir:self.blank_path];
+}
+
+- (void)clearAtDir:(NSString *)dir {
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSArray *directoryContent = [fileManager contentsOfDirectoryAtPath:dir error:NULL];
+    for (int count = 0; count < (int)[directoryContent count]; count++) {
+        NSString *fileName = directoryContent[count];
+        NSString *fileAbsName = [dir stringByAppendingPathComponent:fileName];
+        [fileManager removeItemAtPath:fileAbsName error:nil];
     }
 }
 
