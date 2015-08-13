@@ -52,16 +52,16 @@
     NSString *leftLabel = self.index > 0 ? NSLocalizedString(@"Pervious", @"Label pervious") : NSLocalizedString(@"Cancel", @"Cancel button label");
     NSString *rightLabel =  self.index < (self.XForm.forms.count - 1) ? NSLocalizedString(@"Next", @"Label next") : NSLocalizedString(@"Submit", @"Label submit");
     
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:leftLabel style:UIBarButtonItemStylePlain target:self action:@selector(pervious)];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:rightLabel style:UIBarButtonItemStylePlain target:self action:@selector(next)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:leftLabel style:UIBarButtonItemStylePlain target:self action:@selector(pervious:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:rightLabel style:UIBarButtonItemStylePlain target:self action:@selector(next:)];
     
     self.navigationItem.title = [NSString stringWithFormat:@"%@ (%d/%u)", self.navigationItem.title, self.index + 1, self.XForm.forms.count];
     
-    UISwipeGestureRecognizer * swipeleft=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(next)];
+    UISwipeGestureRecognizer * swipeleft=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(next:)];
     swipeleft.direction=UISwipeGestureRecognizerDirectionLeft;
     [self.view addGestureRecognizer:swipeleft];
     
-    UISwipeGestureRecognizer * swiperight=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(pervious)];
+    UISwipeGestureRecognizer * swiperight=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(pervious:)];
     swiperight.direction=UISwipeGestureRecognizerDirectionRight;
     [self.view addGestureRecognizer:swiperight];
 
@@ -160,15 +160,17 @@
     return headerView;
 }
 
-- (void)pervious {
+- (void)pervious:(id)sender {
     if (self.index > 0) {
         [self.navigationController popViewControllerAnimated:YES];
     } else {
-        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        if ([sender isKindOfClass:[UIBarButtonItem class]]) {
+            [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        }
     }
 }
 
-- (void)next {
+- (void)next:(id)sender {
     if (self.index < (self.XForm.forms.count - 1)) {
         if ([self isValid]) {
             XFormViewController *nextForm = [[XFormViewController alloc] initWithForm:self.XForm WithIndex:self.index+1];
@@ -178,21 +180,23 @@
         }
     } else {
         if ([self isValid]) {
-            [XFormsParser InjecValues:self.XForm];
-
-            [OpenMRSAPIManager uploadXForms:self.XForm completion:^(NSError *error) {
-                if (!error) {
-                    [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Sent", @"Label sent")];
-                    [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-                } else {
-                    UIAlertView *errorUploading = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error uploading", @"Title error uploading")
-                                                                             message:NSLocalizedString(@"Oops, Seems there's no internet connectivity available now, Do you want to save the form for offline usage or discard now.", @"Message for error submitting form")
-                                                                            delegate:self
-                                                                   cancelButtonTitle:NSLocalizedString(@"Discard", @"Discard button label")
-                                                                   otherButtonTitles:NSLocalizedString(@"Save Offline", @"Label save offline"), nil];
-                    [errorUploading show];
-                }
-            }];
+            if ([sender isKindOfClass:[UIBarButtonItem class]]) {
+                [XFormsParser InjecValues:self.XForm];
+                
+                [OpenMRSAPIManager uploadXForms:self.XForm completion:^(NSError *error) {
+                    if (!error) {
+                        [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Sent", @"Label sent")];
+                        [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+                    } else {
+                        UIAlertView *errorUploading = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error uploading", @"Title error uploading")
+                                                                                 message:NSLocalizedString(@"Oops, Seems there's no internet connectivity available now, Do you want to save the form for offline usage or discard now.", @"Message for error submitting form")
+                                                                                delegate:self
+                                                                       cancelButtonTitle:NSLocalizedString(@"Discard", @"Discard button label")
+                                                                       otherButtonTitles:NSLocalizedString(@"Save Offline", @"Label save offline"), nil];
+                        [errorUploading show];
+                    }
+                }];
+            }
         } else {
             [self showValidationWarning];
         }
@@ -204,10 +208,12 @@
     self.allNonValidFields = @"";
     for(id obj in array) {
         XLFormValidationStatus * validationStatus = [[obj userInfo] objectForKey:XLValidationStatusErrorKey];
-        NSString *title = validationStatus.rowDescriptor.title;
+        NSString *tag = validationStatus.rowDescriptor.tag;
+        XFormElement *element = [self.XForm.groups[self.index] objectForKey:tag];
+        NSString *title = element.label;
     
         if ([self.allNonValidFields isEqualToString:@""]) {
-            self.allNonValidFields = [self.allNonValidFields stringByAppendingString:title];
+            self.allNonValidFields = title;
         } else {
             self.allNonValidFields = [self.allNonValidFields stringByAppendingString:[NSString stringWithFormat:@", %@", title]];
         }
