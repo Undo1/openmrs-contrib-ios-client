@@ -55,7 +55,7 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:leftLabel style:UIBarButtonItemStylePlain target:self action:@selector(pervious:)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:rightLabel style:UIBarButtonItemStylePlain target:self action:@selector(next:)];
     
-    self.navigationItem.title = [NSString stringWithFormat:@"%@ (%d/%u)", self.navigationItem.title, self.index + 1, self.XForm.forms.count];
+    self.navigationItem.title = [NSString stringWithFormat:@"%@ (%d/%lu)", self.XForm.name, self.index + 1, (unsigned long)self.XForm.forms.count];
     
     UISwipeGestureRecognizer * swipeleft=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(next:)];
     swipeleft.direction=UISwipeGestureRecognizerDirectionLeft;
