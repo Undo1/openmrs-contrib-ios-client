@@ -72,6 +72,11 @@
     }
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
+}
+
 - (void)addTutorialView {
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     self.tutorialView = [[UIView alloc] initWithFrame:screenRect];
