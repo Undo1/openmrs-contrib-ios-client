@@ -330,7 +330,7 @@
         self.XForm.name = filename;
         NSLog(@"name: %@", self.XForm.name);
         [[XFormsStore sharedStore] saveFilledForm:self.XForm];
-        [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }
+    [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 @end
