@@ -15,6 +15,7 @@
 #import "SVProgressHUD.h"
 #import "XFormsStore.h"
 #import "XFormImageCell.h"
+#import "MRSDateUtilities.h"
 
 @interface XFormViewController ()
 
@@ -23,7 +24,7 @@
 @property (nonatomic, strong) XFormElement *repeatElement;
 
 @property (nonatomic, strong) UIView *tutorialView;
-
+@property (nonatomic, strong) NSString *allNonValidFields;
 @end
 
 @implementation XFormViewController
@@ -63,7 +64,7 @@
     UISwipeGestureRecognizer * swiperight=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(pervious)];
     swiperight.direction=UISwipeGestureRecognizerDirectionRight;
     [self.view addGestureRecognizer:swiperight];
-    
+
     if ([[NSUserDefaults standardUserDefaults] boolForKey:UDnewSession] &&
         [[NSUserDefaults standardUserDefaults] boolForKey:UDisWizard]) {
         [self addTutorialView];
@@ -178,19 +179,17 @@
     } else {
         if ([self isValid]) {
             [XFormsParser InjecValues:self.XForm];
+
             [OpenMRSAPIManager uploadXForms:self.XForm completion:^(NSError *error) {
                 if (!error) {
                     [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Sent", @"Label sent")];
-                    [self.navigationController popToRootViewControllerAnimated:YES];
+                    [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
                 } else {
                     UIAlertView *errorUploading = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error uploading", @"Title error uploading")
-                                                                             message:NSLocalizedString(@"If you are connected review the form agian, else save it for offline usage", @"Message for error submitting form")
+                                                                             message:NSLocalizedString(@"Oops, Seems there's no internet connectivity available now, Do you want to save the form for offline usage or discard now.", @"Message for error submitting form")
                                                                             delegate:self
-                                                                   cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel button label")
+                                                                   cancelButtonTitle:NSLocalizedString(@"Discard", @"Discard button label")
                                                                    otherButtonTitles:NSLocalizedString(@"Save Offline", @"Label save offline"), nil];
-                    if (!self.XForm.loadedLocaly) {
-                        errorUploading.alertViewStyle = UIAlertViewStylePlainTextInput;
-                    }
                     [errorUploading show];
                 }
             }];
@@ -201,12 +200,24 @@
 }
 
 - (BOOL)isValid {
+    NSArray * array = [self formValidationErrors];
+    self.allNonValidFields = @"";
+    for(id obj in array) {
+        XLFormValidationStatus * validationStatus = [[obj userInfo] objectForKey:XLValidationStatusErrorKey];
+        NSString *title = validationStatus.rowDescriptor.title;
+    
+        if ([self.allNonValidFields isEqualToString:@""]) {
+            self.allNonValidFields = [self.allNonValidFields stringByAppendingString:title];
+        } else {
+            self.allNonValidFields = [self.allNonValidFields stringByAppendingString:[NSString stringWithFormat:@", %@", title]];
+        }
+    }
     return [self formValidationErrors].count == 0;
 }
 
 - (void)showValidationWarning {
     [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Warning label error")
-                                message:NSLocalizedString(@"Plese fill out all the required fields", @"Error message")
+                                message:[NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Plese fill", @"Error message"), self.allNonValidFields]
                                delegate:nil
                       cancelButtonTitle:@"OK"
                       otherButtonTitles:nil]
@@ -314,29 +325,12 @@
 }
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    NSLog(@"index pressed %d", buttonIndex);
     if (buttonIndex == 1) {
-        NSString *filename = [alertView textFieldAtIndex:0].text;
-        if (self.XForm.loadedLocaly) {
-            filename = self.XForm.name;
-        }
+        NSString *filename = [NSString stringWithFormat:@"%@_%@", self.XForm.name, [MRSDateUtilities openMRSFormatStringWithDate:[NSDate date]]];
         self.XForm.name = filename;
-        filename = [[NSString stringWithFormat:@"%@~%@", filename, self.XForm.XFormsID] stringByAppendingPathExtension:@"xml"];
-        NSString *filledPath = [[NSUserDefaults standardUserDefaults] objectForKey:UDfilledForms];
-        filledPath = [filledPath stringByAppendingPathComponent:filename];
         NSLog(@"name: %@", self.XForm.name);
-        if (self.XForm.loadedLocaly) {
-            [[XFormsStore sharedStore] saveFilledForm:self.XForm];
-            [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-            return;
-        }
-
-        if ([[NSFileManager defaultManager] fileExistsAtPath:filledPath]) {
-            [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"File already exist", @"Label file already exist")];
-        } else {
-            [[XFormsStore sharedStore] saveFilledForm:self.XForm];
-            [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-        }
+        [[XFormsStore sharedStore] saveFilledForm:self.XForm];
+        [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }
 }
 @end
