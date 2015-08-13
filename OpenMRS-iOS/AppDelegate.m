@@ -109,6 +109,9 @@
     if (![userDefaults objectForKey:UDnewSession]) {
         [userDefaults setBool:YES forKey:UDnewSession];
     }
+    if (![userDefaults objectForKey:UDrefreshInterval]) {
+        [userDefaults setDouble:5 forKey:UDrefreshInterval];
+    }
     
     if ([[NSProcessInfo processInfo] respondsToSelector:@selector(operatingSystemVersion)]) {
         if ([[NSProcessInfo processInfo] operatingSystemVersion].majorVersion >= 8) {

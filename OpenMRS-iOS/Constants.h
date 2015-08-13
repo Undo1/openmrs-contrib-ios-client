@@ -60,6 +60,7 @@ extern NSString *const UDisWizard;
 extern NSString *const UDblankForms;
 extern NSString *const UDfilledForms;
 extern NSString *const UDnewSession;
+extern NSString *const UDrefreshInterval;
 
 + (NSDictionary *)PATIENT_ATTRIBUTES;
 + (NSDictionary *)PATIENT_ATTRIBUTES_TYPES;

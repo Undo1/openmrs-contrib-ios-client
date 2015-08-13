@@ -79,6 +79,7 @@ NSString *const UDisWizard = @"isWizard";
 NSString *const UDblankForms = @"blankForms";
 NSString *const UDfilledForms = @"filledForms";
 NSString *const UDnewSession = @"newSession";
+NSString *const UDrefreshInterval = @"refreshInterval";
 
 + (NSDictionary *)PATIENT_ATTRIBUTES {
     return @{

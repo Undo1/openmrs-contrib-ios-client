@@ -11,6 +11,7 @@
 #import "EncounterViewController.h"
 #import "MRSHelperFunctions.h"
 #import "AppDelegate.h"
+#import "PatientViewController.h"
 
 @implementation PatientEncounterListView
 
@@ -44,6 +45,10 @@
 - (void)viewDidAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    UINavigationController *parentNav = self.tabBarController.viewControllers[0];
+    PatientViewController *patientVC = parentNav.viewControllers[0];
+    patientVC.encoutersEdited = YES;
+    [patientVC updateWithDetailedInfo];
     [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
 }
 

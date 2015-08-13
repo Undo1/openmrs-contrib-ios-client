@@ -55,7 +55,7 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (self.visits.count) {
+    if (self.visits.count == 0) {
         UILabel *backgroundLabel = [[UILabel alloc] init];
         backgroundLabel.textAlignment = NSTextAlignmentCenter;
         backgroundLabel.text = [NSString stringWithFormat:@"\"%@\"", NSLocalizedString(@"No Visits", @"Label -no- -visits-")];

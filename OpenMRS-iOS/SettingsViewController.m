@@ -50,6 +50,8 @@
 {
     if (section == 2) {
         return 1;
+    } else if (section == 1){
+        return 3;
     } else {
         return 2;
     }
@@ -98,6 +100,25 @@
             cell.textLabel.text = NSLocalizedString(@"Sync offline patients", @"Label -sync- -offline- -patients-");
             return cell;
 
+        } else if (indexPath.row == 2) {
+            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"counterCell"];
+            if (!cell) {
+                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"counterCell"];
+            }
+            cell.textLabel.textColor = [UIColor blackColor];
+            cell.textLabel.textAlignment = NSTextAlignmentLeft;
+
+            double interval = [[NSUserDefaults standardUserDefaults] doubleForKey:UDrefreshInterval];
+            UIStepper *minuteStepper = [[UIStepper alloc] init];
+            minuteStepper.value = interval;
+            [minuteStepper addTarget:self action:@selector(step:) forControlEvents:UIControlEventValueChanged];
+            cell.accessoryView = minuteStepper;
+
+            
+            cell.textLabel.text = [NSString stringWithFormat:@"%@\n(%.f %@)", NSLocalizedString(@"Patient refersh interval", @"Label -patient- -refresh- -interval-"), minuteStepper.value, NSLocalizedString(@"minutes", @"word minutes")];
+            cell.textLabel.numberOfLines = 0;
+            cell.textLabel.lineBreakMode = NSLineBreakByWordWrapping;
+            return cell;
         }
     }
     if (indexPath.section == 2) {
@@ -122,6 +143,14 @@
     }
     return [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
 }
+
+- (void)step:(UIStepper *)sender {
+    UIView *temp = sender.superview.subviews[0];
+    UILabel *label = temp.subviews[0];
+    label.text = [NSString stringWithFormat:@"%@\n(%.f %@)", NSLocalizedString(@"Patient refersh interval", @"Label -patient- -refresh- -interval-"), sender.value, NSLocalizedString(@"minutes", @"word minutes")];
+    [[NSUserDefaults standardUserDefaults] setDouble:sender.value forKey:UDrefreshInterval];
+}
+
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 1 && indexPath.row == 0) {

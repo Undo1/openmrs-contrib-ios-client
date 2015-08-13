@@ -21,12 +21,11 @@
 #import "SyncingEngine.h"
 #import "EditPatientForm.h"
 #import "XFormsList.h"
+#import "Constants.h"
 
 @interface PatientViewController ()
 
-@property (nonatomic) BOOL patientEdited;
-@property (nonatomic) BOOL encoutersEdited;
-@property (nonatomic) BOOL visitsEdited;
+@property (nonatomic, strong) NSTimer *refreshingTimer;
 
 @end
 
@@ -39,6 +38,8 @@
         self.restorationClass = [self class];
 
         self.tabBarItem.image = [UIImage imageNamed:@"user_icon"];
+        double interval = [[NSUserDefaults standardUserDefaults] doubleForKey:UDrefreshInterval];
+        self.refreshingTimer = [NSTimer scheduledTimerWithTimeInterval:interval * 60 target:self selector:@selector(refresh) userInfo:nil repeats:YES];
     }
     return self;
 }
@@ -82,6 +83,18 @@
     self.patientEdited = YES;
     self.visitsEdited = YES;
     self.encoutersEdited = YES;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    [self.refreshingTimer invalidate];
+}
+
+- (void)refresh {
+    self.patientEdited = YES;
+    self.encoutersEdited = YES;
+    self.visitsEdited = YES;
+    [self updateWithDetailedInfo];
 }
 
 - (void)close {
@@ -148,6 +161,7 @@
                 UINavigationController *parentNav = self.tabBarController.viewControllers[2];
                 PatientEncounterListView *encounterList = parentNav.viewControllers[0];
                 encounterList.encounters = self.encounters;
+                [encounterList.tableView reloadData];
             }
         }];
     }
