@@ -43,10 +43,6 @@
     [super viewDidLoad];
     
     self.navigationItem.title = @"XForms"; //That doesn't need localization.
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close")
-                                                                             style:UIBarButtonItemStylePlain
-                                                                            target:self
-                                                                            action:@selector(close)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save offline", @"Label save offline")
                                                                               style:UIBarButtonItemStylePlain
                                                                              target:self
@@ -140,10 +136,6 @@
         [self.forms removeObjectAtIndex:indexPath.row];
         [self.tableView reloadData];
     }
-}
-
-- (void)close {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)saveOffline {
