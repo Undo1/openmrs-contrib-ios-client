@@ -7,6 +7,7 @@
 //
 
 #import "XFormAudioCell.h"
+#import "Base64.h"
 
 NSString * const XLFormRowDescriptorTypeAudioInLine = @"AudioInLine";
 
@@ -22,6 +23,8 @@ NSString * const XLFormRowDescriptorTypeAudioInLine = @"AudioInLine";
 @property (nonatomic, strong) UIView *middleView;
 @property (nonatomic, strong) UIButton *remove;
 @property (nonatomic) BOOL recorded;
+
+@property (nonatomic, strong) NSData *audioData;
 
 @end
 
@@ -42,11 +45,17 @@ NSString * const XLFormRowDescriptorTypeAudioInLine = @"AudioInLine";
         self.record.enabled = YES;
         self.remove.enabled = YES;
     }
+    if (self.rowDescriptor.value && !self.audioData) {
+        XLFormOptionsObject *opObj = self.rowDescriptor.value;
+        self.audioData = [NSData dataWithBase64EncodedString:opObj.valueData];
+        if (self.audioData) {
+            self.play.enabled = YES;
+        }
+    }
 }
 
 - (void)configure {
     [super configure];
-    self.rowDescriptor.value = nil;
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     [self configureViews];
     [self configureContraints];
@@ -117,6 +126,7 @@ NSString * const XLFormRowDescriptorTypeAudioInLine = @"AudioInLine";
                                                                   constant:0.0]];
 }
 
+
 - (void)setupAudio {
     self.play.enabled = NO;
     
@@ -175,7 +185,16 @@ NSString * const XLFormRowDescriptorTypeAudioInLine = @"AudioInLine";
 
 - (void)playPressed {
     if (!recorder.recording) {
-        player = [[AVAudioPlayer alloc] initWithContentsOfURL:recorder.url error:nil];
+        if (self.audioData) {
+            player = [[AVAudioPlayer alloc] initWithData:self.audioData error:nil];
+        } else {
+            if (!self.rowDescriptor.sectionDescriptor.formDescriptor.disabled) {
+                player = [[AVAudioPlayer alloc] initWithContentsOfURL:recorder.url error:nil];
+            }
+        }
+        if (!player) {
+            return;
+        }
         player.delegate = self;
         [player play];
         self.play.enabled = NO;

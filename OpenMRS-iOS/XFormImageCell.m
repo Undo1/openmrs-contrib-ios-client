@@ -39,6 +39,12 @@ NSString * const XLFormRowDescriptorTypeImageInLine = @"ImageInLine";
         self.camera.enabled = YES;
         self.remove.enabled = YES;
     }
+    if (self.rowDescriptor.value && !self.image) {
+        XLFormOptionsObject *opObj = self.rowDescriptor.value;
+        NSData *imageData = [NSData dataWithBase64EncodedString:opObj.valueData];
+        UIImage *image = [UIImage imageWithData:imageData];
+        self.image = image;
+    }
 }
 
 - (void)configure {
@@ -100,6 +106,7 @@ NSString * const XLFormRowDescriptorTypeImageInLine = @"ImageInLine";
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[title]-0-|" options:0 metrics:nil views:viewsDict]];
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[title]-5-[gallery]-5-[image(150)]-5-[remove]-0-|" options:0 metrics:nil views:viewsDict]];
     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.gallery attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.camera attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
+    [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.gallery attribute:NSLayoutAttributeTopMargin relatedBy:NSLayoutRelationEqual toItem:self.camera attribute:NSLayoutAttributeTopMargin multiplier:1 constant:0]];
 }
 
 - (void)initCameraRoll {
@@ -127,7 +134,7 @@ NSString * const XLFormRowDescriptorTypeImageInLine = @"ImageInLine";
 
 - (void)removeImage {
     self.image = nil;
-    self.imageSelected.image = [UIImage imageNamed:@"no-image"];
+    self.rowDescriptor.value = nil;
 }
 
 - (void)setImage:(UIImage *)image {
@@ -136,7 +143,6 @@ NSString * const XLFormRowDescriptorTypeImageInLine = @"ImageInLine";
         self.imageSelected.image = image;
     } else {
         self.imageSelected.image = [UIImage imageNamed:@"no-image"];
-        self.rowDescriptor.value = nil;
         return;
     }
     NSData *imageData = UIImagePNGRepresentation(image);

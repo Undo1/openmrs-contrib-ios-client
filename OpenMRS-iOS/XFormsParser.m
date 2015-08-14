@@ -182,7 +182,6 @@
                 inRepeat = NO;
             }
         }
-        NSLog(@"element: %@, in repeat: %d", element.name, inRepeat);
         old_count = count;
     }
     if (count == old_count && inRepeat) {
@@ -505,6 +504,9 @@
         } else {
             return @"";
         }
+    } else if ([formElement.type isEqualToString:kXFormsImage] ||
+               [formElement.type isEqualToString:kXFormsAudio]) {
+        return [XLFormOptionsObject formOptionsObjectWithValue:value displayText:@""];
     } else {
         return nil;
     }
