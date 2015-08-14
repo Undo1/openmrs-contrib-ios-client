@@ -109,17 +109,29 @@
         [form.forms addObject:formDescriptor];
         [form.groups addObject:groupDict];
     }
+    int count = 0;
+    int old_count = 0;
+    BOOL inRepeat = NO;
     for (GDataXMLElement *element in [group children]) {
         //handling input
         if ([element.localName isEqualToString:@"input"] ||
             [element.localName isEqualToString:kXFormsSelect] ||
             [element.localName isEqualToString:kXFormsMutlipleSelect] ||
             [element.localName isEqualToString:kXFormsUpload]) {
-            [XFormsParser parseInput:element bindings:bindings instance:instance Section:section Group:groupDict Document:doc];
+            [XFormsParser parseInput:element count:0 bindings:bindings instance:instance Section:section Group:groupDict Document:doc];
         }
         //handling repeat
-        if ([element.localName isEqualToString:kXFormsRepeat]) {
-            [XFormsParser parseRepeat:element bindings:bindings instance:instance Section:section Group:groupDict Form:form Document:doc];
+        if ([element.name isEqualToString:kXFormsRepeat]) {
+            [XFormsParser parseRepeat:element count:count bindings:bindings instance:instance Section:section Group:groupDict Form:form Document:doc];
+            count++;
+            /* setting groupnode */
+            for (NSString *key in groupDict) {
+                XFormElement *element = groupDict[key];
+                element.groupNode = group;
+                [groupDict setObject:element forKey:key];
+            }
+            [formDescriptor addFormSection:section];
+            section = [XLFormSectionDescriptor formSectionWithTitle:section.title];
         }
         // handling group
         if ([element.localName isEqualToString:kXFormsGroup]) {
@@ -133,18 +145,20 @@
                     if ([rowInSection.tag isEqualToString:@"info"]) {
                         rowInSection = section.formRows[1];
                     }
-                    section.title = rowInSection.title;
-                    rowInSection.title = @"";
-
-                    
-                    if (rowInSection.isDisabled) {
-                        section.title = [NSString stringWithFormat:@"%@ (%@)", section.title, NSLocalizedString(@"Locked", @"Label locked")];
-                    }
-                    if (rowInSection.isRequired) {
-                        NSAttributedString *requiredLabel = [[NSAttributedString alloc] initWithString:@""];
-                        [rowInSection.cellConfig setObject:requiredLabel forKey:@"textLabel.attributedText"];
-
-                        section.title = [NSString stringWithFormat:@"%@ (%@)", section.title, NSLocalizedString(@"Required", @"Label required")];
+                    if (![section.title hasPrefix:rowInSection.title]) {
+                        section.title = rowInSection.title;
+                        rowInSection.title = @"";
+                        
+                        
+                        if (rowInSection.isDisabled) {
+                            section.title = [NSString stringWithFormat:@"%@ (%@)", section.title, NSLocalizedString(@"Locked", @"Label locked")];
+                        }
+                        if (rowInSection.isRequired) {
+                            NSAttributedString *requiredLabel = [[NSAttributedString alloc] initWithString:@""];
+                            [rowInSection.cellConfig setObject:requiredLabel forKey:@"textLabel.attributedText"];
+                            
+                            section.title = [NSString stringWithFormat:@"%@ (%@)", section.title, NSLocalizedString(@"Required", @"Label required")];
+                        }
                     }
                 }
                 [formDescriptor addFormSection:section];
@@ -155,13 +169,36 @@
                 formDescriptor = [XLFormDescriptor formDescriptorWithTitle:groupLabel];
                 section = [XLFormSectionDescriptor formSection];
             }
-            
+            if (count > old_count) {
+                inRepeat = YES;
+            }
+            if (count == old_count && inRepeat) {
+                [form.forms addObject:formDescriptor];
+                [form.groups addObject:groupDict];
+                /* Re-initializing */
+                groupDict = [[NSMutableDictionary alloc] init];
+                formDescriptor = [XLFormDescriptor formDescriptorWithTitle:groupLabel];
+                section = [XLFormSectionDescriptor formSection];
+                inRepeat = NO;
+            }
         }
+        NSLog(@"element: %@, in repeat: %d", element.name, inRepeat);
+        old_count = count;
+    }
+    if (count == old_count && inRepeat) {
+        [form.forms addObject:formDescriptor];
+        [form.groups addObject:groupDict];
+        /* Re-initializing */
+        groupDict = [[NSMutableDictionary alloc] init];
+        formDescriptor = [XLFormDescriptor formDescriptorWithTitle:groupLabel];
+        section = [XLFormSectionDescriptor formSection];
+        inRepeat = NO;
     }
 }
 
-+ (void)parseRepeat:(GDataXMLElement *)repeat bindings:(NSArray *)bindings instance:(GDataXMLElement* )instance Section:(XLFormSectionDescriptor *)section Group:(NSMutableDictionary *)group Form:(XForms *)form Document:(GDataXMLDocument *)doc {
++ (void)parseRepeat:(GDataXMLElement *)repeat count:(int)count bindings:(NSArray *)bindings instance:(GDataXMLElement* )instance Section:(XLFormSectionDescriptor *)section Group:(NSMutableDictionary *)group Form:(XForms *)form Document:(GDataXMLDocument *)doc {
     XFormElement *formElement = [[XFormElement alloc] init];
+    formElement.index = count;
     formElement.type = kXFormsRepeat;
     
     //labels and hints
@@ -186,7 +223,8 @@
 
     //XMLNode
     NSString *nodeXPath = [[bindingForInput attributeForName:@"nodeset"] stringValue];
-    GDataXMLElement *instanceNode = [instance nodesForXPath:[NSString stringWithFormat:@"/%@", nodeXPath] error:nil][0];
+    GDataXMLElement *instanceNode = [instance nodesForXPath:[NSString stringWithFormat:@"/%@", nodeXPath] error:nil][formElement.index];
+    // discover where this is used by removing propety and seeing where it breaks TODODOOOOOADSASDQWedqwe
     formElement.XPathNode = nodeXPath;
     formElement.XMLnode = instanceNode;
     
@@ -198,13 +236,13 @@
             [element.localName isEqualToString:kXFormsMutlipleSelect] ||
             [element.localName isEqualToString:kXFormsUpload]) {
             //It adds the new row to the new section
-            [XFormsParser parseInput:element bindings:bindings instance:instance Section:section Group:formElement.subElements Document:doc];
+            [XFormsParser parseInput:element count:count bindings:bindings instance:instance Section:section Group:formElement.subElements Document:doc];
         }
     }
     [group setObject:formElement forKey:formElement.bindID];
 }
 
-+ (void)parseInput:(GDataXMLElement *)input bindings:(NSArray *)bindings instance:(GDataXMLElement* )instance Section:(XLFormSectionDescriptor *)section Group:(NSMutableDictionary *)group Document:(GDataXMLDocument *)doc {
++ (void)parseInput:(GDataXMLElement *)input count:(int)count bindings:(NSArray *)bindings instance:(GDataXMLElement* )instance Section:(XLFormSectionDescriptor *)section Group:(NSMutableDictionary *)group Document:(GDataXMLDocument *)doc {
     XFormElement *formElement = [[XFormElement alloc] init];
     //labels and hints
     if ([input elementsForName:@"xf:label"]) {
@@ -325,7 +363,7 @@
     }
     
     NSString *nodeXPath = [[bindingForInput attributeForName:@"nodeset"] stringValue];
-    GDataXMLElement *instanceNode = [instance nodesForXPath:[NSString stringWithFormat:@"/%@", nodeXPath] error:nil][0];
+    GDataXMLElement *instanceNode = [instance nodesForXPath:[NSString stringWithFormat:@"/%@", nodeXPath] error:nil][count];
     formElement.XPathNode = nodeXPath;
     formElement.XMLnode = instanceNode;
     
@@ -355,6 +393,7 @@
         XLFormDescriptor *formDescriptor = form.forms[i];
         NSDictionary *elements = form.groups[i];
         int index = 0;
+        BOOL added = NO;
         for (XLFormSectionDescriptor *section in formDescriptor.formSections) {
             for (XLFormRowDescriptor *row in section.formRows) {
                 if ([row.tag isEqualToString:@"add"] || [row.tag isEqualToString:@"delete"] || [row.tag isEqualToString:@"info"]) {
@@ -367,9 +406,13 @@
                     for (NSString *key in elements) {
                         superElement = elements[key];
                     }
-                    if (index) {
+                    if (index && !added) {
                         [[superElement parentNodeFromDoc:form.doc] addChild:superElement.XMLnode];
                         superElement.XMLnode = [[superElement parentNodeFromDoc:form.doc] elementsForName:superElement.XMLnode.name][index];
+                        // add a ui element for it as well for view.
+                        [superElement.groupNode addChild:[superElement.groupNode elementsForName:kXFormsRepeat][0]];
+                        NSLog(@"Added node: %@", [superElement.groupNode elementsForName:kXFormsRepeat][0]);
+                        added = YES;
                     }
                     for (NSString *subelementKey in superElement.subElements) {
                         XFormElement *subelement = [superElement.subElements objectForKey:subelementKey];
@@ -396,6 +439,15 @@
     }
     NSLog(@"%@", instance);
     return nil;
+}
+
++ (void)modifyElement:(XFormElement *)element Value:(id)value {
+    NSLog(@"ID: %@, xml node :%@, val: %@", element.bindID, element.XMLnode, value);
+    if (element && value) {
+        GDataXMLElement *elementNode = element.XMLnode;
+        elementNode.stringValue = [XFormsParser stringFromValue:value Type:element.type];
+    }
+    NSLog(@"ID: %@, xml node :%@", element.bindID, element.XMLnode);
 }
 
 + (id) getRowValueFromElement:(XFormElement *)formElement andValue:(NSString *) value {
@@ -456,15 +508,6 @@
     } else {
         return nil;
     }
-}
-
-+ (void)modifyElement:(XFormElement *)element Value:(id)value {
-    NSLog(@"ID: %@, xml node :%@, val: %@", element.bindID, element.XMLnode, value);
-    if (element && value) {
-        GDataXMLElement *elementNode = element.XMLnode;
-        elementNode.stringValue = [XFormsParser stringFromValue:value Type:element.type];
-    }
-    NSLog(@"ID: %@, xml node :%@", element.bindID, element.XMLnode);
 }
 
 + (NSString *)stringFromValue:(id)value Type:(NSString *)type {

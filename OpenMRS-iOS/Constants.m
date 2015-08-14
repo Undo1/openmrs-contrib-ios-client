@@ -50,7 +50,7 @@ NSString *const kXFormsUpload = @"upload";
 NSString *const kXFormsGroup = @"group";
 NSString *const kXFormsSelect = @"select1";
 NSString *const kXFormsMutlipleSelect = @"select";
-NSString *const kXFormsRepeat = @"repeat";
+NSString *const kXFormsRepeat = @"xf:repeat";
 NSString *const kXFormBase64 = @"xsd:base64Binary";
 
 NSString *const kXFormsImage = @"image";

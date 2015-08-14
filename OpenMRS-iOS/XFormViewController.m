@@ -187,12 +187,6 @@
             [self showValidationWarning];
         }
     } else {
-        /*
-        XLFormViewController *xlform = [[XLFormViewController alloc] initWithForm:[self.XForm getReviewForm]];
-        xlform.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(dismissNew:)];
-        xlform.navigationItem.title = self.XForm.name;
-        [self.navigationController pushViewController:xlform animated:YES];
-        return;*/
         if ([self isValid]) {
             if ([sender isKindOfClass:[UIBarButtonItem class]]) {
                 if ([[NSUserDefaults standardUserDefaults] boolForKey:UDisWizard]) {
@@ -277,8 +271,11 @@
 - (BOOL)isRepeat {
     //Check if already repeat, so we don't repeat repeat.
     XLFormDescriptor *form = self.XForm.forms[self.index];
-    if (form.formSections.count > 1) {
-        return NO;
+    for (XLFormSectionDescriptor *section in form.formSections) {
+        XLFormRowDescriptor *row = section.formRows[0];
+        if ([row.tag isEqual:@"add"] || [row.tag isEqual:@"delete"]) {
+            return NO;
+        }
     }
     
     NSDictionary *elements = self.XForm.groups[self.index];
