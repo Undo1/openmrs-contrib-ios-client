@@ -413,8 +413,7 @@
         } else {
             return nil;
         }
-    } else if ([formElement.type isEqualToString:kXFormsSelect] ||
-               [formElement.type isEqualToString:kXFormsMutlipleSelect]) {
+    } else if ([formElement.type isEqualToString:kXFormsSelect]) {
         for (XLFormOptionsObject *opObj in formElement.items) {
             NSString *valueOb = opObj.valueData;
             if ([valueOb isEqualToString:value]) {
@@ -422,6 +421,22 @@
             }
         }
         return nil;
+    } else if ([formElement.type isEqualToString:kXFormsMutlipleSelect]) {
+        if ([value isEqualToString:@""]) {
+            return nil;
+        }
+        NSArray *values = [value componentsSeparatedByString:@" "];
+        NSMutableArray *multiSelectValues = [[NSMutableArray alloc] init];
+        for (XLFormOptionsObject *opObj in formElement.items) {
+            for (NSString *singleValue in values) {
+                NSString *valueOb = opObj.valueData;
+                if ([valueOb isEqualToString:singleValue]) {
+                    [multiSelectValues addObject:opObj];
+                }
+            }
+        }
+        return multiSelectValues;
+
     } else if ([formElement.type isEqualToString:kXFormsDate] ||
                [formElement.type isEqualToString:kXFormsTime] ||
                [formElement.type isEqualToString:kXFormsDateTime]) {
@@ -474,12 +489,16 @@
     } else if ([type isEqualToString:kXFormsSelect] ||
                [type isEqualToString:kXFormsImage] ||
                [type isEqualToString:kXFormsAudio] ||
-               [type isEqualToString:kXFormsGPS] ||
-               [type isEqualToString:kXFormsMutlipleSelect]) {
+               [type isEqualToString:kXFormsGPS]) {
         XLFormOptionsObject *obj = value;
         return obj.valueData;
-    }
-    else {
+    } else if ([type isEqualToString:kXFormsMutlipleSelect]) {
+        NSMutableArray *stringsValue = [[NSMutableArray alloc] init];
+        for (XLFormOptionsObject *obj in value) {
+            [stringsValue addObject:obj.valueData];
+        }
+        return [stringsValue componentsJoinedByString:@" "];
+    } else {
         NSLog(@"Unsupported type");
         [NSException raise:@"Invalid foo value" format:@"foo of %@ is invalid", type];
         return nil;
