@@ -61,6 +61,7 @@ NSString * const XLFormRowDescriptorTypeImageInLine = @"ImageInLine";
     [self.gallery addTarget:self action:@selector(initCameraRoll) forControlEvents:UIControlEventTouchUpInside];
     self.gallery.translatesAutoresizingMaskIntoConstraints = NO;
     [self.gallery setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.gallery setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
     [self.contentView addSubview:self.gallery];
     
     self.camera = [[UIButton alloc] init];
@@ -68,6 +69,7 @@ NSString * const XLFormRowDescriptorTypeImageInLine = @"ImageInLine";
     [self.camera addTarget:self action:@selector(initCamera) forControlEvents:UIControlEventTouchUpInside];
     self.camera.translatesAutoresizingMaskIntoConstraints = NO;
     [self.camera setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+    [self.camera setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
     [self.contentView addSubview:self.camera];
     
     self.imageSelected = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"no-image"]];
@@ -78,6 +80,7 @@ NSString * const XLFormRowDescriptorTypeImageInLine = @"ImageInLine";
     self.remove = [[UIButton alloc] init];
     [self.remove setTitle:NSLocalizedString(@"Remove", @"Label remove") forState:UIControlStateNormal];
     [self.remove setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [self.remove setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
     [self.remove addTarget:self action:@selector(removeImage) forControlEvents:UIControlEventTouchUpInside];
     self.remove.translatesAutoresizingMaskIntoConstraints = NO;
     [self.contentView addSubview:self.remove];

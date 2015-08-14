@@ -88,7 +88,7 @@ NSString * const XLFormRowDescriptorTypeAudioInLine = @"AudioInLine";
     [self.remove addTarget:self action:@selector(removePressed) forControlEvents:UIControlEventTouchUpInside];
     [self.remove setTitle:NSLocalizedString(@"Remove", @"Label remove") forState:UIControlStateNormal];
     [self.remove setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-    [self.record setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
+    [self.remove setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
     self.remove.translatesAutoresizingMaskIntoConstraints = NO;
     [self.contentView addSubview:self.remove];
 }
