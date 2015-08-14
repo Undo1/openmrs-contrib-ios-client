@@ -24,6 +24,7 @@
 		2437140E1B77422500CB9687 /* swipe-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 2437140D1B77422500CB9687 /* swipe-icon.png */; };
 		243786431B46B81A00AB5089 /* AddPatientForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 243786421B46B81A00AB5089 /* AddPatientForm.m */; };
 		243786491B47730900AB5089 /* SyncingEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = 243786481B47730900AB5089 /* SyncingEngine.m */; };
+		245E05421B7B89F00065FD45 /* Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = 245E05411B7B89F00065FD45 /* Base64.m */; };
 		245EDDC91B21A0F400B8C0EB /* user_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDC71B21A0F400B8C0EB /* user_icon.png */; };
 		245EDDCA1B21A0F400B8C0EB /* vitals_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDC81B21A0F400B8C0EB /* vitals_icon.png */; };
 		245EDDCD1B21A10B00B8C0EB /* user_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 245EDDCB1B21A10B00B8C0EB /* user_icon@2x.png */; };
@@ -152,6 +153,8 @@
 		243786471B47730900AB5089 /* SyncingEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SyncingEngine.h; sourceTree = "<group>"; };
 		243786481B47730900AB5089 /* SyncingEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SyncingEngine.m; sourceTree = "<group>"; };
 		243FFBEF1B3AE781007E717D /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Localizable.strings; sourceTree = "<group>"; };
+		245E05401B7B89F00065FD45 /* Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Base64.h; sourceTree = "<group>"; };
+		245E05411B7B89F00065FD45 /* Base64.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Base64.m; sourceTree = "<group>"; };
 		245EDDC71B21A0F400B8C0EB /* user_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = user_icon.png; sourceTree = "<group>"; };
 		245EDDC81B21A0F400B8C0EB /* vitals_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = vitals_icon.png; sourceTree = "<group>"; };
 		245EDDCB1B21A10B00B8C0EB /* user_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "user_icon@2x.png"; sourceTree = "<group>"; };
@@ -591,6 +594,8 @@
 		248FBE3C1B03BB4E00569C2C /* Support */ = {
 			isa = PBXGroup;
 			children = (
+				245E05401B7B89F00065FD45 /* Base64.h */,
+				245E05411B7B89F00065FD45 /* Base64.m */,
 				247B74791B70B85300BD3D3A /* XFormsStore */,
 				240F4EE81B5D3FFA00E943FC /* XForms Parser */,
 				D396A51A1A2E09DE00DE6448 /* KeychainItemWrapper.h */,
@@ -1103,6 +1108,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				245E05421B7B89F00065FD45 /* Base64.m in Sources */,
 				D396A5471A2E396300DE6448 /* MRSVisit.m in Sources */,
 				D3A4728B1A3770B4002A0BBD /* AddPatientTableViewController.m in Sources */,
 				D3F797BC1A71F72B008E6064 /* MRSVisitType.swift in Sources */,
