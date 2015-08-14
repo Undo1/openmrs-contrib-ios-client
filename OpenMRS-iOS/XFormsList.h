@@ -13,6 +13,7 @@
 
 @property (nonatomic, strong) MRSPatient *patient;
 
-- (instancetype)initWithForms:(NSArray *)forms;
+- (instancetype)initBlankForms;
+- (instancetype)initFilledForms;
 
 @end

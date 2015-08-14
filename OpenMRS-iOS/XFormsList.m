@@ -15,8 +15,8 @@
 
 @interface XFormsList ()
 
-@property (nonatomic, strong) UISegmentedControl *filledOrBlank;
 @property (nonatomic, strong) NSMutableArray *forms;
+@property (nonatomic) BOOL FilledForms;
 
 @end
 
@@ -31,10 +31,18 @@
     return self;
 }
 
-- (instancetype)initWithForms:(NSArray *)forms {
+- (instancetype)initBlankForms {
     self = [self init];
     if (self) {
-        self.forms = [NSMutableArray arrayWithArray:forms];
+        self.FilledForms = NO;
+    }
+    return self;
+}
+
+- (instancetype)initFilledForms {
+    self = [self init];
+    if (self) {
+        self.FilledForms = YES;
     }
     return self;
 }
@@ -43,42 +51,66 @@
     [super viewDidLoad];
     
     self.navigationItem.title = @"XForms"; //That doesn't need localization.
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save offline", @"Label save offline")
-                                                                              style:UIBarButtonItemStylePlain
-                                                                             target:self
-                                                                             action:@selector(saveOffline)];
+    if (self.FilledForms) {
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(close)];
+    }
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
     
-    self.filledOrBlank = [[UISegmentedControl alloc] initWithItems:@[NSLocalizedString(@"Blank forms", @"Label blank forms"), NSLocalizedString(@"Filled forms", @"Label filled forms")]];
-    self.filledOrBlank.selectedSegmentIndex = 0;
-    [self.filledOrBlank addTarget:self action:@selector(switchValueChanged:) forControlEvents:UIControlEventValueChanged];
-    
-    UIView *headerView = [[UIView alloc] init];
-    
-    CGFloat width = [[UIScreen mainScreen] bounds].size.width;
-    CGFloat segmentHeight = 33;
-    CGFloat segmentWidth = 250;
-    CGFloat height = 44;
-    [headerView setFrame:CGRectMake(0, 0, width, 44)];
-    [self.filledOrBlank setFrame:CGRectMake((width-segmentWidth)/2.0, ((height-segmentHeight)/2), segmentWidth, segmentHeight)];
-    self.filledOrBlank.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
-    
-    [headerView addSubview:self.filledOrBlank];
-    self.tableView.tableHeaderView = headerView;
-    
+    if (self.FilledForms) {
+        
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Send all", @"Label send all")
+                                                                                  style:UIBarButtonItemStylePlain
+                                                                                 target:self
+                                                                                 action:@selector(sendAll)];
+
+        self.forms = [NSMutableArray arrayWithArray:[[XFormsStore sharedStore] loadFilledFiles]];
+        [self.tableView reloadData];
+    } else {
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save offline", @"Label save offline")
+                                                                                  style:UIBarButtonItemStylePlain
+                                                                                 target:self
+                                                                                 action:@selector(saveOffline)];
+
+        [self updateForms];
+    }
+}
+
+- (void)updateForms {
     [[XFormsStore sharedStore] loadForms:^(NSArray *forms, NSError *error) {
         if (!error) {
             self.forms = [NSMutableArray arrayWithArray:forms];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self.tableView reloadData];
-            });
+        } else {
+            if (!self.forms) {
+                UIAlertView *alertLoadingForms = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Warning label error")
+                                                                        message:NSLocalizedString(@"Cannot load xforms, If you are connected please check xforms support on server", @"Warning message for error loading xforms list")
+                                                                       delegate:self
+                                                              cancelButtonTitle:NSLocalizedString(@"Cancel", @"Canel button label")
+                                                              otherButtonTitles: nil];
+                [alertLoadingForms show];
+            }
         }
     }];
+}
+
+- (void)setForms:(NSMutableArray *)forms {
+    NSArray *temp = [forms sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
+        XForms *form1 = obj1;
+        XForms *form2 = obj2;
+        return [form1.name compare:form2.name];
+    }];
+    _forms = [NSMutableArray arrayWithArray:temp];
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+    });
 }
 
 - (void)setPatient:(MRSPatient *)patient {
     _patient = patient;
     [[XFormsStore sharedStore] setPatient:patient];
+}
+
+- (void)close {
+    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 #pragma mark - Table view data source
@@ -109,16 +141,23 @@
     NSString *formName = selectedForm.name;
     NSLog(@"Selected form doc: %@", selectedForm.doc);
     if (selectedForm.doc) {
+        NSLog(@"forms: %@", selectedForm.doc.rootElement);
         UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:[[XFormViewController alloc] initWithForm:selectedForm WithIndex:0]];
         [self presentViewController:nc animated:YES completion:nil];
     } else {
-        if (self.filledOrBlank.selectedSegmentIndex == 0) {
+        if (!self.FilledForms) {
             [[XFormsStore sharedStore] loadForm:formID andFormName:formName completion:^(XForms *xform, NSError *error) {
                 if (!error) {
                     UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:[[XFormViewController alloc] initWithForm:xform WithIndex:0]];
                     [self presentViewController:nc animated:YES completion:nil];
                 } else {
-                    NSLog(@"can't get error");
+                    UIAlertView *corruptedForm = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Warning label error")
+                                                                            message:NSLocalizedString(@"Can not open xform, If you are connected to the internet. this form maybe deleted or corrupted", @"Warning can not load xforms")
+                                                                           delegate:self
+                                                                  cancelButtonTitle:NSLocalizedString(@"Cancel", @"Canel button label")
+                                                                  otherButtonTitles: nil];
+                    [corruptedForm show];
+                    [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
                 }
             }];
         }
@@ -130,7 +169,7 @@
 }
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (editingStyle == UITableViewCellEditingStyleDelete && self.filledOrBlank.selectedSegmentIndex == 1) {
+    if (editingStyle == UITableViewCellEditingStyleDelete && self.FilledForms) {
         XForms *form = self.forms[indexPath.row];
         [[XFormsStore sharedStore] deleteFilledForm:form];
         [self.forms removeObjectAtIndex:indexPath.row];
@@ -180,28 +219,5 @@
             }
         }
     });
-}
-
-- (void)switchValueChanged:(UISegmentedControl *)segmentControl {
-    if (segmentControl.selectedSegmentIndex == 0) {
-        self.navigationItem.rightBarButtonItem.title = NSLocalizedString(@"Save offline", @"Label save offline");
-        self.navigationItem.rightBarButtonItem.action = @selector(saveOffline);
-
-        [[XFormsStore sharedStore] loadForms:^(NSArray *forms, NSError *error) {
-            if (forms) {
-                self.forms = [NSMutableArray arrayWithArray:forms];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.navigationItem.rightBarButtonItem.enabled = YES;
-                    [self.tableView reloadData];
-                });
-            }
-        }];
-    } else {
-        self.navigationItem.rightBarButtonItem.title = NSLocalizedString(@"Send all", @"Label send all");
-        self.navigationItem.rightBarButtonItem.action = @selector(sendAll);
-
-        self.forms = [NSMutableArray arrayWithArray:[[XFormsStore sharedStore] loadFilledFiles]];
-        [self.tableView reloadData];
-    }
 }
 @end

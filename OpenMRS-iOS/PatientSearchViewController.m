@@ -167,7 +167,7 @@
     UINavigationController *navController3 = [[UINavigationController alloc] initWithRootViewController:encounterList];
     navController3.restorationIdentifier = @"navContrller3";
     
-    XFormsList *formsList = [[XFormsList alloc] init];
+    XFormsList *formsList = [[XFormsList alloc] initBlankForms];
     UINavigationController *formListNavigationController = [[UINavigationController alloc] initWithRootViewController:formsList];
     formsList.patient = vc.patient;
 

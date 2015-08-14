@@ -34,30 +34,27 @@
 }
 
 - (void)loadForms:(void (^)(NSArray *forms, NSError *error))completion {
+    // load from disk
+    NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.blank_path error:nil];
+    NSMutableArray *blankForms = [[NSMutableArray alloc] init];
+    NSURL *blankFormsURL = [NSURL URLWithString:self.blank_path];
     
+    NSLog(@"Blank forms found %lu at documents directory %@", (unsigned long)directoryContent.count, self.blank_path);
+    for (int i=0;i<directoryContent.count;i++) {
+        NSString *fileName = directoryContent[i];
+        XForms *xforms = [[XForms alloc] initFormFromFile:fileName andURL:blankFormsURL Patient:self.patient];
+        [blankForms addObject:xforms];
+        NSLog(@"blank form: %@", directoryContent[i]);
+    }
+    // Return form disk first
+    completion(blankForms, nil);
     // load from internet
     [OpenMRSAPIManager getXFormsList:^(NSArray *forms, NSError *error) {
         if (!error) {
+            // Then form internet second
             completion(forms, nil);
         } else {
-            // If failed load from file system
-            error = nil;
-            NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:self.blank_path error:&error];
-            if (error) {
-                completion(nil, error);
-                return;
-            }
-            NSMutableArray *blankForms = [[NSMutableArray alloc] init];
-            NSURL *blankFormsURL = [NSURL URLWithString:self.blank_path];
-
-            NSLog(@"Blank forms found %lu at documents directory %@", (unsigned long)directoryContent.count, self.blank_path);
-            for (int i=0;i<directoryContent.count;i++) {
-                NSString *fileName = directoryContent[i];
-                XForms *xforms = [[XForms alloc] initFormFromFile:fileName andURL:blankFormsURL Patient:self.patient];
-                [blankForms addObject:xforms];
-                NSLog(@"blank form: %@", directoryContent[i]);
-            }
-            completion(blankForms, nil);
+            completion(nil, error);
         }
     }];
 }

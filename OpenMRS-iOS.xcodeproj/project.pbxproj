@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		240BE3A11B7E2191008E60DE /* form-thumbnail@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 240BE39E1B7E2191008E60DE /* form-thumbnail@3x.png */; };
+		240BE3A21B7E2191008E60DE /* form-thumbnail@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 240BE39F1B7E2191008E60DE /* form-thumbnail@2x.png */; };
+		240BE3A31B7E2191008E60DE /* form-thumbnail.png in Resources */ = {isa = PBXBuildFile; fileRef = 240BE3A01B7E2191008E60DE /* form-thumbnail.png */; };
 		240F4EE31B5BB22900E943FC /* XFormsList.m in Sources */ = {isa = PBXBuildFile; fileRef = 240F4EE21B5BB22900E943FC /* XFormsList.m */; };
 		240F4EE71B5BB31600E943FC /* XForms.m in Sources */ = {isa = PBXBuildFile; fileRef = 240F4EE61B5BB31600E943FC /* XForms.m */; };
 		240F4EEB1B5D401000E943FC /* XFormsParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 240F4EEA1B5D401000E943FC /* XFormsParser.m */; };
@@ -116,6 +119,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		240BE39E1B7E2191008E60DE /* form-thumbnail@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-thumbnail@3x.png"; sourceTree = "<group>"; };
+		240BE39F1B7E2191008E60DE /* form-thumbnail@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-thumbnail@2x.png"; sourceTree = "<group>"; };
+		240BE3A01B7E2191008E60DE /* form-thumbnail.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-thumbnail.png"; sourceTree = "<group>"; };
 		240F4EE11B5BB22900E943FC /* XFormsList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XFormsList.h; sourceTree = "<group>"; };
 		240F4EE21B5BB22900E943FC /* XFormsList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = XFormsList.m; sourceTree = "<group>"; };
 		240F4EE51B5BB31600E943FC /* XForms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = XForms.h; sourceTree = "<group>"; };
@@ -867,6 +873,9 @@
 		D397396E1A2E082200D0AB69 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				240BE39E1B7E2191008E60DE /* form-thumbnail@3x.png */,
+				240BE39F1B7E2191008E60DE /* form-thumbnail@2x.png */,
+				240BE3A01B7E2191008E60DE /* form-thumbnail.png */,
 				248A46141B7A64A400E9F098 /* form-icon.png */,
 				248A46151B7A64A400E9F098 /* form-icon@2x.png */,
 				248A46161B7A64A400E9F098 /* form-icon@3x.png */,
@@ -1031,6 +1040,7 @@
 				D396EAF51A36460500191F50 /* search_icon.png in Resources */,
 				241240A81B62854B009E172B /* MapViewController.xib in Resources */,
 				D3FAEFFE1A51C1CD002B1BF7 /* Images.xcassets in Resources */,
+				240BE3A11B7E2191008E60DE /* form-thumbnail@3x.png in Resources */,
 				246BAB2B1B77969B00979E50 /* no-image.png in Resources */,
 				245EDDCE1B21A10B00B8C0EB /* vitals_icon@2x.png in Resources */,
 				D3A57DBD1B2E5BF800F25F30 /* active_visits_tab_bar_icon@2x.png in Resources */,
@@ -1038,6 +1048,8 @@
 				D3079E761A3D4DED00E308C7 /* add_patient_icon.png in Resources */,
 				245EDDD11B21A11800B8C0EB /* user_icon@3x.png in Resources */,
 				24D5CECD1B4B4DB500F1D660 /* settings_icon@2x.png in Resources */,
+				240BE3A31B7E2191008E60DE /* form-thumbnail.png in Resources */,
+				240BE3A21B7E2191008E60DE /* form-thumbnail@2x.png in Resources */,
 				D3079E751A3D4DED00E308C7 /* add_patient_icon@2x.png in Resources */,
 				245EDDC91B21A0F400B8C0EB /* user_icon.png in Resources */,
 				248A46171B7A64A400E9F098 /* form-icon.png in Resources */,
