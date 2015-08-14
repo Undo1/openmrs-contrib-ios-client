@@ -63,7 +63,7 @@
                                                                                  target:self
                                                                                  action:@selector(sendAll)];
 
-        self.forms = [NSMutableArray arrayWithArray:[[XFormsStore sharedStore] loadFilledFiles]];
+        [self updateForms];
         [self.tableView reloadData];
     } else {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save offline", @"Label save offline")
@@ -75,21 +75,30 @@
     }
 }
 
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self updateForms];
+}
+
 - (void)updateForms {
-    [[XFormsStore sharedStore] loadForms:^(NSArray *forms, NSError *error) {
-        if (!error) {
-            self.forms = [NSMutableArray arrayWithArray:forms];
-        } else {
-            if (!self.forms) {
-                UIAlertView *alertLoadingForms = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Warning label error")
-                                                                        message:NSLocalizedString(@"Cannot load xforms, If you are connected please check xforms support on server", @"Warning message for error loading xforms list")
-                                                                       delegate:self
-                                                              cancelButtonTitle:NSLocalizedString(@"Cancel", @"Canel button label")
-                                                              otherButtonTitles: nil];
-                [alertLoadingForms show];
+    if (self.FilledForms) {
+        self.forms = [NSMutableArray arrayWithArray:[[XFormsStore sharedStore] loadFilledFiles]];
+    } else {
+        [[XFormsStore sharedStore] loadForms:^(NSArray *forms, NSError *error) {
+            if (!error) {
+                self.forms = [NSMutableArray arrayWithArray:forms];
+            } else {
+                if (!self.forms) {
+                    UIAlertView *alertLoadingForms = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Warning label error")
+                                                                                message:NSLocalizedString(@"Cannot load xforms, If you are connected please check xforms support on server", @"Warning message for error loading xforms list")
+                                                                               delegate:self
+                                                                      cancelButtonTitle:NSLocalizedString(@"Cancel", @"Canel button label")
+                                                                      otherButtonTitles: nil];
+                    [alertLoadingForms show];
+                }
             }
-        }
-    }];
+        }];
+    }
 }
 
 - (void)setForms:(NSMutableArray *)forms {
@@ -160,6 +169,8 @@
                     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
                 }
             }];
+        } else {
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
         }
     }
 }

@@ -44,12 +44,18 @@
                                         @"xmlns:xs": @"http://www.w3.org/2001/XMLSchema",
                                         @"xmlns:xsi": @"http://www.w3.org/2001/XMLSchema-instance"
                                         };
-    for (NSString *attributesKey in attributesStrings) {
-        GDataXMLNode *node = [GDataXMLNode attributeWithName:attributesKey stringValue:attributesStrings[attributesKey]];
-        [form addAttribute:node];
+    if (!self.loadedLocaly) {
+        for (NSString *attributesKey in attributesStrings) {
+            if (![form attributeForName:attributesKey]) {
+                GDataXMLNode *node = [GDataXMLNode attributeWithName:attributesKey stringValue:attributesStrings[attributesKey]];
+                [form addAttribute:node];
+            }
+        }
     }
-    
-    NSString *ModelString = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>%@", form.XMLString];
+    NSString *ModelString = form.XMLString;
+    if (![form.XMLString hasPrefix:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>%@"]) {
+        ModelString = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>%@", form.XMLString];
+    }
     NSLog(@"sent string: %@", ModelString);
     return [ModelString dataUsingEncoding:NSUTF8StringEncoding];
 }

@@ -376,6 +376,11 @@
 
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1) {
+        if (self.XForm.loadedLocaly) {
+            [[XFormsStore sharedStore] saveFilledForm:self.XForm];
+            [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+            return;
+        }
         NSString *filename = [NSString stringWithFormat:@"%@_%@", self.XForm.name, [MRSDateUtilities openMRSFormatStringWithDate:[NSDate date]]];
         self.XForm.name = filename;
         NSLog(@"name: %@", self.XForm.name);
