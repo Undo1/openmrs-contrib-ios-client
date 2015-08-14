@@ -152,6 +152,10 @@
     if (selectedForm.doc) {
         NSLog(@"forms: %@", selectedForm.doc.rootElement);
         UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:[[XFormViewController alloc] initWithForm:selectedForm WithIndex:0]];
+        // Make the form read only if read from Disk.
+        for (XLFormDescriptor *form in selectedForm.forms) {
+            form.disabled = YES;
+        }
         [self presentViewController:nc animated:YES completion:nil];
     } else {
         if (!self.FilledForms) {

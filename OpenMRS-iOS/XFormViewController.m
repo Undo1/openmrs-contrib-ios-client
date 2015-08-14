@@ -218,7 +218,10 @@
 }
 
 - (void)submitForm {
-    [XFormsParser InjecValues:self.XForm];
+    if (!self.form.disabled) {
+        // Then it's read from disk so don't reinject it.
+        [XFormsParser InjecValues:self.XForm];
+    }
     
     [OpenMRSAPIManager uploadXForms:self.XForm completion:^(NSError *error) {
         if (!error) {
