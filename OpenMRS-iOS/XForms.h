@@ -23,5 +23,6 @@
 
 - (instancetype)initFormFromFile:(NSString *)fileName andURL:(NSURL *)url Patient:(MRSPatient *)patient;
 - (NSData *)getModelFromDocument;
+- (XLFormDescriptor *)getReviewForm;
 
 @end

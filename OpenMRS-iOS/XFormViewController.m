@@ -17,7 +17,7 @@
 #import "XFormImageCell.h"
 #import "MRSDateUtilities.h"
 
-@interface XFormViewController ()
+@interface XFormViewController () <UIActionSheetDelegate>
 
 @property (nonatomic, strong) XForms *XForm;
 @property (nonatomic) int index;
@@ -49,8 +49,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     NSString *leftLabel = self.index > 0 ? NSLocalizedString(@"Pervious", @"Label pervious") : NSLocalizedString(@"Cancel", @"Cancel button label");
-    NSString *rightLabel =  self.index < (self.XForm.forms.count - 1) ? NSLocalizedString(@"Next", @"Label next") : NSLocalizedString(@"Submit", @"Label submit");
+    NSString *rightLabel =  self.index < (self.XForm.forms.count - 1) ? NSLocalizedString(@"Next", @"Label next") : NSLocalizedString(@"Done", @"Label done");
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:leftLabel style:UIBarButtonItemStylePlain target:self action:@selector(pervious:)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:rightLabel style:UIBarButtonItemStylePlain target:self action:@selector(next:)];
@@ -74,6 +75,7 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    [self.tableView reloadData];
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
 }
 
@@ -176,6 +178,7 @@
 }
 
 - (void)next:(id)sender {
+
     if (self.index < (self.XForm.forms.count - 1)) {
         if ([self isValid]) {
             XFormViewController *nextForm = [[XFormViewController alloc] initWithForm:self.XForm WithIndex:self.index+1];
@@ -184,28 +187,64 @@
             [self showValidationWarning];
         }
     } else {
+        /*
+        XLFormViewController *xlform = [[XLFormViewController alloc] initWithForm:[self.XForm getReviewForm]];
+        xlform.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(dismissNew:)];
+        xlform.navigationItem.title = self.XForm.name;
+        [self.navigationController pushViewController:xlform animated:YES];
+        return;*/
         if ([self isValid]) {
             if ([sender isKindOfClass:[UIBarButtonItem class]]) {
-                [XFormsParser InjecValues:self.XForm];
-                
-                [OpenMRSAPIManager uploadXForms:self.XForm completion:^(NSError *error) {
-                    if (!error) {
-                        [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Sent", @"Label sent")];
-                        [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
-                    } else {
-                        UIAlertView *errorUploading = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error uploading", @"Title error uploading")
-                                                                                 message:NSLocalizedString(@"Oops, Seems there's no internet connectivity available now, Do you want to save the form for offline usage or discard now.", @"Message for error submitting form")
-                                                                                delegate:self
-                                                                       cancelButtonTitle:NSLocalizedString(@"Discard", @"Discard button label")
-                                                                       otherButtonTitles:NSLocalizedString(@"Save Offline", @"Label save offline"), nil];
-                        [errorUploading show];
-                    }
-                }];
+                if ([[NSUserDefaults standardUserDefaults] boolForKey:UDisWizard]) {
+                    UIActionSheet *reviewOrSubmit = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Choose Action", @"Title choose action")
+                                                                               delegate:self
+                                                                      cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel button label")
+                                                                 destructiveButtonTitle:nil
+                                                                      otherButtonTitles:NSLocalizedString(@"Review form", @"Button title review form"), NSLocalizedString(@"Submit form", @"Button label submit form"), nil];
+                    [reviewOrSubmit showInView:self.view];
+                } else {
+                    [self submitForm];
+                }
             }
         } else {
             [self showValidationWarning];
         }
     }
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 0) {
+        XLFormViewController *xlform = [[XLFormViewController alloc] initWithForm:[self.XForm getReviewForm]];
+        xlform.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(dismissNew:)];
+        xlform.navigationItem.title = self.XForm.name;
+        [self.navigationController pushViewController:xlform animated:YES];
+    } else {
+        [self submitForm];
+    }
+}
+
+- (void)submitForm {
+    [XFormsParser InjecValues:self.XForm];
+    
+    [OpenMRSAPIManager uploadXForms:self.XForm completion:^(NSError *error) {
+        if (!error) {
+            [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Sent", @"Label sent")];
+            [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        } else {
+            UIAlertView *errorUploading = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error uploading", @"Title error uploading")
+                                                                     message:NSLocalizedString(@"Oops, Seems there's no internet connectivity available now, Do you want to save the form for offline usage or discard now.", @"Message for error submitting form")
+                                                                    delegate:self
+                                                           cancelButtonTitle:NSLocalizedString(@"Discard", @"Discard button label")
+                                                           otherButtonTitles:NSLocalizedString(@"Save Offline", @"Label save offline"), nil];
+            [errorUploading show];
+        }
+    }];
+}
+
+- (void)dismissNew:(UIBarButtonItem *)sender {
+    [self.navigationController popViewControllerAnimated:YES];
+    [self.navigationController popViewControllerAnimated:NO];
+    [self.navigationController pushViewController:[[XFormViewController alloc] initWithForm:self.XForm WithIndex:self.index] animated:NO];
 }
 
 - (BOOL)isValid {

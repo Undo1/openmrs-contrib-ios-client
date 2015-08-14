@@ -50,7 +50,25 @@
     }
     
     NSString *ModelString = [NSString stringWithFormat:@"<?xml version=\"1.0\" encoding=\"UTF-8\"?>%@", form.XMLString];
+    NSLog(@"sent string: %@", ModelString);
     return [ModelString dataUsingEncoding:NSUTF8StringEncoding];
+}
+
+- (XLFormDescriptor *)getReviewForm {
+    XLFormDescriptor *reviewForm = [XLFormDescriptor formDescriptorWithTitle:self.name];
+    XLFormSectionDescriptor *reviewSection = [XLFormSectionDescriptor formSection];
+    [reviewForm addFormSection:reviewSection];
+
+    for (XLFormDescriptor *form in self.forms) {
+        for (XLFormSectionDescriptor *section in form.formSections) {
+            XLFormRowDescriptor *row = section.formRows[0];
+            if (![row.tag isEqualToString:@"add"]) {
+                [reviewForm addFormSection:section];
+            }
+        }
+    }
+    reviewForm.disabled = YES;
+    return reviewForm;
 }
 
 @end
