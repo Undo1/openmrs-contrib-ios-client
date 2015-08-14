@@ -51,6 +51,9 @@
 + (void)fillFormDataTo:(GDataXMLElement *)patientNode fromPatient:(MRSPatient *)patient {
     NSDictionary *attributeDict = [Constants PATIENT_ATTRIBUTES];
     NSDictionary *attributeTypeDict = [Constants PATIENT_ATTRIBUTES_TYPES];
+    GDataXMLNode *uuidNode = [GDataXMLNode attributeWithName:@"uuid" stringValue:patient.UUID];
+    [patientNode addAttribute:uuidNode];
+
     for (GDataXMLElement *patientElement in [patientNode children]) {
         NSLog(@"element :%@", patientElement.name);
         /* If key not recognized continue */
