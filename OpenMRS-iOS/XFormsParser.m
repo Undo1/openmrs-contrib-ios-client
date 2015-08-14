@@ -425,6 +425,9 @@
     } else if ([formElement.type isEqualToString:kXFormsDate] ||
                [formElement.type isEqualToString:kXFormsTime] ||
                [formElement.type isEqualToString:kXFormsDateTime]) {
+        if ([value isEqualToString:@"\'today()\'"]) {
+            return [NSDate date];
+        }
          return [MRSDateUtilities DatefromXFormsString:value
                                                       type:formElement.type];
     } else if ([formElement.type isEqualToString:kXFormsBoolean]) {
