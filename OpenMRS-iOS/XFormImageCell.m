@@ -12,6 +12,7 @@ NSString * const XLFormRowDescriptorTypeImageInLine = @"ImageInLine";
 
 @interface XFormImageCell ()
 
+@property (nonatomic, strong) UILabel *title;
 @property (nonatomic, strong) UIButton *gallery;
 @property (nonatomic, strong) UIButton *camera;
 @property (nonatomic, strong) UIButton *remove;
@@ -27,7 +28,8 @@ NSString * const XLFormRowDescriptorTypeImageInLine = @"ImageInLine";
 
 - (void)update {
     [super update];
-    
+    self.title.text = self.rowDescriptor.title;
+
     if (self.rowDescriptor.sectionDescriptor.formDescriptor.isDisabled) {
         self.gallery.enabled = NO;
         self.camera.enabled = NO;
@@ -47,13 +49,18 @@ NSString * const XLFormRowDescriptorTypeImageInLine = @"ImageInLine";
 }
 
 - (void)configureView {
+    self.title = [[UILabel alloc] init];
+    self.title.text = self.rowDescriptor.title;
+    self.title.font = [UIFont preferredFontForTextStyle:UIFontTextStyleSubheadline];
+    [self.title sizeToFit];
+    self.title.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.contentView addSubview:self.title];
+
     self.gallery = [[UIButton alloc] init];
     [self.gallery setTitle:NSLocalizedString(@"Gallery", @"Label gallery") forState:UIControlStateNormal];
     [self.gallery addTarget:self action:@selector(initCameraRoll) forControlEvents:UIControlEventTouchUpInside];
     self.gallery.translatesAutoresizingMaskIntoConstraints = NO;
     [self.gallery setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    self.gallery.layer.borderWidth = 0.25;
-    self.gallery.layer.borderColor = [UIColor grayColor].CGColor;
     [self.contentView addSubview:self.gallery];
     
     self.camera = [[UIButton alloc] init];
@@ -61,14 +68,11 @@ NSString * const XLFormRowDescriptorTypeImageInLine = @"ImageInLine";
     [self.camera addTarget:self action:@selector(initCamera) forControlEvents:UIControlEventTouchUpInside];
     self.camera.translatesAutoresizingMaskIntoConstraints = NO;
     [self.camera setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    self.camera.layer.borderWidth = 0.25;
-    self.camera.layer.borderColor = [UIColor grayColor].CGColor;
     [self.contentView addSubview:self.camera];
     
     self.imageSelected = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"no-image"]];
     self.imageSelected.contentMode = UIViewContentModeScaleAspectFit;
     self.imageSelected.translatesAutoresizingMaskIntoConstraints = NO;
-    self.imageSelected.backgroundColor = [UIColor colorWithRed:235.0/256 green:235.0/256 blue:241.0/256 alpha:1];
     [self.contentView addSubview:self.imageSelected];
     
     self.remove = [[UIButton alloc] init];
@@ -81,6 +85,7 @@ NSString * const XLFormRowDescriptorTypeImageInLine = @"ImageInLine";
 
 - (void)configureConstraints {
     NSDictionary *viewsDict = @{
+                                @"title": self.title,
                                 @"gallery": self.gallery,
                                 @"camera": self.camera,
                                 @"image": self.imageSelected,
@@ -89,7 +94,8 @@ NSString * const XLFormRowDescriptorTypeImageInLine = @"ImageInLine";
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[gallery]-0-[camera]-0-|" options:0 metrics:nil views:viewsDict]];
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[image]-0-|" options:0 metrics:nil views:viewsDict]];
     [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-0-[remove]-0-|" options:0 metrics:nil views:viewsDict]];
-    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-0-[gallery]-0-[image(150)]-5-[remove]-0-|" options:0 metrics:nil views:viewsDict]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-10-[title]-0-|" options:0 metrics:nil views:viewsDict]];
+    [self.contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-5-[title]-5-[gallery]-5-[image(150)]-5-[remove]-0-|" options:0 metrics:nil views:viewsDict]];
     [self.contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.gallery attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.camera attribute:NSLayoutAttributeWidth multiplier:1 constant:0]];
 }
 
