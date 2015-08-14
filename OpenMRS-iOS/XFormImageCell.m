@@ -7,6 +7,7 @@
 //
 
 #import "XFormImageCell.h"
+#import "Base64.h"
 NSString * const XLFormRowDescriptorTypeImageInLine = @"ImageInLine";
 
 @interface XFormImageCell ()
@@ -22,6 +23,20 @@ NSString * const XLFormRowDescriptorTypeImageInLine = @"ImageInLine";
 
 + (void)load {
     [XLFormViewController.cellClassesForRowDescriptorTypes setObject:[XFormImageCell class] forKey:XLFormRowDescriptorTypeImageInLine];
+}
+
+- (void)update {
+    [super update];
+    
+    if (self.rowDescriptor.sectionDescriptor.formDescriptor.isDisabled) {
+        self.gallery.enabled = NO;
+        self.camera.enabled = NO;
+        self.remove.enabled = NO;
+    } else {
+        self.gallery.enabled = YES;
+        self.camera.enabled = YES;
+        self.remove.enabled = YES;
+    }
 }
 
 - (void)configure {
@@ -106,25 +121,31 @@ NSString * const XLFormRowDescriptorTypeImageInLine = @"ImageInLine";
     self.imageSelected.image = [UIImage imageNamed:@"no-image"];
 }
 
-- (void)update {
-    [super update];
-}
-
 - (void)setImage:(UIImage *)image {
+    _image = image;
     if (image) {
         self.imageSelected.image = image;
     } else {
         self.imageSelected.image = [UIImage imageNamed:@"no-image"];
+        self.rowDescriptor.value = nil;
+        return;
     }
-    NSData *imageData = UIImageJPEGRepresentation(image, 1);
-    self.rowDescriptor.value = [XLFormOptionsObject formOptionsObjectWithValue:[imageData base64EncodedStringWithOptions:NSDataBase64Encoding64CharacterLineLength] displayText:@""];
+    NSData *imageData = UIImagePNGRepresentation(image);
+    self.rowDescriptor.value = [XLFormOptionsObject formOptionsObjectWithValue:[NSString stringWithFormat:@"%@", [imageData base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed]] displayText:@""];
 }
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIImage *image = info[UIImagePickerControllerOriginalImage];
     self.image = image;
-
     [self.formViewController.navigationController dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (BOOL)formDescriptorCellCanBecomeFirstResponder {
+    if (self.rowDescriptor.sectionDescriptor.formDescriptor.isDisabled) {
+        return false;
+    } else {
+        return true;
+    }
 }
 
 @end

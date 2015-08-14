@@ -8,92 +8,20 @@
 
 #import "XFormAudioCell.h"
 
-@interface CustomButton : UIButton
-
-@property (nonatomic, strong) CAShapeLayer *customLayer;
-@property (nonatomic, strong) UIColor *color;
-
-- (void)drawCircleButton:(UIColor *)color;
-
-@end
-
-@implementation CustomButton
-
-- (void)drawCircleButton:(UIColor *)color
-{
-    self.color = color;
-    
-    [self setTitleColor:color forState:UIControlStateNormal];
-    
-    self.customLayer = [CAShapeLayer layer];
-    
-    [self.customLayer setBounds:CGRectMake(0.0f, 0.0f, [self bounds].size.width,
-                                           [self bounds].size.height)];
-    [self.customLayer setPosition:CGPointMake(CGRectGetMidX([self bounds]),CGRectGetMidY([self bounds]))];
-    
-    UIBezierPath *path = [UIBezierPath bezierPathWithOvalInRect:CGRectMake(0, 0, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame))];
-    
-    [self.customLayer setStrokeColor:[color CGColor]];
-    
-    [self.customLayer setLineWidth:2.0f];
-    [self.customLayer setFillColor:[self.color CGColor]];
-    
-    [self.customLayer setPath:[path CGPath]];
-    
-    [[self layer] addSublayer:self.customLayer];
-}
-
-- (void)drawTriangleButton:(UIColor *)color {
-    self.customLayer = [CAShapeLayer layer];
-    self.color = color;
-    
-    [self setTitleColor:color forState:UIControlStateNormal];
-    
-    [self.layer setBounds:CGRectMake(0.0f, 0.0f, [self bounds].size.width,
-                                     [self bounds].size.height)];
-    [self.layer setPosition:CGPointMake(CGRectGetMidX([self bounds]),CGRectGetMidY([self bounds]))];
-    CGMutablePathRef path = CGPathCreateMutable();
-    CGPathMoveToPoint(path, nil, 0, CGRectGetHeight(self.frame));
-    CGPathAddLineToPoint(path, nil, 0, 0);
-    CGPathAddLineToPoint(path, nil, CGRectGetWidth(self.frame), CGRectGetHeight(self.frame)/2);
-    CGPathCloseSubpath(path);
-    self.customLayer.path = path;
-    
-    [self.customLayer setStrokeColor:[color CGColor]];
-    
-    [self.customLayer setLineWidth:2.0f];
-    [self.customLayer setFillColor:[self.color CGColor]];
-    
-    [[self layer] addSublayer:self.customLayer];
-}
-
-- (void)setHighlighted:(BOOL)highlighted
-{
-    [super setHighlighted:highlighted];
-    if (highlighted)
-    {
-        self.titleLabel.textColor = [UIColor whiteColor];
-        [self.customLayer setFillColor:self.color.CGColor];
-    }
-    else
-    {
-        [self.customLayer setFillColor:[UIColor clearColor].CGColor];
-        self.titleLabel.textColor = self.color;
-    }
-}
-
-@end
-
-
 NSString * const XLFormRowDescriptorTypeAudioInLine = @"AudioInLine";
 
-@interface XFormAudioCell ()
+@interface XFormAudioCell () {
+    AVAudioPlayer *player;
+    AVAudioRecorder *recorder;
+}
 
+@property (nonatomic, strong) NSURL *outputFileURL;
 @property (nonatomic, strong) UILabel *title;
-@property (nonatomic, strong) CustomButton *record;
-@property (nonatomic, strong) CustomButton *play;
+@property (nonatomic, strong) UIButton *record;
+@property (nonatomic, strong) UIButton *play;
 @property (nonatomic, strong) UIView *middleView;
 @property (nonatomic, strong) UIButton *remove;
+@property (nonatomic) BOOL recorded;
 
 @end
 
@@ -106,13 +34,23 @@ NSString * const XLFormRowDescriptorTypeAudioInLine = @"AudioInLine";
 - (void)update {
     [super update];
     self.title.text = self.rowDescriptor.title;
+
+    if (self.rowDescriptor.sectionDescriptor.formDescriptor.isDisabled) {
+        self.record.enabled = NO;
+        self.remove.enabled = NO;
+    } else {
+        self.record.enabled = YES;
+        self.remove.enabled = YES;
+    }
 }
 
 - (void)configure {
     [super configure];
+    self.rowDescriptor.value = nil;
     self.selectionStyle = UITableViewCellSelectionStyleNone;
     [self configureViews];
     [self configureContraints];
+    [self setupAudio];
 }
 
 - (void)configureViews {
@@ -126,14 +64,17 @@ NSString * const XLFormRowDescriptorTypeAudioInLine = @"AudioInLine";
     
     self.middleView = [[UIView alloc] init];
     
-    self.record = [CustomButton buttonWithType:UIButtonTypeCustom];
+    self.record = [[UIButton alloc] init];
+    [self.record addTarget:self action:@selector(recordPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.record setBackgroundImage:[UIImage imageNamed:@"reocrd_plain"] forState:UIControlStateNormal];
     [self.record setTitle:NSLocalizedString(@"Record", @"Label record") forState:UIControlStateNormal];
+    [self.record setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
     [self.record setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     self.record.translatesAutoresizingMaskIntoConstraints = NO;
     [self.middleView addSubview:self.record];
 
-    self.play = [[CustomButton alloc] init];
+    self.play = [[UIButton alloc] init];
+    [self.play addTarget:self action:@selector(playPressed) forControlEvents:UIControlEventTouchUpInside];
     [self.play setBackgroundImage:[UIImage imageNamed:@"play_button_active"] forState:UIControlStateNormal];
     [self.play setBackgroundImage:[UIImage imageNamed:@"play_button_disabled"] forState:UIControlStateDisabled];
     self.play.translatesAutoresizingMaskIntoConstraints = NO;
@@ -144,8 +85,10 @@ NSString * const XLFormRowDescriptorTypeAudioInLine = @"AudioInLine";
     [self.contentView addSubview:self.middleView];
     
     self.remove = [[UIButton alloc] init];
+    [self.remove addTarget:self action:@selector(removePressed) forControlEvents:UIControlEventTouchUpInside];
     [self.remove setTitle:NSLocalizedString(@"Remove", @"Label remove") forState:UIControlStateNormal];
     [self.remove setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    [self.record setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
     self.remove.translatesAutoresizingMaskIntoConstraints = NO;
     [self.contentView addSubview:self.remove];
 }
@@ -172,6 +115,90 @@ NSString * const XLFormRowDescriptorTypeAudioInLine = @"AudioInLine";
                                                                  attribute:NSLayoutAttributeCenterX
                                                                 multiplier:1.0
                                                                   constant:0.0]];
+}
+
+- (void)setupAudio {
+    self.play.enabled = NO;
+    
+    NSArray *pathComponents = [NSArray arrayWithObjects:
+                               [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject],
+                               [NSString stringWithFormat:@"Audio%d.m4a", rand() % 1000],
+                               nil];
+    self.outputFileURL = [NSURL fileURLWithPathComponents:pathComponents];
+    
+    AVAudioSession *session = [AVAudioSession sharedInstance];
+    NSError *error = nil;
+    [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
+    if (error) {
+        NSLog(@"Error opening session");
+        [self.formViewController.navigationController popViewControllerAnimated:YES];
+    }
+    NSMutableDictionary *recordSetting = [[NSMutableDictionary alloc] init];
+    
+    [recordSetting setValue:[NSNumber numberWithInt:kAudioFormatMPEG4AAC] forKey:AVFormatIDKey];
+    [recordSetting setValue:[NSNumber numberWithFloat:44100.0] forKey:AVSampleRateKey];
+    [recordSetting setValue:[NSNumber numberWithInt: 2] forKey:AVNumberOfChannelsKey];
+    error = nil;
+    recorder = [[AVAudioRecorder alloc] initWithURL:self.outputFileURL settings:recordSetting error:&error];
+    if (error) {
+        NSLog(@"Error opening recorder");
+        [self.formViewController.navigationController popViewControllerAnimated:YES];
+    }
+    recorder.delegate = self;
+    recorder.meteringEnabled = YES;
+    [recorder prepareToRecord];
+}
+
+- (void)recordPressed {
+    if (player.playing) {
+        [player stop];
+        self.play.enabled = NO;
+    }
+    if (!recorder.recording) {
+        AVAudioSession *session = [AVAudioSession sharedInstance];
+        [session setActive:YES error:nil];
+        
+        [recorder record];
+        [self.record setTitle:@"Stop" forState:UIControlStateNormal];
+        self.recorded = YES;
+        self.play.enabled = NO;
+    } else {
+        self.recorded = YES;
+        [recorder stop];
+        
+        AVAudioSession *session = [AVAudioSession sharedInstance];
+        [session setActive:NO error:nil];
+        self.play.enabled = YES;
+        [self.record setTitle:@"Record" forState:UIControlStateNormal];
+    }
+}
+
+- (void)playPressed {
+    if (!recorder.recording) {
+        player = [[AVAudioPlayer alloc] initWithContentsOfURL:recorder.url error:nil];
+        player.delegate = self;
+        [player play];
+        self.play.enabled = NO;
+    }
+}
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+    self.play.enabled = YES;
+}
+
+- (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)flag {
+    [self.record setTitle:@"Record" forState:UIControlStateNormal];
+    
+    NSData *data  = [NSData dataWithContentsOfURL:self.outputFileURL];
+    self.rowDescriptor.value = [XLFormOptionsObject formOptionsObjectWithValue:[data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed] displayText:self.outputFileURL.lastPathComponent];
+    self.play.enabled = YES;
+}
+
+- (void)removePressed {
+    [[NSFileManager defaultManager] removeItemAtURL:self.outputFileURL error:nil];
+    self.rowDescriptor.value = nil;
+    self.recorded = NO;
+    self.play.enabled = NO;
+    [self setupAudio];
 }
 
 @end
