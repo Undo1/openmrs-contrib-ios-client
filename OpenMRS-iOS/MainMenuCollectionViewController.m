@@ -34,6 +34,8 @@ static NSString * const reuseIdentifier = @"Cell";
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Settings", @"Label settings") style:UIBarButtonItemStyleBordered target:self action:@selector(showSettings)];
     }
 
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Logout", @"Label logout") style:UIBarButtonItemStyleDone target:self action:@selector(logout)];
+
     self.collectionView.backgroundColor = [UIColor whiteColor];
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
 }
@@ -237,29 +239,6 @@ static NSString * const reuseIdentifier = @"Cell";
         XFormsList *formsList = [[XFormsList alloc] initFilledForms];
         UINavigationController *formListNavigationController = [[UINavigationController alloc] initWithRootViewController:formsList];
         [self presentViewController:formListNavigationController animated:YES completion:nil];
-        /*[OpenMRSAPIManager getXFormsList:^(NSArray *forms, NSError *error) {
-            if (!error) {
-                XFormsList *formsList = [[XFormsList alloc] initWithForms:forms];
-                UINavigationController *formListNavigationController = [[UINavigationController alloc] initWithRootViewController:formsList];
-                [self presentViewController:formListNavigationController animated:YES completion:nil];
-            } else {
-                UIAlertView *formsAlert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"XForms error", @"Error label xforms error")
-                                                                     message:NSLocalizedString(@"Error loading XForms check XForms support", @"XForms error message")
-                                                                    delegate:self
-                                                           cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel button label ")
-                                                           otherButtonTitles:nil];
-                [formsAlert show];
-            }
-        }];*/
-        /*
-        [OpenMRSAPIManager getXformWithID:@"0" completion:^(XForms *form, NSError *error) {
-            if (!error) {
-                UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:[[XFormViewController alloc] initWithForm:form WithIndex:0]];
-                [self presentViewController:nc animated:YES completion:nil];
-            } else {
-                NSLog(@"can't get error");
-            }
-        }];*/
     } else {
         SettingsViewController *settings = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
         UINavigationController *navcon = [[UINavigationController alloc] initWithRootViewController:settings];
@@ -267,6 +246,12 @@ static NSString * const reuseIdentifier = @"Cell";
         navcon.modalPresentationStyle = UIModalPresentationFormSheet;
         [self presentViewController:navcon animated:YES completion:nil];
     }
+}
+
+- (void)logout {
+    [OpenMRSAPIManager logout];
+    [[XFormsStore sharedStore] clearFilledForms];
+    [[XFormsStore sharedStore] clearBlankForms];
 }
 
 #pragma mark - <UIViewControllerRestoration>

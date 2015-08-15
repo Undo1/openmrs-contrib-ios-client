@@ -53,22 +53,13 @@
     } else if (section == 1){
         return 3;
     } else {
-        return 2;
+        return 1;
     }
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
-        if (indexPath.row == 1) {
-            UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"logoutCell"];
-            if (!cell) {
-                cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"logoutCell"];
-            }
-            cell.textLabel.text = NSLocalizedString(@"Logout", @"Label logout");
-            cell.textLabel.textColor = self.view.tintColor;
-            cell.textLabel.textAlignment = NSTextAlignmentCenter;
-            return cell;
-        } else if (indexPath.row == 0) {
+        if (indexPath.row == 0) {
             UITableViewCell *usernameCell = [tableView dequeueReusableCellWithIdentifier:@"usernameCell"];
             if (!usernameCell) {
                 usernameCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"usernameCell"];
@@ -157,12 +148,6 @@
         AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
         [delegate clearStore];
         [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-    } else if (indexPath.section == 0 && indexPath.row == 1) {
-        [self dismissViewControllerAnimated:NO completion:^ {
-            [OpenMRSAPIManager logout];
-            [[XFormsStore sharedStore] clearFilledForms];
-            [[XFormsStore sharedStore] clearBlankForms];
-        }];
     } else if (indexPath.section == 1 && indexPath.row == 1) {
         [[SyncingEngine sharedEngine] updateExistingOutOfDatePatients:nil];
         [tableView deselectRowAtIndexPath:indexPath animated:NO];
