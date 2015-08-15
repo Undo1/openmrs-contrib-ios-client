@@ -18,6 +18,8 @@
 @property (nonatomic, strong) NSMutableArray *forms;
 @property (nonatomic) BOOL FilledForms;
 
+@property (nonatomic) int counter;
+
 @end
 
 @implementation XFormsList
@@ -62,21 +64,18 @@
                                                                                   style:UIBarButtonItemStylePlain
                                                                                  target:self
                                                                                  action:@selector(sendAll)];
-
-        [self updateForms];
         [self.tableView reloadData];
     } else {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save offline", @"Label save offline")
                                                                                   style:UIBarButtonItemStylePlain
                                                                                  target:self
                                                                                  action:@selector(saveOffline)];
-
-        [self updateForms];
     }
 }
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
+    self.counter = 1;
     [self updateForms];
 }
 
@@ -86,6 +85,12 @@
     } else {
         [[XFormsStore sharedStore] loadForms:^(NSArray *forms, NSError *error) {
             if (!error) {
+                if (self.counter == 1) {
+                    self.counter = 2;
+                } else if (self.counter == 2) {
+                    [self syncBetweenForms:self.forms andWebForms:forms];
+                    self.counter = 3;
+                }
                 self.forms = [NSMutableArray arrayWithArray:forms];
             } else {
                 if (!self.forms) {
@@ -98,6 +103,21 @@
                 }
             }
         }];
+    }
+}
+
+- (void)syncBetweenForms:(NSArray *)forms andWebForms:(NSArray *)webForms {
+    for (XForms *form in forms) {
+        BOOL found = NO;
+        for (XForms *webForm in webForms) {
+            if ([form.name isEqualToString:webForm.name]) {
+                found = YES;
+                break;
+            }
+        }
+        if (!found) {
+            [[XFormsStore sharedStore] deleteBlankForm:form];
+        }
     }
 }
 
@@ -153,8 +173,10 @@
         NSLog(@"forms: %@", selectedForm.doc.rootElement);
         UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:[[XFormViewController alloc] initWithForm:selectedForm WithIndex:0]];
         // Make the form read only if read from Disk.
-        for (XLFormDescriptor *form in selectedForm.forms) {
-            form.disabled = YES;
+        if (self.FilledForms) {
+            for (XLFormDescriptor *form in selectedForm.forms) {
+                form.disabled = YES;
+            }
         }
         [self presentViewController:nc animated:YES completion:nil];
     } else {

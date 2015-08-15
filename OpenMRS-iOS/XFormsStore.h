@@ -19,6 +19,7 @@
 - (void)loadForm:(NSString *)formID andFormName:(NSString *)formName completion:(void (^)(XForms *xform, NSError *error))completion;
 - (void)saveFilledForm:(XForms *)form;
 - (NSArray *)loadFilledFiles;
+- (void)deleteBlankForm:(XForms *)form;
 - (void)deleteFilledForm:(XForms *)form;
 - (void)clearFilledForms;
 - (void)clearBlankForms;

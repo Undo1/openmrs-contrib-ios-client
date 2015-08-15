@@ -122,11 +122,19 @@
     return forms;
 }
 
+- (void)deleteBlankForm:(XForms *)form {
+    [self deleteForm:form atDir:self.blank_path];
+}
+
 - (void)deleteFilledForm:(XForms *)form {
+    [self deleteForm:form atDir:self.filled_path];
+}
+
+- (void)deleteForm:(XForms *)form atDir:(NSString *)dir {
     NSString *fileName = [[NSString stringWithFormat:@"%@~%@", form.name, form.XFormsID] stringByAppendingPathExtension:@"xml"];
-    NSString *absFileName = [self.filled_path stringByAppendingPathComponent:fileName];
+    NSString *absFileName = [dir stringByAppendingPathComponent:fileName];
     NSFileManager *fileManager = [NSFileManager defaultManager];
-    NSArray *directoryContent = [fileManager contentsOfDirectoryAtPath:self.filled_path error:NULL];
+    NSArray *directoryContent = [fileManager contentsOfDirectoryAtPath:dir error:NULL];
     for (int count = 0; count < (int)[directoryContent count]; count++)
     {
         NSLog(@"File %d: %@", (count + 1), [directoryContent objectAtIndex:count]);
