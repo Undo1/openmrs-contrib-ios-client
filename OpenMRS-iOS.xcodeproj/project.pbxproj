@@ -38,6 +38,7 @@
 		247B747C1B70B86C00BD3D3A /* XFormsStore.m in Sources */ = {isa = PBXBuildFile; fileRef = 247B747B1B70B86C00BD3D3A /* XFormsStore.m */; };
 		247BC2861B7F5DAA00853B37 /* MRSAlertHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 247BC2851B7F5DAA00853B37 /* MRSAlertHandler.m */; };
 		247BC2881B7F649A00853B37 /* AddPatientForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 247BC2871B7F649A00853B37 /* AddPatientForm.m */; };
+		247BC28B1B7F7BF100853B37 /* SettingsForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 247BC28A1B7F7BF100853B37 /* SettingsForm.m */; };
 		248A46171B7A64A400E9F098 /* form-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 248A46141B7A64A400E9F098 /* form-icon.png */; };
 		248A46181B7A64A400E9F098 /* form-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 248A46151B7A64A400E9F098 /* form-icon@2x.png */; };
 		248A46191B7A64A400E9F098 /* form-icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 248A46161B7A64A400E9F098 /* form-icon@3x.png */; };
@@ -79,7 +80,6 @@
 		D396A53F1A2E0B5A00DE6448 /* openmrs-logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D396A53C1A2E0B5A00DE6448 /* openmrs-logo@2x.png */; };
 		D396A5401A2E0B5A00DE6448 /* openmrs-logo@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D396A53D1A2E0B5A00DE6448 /* openmrs-logo@3x.png */; };
 		D396A5411A2E0B5A00DE6448 /* openmrs-logo.png in Resources */ = {isa = PBXBuildFile; fileRef = D396A53E1A2E0B5A00DE6448 /* openmrs-logo.png */; };
-		D396A5441A2E0CEF00DE6448 /* SettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5431A2E0CEF00DE6448 /* SettingsViewController.m */; };
 		D396A5471A2E396300DE6448 /* MRSVisit.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5461A2E396300DE6448 /* MRSVisit.m */; };
 		D396A54A1A2E3CBC00DE6448 /* MRSEncounter.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A5491A2E3CBC00DE6448 /* MRSEncounter.m */; };
 		D396A54D1A2E3E5600DE6448 /* PatientEncounterListView.m in Sources */ = {isa = PBXBuildFile; fileRef = D396A54C1A2E3E5600DE6448 /* PatientEncounterListView.m */; };
@@ -174,6 +174,8 @@
 		247BC2841B7F5DAA00853B37 /* MRSAlertHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSAlertHandler.h; sourceTree = "<group>"; };
 		247BC2851B7F5DAA00853B37 /* MRSAlertHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSAlertHandler.m; sourceTree = "<group>"; };
 		247BC2871B7F649A00853B37 /* AddPatientForm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddPatientForm.m; sourceTree = "<group>"; };
+		247BC2891B7F7BF100853B37 /* SettingsForm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsForm.h; sourceTree = "<group>"; };
+		247BC28A1B7F7BF100853B37 /* SettingsForm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsForm.m; sourceTree = "<group>"; };
 		248A46141B7A64A400E9F098 /* form-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon.png"; sourceTree = "<group>"; };
 		248A46151B7A64A400E9F098 /* form-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon@2x.png"; sourceTree = "<group>"; };
 		248A46161B7A64A400E9F098 /* form-icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon@3x.png"; sourceTree = "<group>"; };
@@ -239,8 +241,6 @@
 		D396A53C1A2E0B5A00DE6448 /* openmrs-logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "openmrs-logo@2x.png"; sourceTree = "<group>"; };
 		D396A53D1A2E0B5A00DE6448 /* openmrs-logo@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "openmrs-logo@3x.png"; sourceTree = "<group>"; };
 		D396A53E1A2E0B5A00DE6448 /* openmrs-logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "openmrs-logo.png"; sourceTree = "<group>"; };
-		D396A5421A2E0CEF00DE6448 /* SettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsViewController.h; sourceTree = "<group>"; };
-		D396A5431A2E0CEF00DE6448 /* SettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsViewController.m; sourceTree = "<group>"; };
 		D396A5451A2E396300DE6448 /* MRSVisit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSVisit.h; sourceTree = "<group>"; };
 		D396A5461A2E396300DE6448 /* MRSVisit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSVisit.m; sourceTree = "<group>"; };
 		D396A5481A2E3CBC00DE6448 /* MRSEncounter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSEncounter.h; sourceTree = "<group>"; };
@@ -747,8 +747,8 @@
 		248FBE4B1B03BC6400569C2C /* Settings */ = {
 			isa = PBXGroup;
 			children = (
-				D396A5421A2E0CEF00DE6448 /* SettingsViewController.h */,
-				D396A5431A2E0CEF00DE6448 /* SettingsViewController.m */,
+				247BC2891B7F7BF100853B37 /* SettingsForm.h */,
+				247BC28A1B7F7BF100853B37 /* SettingsForm.m */,
 			);
 			name = Settings;
 			sourceTree = "<group>";
@@ -1120,6 +1120,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				247BC28B1B7F7BF100853B37 /* SettingsForm.m in Sources */,
 				245E05421B7B89F00065FD45 /* Base64.m in Sources */,
 				D396A5471A2E396300DE6448 /* MRSVisit.m in Sources */,
 				D3A4728B1A3770B4002A0BBD /* AddPatientTableViewController.m in Sources */,
@@ -1145,7 +1146,6 @@
 				D39AD7AB1A3BFE8600C01540 /* CaptureVitalsTableViewController.m in Sources */,
 				243206711B30436700B54970 /* MRSHelperFunctions.m in Sources */,
 				D396A5281A2E09DE00DE6448 /* SignInViewController.m in Sources */,
-				D396A5441A2E0CEF00DE6448 /* SettingsViewController.m in Sources */,
 				2494E8E81B3CC1BC00ABFE53 /* IdentifierTypeCell.m in Sources */,
 				D3E47BA91A3A08EF004B3F95 /* MRSPatientIdentifier.m in Sources */,
 				240F4EF31B5D852700E943FC /* XFormViewController.m in Sources */,

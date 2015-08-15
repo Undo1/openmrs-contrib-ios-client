@@ -8,7 +8,6 @@
 
 #import "MainMenuCollectionViewController.h"
 #import "PatientSearchViewController.h"
-#import "SettingsViewController.h"
 #import "AddPatientTableViewController.h"
 #import "ActiveVisitsList.h"
 #import "AddPatientForm.h"
@@ -18,6 +17,7 @@
 #import "XFormsList.h"
 #import "XFormViewController.h"
 #import "XFormsStore.h"
+#import "SettingsForm.h"
 
 @implementation MainMenuCollectionViewController
 
@@ -50,7 +50,7 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 - (void)showSettings
 {
-    SettingsViewController *settings = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    SettingsForm *settings = [[SettingsForm alloc] init];
     UINavigationController *navcon = [[UINavigationController alloc] initWithRootViewController:settings];
     navcon.restorationIdentifier = NSStringFromClass([navcon class]);
     [self presentViewController:navcon animated:YES completion:nil];
@@ -240,7 +240,7 @@ static NSString * const reuseIdentifier = @"Cell";
         UINavigationController *formListNavigationController = [[UINavigationController alloc] initWithRootViewController:formsList];
         [self presentViewController:formListNavigationController animated:YES completion:nil];
     } else {
-        SettingsViewController *settings = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        SettingsForm *settings = [[SettingsForm alloc] init];
         UINavigationController *navcon = [[UINavigationController alloc] initWithRootViewController:settings];
         navcon.restorationIdentifier = NSStringFromClass([navcon class]);
         navcon.modalPresentationStyle = UIModalPresentationFormSheet;
