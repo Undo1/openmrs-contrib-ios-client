@@ -14,6 +14,7 @@
 #import "SyncingEngine.h"
 #import "Constants.h"
 #import "XFormsStore.h"
+#import <Instabug/Instabug.h>
 
 @implementation SettingsViewController
 - (void)viewDidLoad
@@ -53,7 +54,7 @@
     } else if (section == 1){
         return 3;
     } else {
-        return 1;
+        return 2;
     }
 }
 - (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
@@ -77,6 +78,15 @@
             usernameCell.textLabel.text = [NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Logged in as", @"Label -logged- -in- -as"), username];
             usernameCell.textLabel.textColor = [UIColor grayColor];
             return usernameCell;
+        } else if (indexPath.row == 1) {
+            UITableViewCell *feedbackCell = [tableView dequeueReusableCellWithIdentifier:@"feedbackCell"];
+            if (!feedbackCell) {
+                feedbackCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"feedbackCell"];
+            }
+            feedbackCell.textLabel.text = NSLocalizedString(@"Send feedback", @"Label send feedback");
+            feedbackCell.textLabel.textAlignment = NSTextAlignmentCenter;
+            feedbackCell.textLabel.textColor = [UIColor colorWithRed:39/255.0 green:139/255.0 blue:146/255.0 alpha:1];
+            return feedbackCell;
         }
     }
     if (indexPath.section == 1) {
@@ -152,7 +162,10 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 1 && indexPath.row == 0) {
+    if (indexPath.section == 0 && indexPath.row == 1) {
+        [Instabug invokeFeedbackSender];
+        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+    } else if (indexPath.section == 1 && indexPath.row == 0) {
         AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
         [delegate clearStore];
         [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
