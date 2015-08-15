@@ -31,9 +31,6 @@ static NSString * const reuseIdentifier = @"Cell";
     self.restorationClass = [self class];
     self.title = NSLocalizedString(@"OpenMRS", @"Orgnaization name");
     self.view.backgroundColor = [UIColor whiteColor];
-    if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Settings", @"Label settings") style:UIBarButtonItemStyleBordered target:self action:@selector(showSettings)];
-    }
 
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Logout", @"Label logout") style:UIBarButtonItemStyleDone target:self action:@selector(logout)];
 
@@ -79,10 +76,7 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        return 5;
-    }
-    return 4;
+    return 5;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
