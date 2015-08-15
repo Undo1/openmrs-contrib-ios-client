@@ -87,7 +87,6 @@
 
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.refreshingTimer invalidate];
 }
 
 - (void)refresh {
@@ -101,6 +100,7 @@
     if ([SVProgressHUD isVisible]) {
         [SVProgressHUD dismiss];
     }
+    [self.refreshingTimer invalidate];
     [self.tabBarController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
