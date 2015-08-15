@@ -151,6 +151,9 @@ NSString * const XLFormRowDescriptorTypeImageInLine = @"ImageInLine";
 
 - (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info {
     UIImage *image = info[UIImagePickerControllerOriginalImage];
+    if (image.size.width > 1500 || image.size.height > 1500) {
+        image = [self imageWithImage:image scaledToSize:CGSizeMake(image.size.width/2, image.size.height/2)];
+    }
     self.image = image;
     [self.formViewController.navigationController dismissViewControllerAnimated:YES completion:nil];
 }
@@ -161,6 +164,17 @@ NSString * const XLFormRowDescriptorTypeImageInLine = @"ImageInLine";
     } else {
         return true;
     }
+}
+
+- (UIImage*)imageWithImage:(UIImage*)image
+              scaledToSize:(CGSize)newSize;
+{
+    UIGraphicsBeginImageContext( newSize );
+    [image drawInRect:CGRectMake(0,0,newSize.width,newSize.height)];
+    UIImage* newImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    return newImage;
 }
 
 @end
