@@ -16,12 +16,15 @@
 #import "XFormsStore.h"
 #import "XFormImageCell.h"
 #import "MRSDateUtilities.h"
+#import "MBProgressExtension.h"
+#import "MRSAlertHandler.h"
 
 @interface XFormViewController () <UIActionSheetDelegate>
 
 @property (nonatomic, strong) XForms *XForm;
 @property (nonatomic) int index;
 @property (nonatomic, strong) XFormElement *repeatElement;
+@property (nonatomic, strong) XLFormViewController *reviewForm;
 
 @property (nonatomic, strong) UIView *tutorialView;
 @property (nonatomic, strong) NSString *allNonValidFields;
@@ -190,12 +193,11 @@
         if ([self isValid]) {
             if ([sender isKindOfClass:[UIBarButtonItem class]]) {
                 if ([[NSUserDefaults standardUserDefaults] boolForKey:UDisWizard]) {
-                    UIActionSheet *reviewOrSubmit = [[UIActionSheet alloc] initWithTitle:NSLocalizedString(@"Choose Action", @"Title choose action")
-                                                                               delegate:self
-                                                                      cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel button label")
-                                                                 destructiveButtonTitle:nil
-                                                                      otherButtonTitles:NSLocalizedString(@"Review form", @"Button title review form"), NSLocalizedString(@"Submit form", @"Button label submit form"), nil];
-                    [reviewOrSubmit showInView:self.view];
+                    self.reviewForm = [[XLFormViewController alloc] initWithForm:[self.XForm getReviewForm]];
+                    self.reviewForm.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(dismissNew:)];
+                    self.reviewForm.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Submit form", @"Button label submit form") style:UIBarButtonItemStylePlain target:self action:@selector(submitForm)];
+                    self.reviewForm.navigationItem.title = self.XForm.name;
+                    [self.navigationController pushViewController:self.reviewForm animated:YES];
                 } else {
                     [self submitForm];
                 }
@@ -223,9 +225,17 @@
         [XFormsParser InjecValues:self.XForm];
     }
     
+    UIView *view;
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:UDisWizard]) {
+        view = self.reviewForm.view;
+    } else {
+        view = self.view;
+    }
+    [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:view];
     [OpenMRSAPIManager uploadXForms:self.XForm completion:^(NSError *error) {
+        [MBProgressExtension hideActivityIndicatorInView:view];
         if (!error) {
-            [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Sent", @"Label sent")];
+            [[MRSAlertHandler alertForSucess:self] show];
             [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
         } else {
             UIAlertView *errorUploading = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error uploading", @"Title error uploading")
