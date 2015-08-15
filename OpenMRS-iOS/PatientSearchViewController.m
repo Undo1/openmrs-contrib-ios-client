@@ -208,6 +208,12 @@
     self.onlineOrOffile.selectedSegmentIndex = index == 0 ? 0 : 1;
     self.segmentIndex = index == 0? @0: @1;
     self.isOnline = index == 0 ? YES : NO;
+    if (!self.isOnline) {
+        [OpenMRSAPIManager cancelPreviousSearchOperations];
+    } else {
+        self.currentSearchResults = [NSArray array];
+        [self.tableView reloadData];
+    }
     [self reloadDataForSearch:self.bar.text];
 }
 
