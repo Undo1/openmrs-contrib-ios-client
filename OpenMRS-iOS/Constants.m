@@ -109,4 +109,7 @@ NSString *const UDrefreshInterval = @"refreshInterval";
              };
 }
 
+NSInteger const errNoInternet = -1004;
+NSInteger const errBadRequest = -1011;
+
 @end

@@ -13,6 +13,7 @@ pod 'Instabug'
 pod 'FlurrySDK'
 pod 'XMLDictionary'
 pod 'GDataXML-HTML', '~> 1.2.0'
+pod 'MBProgressHUD', '~> 0.9.1'
 
 target 'OpenMRS-iOS' do
 

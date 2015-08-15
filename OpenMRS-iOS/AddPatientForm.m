@@ -14,7 +14,8 @@
 #import "OpenMRSAPIManager.h"
 #import "SelectPatientIdentifierTypeTableViewController.h"
 #import "Constants.h"
-#import "SVProgressHUD.h"
+#import "MRSAlertHandler.h"
+#import "MBProgressHUD.h"
 
 
 @interface AddPatientForm ()
@@ -252,12 +253,25 @@
         }
         NSArray *identifiers = @[@{@"identifier":values[kIdentifier], @"identifierType":self.patientIdentifierType.UUID}];
         NSLog(@"Identifiers: %@", identifiers);
-        [SVProgressHUD show];
+        [[MBProgressHUD showHUDAddedTo:self.view animated:YES] setLabelText:NSLocalizedString(@"Loading", @"Label loading")];
+        [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
         [OpenMRSAPIManager addPatient:parameters withIdentifier:identifiers completion:^(NSError *error, MRSPatient *createdPatient) {
+            [MBProgressHUD hideHUDForView:self.view animated:YES];
+            [[UIApplication sharedApplication] endIgnoringInteractionEvents];
             if (!error) {
-                [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Done", @"Label done")];
+                UIAlertView *sucess = [MRSAlertHandler alertForSucess:self];
+                [sucess show];
             } else {
-                [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Error", @"Warning label error")];
+                if (error.code == errNoInternet) {
+                    UIAlertView *noInternetError = [MRSAlertHandler alertForNoInternet:self];
+                    [noInternetError show];
+                } else if (error.code == errBadRequest || [error userInfo]) {
+                    UIAlertView *requestError = [MRSAlertHandler alertViewForError:self error:error];
+                    [requestError show];
+                } else {
+                    UIAlertView *unrecoginzedError = [MRSAlertHandler alertForNotRecoginzedError:self];
+                    [unrecoginzedError show];
+                }
             }
         }];
     } else {
@@ -277,9 +291,9 @@
         XLFormValidationStatus * validationStatus = [[obj userInfo] objectForKey:XLValidationStatusErrorKey];
         NSString *tag = validationStatus.rowDescriptor.tag;
         if ([tag isEqualToString:kGivenName] || [tag isEqualToString:kFamilyName] ||
-            [tag isEqualToString:kIdentifier] || [tag isEqualToString:kIdentifierType] ||
-            [tag isEqualToString:kAddress1] || [tag isEqualToString:kAge] ||
-            [tag isEqualToString:kBirthdate]){
+            [tag isEqualToString:kIdentifier] || [tag isEqualToString:kAddress1] ||
+            [tag isEqualToString:kAge] || [tag isEqualToString:kBirthdate] ||
+            [tag isEqualToString:kIdentifierType]){
 
             UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[self.form indexPathOfFormRow:validationStatus.rowDescriptor]];
             cell.backgroundColor = [UIColor orangeColor];

@@ -64,4 +64,7 @@ extern NSString *const UDrefreshInterval;
 
 + (NSDictionary *)PATIENT_ATTRIBUTES;
 + (NSDictionary *)PATIENT_ATTRIBUTES_TYPES;
+
+extern NSInteger const errNoInternet;
+extern NSInteger const errBadRequest;
 @end
