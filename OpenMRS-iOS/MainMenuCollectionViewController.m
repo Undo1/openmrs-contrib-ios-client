@@ -29,7 +29,7 @@ static NSString * const reuseIdentifier = @"Cell";
     [super viewDidLoad];
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
-    self.title = NSLocalizedString(@"OpenMRS", @"Orgnaization name");
+    self.title = @"OpenMRS iOS Client";
     self.view.backgroundColor = [UIColor whiteColor];
 
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Logout", @"Label logout") style:UIBarButtonItemStyleDone target:self action:@selector(logout)];
