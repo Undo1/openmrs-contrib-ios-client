@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "PatientViewController.h"
 
 @interface PatientVisitListView : UITableViewController <UIViewControllerRestoration>
 @property (nonatomic, strong) NSArray *visits;
+
+@property (nonatomic, strong) PatientViewController *pvc;
 @end

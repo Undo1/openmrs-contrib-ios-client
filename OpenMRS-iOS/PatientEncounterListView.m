@@ -39,6 +39,8 @@
     [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
     [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
     
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self.pvc action:@selector(close)];
+
     self.title = NSLocalizedString(@"Encounters", "Label encounters");
 }
 
