@@ -56,6 +56,14 @@
         return 1;
     }
 }
+- (NSString *)tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section {
+    if (section == 0) {
+        NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
+        return [NSString stringWithFormat:@"%@: (%@)", NSLocalizedString(@"Version", @"Label version"), appVersion];
+    } else {
+        return @"";
+    }
+}
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
