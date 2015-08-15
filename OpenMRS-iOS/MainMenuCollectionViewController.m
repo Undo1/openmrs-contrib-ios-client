@@ -254,7 +254,7 @@ static NSString * const reuseIdentifier = @"Cell";
     [[XFormsStore sharedStore] clearFilledForms];
     [[XFormsStore sharedStore] clearBlankForms];
     AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    [delegate clearStore];
+    //[delegate clearStore];
 }
 
 #pragma mark - <UIViewControllerRestoration>

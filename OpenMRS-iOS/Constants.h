@@ -67,4 +67,8 @@ extern NSString *const UDrefreshInterval;
 
 extern NSInteger const errNoInternet;
 extern NSInteger const errBadRequest;
+extern NSInteger const errServerNotFound;
+extern NSInteger const errTimeout;
+extern NSInteger const errNetWorkLost;
+
 @end

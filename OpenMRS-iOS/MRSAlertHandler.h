@@ -13,7 +13,9 @@
 
 + (UIAlertView *)alertForNoInternet:(id)sender;
 + (UIAlertView *)alertForSucess:(id)sender;
++ (UIAlertView *)alertforTimeOut:(id)sender;
 + (UIAlertView *)alertForNotRecoginzedError:(id)sender;
 + (UIAlertView *)alertViewForError:(id)sender error:(NSError *) error;
-
++ (UIAlertView *)alertForServerNotFound:(id)sender;
++ (UIAlertView *)alertViewForErrorBadRequest:(id)sender error:(NSError *)error;
 @end

@@ -262,16 +262,7 @@
                 UIAlertView *sucess = [MRSAlertHandler alertForSucess:self];
                 [sucess show];
             } else {
-                if (error.code == errNoInternet) {
-                    UIAlertView *noInternetError = [MRSAlertHandler alertForNoInternet:self];
-                    [noInternetError show];
-                } else if (error.code == errBadRequest || [error userInfo]) {
-                    UIAlertView *requestError = [MRSAlertHandler alertViewForError:self error:error];
-                    [requestError show];
-                } else {
-                    UIAlertView *unrecoginzedError = [MRSAlertHandler alertForNotRecoginzedError:self];
-                    [unrecoginzedError show];
-                }
+                [[MRSAlertHandler alertViewForError:self error:error] show];
             }
         }];
     } else {

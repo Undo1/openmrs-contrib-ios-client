@@ -111,5 +111,8 @@ NSString *const UDrefreshInterval = @"refreshInterval";
 
 NSInteger const errNoInternet = -1004;
 NSInteger const errBadRequest = -1011;
+NSInteger const errServerNotFound = -1003;
+NSInteger const errTimeout = -1001;
+NSInteger const errNetWorkLost = -1005;
 
 @end
