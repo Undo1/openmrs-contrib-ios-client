@@ -39,6 +39,10 @@ NSString *kWizardMode = @"wizardMode";
 }
 
 - (void)initForm {
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+
     XLFormDescriptor *form = [XLFormDescriptor formDescriptorWithTitle:NSLocalizedString(@"Settings", @"Label settings")];
     XLFormSectionDescriptor *section = [XLFormSectionDescriptor formSection];
     
@@ -46,13 +50,15 @@ NSString *kWizardMode = @"wizardMode";
     section.footerTitle = [NSString stringWithFormat:@"%@: (%@)", NSLocalizedString(@"Version", @"Label version"), appVersion];
     
     [form addFormSection:section];
-    
-    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
-    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+
     XLFormRowDescriptor *row = [XLFormRowDescriptor formRowDescriptorWithTag:kUserName rowType:XLFormRowDescriptorTypeInfo title:[NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Logged in as", @"Label -logged- -in- -as"), username]];
     row.disabled = @YES;
     [section addFormRow:row];
     
+    row = [XLFormRowDescriptor formRowDescriptorWithTag:kUserName rowType:XLFormRowDescriptorTypeInfo title:host];
+    row.disabled = @YES;
+    [section addFormRow:row];
+
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kSendFeedback rowType:XLFormRowDescriptorTypeButton title:NSLocalizedString(@"Send feedback", @"Label send feedback")];
     row.action.formSelector = @selector(sendFeedback);
     [row.cellConfig setObject:[UIColor colorWithRed:39/255.0 green:139/255.0 blue:146/255.0 alpha:1] forKey:@"textLabel.color"];
@@ -116,7 +122,7 @@ NSString *kWizardMode = @"wizardMode";
 
 - (void)sendFeedback {
     [Instabug invokeFeedbackSender];
-    [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForItem:1 inSection:0] animated:YES];
+    [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:0] animated:YES];
 }
 
 - (void)removeOfflinePatients {
