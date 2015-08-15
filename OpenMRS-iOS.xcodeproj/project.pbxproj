@@ -18,7 +18,6 @@
 		2412409D1B626B63009E172B /* SimpleAudioViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2412409C1B626B63009E172B /* SimpleAudioViewController.m */; };
 		2412409F1B627766009E172B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2412409E1B627766009E172B /* AVFoundation.framework */; };
 		241240A61B62854B009E172B /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 241240A21B62854B009E172B /* MapViewController.m */; };
-		241240A71B62854B009E172B /* CLLocationValueTrasformer.m in Sources */ = {isa = PBXBuildFile; fileRef = 241240A41B62854B009E172B /* CLLocationValueTrasformer.m */; };
 		241240A81B62854B009E172B /* MapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 241240A51B62854B009E172B /* MapViewController.xib */; };
 		2432066D1B2E439000B54970 /* EditPatient.m in Sources */ = {isa = PBXBuildFile; fileRef = 2432066C1B2E439000B54970 /* EditPatient.m */; };
 		243206711B30436700B54970 /* MRSHelperFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 243206701B30436700B54970 /* MRSHelperFunctions.m */; };
@@ -137,8 +136,6 @@
 		2412409E1B627766009E172B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		241240A11B62854B009E172B /* MapViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapViewController.h; sourceTree = "<group>"; };
 		241240A21B62854B009E172B /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
-		241240A31B62854B009E172B /* CLLocationValueTrasformer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLLocationValueTrasformer.h; sourceTree = "<group>"; };
-		241240A41B62854B009E172B /* CLLocationValueTrasformer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CLLocationValueTrasformer.m; sourceTree = "<group>"; };
 		241240A51B62854B009E172B /* MapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapViewController.xib; sourceTree = "<group>"; };
 		241729061B30C73400BB35F0 /* openmrs-offline 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "openmrs-offline 2.xcdatamodel"; sourceTree = "<group>"; };
 		2432066B1B2E439000B54970 /* EditPatient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditPatient.h; sourceTree = "<group>"; };
@@ -371,8 +368,6 @@
 			children = (
 				241240A11B62854B009E172B /* MapViewController.h */,
 				241240A21B62854B009E172B /* MapViewController.m */,
-				241240A31B62854B009E172B /* CLLocationValueTrasformer.h */,
-				241240A41B62854B009E172B /* CLLocationValueTrasformer.m */,
 				241240A51B62854B009E172B /* MapViewController.xib */,
 			);
 			name = GPSChooserViewController;
@@ -1164,7 +1159,6 @@
 				D3E47BA61A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m in Sources */,
 				D396A5291A2E09DE00DE6448 /* OpenMRSAPIManager.m in Sources */,
 				D3F797BA1A71F690008E6064 /* SelectVisitTypeView.swift in Sources */,
-				241240A71B62854B009E172B /* CLLocationValueTrasformer.m in Sources */,
 				D39739711A2E082300D0AB69 /* main.m in Sources */,
 				D396A5501A2E3F7600DE6448 /* PatientVisitListView.m in Sources */,
 				240F4EEB1B5D401000E943FC /* XFormsParser.m in Sources */,

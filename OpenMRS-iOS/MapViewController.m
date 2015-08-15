@@ -66,12 +66,20 @@
     [self.view addSubview:self.mapView];
     self.mapView.delegate = self;
     if (self.rowDescriptor.value){
-        [self.mapView setCenterCoordinate:((CLLocation *)self.rowDescriptor.value).coordinate];
-        self.title = [NSString stringWithFormat:@"%0.4f, %0.4f", self.mapView.centerCoordinate.latitude, self.mapView.centerCoordinate.longitude];
-        MapAnnotation *annotation = [[MapAnnotation alloc] init];
-        annotation.coordinate = self.mapView.centerCoordinate;
-        [self.mapView addAnnotation:annotation];
+        NSArray *coordinates = [self.rowDescriptor.value componentsSeparatedByString:@" "];
+        CLLocationCoordinate2D cord;
+        if (coordinates.count == 2) {
+            cord = CLLocationCoordinate2DMake([coordinates[0] floatValue], [coordinates[1] floatValue]);
+            [self.mapView setCenterCoordinate:cord];
+            self.title = [NSString stringWithFormat:@"%.4f, %.4f", self.mapView.centerCoordinate.latitude, self.mapView.centerCoordinate.longitude];
+            MapAnnotation *annotation = [[MapAnnotation alloc] init];
+            annotation.coordinate = self.mapView.centerCoordinate;
+            [self.mapView addAnnotation:annotation];
+        }
     }
+    UITapGestureRecognizer* tapRec = [[UITapGestureRecognizer alloc]
+                                      initWithTarget:self action:@selector(didTapMap:)];
+    [self.mapView addGestureRecognizer:tapRec];
 }
 
 -(MKMapView *)mapView
@@ -80,6 +88,21 @@
     _mapView = [[MKMapView alloc] initWithFrame:self.view.bounds];
     _mapView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     return _mapView;
+}
+
+- (void)didTapMap:(UITapGestureRecognizer *)gesture {
+    if (gesture.state != UIGestureRecognizerStateEnded)
+        return;
+    for (MapAnnotation *ann in self.mapView.annotations) {
+        [self.mapView removeAnnotation:ann];
+    }
+    CGPoint touchPoint = [gesture locationInView:self.mapView];
+    CLLocationCoordinate2D loc = [self.mapView convertPoint:touchPoint toCoordinateFromView:self.mapView];
+    MapAnnotation *annotation = [[MapAnnotation alloc] init];
+    annotation.coordinate = loc;
+    self.rowDescriptor.value = [NSString stringWithFormat:@"%.4f %.4f", loc.latitude, loc.longitude];
+    self.title = [NSString stringWithFormat:@"%.4f %.4f", loc.latitude, loc.longitude];
+    [self.mapView addAnnotation:annotation];
 }
 
 #pragma mark - MKMapViewDelegate
@@ -99,8 +122,8 @@
    fromOldState:(MKAnnotationViewDragState)oldState
 {
     if (newState == MKAnnotationViewDragStateEnding){
-        self.rowDescriptor.value = [[CLLocation alloc] initWithLatitude:view.annotation.coordinate.latitude longitude:view.annotation.coordinate.longitude];
-        self.title = [NSString stringWithFormat:@"%0.4f, %0.4f", view.annotation.coordinate.latitude, view.annotation.coordinate.longitude];
+        self.rowDescriptor.value = [NSString stringWithFormat:@"%.4f, %.4f", view.annotation.coordinate.latitude, view.annotation.coordinate.longitude];
+        self.title = [NSString stringWithFormat:@"%.4f, %.4f", view.annotation.coordinate.latitude, view.annotation.coordinate.longitude];
     }
 }
 

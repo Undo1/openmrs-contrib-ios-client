@@ -13,7 +13,6 @@
 #import "Constants.h"
 #import "SimpleAudioViewController.h"
 #import "MapViewController.h"
-#import "CLLocationValueTrasformer.h"
 #import "MRSDateUtilities.h"
 #import "MRSPatient.h"
 #import "MRSHelperFunctions.h"
@@ -310,8 +309,6 @@
     }
     if ([formElement.type isEqualToString:kXFormsGPS]) {
         row.action.viewControllerClass = [MapViewController class];
-        row.valueTransformer = [CLLocationValueTrasformer class];
-        row.value = [[CLLocation alloc] initWithLatitude:-33 longitude:-56];
     }
 
     // Items
@@ -450,7 +447,8 @@
 }
 
 + (id) getRowValueFromElement:(XFormElement *)formElement andValue:(NSString *) value {
-    if ([formElement.type isEqualToString:kXFormsString]) {
+    if ([formElement.type isEqualToString:kXFormsString] ||
+        [formElement.type isEqualToString:kXFormsGPS]) {
         return value;
     } else if ([formElement.type isEqualToString:kXFormsNumber]) {
         if (![value isEqualToString:@""]) {
@@ -513,7 +511,8 @@
 }
 
 + (NSString *)stringFromValue:(id)value Type:(NSString *)type {
-    if ([type isEqualToString:kXFormsString]) {
+    if ([type isEqualToString:kXFormsString]||
+        [type isEqualToString:kXFormsGPS]) {
         return value;
     } else if ([type isEqualToString:kXFormsNumber] ||
                [type isEqualToString:kXFormsDecimal]) {
