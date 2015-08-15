@@ -12,6 +12,7 @@
 #import "MBProgressHUD.h"
 #import "Constants.h"
 #import "MRSAlertHandler.h"
+#import "MBProgressExtension.h"
 
 @interface SignInViewController ()
 
@@ -158,12 +159,11 @@
     host = [self reCheckHost:host];
     self.hostTextField.text = host;
 
-    [[MBProgressHUD showHUDAddedTo:self.view animated:YES] setLabelText:NSLocalizedString(@"Loading", @"Label loading")];
-    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+    [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:self.view];
     [OpenMRSAPIManager verifyCredentialsWithUsername:username password:password host:host completion:^(NSError *error) {
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
-        [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+        [MBProgressExtension hideActivityIndicatorInView:self.view];
         if (!error) {
+            [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Logged In", @"Message -logged- -in-") inView:self.presentingViewController.view];
             [self updateKeychainWithHost:host username:username password:password];
             dispatch_async(dispatch_get_main_queue(), ^ {
                 [self dismissViewControllerAnimated:YES completion:nil];
@@ -180,7 +180,7 @@
     if (![host hasPrefix:@"http://"]) {
         host = [@"http://" stringByAppendingString:host];
     }
-    if ([host hasPrefix:@"/openmrs/"]) {
+    if ([host hasSuffix:@"/openmrs/"]) {
         host = [host substringWithRange:NSMakeRange(0, host.length-1)];
     }
     if (![host hasSuffix:@"/openmrs"]) {

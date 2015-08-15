@@ -39,6 +39,9 @@
 		247BC2861B7F5DAA00853B37 /* MRSAlertHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 247BC2851B7F5DAA00853B37 /* MRSAlertHandler.m */; };
 		247BC2881B7F649A00853B37 /* AddPatientForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 247BC2871B7F649A00853B37 /* AddPatientForm.m */; };
 		247BC28B1B7F7BF100853B37 /* SettingsForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 247BC28A1B7F7BF100853B37 /* SettingsForm.m */; };
+		247BC28E1B7FC65600853B37 /* MBProgressExtension.m in Sources */ = {isa = PBXBuildFile; fileRef = 247BC28D1B7FC65600853B37 /* MBProgressExtension.m */; };
+		247BC2911B7FC79400853B37 /* 37x-Checkmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 247BC28F1B7FC79400853B37 /* 37x-Checkmark.png */; };
+		247BC2921B7FC79400853B37 /* 37x-Checkmark@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 247BC2901B7FC79400853B37 /* 37x-Checkmark@2x.png */; };
 		248A46171B7A64A400E9F098 /* form-icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 248A46141B7A64A400E9F098 /* form-icon.png */; };
 		248A46181B7A64A400E9F098 /* form-icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 248A46151B7A64A400E9F098 /* form-icon@2x.png */; };
 		248A46191B7A64A400E9F098 /* form-icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 248A46161B7A64A400E9F098 /* form-icon@3x.png */; };
@@ -176,6 +179,10 @@
 		247BC2871B7F649A00853B37 /* AddPatientForm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddPatientForm.m; sourceTree = "<group>"; };
 		247BC2891B7F7BF100853B37 /* SettingsForm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsForm.h; sourceTree = "<group>"; };
 		247BC28A1B7F7BF100853B37 /* SettingsForm.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsForm.m; sourceTree = "<group>"; };
+		247BC28C1B7FC65600853B37 /* MBProgressExtension.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressExtension.h; sourceTree = "<group>"; };
+		247BC28D1B7FC65600853B37 /* MBProgressExtension.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressExtension.m; sourceTree = "<group>"; };
+		247BC28F1B7FC79400853B37 /* 37x-Checkmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "37x-Checkmark.png"; sourceTree = "<group>"; };
+		247BC2901B7FC79400853B37 /* 37x-Checkmark@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "37x-Checkmark@2x.png"; sourceTree = "<group>"; };
 		248A46141B7A64A400E9F098 /* form-icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon.png"; sourceTree = "<group>"; };
 		248A46151B7A64A400E9F098 /* form-icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon@2x.png"; sourceTree = "<group>"; };
 		248A46161B7A64A400E9F098 /* form-icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "form-icon@3x.png"; sourceTree = "<group>"; };
@@ -614,6 +621,8 @@
 				2436F2B41B49D56C00294B4C /* Constants.m */,
 				247BC2841B7F5DAA00853B37 /* MRSAlertHandler.h */,
 				247BC2851B7F5DAA00853B37 /* MRSAlertHandler.m */,
+				247BC28C1B7FC65600853B37 /* MBProgressExtension.h */,
+				247BC28D1B7FC65600853B37 /* MBProgressExtension.m */,
 			);
 			name = Support;
 			sourceTree = "<group>";
@@ -873,6 +882,8 @@
 		D397396E1A2E082200D0AB69 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				247BC28F1B7FC79400853B37 /* 37x-Checkmark.png */,
+				247BC2901B7FC79400853B37 /* 37x-Checkmark@2x.png */,
 				240BE39E1B7E2191008E60DE /* form-thumbnail@3x.png */,
 				240BE39F1B7E2191008E60DE /* form-thumbnail@2x.png */,
 				240BE3A01B7E2191008E60DE /* form-thumbnail.png */,
@@ -1035,6 +1046,7 @@
 				D3A57DBC1B2E5BF800F25F30 /* active_visits_tab_bar_icon.png in Resources */,
 				24C1E0E11B793953003A13A9 /* play_button_disabled.png in Resources */,
 				24A8DEC71B18C18A00F5FF84 /* active_visits_icon@3x.png in Resources */,
+				247BC2911B7FC79400853B37 /* 37x-Checkmark.png in Resources */,
 				24D5CECC1B4B4DB500F1D660 /* settings_icon.png in Resources */,
 				D3A57DBE1B2E5BF800F25F30 /* active_visits_tab_bar_icon@3x.png in Resources */,
 				D396EAF51A36460500191F50 /* search_icon.png in Resources */,
@@ -1058,6 +1070,7 @@
 				248A46181B7A64A400E9F098 /* form-icon@2x.png in Resources */,
 				D396EAF61A36460500191F50 /* search_icon@2x.png in Resources */,
 				245EDDD21B21A11800B8C0EB /* vitals_icon@3x.png in Resources */,
+				247BC2921B7FC79400853B37 /* 37x-Checkmark@2x.png in Resources */,
 				D396A53F1A2E0B5A00DE6448 /* openmrs-logo@2x.png in Resources */,
 				24A8DEC81B18C18A00F5FF84 /* active_visits_icon@2x.png in Resources */,
 				24A8DEC91B18C18A00F5FF84 /* active_visits_icon.png in Resources */,
@@ -1140,6 +1153,7 @@
 				2436F2B51B49D56C00294B4C /* Constants.m in Sources */,
 				D317E7F61A4C6BD300E05212 /* OrderedDictionary.m in Sources */,
 				2432066D1B2E439000B54970 /* EditPatient.m in Sources */,
+				247BC28E1B7FC65600853B37 /* MBProgressExtension.m in Sources */,
 				240F4EEF1B5D415100E943FC /* XFormElement.m in Sources */,
 				D396A52D1A2E09DE00DE6448 /* MRSPatient.m in Sources */,
 				247B747C1B70B86C00BD3D3A /* XFormsStore.m in Sources */,

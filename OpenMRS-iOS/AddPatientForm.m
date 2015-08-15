@@ -15,7 +15,7 @@
 #import "SelectPatientIdentifierTypeTableViewController.h"
 #import "Constants.h"
 #import "MRSAlertHandler.h"
-#import "MBProgressHUD.h"
+#import "MBProgressExtension.h"
 
 
 @interface AddPatientForm ()
@@ -253,11 +253,9 @@
         }
         NSArray *identifiers = @[@{@"identifier":values[kIdentifier], @"identifierType":self.patientIdentifierType.UUID}];
         NSLog(@"Identifiers: %@", identifiers);
-        [[MBProgressHUD showHUDAddedTo:self.view animated:YES] setLabelText:NSLocalizedString(@"Loading", @"Label loading")];
-        [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+        [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:self.view];
         [OpenMRSAPIManager addPatient:parameters withIdentifier:identifiers completion:^(NSError *error, MRSPatient *createdPatient) {
-            [MBProgressHUD hideHUDForView:self.view animated:YES];
-            [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+            [MBProgressExtension hideActivityIndicatorInView:self.view];
             if (!error) {
                 UIAlertView *sucess = [MRSAlertHandler alertForSucess:self];
                 [sucess show];

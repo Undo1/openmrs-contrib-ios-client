@@ -11,6 +11,9 @@
 #import "MRSHelperFunctions.h"
 #import "MRSVisitCell.h"
 #import "MRSVisit.h"
+#import "MBProgressHUD.h"
+#import "MRSAlertHandler.h"
+#import "MBProgressExtension.h"
 
 @interface ActiveVisitsList ()
 
@@ -143,24 +146,23 @@
 
 - (void)loadMore {
     self.loading = YES;
-    [SVProgressHUD showWithStatus:[NSString stringWithFormat:@"%@..", NSLocalizedString(@"Loading more visits", @"Message Loading more visits")]];
+
+    [MBProgressExtension showBlockWithDetailTitle:NSLocalizedString(@"Loading more visits", @"Message Loading more visits") inView:self.view];
     [OpenMRSAPIManager getActiveVisits:self.activeVisits From:self.startIndex withCompletion:^(NSError *error) {
+        [MBProgressExtension hideActivityIndicatorInView:self.view];
         if (!error) {
+            [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Completed", @"Label completed") inView:self.view];
             [self.tableView reloadData];
             int current = self.startIndex;
             self.startIndex = self.activeVisits.count;
             self.loading = NO;
             [self addNewRows:current];
-            [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Done", @"Label done")];
         } else {
             if (self.activeVisits.count == 0){
-                [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Can not load active visits", @"Message Can not load active visits")];
-                //To remove the spinning indicator cell.
                 self.hasMore = NO;
                 [self.tableView reloadData];
-            } else {
-                [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Problem loading more active visits", @"Message Problem loading more active visits")];
             }
+            [[MRSAlertHandler alertViewForError:self error:error] show];
         }
     }];
 }
