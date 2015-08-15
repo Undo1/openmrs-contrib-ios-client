@@ -18,6 +18,7 @@
 #import "XFormViewController.h"
 #import "XFormsStore.h"
 #import "SettingsForm.h"
+#import "AppDelegate.h"
 
 @implementation MainMenuCollectionViewController
 
@@ -252,6 +253,8 @@ static NSString * const reuseIdentifier = @"Cell";
     [OpenMRSAPIManager logout];
     [[XFormsStore sharedStore] clearFilledForms];
     [[XFormsStore sharedStore] clearBlankForms];
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    [delegate clearStore];
 }
 
 #pragma mark - <UIViewControllerRestoration>
