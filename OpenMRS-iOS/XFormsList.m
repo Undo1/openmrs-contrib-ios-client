@@ -10,8 +10,10 @@
 #import "XForms.h"
 #import "XFormsStore.h"
 #import "XFormViewController.h"
-#import "SVProgressHUD.h"
 #import "OpenMRSAPIManager.h"
+#import "MBProgressExtension.h"
+#import "MBProgressHUD.h"
+#import "MRSAlertHandler.h"
 
 @interface XFormsList ()
 
@@ -68,7 +70,7 @@
                                                                                  action:@selector(sendAll)];
         [self.tableView reloadData];
     } else {
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save offline", @"Label save offline")
+        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Save all offline", @"Label save all offline")
                                                                                   style:UIBarButtonItemStylePlain
                                                                                  target:self
                                                                                  action:@selector(saveOffline)];
@@ -85,24 +87,19 @@
     if (self.FilledForms) {
         self.forms = [NSMutableArray arrayWithArray:[[XFormsStore sharedStore] loadFilledFiles]];
     } else {
+        [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:self.view];
         [[XFormsStore sharedStore] loadForms:^(NSArray *forms, NSError *error) {
             if (!error) {
                 if (self.counter == 1) {
                     self.counter = 2;
                 } else if (self.counter == 2) {
+                    [MBProgressExtension hideActivityIndicatorInView:self.view];
                     [self syncBetweenForms:self.forms andWebForms:forms];
                     self.counter = 3;
                 }
                 self.forms = [NSMutableArray arrayWithArray:forms];
             } else {
-                if (!self.forms) {
-                    UIAlertView *alertLoadingForms = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Warning label error")
-                                                                                message:NSLocalizedString(@"Cannot load xforms, If you are connected please check xforms support on server", @"Warning message for error loading xforms list")
-                                                                               delegate:self
-                                                                      cancelButtonTitle:NSLocalizedString(@"Cancel", @"Canel button label")
-                                                                      otherButtonTitles: nil];
-                    [alertLoadingForms show];
-                }
+                [[MRSAlertHandler alertViewForError:self error:error] show];
             }
         }];
     }
@@ -183,17 +180,14 @@
         [self presentViewController:nc animated:YES completion:nil];
     } else {
         if (!self.FilledForms) {
+            [MBProgressExtension showBlockWithTitle:@"" inView:self.view];
             [[XFormsStore sharedStore] loadForm:formID andFormName:formName completion:^(XForms *xform, NSError *error) {
+                [MBProgressExtension hideActivityIndicatorInView:self.view];
                 if (!error) {
                     UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:[[XFormViewController alloc] initWithForm:xform WithIndex:0]];
                     [self presentViewController:nc animated:YES completion:nil];
                 } else {
-                    UIAlertView *corruptedForm = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Warning label error")
-                                                                            message:NSLocalizedString(@"Can not open xform, If you are connected to the internet. this form maybe deleted or corrupted", @"Warning can not load xforms")
-                                                                           delegate:self
-                                                                  cancelButtonTitle:NSLocalizedString(@"Cancel", @"Canel button label")
-                                                                  otherButtonTitles: nil];
-                    [corruptedForm show];
+                    [[MRSAlertHandler alertViewForError:self error:error] show];
                     [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
                 }
             }];
@@ -217,9 +211,18 @@
 }
 
 - (void)saveOffline {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.mode = MBProgressHUDModeDeterminate;
+    hud.progress = 0.0f;
+    [hud show:YES];
+    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         __block NSError *master_error = nil;
         for (int i=0;i<self.forms.count;i++) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                hud.progress = (float)(i)/self.forms.count + 0.001f;
+                hud.labelText = [NSString stringWithFormat:@"%d of %lu", i, (unsigned long)self.forms.count];
+            });
             XForms *form = self.forms[i];
             dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
             [[XFormsStore sharedStore] loadForm:form.XFormsID andFormName:form.name completion:^(XForms *xform, NSError *error) {
@@ -232,31 +235,74 @@
             }];
             dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
             if (master_error) {
-                [SVProgressHUD showErrorWithStatus:[NSString stringWithFormat:@"%@ XForms", NSLocalizedString(@"Error saving", @"Warning label -Error- and -Saving-")]];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [hud hide:YES];
+                    [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+                    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Warning label error")
+                                                message:[NSString stringWithFormat:@"%@ XForms", NSLocalizedString(@"Error saving", @"Warning label -Error- and -Saving-")]
+                                               delegate:self
+                                      cancelButtonTitle:@"OK"
+                                      otherButtonTitles: nil]
+                     show];
+                });
                 break;
             }
         }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [hud hide:YES];
+            [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+            [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Completed", @"Label completed") inView:self.view];
+        });
     });
 }
 
 - (void)sendAll {
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    hud.mode = MBProgressHUDModeDeterminate;
+    hud.progress = 0.0f;
+    [hud show:YES];
+    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         __block NSError *master_error = nil;
+        __block NSMutableArray *finalArray = [NSMutableArray array];
         for (int i=0;i<self.forms.count;i++) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                hud.progress = (float)(i)/self.forms.count + 0.001f;
+                hud.labelText = [NSString stringWithFormat:@"%d of %lu", i, (unsigned long)self.forms.count];
+            });
             XForms *form = self.forms[i];
             dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
             [OpenMRSAPIManager uploadXForms:form completion:^(NSError *error) {
                 if (error) {
                     master_error = error;
+                    for (int j=i;j<self.forms.count;j++) {
+                        [finalArray addObject:self.forms[i]];
+                    }
+                } else {
+                    [[XFormsStore sharedStore] deleteFilledForm:form];
                 }
                 dispatch_semaphore_signal(semaphore);
             }];
             dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
             if (master_error) {
-                [SVProgressHUD showErrorWithStatus:[NSString stringWithFormat:@"%@ -%@- aborting..", NSLocalizedString(@"Error saving", @"Warning label -Error- and -Saving-"), form.name, NSLocalizedString(@"aborting", @"aborting")]];
+                self.forms = finalArray;
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [hud hide:YES];
+                    [self.tableView reloadData];
+                    [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+                    [[MRSAlertHandler alertViewForError:self error:master_error] show];
+                });
                 break;
             }
         }
+        self.forms = finalArray;
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [hud hide:YES];
+            [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+            [self.tableView reloadData];
+            [[MRSAlertHandler alertForSucess:self] show];
+        });
     });
 }
 @end
