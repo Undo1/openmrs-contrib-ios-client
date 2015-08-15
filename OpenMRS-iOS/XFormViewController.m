@@ -344,6 +344,12 @@
         XLFormRowDescriptor *newRow = [XLFormRowDescriptor formRowDescriptorWithTag:[NSString stringWithFormat:@"%@~NEW" , row.tag, count]
                                                                               rowType:[[Constants MAPPING_TYPES] objectForKey:type]
                                                                                 title:row.title];
+        if (!([[NSUserDefaults standardUserDefaults] boolForKey:UDisWizard]) &&
+            ([type isEqualToString:kXFormsString] ||
+             [type isEqualToString:kXFormsNumber] ||
+             [type isEqualToString:kXFormsDecimal])) {
+                [newRow.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
+            }
         if (subElement.defaultValue) {
             newRow.value = subElement.defaultValue;
         }
