@@ -253,11 +253,13 @@
                 break;
             }
         }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [hud hide:YES];
-            [[UIApplication sharedApplication] endIgnoringInteractionEvents];
-            [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Completed", @"Label completed") inView:self.view];
-        });
+        if (!master_error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [hud hide:YES];
+                [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+                [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Completed", @"Label completed") inView:self.view];
+            });
+        }
     });
 }
 
@@ -301,12 +303,14 @@
             }
         }
         self.forms = finalArray;
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [hud hide:YES];
-            [[UIApplication sharedApplication] endIgnoringInteractionEvents];
-            [self.tableView reloadData];
-            [[MRSAlertHandler alertForSucess:self] show];
-        });
+        if (!master_error) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [hud hide:YES];
+                [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+                [self.tableView reloadData];
+                [[MRSAlertHandler alertForSucess:self] show];
+            });
+        }
     });
 }
 @end
