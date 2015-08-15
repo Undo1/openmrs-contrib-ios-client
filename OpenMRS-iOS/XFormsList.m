@@ -99,6 +99,10 @@
                 }
                 self.forms = [NSMutableArray arrayWithArray:forms];
             } else {
+                if (self.counter == 2) {
+                    [MBProgressExtension hideActivityIndicatorInView:self.view];
+                    self.counter = 3;
+                }
                 [[MRSAlertHandler alertViewForError:self error:error] show];
             }
         }];
