@@ -12,7 +12,9 @@
 @implementation MRSAlertHandler
 
 + (UIAlertView *)alertViewForError:(id)sender error:(NSError *) error {
-    if (error.code == errNoInternet || error.code == errNetWorkLost) {
+    NSLog(@"error: %@", error);
+    NSLog(@"error userinfo(%ld): %@", (long)error.code,error.userInfo);
+    if (error.code == errNoInternet || error.code == errNetWorkLost || error.code == errNetworkDown) {
         return [MRSAlertHandler alertForNoInternet:sender];
     } else if (error.code == errBadRequest) {
         return [MRSAlertHandler alertViewForErrorBadRequest:sender error:error];

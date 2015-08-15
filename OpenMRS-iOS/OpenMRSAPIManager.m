@@ -249,7 +249,6 @@
 }
 + (void)getEncountersForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *encounters))completion
 {
-    [SVProgressHUD show];
     NSURL *hostUrl = [self setUpCredentialsLayer];
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/encounter?patient=%@", [hostUrl absoluteString], patient.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
@@ -261,14 +260,8 @@
             [array addObject:visit];
         }
         completion(nil, array);
-        dispatch_async(dispatch_get_main_queue(), ^ {
-            [SVProgressHUD popActivity];
-        });
     }
     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^ {
-            [SVProgressHUD popActivity];
-        });
         if (error.code == -1009) { //network down
             AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
             NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
@@ -354,7 +347,6 @@
 }
 + (void)getVisitsForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *visits))completion
 {
-    [SVProgressHUD show];
     NSURL *hostUrl = [self setUpCredentialsLayer];
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/visit?v=full&patient=%@", [hostUrl absoluteString], patient.UUID] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
@@ -380,14 +372,8 @@
             [array addObject:visit];
         }
         completion(nil, array);
-        dispatch_async(dispatch_get_main_queue(), ^ {
-            [SVProgressHUD popActivity];
-        });
     }
     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-        dispatch_async(dispatch_get_main_queue(), ^ {
-            [SVProgressHUD popActivity];
-        });
         if (error.code == -1009) { //network down
             AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
             NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];

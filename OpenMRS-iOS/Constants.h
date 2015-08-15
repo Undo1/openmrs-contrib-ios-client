@@ -70,5 +70,6 @@ extern NSInteger const errBadRequest;
 extern NSInteger const errServerNotFound;
 extern NSInteger const errTimeout;
 extern NSInteger const errNetWorkLost;
+extern NSInteger const errNetworkDown;
 
 @end
