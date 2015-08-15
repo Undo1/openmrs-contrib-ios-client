@@ -30,32 +30,20 @@
 #import "XForms.h"
 #import "GDataXMLNode.h"
 #import "XFormsParser.h"
+#import "Constants.h"
 #import <CoreData/CoreData.h>
 
 @implementation OpenMRSAPIManager
-+ (void)verifyCredentialsWithUsername:(NSString *)username password:(NSString *)password host:(NSString *)host completion:(void (^)(BOOL success))completion
++ (void)verifyCredentialsWithUsername:(NSString *)username password:(NSString *)password host:(NSString *)host completion:(void (^)(NSError *error))completion
 {
-    [SVProgressHUD show];
     NSURL *hostUrl = [NSURL URLWithString:host];
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/user", host] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
-        completion(YES);
-        dispatch_async(dispatch_get_main_queue(), ^ {
-            [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Logged In", @"Message -logged- -in-")];
-        });
+        completion(nil);
     }
     failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         NSLog(@"Couldn't verify creds: %@", error);
-        completion(NO);
-        dispatch_async(dispatch_get_main_queue(), ^ {
-            if (error.code == -1003) //Server with specified hostname not found
-            {
-                [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Couldn't find server", @"Message -could- -not- -find- -server-")];
-            } else
-            {
-                [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Login failed", @"Message -login- -failed-")];
-            }
-        });
+        completion(error);
     }];
 }
 

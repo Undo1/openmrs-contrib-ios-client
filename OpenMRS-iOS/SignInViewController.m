@@ -9,6 +9,9 @@
 #import "SignInViewController.h"
 #import "OpenMRSAPIManager.h"
 #import "KeychainItemWrapper.h"
+#import "MBProgressHUD.h"
+#import "Constants.h"
+#import "MRSAlertHandler.h"
 
 @interface SignInViewController ()
 
@@ -27,7 +30,6 @@
     [super viewDidLoad];
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
-    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
 
     [self setUpViews];
     [self setUpContrains];
@@ -150,19 +152,18 @@
 
 - (void)signIn:(UIButton *)sender
 {
-    self.hostTextField.text = [self urlifiedString:self.hostTextField.text];
     NSString *password = self.passwordTextField.text;
     NSString *username = self.usernameTextField.text;
     NSString *host = self.hostTextField.text;
-    if (username.length == 0) username = @"admin";
-    if (password.length == 0) password = @"Admin123";
-    if (host.length == 0 || [host isEqualToString:@"http://"]) host = @"http://demo.openmrs.org/openmrs";
-    if (![host hasPrefix:@"http://"]) {
-        host = [@"http://" stringByAppendingString:host];
-    }
-    [OpenMRSAPIManager verifyCredentialsWithUsername:username password:password host:host completion:^(BOOL success) {
-        if (success) {
-            NSLog(@"Success!");
+    host = [self reCheckHost:host];
+    self.hostTextField.text = host;
+
+    [[MBProgressHUD showHUDAddedTo:self.view animated:YES] setLabelText:NSLocalizedString(@"Loading", @"Label loading")];
+    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+    [OpenMRSAPIManager verifyCredentialsWithUsername:username password:password host:host completion:^(NSError *error) {
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
+        [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+        if (!error) {
             [self updateKeychainWithHost:host username:username password:password];
             dispatch_async(dispatch_get_main_queue(), ^ {
                 [self dismissViewControllerAnimated:YES completion:nil];
@@ -170,22 +171,22 @@
             });
         }
         else {
-            NSLog(@"Failure!");
-            NSString *hostWithOpenmrs = [host stringByAppendingString:@"/openmrs"];
-            [OpenMRSAPIManager verifyCredentialsWithUsername:username password:password host:hostWithOpenmrs completion:^(BOOL success) {
-                if (success) {
-                    [self updateKeychainWithHost:hostWithOpenmrs username:username password:password];
-                    dispatch_async(dispatch_get_main_queue(), ^ {
-                        [self dismissViewControllerAnimated:YES completion:nil];
-                        [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-                    });
-                }
-                else {
-                    NSLog(@"Failure");
-                }
-            }];
+            [[MRSAlertHandler alertViewForError:self error:error] show];
         }
     }];
+}
+
+- (NSString *)reCheckHost:(NSString *)host {
+    if (![host hasPrefix:@"http://"]) {
+        host = [@"http://" stringByAppendingString:host];
+    }
+    if ([host hasPrefix:@"/openmrs/"]) {
+        host = [host substringWithRange:NSMakeRange(0, host.length-1)];
+    }
+    if (![host hasSuffix:@"/openmrs"]) {
+        host = [host stringByAppendingString:@"/openmrs"];
+    }
+    return host;
 }
 
 - (void)demo:(id)sender {
@@ -201,12 +202,5 @@
     [wrapper setObject:username forKey:(__bridge id)(kSecAttrAccount)];
     [wrapper setObject:host forKey:(__bridge id)(kSecAttrService)];
 }
-- (NSString *)urlifiedString:(NSString *)inputUrl
-{
-    NSURL *url = [NSURL URLWithString:inputUrl];
-    if (url.scheme.length == 0) {
-        return [@"http://" stringByAppendingString:inputUrl];
-    }
-    return inputUrl;
-}
+
 @end

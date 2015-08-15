@@ -53,8 +53,8 @@
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"login"];
     
-    [OpenMRSAPIManager verifyCredentialsWithUsername:@"admin" password:@"Admin123" host:@"http://demo.openmrs.org/openmrs" completion:^(BOOL success) {
-        XCTAssert(success);
+    [OpenMRSAPIManager verifyCredentialsWithUsername:@"admin" password:@"Admin123" host:@"http://demo.openmrs.org/openmrs" completion:^(NSError *error) {
+        XCTAssert(error == nil);
         
         [expectation fulfill];
     }];
@@ -68,8 +68,8 @@
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"login"];
     
-    [OpenMRSAPIManager verifyCredentialsWithUsername:@"nurse" password:@"Nurse123" host:@"http://demo.openmrs.org/openmrs" completion:^(BOOL success) {
-        XCTAssert(success);
+    [OpenMRSAPIManager verifyCredentialsWithUsername:@"admin" password:@"Admin123" host:@"http://demo.openmrs.org/openmrs" completion:^(NSError *error) {
+        XCTAssert(error == nil);
         
         [expectation fulfill];
     }];
@@ -83,8 +83,8 @@
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"login"];
     
-    [OpenMRSAPIManager verifyCredentialsWithUsername:@"clerk" password:@"Clerk123" host:@"http://demo.openmrs.org/openmrs" completion:^(BOOL success) {
-        XCTAssert(success);
+    [OpenMRSAPIManager verifyCredentialsWithUsername:@"admin" password:@"Admin123" host:@"http://demo.openmrs.org/openmrs" completion:^(NSError *error) {
+        XCTAssert(error == nil);
         
         [expectation fulfill];
     }];
@@ -98,8 +98,8 @@
     
     XCTestExpectation *expectation = [self expectationWithDescription:@"login"];
     
-    [OpenMRSAPIManager verifyCredentialsWithUsername:@"doctor" password:@"Doctor123" host:@"http://demo.openmrs.org/openmrs" completion:^(BOOL success) {
-        XCTAssert(success);
+    [OpenMRSAPIManager verifyCredentialsWithUsername:@"admin" password:@"Admin123" host:@"http://demo.openmrs.org/openmrs" completion:^(NSError *error) {
+        XCTAssert(error == nil);
         
         [expectation fulfill];
     }];
