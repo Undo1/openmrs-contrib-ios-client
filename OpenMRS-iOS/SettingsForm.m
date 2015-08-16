@@ -35,6 +35,8 @@ NSString *kWizardMode = @"wizardMode";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.restorationIdentifier = NSStringFromClass([self class]);
+    self.restorationClass = [self class];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(exitSettings)];
 }
 
@@ -107,7 +109,6 @@ NSString *kWizardMode = @"wizardMode";
 
 - (void)exitSettings {
     XLFormRowDescriptor *row = [self.form formRowWithTag:kWizardMode];
-    NSLog(@"row value: %@", row.value);
     if ([row.value isEqualToString: NSLocalizedString(@"Single form", @"Label single form")]) {
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UDisWizard];
     } else {
@@ -134,5 +135,9 @@ NSString *kWizardMode = @"wizardMode";
 - (void)syncOfflinePatients {
     [[SyncingEngine sharedEngine] updateExistingOutOfDatePatients:nil];
     [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForItem:1 inSection:1] animated:YES];
+}
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    return [[self alloc] init];
 }
 @end

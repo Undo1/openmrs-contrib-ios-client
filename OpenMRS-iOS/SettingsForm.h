@@ -11,6 +11,6 @@
 #import "XLFormViewController.h"
 #import "SelectPatientIdentifierTypeTableViewController.h"
 
-@interface SettingsForm : XLFormViewController
+@interface SettingsForm : XLFormViewController <UIViewControllerRestoration>
 
 @end
