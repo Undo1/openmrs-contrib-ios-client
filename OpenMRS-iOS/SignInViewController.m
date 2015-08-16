@@ -61,6 +61,9 @@
     self.hostTextField.translatesAutoresizingMaskIntoConstraints = NO;
     self.hostTextField.placeholder = @"host URL";
     self.hostTextField.font = self.host.font;
+#ifdef DEBUG
+    self.hostTextField.text = @"http://52.27.34.83:8080/openmrs";
+#endif
     self.hostTextField.textAlignment = NSTextAlignmentLeft;
     [self.view addSubview:self.hostTextField ];
 
@@ -76,6 +79,9 @@
     self.usernameTextField.translatesAutoresizingMaskIntoConstraints = NO;
     self.usernameTextField.textAlignment = NSTextAlignmentLeft;
     self.usernameTextField.placeholder = @"username";
+#ifdef DEBUG
+    self.usernameTextField.text = @"admin";
+#endif
     [self.view addSubview:self.usernameTextField];
 
     self.password = [[UILabel alloc] init];
@@ -91,6 +97,9 @@
     self.passwordTextField.secureTextEntry = YES;
     self.passwordTextField.textAlignment = NSTextAlignmentLeft;
     self.passwordTextField.translatesAutoresizingMaskIntoConstraints = NO;
+#ifdef DEBUG
+    self.passwordTextField.text = @"Admin123";
+#endif
     [self.view addSubview:self.passwordTextField];
 
     self.goButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
@@ -195,7 +204,7 @@
         else {
             if (error.code == errBadRequest) {
                 [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Warning label error")
-                                           message:NSLocalizedString(@"Invalid credentials!", @"warning label invalid credentials")
+                                           message:[NSString stringWithFormat:@"%@!", NSLocalizedString(@"Invalid credentials", @"warning label invalid credentials")]
                                           delegate:self
                                  cancelButtonTitle:@"OK"
                                  otherButtonTitles: nil]
@@ -215,7 +224,12 @@
 }
 
 - (void)demo:(id)sender {
-    [[[UIAlertView alloc] initWithTitle:@"Demo" message:NSLocalizedString(@"Are you sure that you want to Demo the iOS app using OpenMRS demo server ?", @"warning going to demo server") delegate:self cancelButtonTitle:NSLocalizedString(@"No", @"No") otherButtonTitles:NSLocalizedString(@"Yes", "Yes"), nil] show];
+    [[[UIAlertView alloc] initWithTitle:@"Demo"
+                                message:[NSString stringWithFormat:@"%@?", NSLocalizedString(@"Are you sure that you want to Demo the iOS app using OpenMRS demo server", @"warning going to demo server")]
+                               delegate:self
+                      cancelButtonTitle:NSLocalizedString(@"No", @"No")
+                      otherButtonTitles:NSLocalizedString(@"Yes", "Yes"), nil]
+     show];
 }
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
