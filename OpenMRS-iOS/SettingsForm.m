@@ -55,7 +55,11 @@ NSString *kWizardMode = @"wizardMode";
     XLFormSectionDescriptor *section = [XLFormSectionDescriptor formSection];
     
     NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    section.footerTitle = [NSString stringWithFormat:@"%@: (%@)", NSLocalizedString(@"Version", @"Label version"), appVersion];
+    if ([appVersion componentsSeparatedByString:@"."].count == 2) {
+        appVersion = [appVersion stringByAppendingString:@".0"];
+    }
+    
+    section.footerTitle = [NSString stringWithFormat:@"%@: (%@)", NSLocalizedString(@"App version", @"Label version"), appVersion];
     
     [form addFormSection:section];
 
