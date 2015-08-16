@@ -550,6 +550,7 @@
             editPatientNavController.restorationIdentifier = NSStringFromClass([editPatientNavController class]);
             editPatientNavController.modalPresentationStyle = UIModalPresentationFormSheet;
             [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+            self.patientEdited = YES;
             [self presentViewController:editPatientNavController animated:YES completion:nil];
         }
     }
