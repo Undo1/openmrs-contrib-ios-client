@@ -149,8 +149,13 @@
     if ([[identifierComponents lastObject] isEqualToString:@"navContrller3"]) {
         self.nav3 = [[UINavigationController alloc] init];
         self.nav3.restorationIdentifier = [identifierComponents lastObject];
-        self.tabbar.viewControllers = [NSArray arrayWithObjects:self.nav1, self.nav2, self.nav3, nil];
         return self.nav3;
+    }
+    if ([[identifierComponents lastObject] isEqualToString:@"navController4"])  {
+        self.nav4 = [[UINavigationController alloc] init];
+        self.nav4.restorationIdentifier = [identifierComponents lastObject];
+        self.tabbar.viewControllers = [NSArray arrayWithObjects:self.nav1, self.nav2, self.nav3, self.nav4, nil];
+        return self.nav4;
     }
     UIViewController *nc = [[UINavigationController alloc] init];
     nc.restorationIdentifier = [identifierComponents lastObject];

@@ -233,6 +233,7 @@ static NSString * const reuseIdentifier = @"Cell";
         
         XFormsList *formsList = [[XFormsList alloc] initFilledForms];
         UINavigationController *formListNavigationController = [[UINavigationController alloc] initWithRootViewController:formsList];
+        formListNavigationController.restorationIdentifier = NSStringFromClass([formListNavigationController class]);
         [self presentViewController:formListNavigationController animated:YES completion:nil];
     } else {
         SettingsForm *settings = [[SettingsForm alloc] init];

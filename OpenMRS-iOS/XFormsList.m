@@ -53,7 +53,14 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
+    if (self.FilledForms) {
+        self.restorationIdentifier = @"filledForms";
+    } else {
+        self.restorationIdentifier = @"blankForms";
+    }
+    self.restorationClass = [self class];
+
     self.navigationItem.title = @"XForms"; //That doesn't need localization.
     if (self.FilledForms) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(close)];
@@ -94,6 +101,7 @@
                     self.counter = 2;
                 } else if (self.counter == 2) {
                     [MBProgressExtension hideActivityIndicatorInView:self.view];
+                    [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Completed", "Label completed") inView:self.view];
                     [self syncBetweenForms:self.forms andWebForms:forms];
                     self.counter = 3;
                 }
@@ -312,5 +320,14 @@
             });
         }
     });
+}
+
++ (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
+    NSString *lastObj = [identifierComponents lastObject];
+    if ([lastObj isEqualToString:@"filledForms"]) {
+        return [[self alloc] initFilledForms];
+    } else {
+        return [[self alloc] initBlankForms];
+    }
 }
 @end

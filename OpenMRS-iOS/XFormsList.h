@@ -10,7 +10,7 @@
 #import "MRSPatient.h"
 #import "PatientViewController.h"
 
-@interface XFormsList : UITableViewController
+@interface XFormsList : UITableViewController <UIViewControllerRestoration>
 
 @property (nonatomic, strong) MRSPatient *patient;
 @property (nonatomic, strong) PatientViewController *pvc;

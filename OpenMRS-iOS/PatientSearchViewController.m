@@ -172,6 +172,7 @@
     XFormsList *formsList = [[XFormsList alloc] initBlankForms];
     formsList.pvc = vc;
     UINavigationController *formListNavigationController = [[UINavigationController alloc] initWithRootViewController:formsList];
+    formListNavigationController.restorationIdentifier = @"navController4";
     formsList.patient = vc.patient;
 
     UITabBarController *patientView = [[UITabBarController alloc] init];

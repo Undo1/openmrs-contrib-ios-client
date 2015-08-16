@@ -23,6 +23,7 @@
 @property (nonatomic, strong) UINavigationController *nav1;
 @property (nonatomic, strong) UINavigationController *nav2;
 @property (nonatomic, strong) UINavigationController *nav3;
+@property (nonatomic, strong) UINavigationController *nav4;
 
 - (void)saveContext;
 - (NSURL *)applicationDocumentsDirectory;
