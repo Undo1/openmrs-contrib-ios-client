@@ -36,6 +36,7 @@
         NSLog(@"%@", _sharedManager.baseURL.absoluteString);
         _sharedManager = [[self alloc] initWithBaseURL:[NSURL URLWithString:host]];
     }
+    _sharedManager.requestSerializer.timeoutInterval = 10;
     _sharedManager.responseSerializer = [AFJSONResponseSerializer new];
     return _sharedManager;
 }

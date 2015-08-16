@@ -14,7 +14,7 @@
 #import "MRSAlertHandler.h"
 #import "MBProgressExtension.h"
 
-@interface SignInViewController ()
+@interface SignInViewController () <UIAlertViewDelegate>
 
 @property (nonatomic, strong) UIImageView *imageView;
 @property (nonatomic, strong) UILabel *host;
@@ -153,6 +153,28 @@
 
 - (void)signIn:(UIButton *)sender
 {
+    NSMutableArray *fieldNames = [NSMutableArray array];
+    if ([self.hostTextField.text  isEqualToString:@""]) {
+        [fieldNames addObject:NSLocalizedString(@"Host", @"Label host")];
+    }
+    if ([self.usernameTextField.text isEqualToString:@""]) {
+        [fieldNames addObject:NSLocalizedString(@"Username", @"Label username")];
+    }
+    if ([self.passwordTextField.text isEqualToString:@""]) {
+        [fieldNames addObject:NSLocalizedString(@"Password", @"Label password")];
+    }
+    if (fieldNames.count > 0) {
+        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Warning label error")
+                                    message:[NSString stringWithFormat:@"(%@) %@.",
+                                             [fieldNames componentsJoinedByString:@", "],
+                                             NSLocalizedString(@"is empty", @"alert msesage empty files")]
+                                   delegate:self
+                          cancelButtonTitle:@"OK"
+                          otherButtonTitles: nil]
+         show];
+        return;
+    }
+
     NSString *password = self.passwordTextField.text;
     NSString *username = self.usernameTextField.text;
     NSString *host = self.hostTextField.text;
@@ -171,7 +193,16 @@
             });
         }
         else {
-            [[MRSAlertHandler alertViewForError:self error:error] show];
+            if (error.code == errBadRequest) {
+                [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Warning label error")
+                                           message:NSLocalizedString(@"Invalid credentials!", @"warning label invalid credentials")
+                                          delegate:self
+                                 cancelButtonTitle:@"OK"
+                                 otherButtonTitles: nil]
+                 show];
+            } else {
+                [[MRSAlertHandler alertViewForError:self error:error] show];
+            }
         }
     }];
 }
@@ -180,20 +211,22 @@
     if (![host hasPrefix:@"http://"]) {
         host = [@"http://" stringByAppendingString:host];
     }
-    if ([host hasSuffix:@"/openmrs/"]) {
-        host = [host substringWithRange:NSMakeRange(0, host.length-1)];
-    }
-    if (![host hasSuffix:@"/openmrs"]) {
-        host = [host stringByAppendingString:@"/openmrs"];
-    }
     return host;
 }
 
 - (void)demo:(id)sender {
-    self.hostTextField.text = @"http://demo.openmrs.org/openmrs";
-    self.usernameTextField.text = @"admin";
-    self.passwordTextField.text = @"Admin123";
-    [self signIn:sender];
+    [[[UIAlertView alloc] initWithTitle:@"Demo" message:NSLocalizedString(@"Are you sure that you want to Demo the iOS app using OpenMRS demo server ?", @"warning going to demo server") delegate:self cancelButtonTitle:NSLocalizedString(@"No", @"No") otherButtonTitles:NSLocalizedString(@"Yes", "Yes"), nil] show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if ([alertView.title isEqualToString:@"Demo"]) {
+        if (buttonIndex == 1) {
+            self.hostTextField.text = @"http://demo.openmrs.org/openmrs";
+            self.usernameTextField.text = @"admin";
+            self.passwordTextField.text = @"Admin123";
+            [self signIn:nil];
+        }
+    }
 }
 - (void)updateKeychainWithHost:(NSString *)host username:(NSString *)username password:(NSString *)password
 {
