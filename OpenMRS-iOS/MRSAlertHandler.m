@@ -32,11 +32,11 @@
 }
 
 + (UIAlertView *)alertforTimeOut:(id)sender {
-    return [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Warning label error") message:NSLocalizedString(@"Te request timed out", @"Warning request timed out") delegate:sender cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    return [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Warning label error") message:NSLocalizedString(@"Seems the Server is hanging up, Please check back later.", @"Warning request timed out") delegate:sender cancelButtonTitle:@"OK" otherButtonTitles: nil];
 }
 
 + (UIAlertView *)alertForServerNotFound:(id)sender {
-    return [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Warning label error") message:NSLocalizedString(@"Server not found", "Warning server not found") delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    return [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Warning label error") message:[NSString stringWithFormat:@"OpenMRS %@", NSLocalizedString(@"server not found", "Warning server not found")] delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil];
 }
 
 + (UIAlertView *)alertForSucess:(id)sender {
