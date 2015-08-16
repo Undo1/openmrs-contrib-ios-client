@@ -50,6 +50,7 @@ NSString *kWizardMode = @"wizardMode";
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
     NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
     NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    host = [NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Backend host", @"Label backend host"), host];
 
     XLFormDescriptor *form = [XLFormDescriptor formDescriptorWithTitle:NSLocalizedString(@"Settings", @"Label settings")];
     XLFormSectionDescriptor *section = [XLFormSectionDescriptor formSection];
@@ -120,6 +121,14 @@ NSString *kWizardMode = @"wizardMode";
     [section addFormRow:row];
     
     self.form = form;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    if (indexPath.section == 0 && indexPath.row == 1) {
+        return 33;
+    } else {
+        return 44;
+    }
 }
 
 - (void)exitSettings {
