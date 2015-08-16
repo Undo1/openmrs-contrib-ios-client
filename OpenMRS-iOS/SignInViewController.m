@@ -138,8 +138,8 @@
                                 @"button": self.goButton,
                                 @"demo": self.demoButton
                                 };
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-50-[image(44)]-20-[username]-10-[password]-50-[button(40)]-10-[demo(40)]" options:0 metrics:nil views:viewsDict]];
-    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.imageView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.host attribute:NSLayoutAttributeCenterY multiplier:1 constant:0]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|-50-[image]-20-[host]-10-[username]-10-[password]-50-[button(40)]-10-[demo(40)]" options:0 metrics:nil views:viewsDict]];
+    [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.imageView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
     
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.host attribute:NSLayoutAttributeBaseline relatedBy:NSLayoutRelationEqual toItem:self.hostTextField attribute:NSLayoutAttributeBaseline multiplier:1 constant:0]];
     
@@ -147,9 +147,7 @@
     
     [self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.password attribute:NSLayoutAttributeBaseline relatedBy:NSLayoutRelationEqual toItem:self.passwordTextField attribute:NSLayoutAttributeBaseline multiplier:1 constant:0]];
 
-    //[self.view addConstraint:[NSLayoutConstraint constraintWithItem:self.goButton attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterX multiplier:1 constant:0]];
-
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-15-[image(44)]-5-[host]-5-[hostTF]-5-|" options:0 metrics:nil views:viewsDict]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[host]-5-[hostTF]-5-|" options:0 metrics:nil views:viewsDict]];
     
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|-20-[username]-5-[usernameTF]-5-|" options:0 metrics:nil views:viewsDict]];
     
