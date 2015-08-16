@@ -75,7 +75,11 @@
         }
         errorDescription = [messages componentsJoinedByString:@", "];
     }
-    UIAlertView *requestError = [[UIAlertView alloc] initWithTitle:errorMessage message:errorDescription delegate:sender cancelButtonTitle:@"OK" otherButtonTitles: nil];
+    UIAlertView *requestError = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Something went wrong", @"warning title something went wrong")
+                                                           message:[NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Server error", @"Label server error"), errorDescription]
+                                                          delegate:sender
+                                                 cancelButtonTitle:@"OK"
+                                                 otherButtonTitles: nil];
     return requestError;
 }
 
