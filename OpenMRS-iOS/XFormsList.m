@@ -265,7 +265,16 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [hud hide:YES];
                 [[UIApplication sharedApplication] endIgnoringInteractionEvents];
-                [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Completed", @"Label completed") inView:self.view];
+                if (self.forms.count == 0) {
+                    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No forms to save yet", @"warning no forms to save")
+                                                message:@""
+                                               delegate:self
+                                      cancelButtonTitle:@"OK"
+                                      otherButtonTitles: nil]
+                     show];
+                }else {
+                    [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Completed", @"Label completed") inView:self.view];
+                }
             });
         }
     });
@@ -316,7 +325,16 @@
                 [hud hide:YES];
                 [[UIApplication sharedApplication] endIgnoringInteractionEvents];
                 [self.tableView reloadData];
-                [[MRSAlertHandler alertForSucess:self] show];
+                if (self.forms.count == 0) {
+                    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No forms to submit yet", @"warning no forms to submit")
+                                                message:@""
+                                               delegate:self
+                                      cancelButtonTitle:@"OK"
+                                      otherButtonTitles: nil]
+                     show];
+                } else {
+                    [[MRSAlertHandler alertForSucess:self] show];
+                }
             });
         }
     });
