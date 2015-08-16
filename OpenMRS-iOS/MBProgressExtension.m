@@ -22,7 +22,7 @@
 }
 
 + (void)hideActivityIndicatorInView:(UIView *)view {
-    [MBProgressHUD hideHUDForView:view animated:YES];
+    [MBProgressHUD hideAllHUDsForView:view animated:YES];
     [[UIApplication sharedApplication] endIgnoringInteractionEvents];
 }
 

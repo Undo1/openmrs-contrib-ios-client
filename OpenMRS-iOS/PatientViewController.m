@@ -146,11 +146,14 @@
     if (self.encoutersEdited) {
         UINavigationController *parentNav = self.tabBarController.viewControllers[2];
         PatientEncounterListView *encounterList = parentNav.viewControllers[0];
-        [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:encounterList.view];
+        if (encounterList)
+            [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:encounterList.view];
         [OpenMRSAPIManager getEncountersForPatient:self.patient completion:^(NSError *error, NSArray *encounters) {
-            [MBProgressExtension hideActivityIndicatorInView:encounterList.view];
+            if (encounterList)
+                [MBProgressExtension hideActivityIndicatorInView:encounterList.view];
             if (error == nil) {
-                [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Completed", @"Label completed") inView:encounterList.view];
+                if (encounterList)
+                    [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Completed", @"Label completed") inView:encounterList.view];
                 self.encounters = encounters;
                 self.encoutersEdited = NO;
                 self.showedErrorAlready = NO;
@@ -170,11 +173,14 @@
     if (self.visitsEdited) {
         UINavigationController *parentNav = self.tabBarController.viewControllers[1];
         PatientVisitListView *visitsView = parentNav.viewControllers[0];
-        [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:visitsView.view];
+        if (visitsView)
+            [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:visitsView.view];
         [OpenMRSAPIManager getVisitsForPatient:self.patient completion:^(NSError *error, NSArray *visits) {
-            [MBProgressExtension hideActivityIndicatorInView:visitsView.view];
+            if (visitsView)
+                [MBProgressExtension hideActivityIndicatorInView:visitsView.view];
             if (error == nil) {
-                [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Completed", @"Label completed") inView:visitsView.view];
+                if (visitsView)
+                    [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Completed", @"Label completed") inView:visitsView.view];
                 self.visits = visits;
                 self.visitsEdited = NO;
                 self.showedErrorAlready = NO;
