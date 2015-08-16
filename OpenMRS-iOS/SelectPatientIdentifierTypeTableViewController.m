@@ -11,8 +11,12 @@
 #import "OpenMRSAPIManager.h"
 #import "MRSHelperFunctions.h"
 #import "IdentifierTypeCell.h"
+#import "MBProgressExtension.h"
+#import "MRSAlertHandler.h"
 
 @interface SelectPatientIdentifierTypeTableViewController ()
+
+@property (nonatomic) BOOL failed;
 
 @end
 
@@ -59,12 +63,18 @@
 
 - (void)reloadData
 {
+    [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:self.view];
     [OpenMRSAPIManager getPatientIdentifierTypesWithCompletion:^(NSError *error, NSArray *types) {
+        [MBProgressExtension hideActivityIndicatorInView:self.view];
         if (!error) {
+            [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Completed", @"Label completed") inView:self.view];
             self.identifierTypes = types;
             dispatch_async(dispatch_get_main_queue(), ^ {
                 [self.tableView reloadData];
             });
+        } else {
+            [[MRSAlertHandler alertViewForError:self error:error] show];
+            self.failed = YES;
         }
     }];
 }
@@ -78,6 +88,14 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    if (self.identifierTypes.count == 0 && self.failed) {
+        UILabel *backgroundLabel = [[UILabel alloc] init];
+        backgroundLabel.textAlignment = NSTextAlignmentCenter;
+        backgroundLabel.text = [NSString stringWithFormat:@"\"%@\"", NSLocalizedString(@"No identifier types available", @"Label no identifier types available")];
+        self.tableView.backgroundView = backgroundLabel;
+    } else {
+        self.tableView.backgroundView = nil;
+    }
     return self.identifierTypes.count;
 }
 

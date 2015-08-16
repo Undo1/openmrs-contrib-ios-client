@@ -115,5 +115,5 @@ NSInteger const errServerNotFound = -1003;
 NSInteger const errTimeout = -1001;
 NSInteger const errNetWorkLost = -1005;
 NSInteger const errNetworkDown = -1009;
-
+NSInteger const errCanNotConnect = -1004;
 @end

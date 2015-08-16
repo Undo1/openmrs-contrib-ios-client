@@ -27,7 +27,7 @@
 @implementation XFormsList
 
 - (instancetype)init {
-    self = [super init];
+    self = [super initWithStyle:UITableViewStyleGrouped];
     if (self) {
         self.tabBarItem.title = NSLocalizedString(@"Form Entry", "Label form entry");
         self.tabBarItem.image = [UIImage imageNamed:@"form-icon"];
@@ -160,6 +160,17 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (self.forms.count == 0) {
+        UILabel *backgroundLabel = [[UILabel alloc] init];
+        backgroundLabel.textAlignment = NSTextAlignmentCenter;
+        backgroundLabel.text = [NSString stringWithFormat:@"\"%@\"", NSLocalizedString(@"No XForms available", @"Label no XForms")];
+        if (self.FilledForms) {
+            backgroundLabel.text = [NSString stringWithFormat:@"\"%@\"", NSLocalizedString(@"No offline filled XForms saved", @"Label no offline filled XForms saved")];
+        }
+        self.tableView.backgroundView = backgroundLabel;
+    } else {
+        self.tableView.backgroundView = nil;
+    }
     return self.forms.count;
 }
 

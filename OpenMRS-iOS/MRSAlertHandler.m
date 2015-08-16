@@ -14,7 +14,7 @@
 + (UIAlertView *)alertViewForError:(id)sender error:(NSError *) error {
     NSLog(@"error: %@", error);
     NSLog(@"error userinfo(%ld): %@", (long)error.code,error.userInfo);
-    if (error.code == errNoInternet || error.code == errNetWorkLost || error.code == errNetworkDown) {
+    if (error.code == errNoInternet || error.code == errNetWorkLost || error.code == errNetworkDown || error.code == errCanNotConnect) {
         return [MRSAlertHandler alertForNoInternet:sender];
     } else if (error.code == errBadRequest) {
         return [MRSAlertHandler alertViewForErrorBadRequest:sender error:error];
@@ -74,6 +74,9 @@
             [messages addObject:dict[@"message"]];
         }
         errorDescription = [messages componentsJoinedByString:@", "];
+    }
+    if ([errorDescription isEqualToString:@""]) {
+        errorDescription = errorMessage;
     }
     UIAlertView *requestError = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Something went wrong", @"warning title something went wrong")
                                                            message:[NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Server error", @"Label server error"), errorDescription]

@@ -30,6 +30,20 @@
 #define MARGIN 5
 #define SPINNERSIZE 50
 
+- (instancetype)initWithStyle:(UITableViewStyle)style {
+    self = [super initWithStyle:style];
+    if (self) {
+        //else paramters are set from restoration
+        if (self.startIndex == 0) {
+            self.hasMore = YES;
+        }
+        if (self.activeVisits.count == 0) {
+            [self loadMore];
+        }
+    }
+    return self;
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -47,14 +61,6 @@
                                                                             action:@selector(close)];
     if ([MRSHelperFunctions isNull:self.activeVisits]) {
         self.activeVisits = [[NSMutableArray alloc] init];
-    }
-    
-    //else paramters are set from restoration
-    if (self.startIndex == 0) {
-        self.hasMore = YES;
-    }
-    if (self.activeVisits.count == 0) {
-        [self loadMore];
     }
 
     [self.tableView registerClass:[MRSVisitCell class] forCellReuseIdentifier:@"cell"];
@@ -86,9 +92,18 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    NSLog(@"has more: %d", self.hasMore);
     if (self.hasMore) {
         return self.activeVisits.count + 1;
     } else {
+        if (self.activeVisits.count == 0) {
+            UILabel *backgroundLabel = [[UILabel alloc] init];
+            backgroundLabel.textAlignment = NSTextAlignmentCenter;
+            backgroundLabel.text = [NSString stringWithFormat:@"\"%@\"", NSLocalizedString(@"No active visits available", @"Label no active visits available")];
+            self.tableView.backgroundView = backgroundLabel;
+        } else {
+            self.tableView.backgroundView = nil;
+        }
         return self.activeVisits.count;
     }
 }
