@@ -14,6 +14,12 @@
 #import "SyncingEngine.h"
 
 
+@interface SettingsForm () <UIWebViewDelegate>
+
+@property (nonatomic, strong) UIActivityIndicatorView *activityIndicator;
+
+@end
+
 @implementation SettingsForm
 
 NSString *kUserName = @"username";
@@ -59,6 +65,11 @@ NSString *kWizardMode = @"wizardMode";
     
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kUserName rowType:XLFormRowDescriptorTypeInfo title:host];
     row.disabled = @YES;
+    [section addFormRow:row];
+
+    row = [XLFormRowDescriptor formRowDescriptorWithTag:kSendFeedback rowType:XLFormRowDescriptorTypeButton title:NSLocalizedString(@"Credits", @"Label credits")];
+    row.action.formSelector = @selector(showCredits);
+    [row.cellConfig setObject:[UIColor colorWithRed:39/255.0 green:139/255.0 blue:146/255.0 alpha:1] forKey:@"textLabel.color"];
     [section addFormRow:row];
 
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kSendFeedback rowType:XLFormRowDescriptorTypeButton title:NSLocalizedString(@"Send feedback", @"Label send feedback")];
@@ -121,9 +132,39 @@ NSString *kWizardMode = @"wizardMode";
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
+- (void)showCredits {
+    UIWebView *webview = [[UIWebView alloc] init];
+    NSURL *url = [NSURL URLWithString:@"https://wiki.openmrs.org/display/docs/OpenMRS+iOS+Client"];
+    NSURLRequest *request = [NSURLRequest requestWithURL:url];
+    webview.delegate = self;
+    [webview loadRequest:request];
+
+    UIViewController *webVC = [[UIViewController alloc] init];
+    webVC.view = webview;
+    webVC.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissWebView)];
+    webVC.title = NSLocalizedString(@"Credits", @"Label credits");
+
+    self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
+    UIBarButtonItem *barButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
+    [webVC navigationItem].rightBarButtonItem = barButton;
+    [self.activityIndicator startAnimating];
+
+    UINavigationController *webViewNav = [[UINavigationController alloc] initWithRootViewController:webVC];
+
+    [self presentViewController:webViewNav animated:YES completion:nil];
+}
+
+- (void)webViewDidFinishLoad:(UIWebView *)webView {
+    [self.activityIndicator stopAnimating];
+}
+
+- (void)dismissWebView {
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
+
 - (void)sendFeedback {
     [Instabug invokeFeedbackSender];
-    [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForItem:2 inSection:0] animated:YES];
+    [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForItem:3 inSection:0] animated:YES];
 }
 
 - (void)removeOfflinePatients {
