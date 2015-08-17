@@ -136,6 +136,7 @@
             if (!savedPatient.upToDate) {
                 NSLog(@"will be edited!");
                 self.patient = savedPatient;
+                [self.tableView reloadData];
                 [self syncPatient:savedPatient];
             } else {
                 [self fetchPatient];

@@ -11,8 +11,9 @@
 #import "MRSDateUtilities.h"
 #import "Constants.h"
 #import "OpenMRSAPIManager.h"
-#import "SVProgressHUD.h"
-
+#import "MBProgressExtension.h"
+#import "MRSAlertHandler.h"
+#import "Constants.h"
 
 @implementation EditPatientForm
 
@@ -74,20 +75,6 @@
     }
     [section addFormRow:row];
     
-    //Age
-    row = [XLFormRowDescriptor formRowDescriptorWithTag:kAge
-                                                rowType:XLFormRowDescriptorTypeInteger
-                                                  title:NSLocalizedString(@"Age", @"Label age")];
-    [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
-    row.required = YES;
-    //Validation it is > 0 and < 120
-    [row addValidator:[XLFormRegexValidator formRegexValidatorWithMsg:@"" regex:@"^([1-9]|[1-9][0-9]|[1][0-1][0-9])$"]];
-    if (self.patient.age) {
-        row.value = self.patient.age;
-    }
-    [section addFormRow:row];
-    row.hidden = [NSString stringWithFormat:@"$%@==0", kbirthdateEstimated];
-    
     //Birthdate
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kBirthdate
                                                 rowType:XLFormRowDescriptorTypeDate
@@ -97,7 +84,6 @@
         row.value = [MRSDateUtilities dateFromOpenMRSFormattedString:self.patient.birthdate];
     }
     [section addFormRow:row];
-    row.hidden = [NSString stringWithFormat:@"$%@==1", kbirthdateEstimated];
     
     //Dead
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kDead
@@ -320,16 +306,13 @@
         if (![MRSHelperFunctions isNull:values[kBirthdate]]) {
             self.patient.birthdate = [MRSDateUtilities openMRSFormatStringWithDate:values[kBirthdate]];
         }
-        if (values[kbirthdateEstimated]) {
-            self.patient.age = values[kAge];
-        } else {
+        if (values[kBirthdate]) {
             self.patient.birthdate = [MRSDateUtilities openMRSFormatStringWithDate:values[kBirthdate]];
         }
         if ([values[kDead] boolValue]) {
             self.patient.dead = YES;
             self.patient.causeOfDeath = values[kCauseOfDeath];
         }
-        [SVProgressHUD show];
         [self updatePatient];
 
     } else {
@@ -348,8 +331,7 @@
     for(id obj in array) {
         XLFormValidationStatus * validationStatus = [[obj userInfo] objectForKey:XLValidationStatusErrorKey];
         NSString *tag = validationStatus.rowDescriptor.tag;
-        if ([tag isEqualToString:kGivenName] || [tag isEqualToString:kFamilyName] || [tag isEqualToString:kAddress1] ||
-            [tag isEqualToString:kAge] || [tag isEqualToString:kBirthdate] || [tag isEqualToString:kCauseOfDeath] ||
+        if ([tag isEqualToString:kGivenName] || [tag isEqualToString:kFamilyName] || [tag isEqualToString:kAddress1] ||[tag isEqualToString:kBirthdate] || [tag isEqualToString:kCauseOfDeath] ||
             [tag isEqualToString:kDeathDate]){
             UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[self.form indexPathOfFormRow:validationStatus.rowDescriptor]];
             cell.backgroundColor = [UIColor orangeColor];
@@ -363,20 +345,28 @@
 }
 
 - (void)updatePatient {
+    [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:self.view];
     [OpenMRSAPIManager EditPatient:self.patient completion:^(NSError *error) {
+        [MBProgressExtension hideActivityIndicatorInView:self.view];
         if (!error) {
             self.patient.upToDate = YES;
             if ([self.patient isInCoreData]) {
                 [self.patient saveToCoreData];
             }
-            [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Saved", @"Response -saved- label")];
+            [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Done", @"Label done") inView:self.presentingViewController.view];
+            [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
         } else {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error saving", @"Warning label -Error- and -Saving-")
-                                                                message:NSLocalizedString(@"Can't save your edits right now, choose Retry to retry now or Save to save your edits offline to sync later", @"Error message")
-                                                               delegate:self
-                                                      cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel button label")
-                                                      otherButtonTitles:NSLocalizedString(@"Retry", @"Retry button label"), NSLocalizedString(@"Save", @"Save button label"), nil];
-            [alertView show];
+            if (error.code == errNoInternet || error.code == errNetWorkLost || error.code == errNetworkDown ||
+                error.code == errServerNotFound) {
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error saving", @"Warning label -Error- and -Saving-")
+                                                                    message:NSLocalizedString(@"Can't save your edits right now, choose Retry to retry now or Save to save your edits offline to sync later", @"Error message")
+                                                                   delegate:self
+                                                          cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel button label")
+                                                          otherButtonTitles:NSLocalizedString(@"Retry", @"Retry button label"), NSLocalizedString(@"Save", @"Save button label"), nil];
+                [alertView show];
+            } else {
+                [[MRSAlertHandler alertViewForError:self error:error] show];
+            }
         }
     }];
 }
@@ -389,11 +379,9 @@
     } else if (buttonIndex == 2){
         self.patient.upToDate = NO;
         [self.patient saveToCoreData];
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+        [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Saved", @"Response -saved- label") inView:self.presentingViewController.view];
     }
-}
-
-- (void)alertViewCancel:(UIAlertView *)alertView {
-    [SVProgressHUD dismiss];
 }
 
 #pragma mark - UIViewStateRestoration
