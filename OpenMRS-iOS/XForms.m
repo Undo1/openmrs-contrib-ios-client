@@ -61,7 +61,7 @@
 }
 
 - (XLFormDescriptor *)getReviewForm {
-    XLFormDescriptor *reviewForm = [XLFormDescriptor formDescriptorWithTitle:self.name];
+    XLFormDescriptor *reviewForm = [XLFormDescriptor formDescriptorWithTitle:NSLocalizedString(@"Summary", @"Title summary")];
     XLFormSectionDescriptor *reviewSection = [XLFormSectionDescriptor formSection];
     [reviewForm addFormSection:reviewSection];
 
