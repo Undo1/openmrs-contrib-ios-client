@@ -72,7 +72,7 @@ NSString *kWizardMode = @"wizardMode";
     row.disabled = @YES;
     [section addFormRow:row];
 
-    row = [XLFormRowDescriptor formRowDescriptorWithTag:kSendFeedback rowType:XLFormRowDescriptorTypeButton title:NSLocalizedString(@"Credits", @"Label credits")];
+    row = [XLFormRowDescriptor formRowDescriptorWithTag:kSendFeedback rowType:XLFormRowDescriptorTypeButton title:NSLocalizedString(@"About", @"Label about")];
     row.action.formSelector = @selector(showCredits);
     [row.cellConfig setObject:[UIColor colorWithRed:39/255.0 green:139/255.0 blue:146/255.0 alpha:1] forKey:@"textLabel.color"];
     [section addFormRow:row];
@@ -155,7 +155,7 @@ NSString *kWizardMode = @"wizardMode";
     UIViewController *webVC = [[UIViewController alloc] init];
     webVC.view = webview;
     webVC.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissWebView)];
-    webVC.title = NSLocalizedString(@"Credits", @"Label credits");
+    webVC.title = NSLocalizedString(@"About", @"Label about");
 
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
     UIBarButtonItem *barButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
@@ -165,6 +165,10 @@ NSString *kWizardMode = @"wizardMode";
     UINavigationController *webViewNav = [[UINavigationController alloc] initWithRootViewController:webVC];
 
     [self presentViewController:webViewNav animated:YES completion:nil];
+}
+
+- (void)webViewDidStartLoad:(UIWebView *)webView {
+    [self.activityIndicator startAnimating];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
