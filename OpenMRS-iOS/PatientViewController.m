@@ -23,6 +23,7 @@
 #import "Constants.h"
 #import "MBProgressExtension.h"
 #import "MRSAlertHandler.h"
+#import "MBProgressHUD.h"
 
 @interface PatientViewController ()
 
@@ -146,14 +147,17 @@
     if (self.encoutersEdited) {
         UINavigationController *parentNav = self.tabBarController.viewControllers[2];
         PatientEncounterListView *encounterList = parentNav.viewControllers[0];
-        if (encounterList)
+        if (encounterList) {
             [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:encounterList.view];
+        }
         [OpenMRSAPIManager getEncountersForPatient:self.patient completion:^(NSError *error, NSArray *encounters) {
-            if (encounterList)
+            if (encounterList) {
                 [MBProgressExtension hideActivityIndicatorInView:encounterList.view];
+            }
             if (error == nil) {
-                if (encounterList)
-                    [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Completed", @"Label completed") inView:encounterList.view];
+                if (encounterList) {
+                    [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Encounters loaded", @"Label loaded encounters") inView:encounterList.view];
+                }
                 self.encounters = encounters;
                 self.encoutersEdited = NO;
                 self.showedErrorAlready = NO;
@@ -173,14 +177,17 @@
     if (self.visitsEdited) {
         UINavigationController *parentNav = self.tabBarController.viewControllers[1];
         PatientVisitListView *visitsView = parentNav.viewControllers[0];
-        if (visitsView)
+        if (visitsView != nil) {
             [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:visitsView.view];
+        }
         [OpenMRSAPIManager getVisitsForPatient:self.patient completion:^(NSError *error, NSArray *visits) {
-            if (visitsView)
+            if (visitsView) {
                 [MBProgressExtension hideActivityIndicatorInView:visitsView.view];
+            }
             if (error == nil) {
-                if (visitsView)
-                    [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Completed", @"Label completed") inView:visitsView.view];
+                if (visitsView) {
+                    [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Visits loaded", @"Label loaded visits") inView:visitsView.view];
+                }
                 self.visits = visits;
                 self.visitsEdited = NO;
                 self.showedErrorAlready = NO;
@@ -227,9 +234,10 @@
 -(void)fetchPatient {
     [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:self.view];
     [OpenMRSAPIManager getDetailedDataOnPatient:self.patient completion:^(NSError *error, MRSPatient *detailedPatient) {
-        [MBProgressExtension hideActivityIndicatorInView:self.view];
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        [[UIApplication sharedApplication] endIgnoringInteractionEvents];
         if (error == nil) {
-            [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Completed", @"Label completed") inView:self.view];
+            [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Patient details loaded", @"Label patient loaded") inView:self.view];
             self.patient = detailedPatient;
             self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
                                    @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
@@ -523,10 +531,15 @@
                         [OpenMRSAPIManager stopVisit:activeVisit completion:^(NSError *error) {
                             [MBProgressExtension hideActivityIndicatorInView:self.view];
                             if (error == nil) {
+                                [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Done", @"Label done") inView:self.view];
+                                self.visitsEdited = YES;
                                 [self updateWithDetailedInfo];
                             } else {
                                 [[MRSAlertHandler alertViewForError:self error:error] show];
                             }
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [self.tableView reloadData];
+                            });
                         }];
                     }
                 }];

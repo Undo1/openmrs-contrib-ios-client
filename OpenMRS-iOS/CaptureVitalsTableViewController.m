@@ -11,6 +11,8 @@
 #import "LocationListTableViewController.h"
 #import "MRSVital.h"
 #import "MRSHelperFunctions.h"
+#import "MBProgressExtension.h"
+#import "MRSAlertHandler.h"
 
 @interface CaptureVitalsTableViewController ()
 
@@ -70,9 +72,15 @@
         vital.value = self.textFieldValues[key];
         [vitals addObject:vital];
     }
+    
+    [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:self.view];
     [OpenMRSAPIManager captureVitals:vitals toPatient:self.patient atLocation:self.currentLocation completion:^(NSError *error) {
+        [MBProgressExtension hideActivityIndicatorInView:self.view];
         if (!error) {
+            [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Completed", @"Label completed") inView:self.presentingViewController.view];
             [self.delegate didCaptureVitalsForPatient:self.patient];
+        } else {
+            [[MRSAlertHandler alertViewForError:self error:error] show];
         }
     }];
 }

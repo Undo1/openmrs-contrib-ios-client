@@ -11,6 +11,8 @@
 #import "MRSPatient.h"
 #import "MRSLocation.h"
 #import "OpenMRSAPIManager.h"
+#import "MBProgressExtension.h"
+#import "MRSAlertHandler.h"
 @interface AddVisitNoteTableViewController ()
 
 @end
@@ -34,10 +36,15 @@
 }
 - (void)done
 {
+    [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Lable loading") inView:self.view];
     [OpenMRSAPIManager addVisitNote:self.currentVisitNote toPatient:self.patient atLocation:self.currentLocation completion:^(NSError *error) {
+        [MBProgressExtension hideActivityIndicatorInView:self.view];
         if (!error) {
+            [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Completed", @"Label completed") inView:self.presentingViewController.view];
             [self.delegate didAddVisitNoteToPatient:self.patient];
             [self dismissViewControllerAnimated:YES completion:nil];
+        } else {
+            [[MRSAlertHandler alertViewForError:self error:error] show];
         }
     }];
 }

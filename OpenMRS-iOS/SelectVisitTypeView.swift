@@ -54,14 +54,17 @@ class SelectVisitTypeView : UITableViewController, UIViewControllerRestoration
     {
         if self.visitTypes == nil
         {
-            
+            MBProgressExtension.showBlockWithTitle(NSLocalizedString("Loading", comment: "Label loading"), inView: self.view)
             OpenMRSAPIManager.getVisitTypesWithCompletion { (error:NSError!, types:[AnyObject]!) -> Void in
+                MBProgressExtension.hideActivityIndicatorInView(self.view)
                 if error != nil
                 {
+                    MRSAlertHandler.alertViewForError(self, error: error).show();
                     NSLog("Error getting visit types: \(error)")
                 }
                 else
                 {
+                    MBProgressExtension.showSucessWithTitle(NSLocalizedString("Completed", comment: "Label completed"), inView: self.view)
                     self.visitTypes = types as! [MRSVisitType]
                     dispatch_async(dispatch_get_main_queue()) {
                         self.tableView.reloadData()
