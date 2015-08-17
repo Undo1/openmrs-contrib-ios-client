@@ -231,12 +231,12 @@
     } else {
         view = self.view;
     }
-    [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:view];
+    [MBProgressExtension showBlockWithDetailTitle:NSLocalizedString(@"Please wait, Communicating with OpenMRS server", @"Label submitting xforms") inView:view];
     [OpenMRSAPIManager uploadXForms:self.XForm completion:^(NSError *error) {
         [MBProgressExtension hideActivityIndicatorInView:view];
         if (!error) {
-            [[MRSAlertHandler alertForSucess:self] show];
             [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Form Submitted Successfully", @"Title submitted successfully") message:@"" delegate:self cancelButtonTitle:@"OK" otherButtonTitles: nil] show];
         } else {
             if (error.code ==  errNetWorkLost || error.code == errNetworkDown || error.code == errNetWorkLost || error.code == errCanNotConnect) {
                 UIAlertView *errorUploading = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error uploading", @"Title error uploading")
