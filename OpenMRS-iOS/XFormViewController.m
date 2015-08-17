@@ -238,12 +238,18 @@
             [[MRSAlertHandler alertForSucess:self] show];
             [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
         } else {
-            UIAlertView *errorUploading = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error uploading", @"Title error uploading")
-                                                                     message:NSLocalizedString(@"Oops, Seems there's no internet connectivity available now, Do you want to save the form for offline usage or discard now.", @"Message for error submitting form")
-                                                                    delegate:self
-                                                           cancelButtonTitle:NSLocalizedString(@"Discard", @"Discard button label")
-                                                           otherButtonTitles:NSLocalizedString(@"Save Offline", @"Label save offline"), nil];
-            [errorUploading show];
+            if (error.code ==  errNetWorkLost || error.code == errNetworkDown || error.code == errNetWorkLost || error.code == errCanNotConnect) {
+                UIAlertView *errorUploading = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error uploading", @"Title error uploading")
+                                                                         message:NSLocalizedString(@"Oops, Seems there's no internet connectivity available now, Do you want to save the form for offline usage or discard now.", @"Message for error submitting form")
+                                                                        delegate:self
+                                                               cancelButtonTitle:NSLocalizedString(@"Discard", @"Discard button label")
+                                                               otherButtonTitles:NSLocalizedString(@"Save Offline", @"Label save offline"), nil];
+                [errorUploading show];
+            } else {
+                [[MRSAlertHandler alertViewForError:self error:error] show];
+                [self.navigationController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+            }
+
         }
     }];
 }
