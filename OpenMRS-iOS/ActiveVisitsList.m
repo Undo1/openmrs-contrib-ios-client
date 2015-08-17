@@ -99,7 +99,7 @@
         if (self.activeVisits.count == 0) {
             UILabel *backgroundLabel = [[UILabel alloc] init];
             backgroundLabel.textAlignment = NSTextAlignmentCenter;
-            backgroundLabel.text = [NSString stringWithFormat:@"\"%@\"", NSLocalizedString(@"No active visits available", @"Label no active visits available")];
+            backgroundLabel.text = [NSString stringWithFormat:@"%@", NSLocalizedString(@"No active visits available", @"Label no active visits available")];
             self.tableView.backgroundView = backgroundLabel;
         } else {
             self.tableView.backgroundView = nil;

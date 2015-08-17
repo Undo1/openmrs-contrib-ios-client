@@ -91,7 +91,7 @@
     if (self.identifierTypes.count == 0 && self.failed) {
         UILabel *backgroundLabel = [[UILabel alloc] init];
         backgroundLabel.textAlignment = NSTextAlignmentCenter;
-        backgroundLabel.text = [NSString stringWithFormat:@"\"%@\"", NSLocalizedString(@"No identifier types available", @"Label no identifier types available")];
+        backgroundLabel.text = [NSString stringWithFormat:@"%@", NSLocalizedString(@"No identifier types available", @"Label no identifier types available")];
         self.tableView.backgroundView = backgroundLabel;
     } else {
         self.tableView.backgroundView = nil;

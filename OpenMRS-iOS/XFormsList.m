@@ -163,9 +163,9 @@
     if (self.forms.count == 0) {
         UILabel *backgroundLabel = [[UILabel alloc] init];
         backgroundLabel.textAlignment = NSTextAlignmentCenter;
-        backgroundLabel.text = [NSString stringWithFormat:@"\"%@\"", NSLocalizedString(@"No XForms available", @"Label no XForms")];
+        backgroundLabel.text = [NSString stringWithFormat:@"%@", NSLocalizedString(@"No XForms available", @"Label no XForms")];
         if (self.FilledForms) {
-            backgroundLabel.text = [NSString stringWithFormat:@"\"%@\"", NSLocalizedString(@"No offline filled XForms saved", @"Label no offline filled XForms saved")];
+            backgroundLabel.text = [NSString stringWithFormat:@"%@", NSLocalizedString(@"No offline filled XForms saved", @"Label no offline filled XForms saved")];
         }
         self.tableView.backgroundView = backgroundLabel;
     } else {

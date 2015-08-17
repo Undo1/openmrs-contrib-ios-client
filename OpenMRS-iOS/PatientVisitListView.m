@@ -60,7 +60,7 @@
     if (self.visits.count == 0) {
         UILabel *backgroundLabel = [[UILabel alloc] init];
         backgroundLabel.textAlignment = NSTextAlignmentCenter;
-        backgroundLabel.text = [NSString stringWithFormat:@"\"%@\"", NSLocalizedString(@"No Visits", @"Label -no- -visits-")];
+        backgroundLabel.text = [NSString stringWithFormat:@"%@", NSLocalizedString(@"No Visits", @"Label -no- -visits-")];
         self.tableView.backgroundView = backgroundLabel;
     } else {
         self.tableView.backgroundView = nil;
