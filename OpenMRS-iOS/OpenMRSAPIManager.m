@@ -257,6 +257,7 @@
             MRSEncounter *visit = [[MRSEncounter alloc] init];
             visit.UUID = visitDict[@"uuid"];
             visit.displayName = visitDict[@"display"];
+            NSLog(@"%@", visitDict[@"uuid"]);
             [array addObject:visit];
         }
         completion(nil, array);
@@ -723,6 +724,33 @@
          NSLog(@"%@", doc.rootElement);
          if (!error) {
              XForms *form = [XFormsParser parseXFormsXML:doc withID:xformID andName:name Patient:patient];
+             completion(form, nil);
+         } else {
+             completion(nil, error);
+         }
+     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+         completion(nil, error);
+     }];
+}
+
++ (void)getXformWithEncounterUuid:(NSString *)encounterUuid andName:(NSString *)name completion:(void (^)(XForms* form, NSError *error))completion {
+    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
+    NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
+    NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
+    NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
+
+    NSURL *hostUrl = [NSURL URLWithString:host];
+    AFXMLParserResponseSerializer *responseSerializer = [AFXMLParserResponseSerializer serializer];
+    responseSerializer.acceptableContentTypes  = [NSSet setWithObject:@"application/xhtml+xml"];
+    [[CredentialsLayer sharedManagerWithHost:hostUrl.host andRequestSerializer:responseSerializer]
+     GET:[NSString stringWithFormat:@"%@/moduleServlet/xforms/xformDownload?target=xformentry&uname=%@&pw=%@&encounterUuid=%@&contentType=xml&excludeLayout=true", [hostUrl absoluteString], username, password, encounterUuid]
+     parameters:nil
+     success:^(AFHTTPRequestOperation *operation, id responseObject) {
+         NSError *error = nil;
+         GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithData:operation.responseData error:&error];
+         NSLog(@"%@", doc.rootElement);
+         if (!error) {
+             XForms *form = [XFormsParser parseXFormsXML:doc withID:encounterUuid andName:name Patient:nil];
              completion(form, nil);
          } else {
              completion(nil, error);

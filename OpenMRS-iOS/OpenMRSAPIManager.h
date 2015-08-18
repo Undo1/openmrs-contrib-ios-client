@@ -38,6 +38,7 @@
 + (void)EditNameForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion;
 + (void)getXFormsList: (void (^)(NSArray *forms, NSError *error))completion;
 + (void)getXformWithID:(NSString *)xformID andName:(NSString *)name Patient:(MRSPatient *)patient completion:(void (^)(XForms* form, NSError *error))completion;
++ (void)getXformWithEncounterUuid:(NSString *)encounterUuid andName:(NSString *)name completion:(void (^)(XForms* form, NSError *error))completion;
 + (void)uploadXForms:(XForms *)form completion:(void (^)(NSError *error))completion;
 + (void)cancelPreviousSearchOperations;
 + (void)logout;
