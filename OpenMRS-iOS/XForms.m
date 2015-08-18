@@ -60,8 +60,8 @@
     return [ModelString dataUsingEncoding:NSUTF8StringEncoding];
 }
 
-- (XLFormDescriptor *)getReviewForm {
-    XLFormDescriptor *reviewForm = [XLFormDescriptor formDescriptorWithTitle:NSLocalizedString(@"Summary", @"Title summary")];
+- (XLFormDescriptor *)getReviewFormWithTitle:(NSString *)title {
+    XLFormDescriptor *reviewForm = [XLFormDescriptor formDescriptorWithTitle:title];
     XLFormSectionDescriptor *reviewSection = [XLFormSectionDescriptor formSection];
     [reviewForm addFormSection:reviewSection];
 

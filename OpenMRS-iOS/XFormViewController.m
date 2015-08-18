@@ -19,7 +19,7 @@
 #import "MBProgressExtension.h"
 #import "MRSAlertHandler.h"
 
-@interface XFormViewController () <UIActionSheetDelegate>
+@interface XFormViewController ()
 
 @property (nonatomic, strong) XForms *XForm;
 @property (nonatomic) int index;
@@ -193,7 +193,7 @@
         if ([self isValid]) {
             if ([sender isKindOfClass:[UIBarButtonItem class]]) {
                 if ([[NSUserDefaults standardUserDefaults] boolForKey:UDisWizard]) {
-                    self.reviewForm = [[XLFormViewController alloc] initWithForm:[self.XForm getReviewForm]];
+                    self.reviewForm = [[XLFormViewController alloc] initWithForm:[self.XForm getReviewFormWithTitle:NSLocalizedString(@"Summary", @"Title summary")]];
                     self.reviewForm.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(dismissNew:)];
                     self.reviewForm.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Submit form", @"Button label submit form") style:UIBarButtonItemStylePlain target:self action:@selector(submitForm)];
                     self.reviewForm.navigationItem.title = self.XForm.name;
@@ -205,17 +205,6 @@
         } else {
             [self showValidationWarning];
         }
-    }
-}
-
-- (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if (buttonIndex == 0) {
-        XLFormViewController *xlform = [[XLFormViewController alloc] initWithForm:[self.XForm getReviewForm]];
-        xlform.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(dismissNew:)];
-        xlform.navigationItem.title = self.XForm.name;
-        [self.navigationController pushViewController:xlform animated:YES];
-    } else {
-        [self submitForm];
     }
 }
 
