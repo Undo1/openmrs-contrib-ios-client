@@ -80,6 +80,7 @@ NSString *const UDblankForms = @"blankForms";
 NSString *const UDfilledForms = @"filledForms";
 NSString *const UDnewSession = @"newSession";
 NSString *const UDrefreshInterval = @"refreshInterval";
+NSString *const UDshowLocked = @"showLocked";
 
 + (NSDictionary *)PATIENT_ATTRIBUTES {
     return @{

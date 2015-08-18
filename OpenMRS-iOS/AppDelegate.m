@@ -112,7 +112,10 @@
     if (![userDefaults objectForKey:UDrefreshInterval]) {
         [userDefaults setDouble:5 forKey:UDrefreshInterval];
     }
-    
+    if (![userDefaults objectForKey:UDshowLocked]) {
+        [userDefaults setBool:YES forKey:UDshowLocked];
+    }
+
     if ([[NSProcessInfo processInfo] respondsToSelector:@selector(operatingSystemVersion)]) {
         if ([[NSProcessInfo processInfo] operatingSystemVersion].majorVersion >= 8) {
             [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];

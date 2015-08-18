@@ -30,6 +30,7 @@ NSString *kRemoveOfflinePatient = @"removePatient";
 NSString *kSyncPatient = @"syncPatient";
 NSString *kRefreshInterval = @"refreshInterval";
 NSString *kWizardMode = @"wizardMode";
+NSString *kShowLocked = @"showLocked";
 
 
 - (instancetype)init {
@@ -125,6 +126,16 @@ NSString *kWizardMode = @"wizardMode";
     [row.cellConfig setObject:@(NSLineBreakByWordWrapping) forKey:@"textLabel.lineBreakMode"];
     [section addFormRow:row];
     
+    row = [XLFormRowDescriptor formRowDescriptorWithTag:kShowLocked
+                                                rowType:XLFormRowDescriptorTypeBooleanSwitch
+                                                  title:NSLocalizedString(@"Show locked fields", @"Label show locked fileds")];
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:UDshowLocked]) {
+        row.value = @YES;
+    } else {
+        row.value = @NO;
+    }
+    [section addFormRow:row];
+    
     self.form = form;
 }
 
@@ -137,13 +148,20 @@ NSString *kWizardMode = @"wizardMode";
 }
 
 - (void)exitSettings {
+    /* Setting user defaults */
+    
+    //Set wizard
     XLFormRowDescriptor *row = [self.form formRowWithTag:kWizardMode];
     if ([row.value isEqualToString: NSLocalizedString(@"Single form", @"Label single form")]) {
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UDisWizard];
     } else {
         [[NSUserDefaults standardUserDefaults] setBool:YES forKey:UDisWizard];
     }
-    
+    //Set show locked
+    row = [self.form formRowWithTag:kShowLocked];
+    [[NSUserDefaults standardUserDefaults] setBool:[row.value boolValue] forKey:UDshowLocked];
+
+    //Set refresh interval
     row = [self.form formRowWithTag:kRefreshInterval];
     [[NSUserDefaults standardUserDefaults] setDouble:[row.value floatValue] forKey:UDrefreshInterval];
     

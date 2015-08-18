@@ -377,8 +377,11 @@
         [infoRow.cellConfig setObject:[UIFont preferredFontForTextStyle:UIFontTextStyleFootnote] forKey:@"textLabel.font"];
         [section addFormRow:infoRow];
     }
-    [group setObject:formElement forKey:formElement.bindID];
-    [section addFormRow:row];
+    if (!(formElement.locked &&
+        ![[NSUserDefaults standardUserDefaults] boolForKey:UDshowLocked])) {
+        [group setObject:formElement forKey:formElement.bindID];
+        [section addFormRow:row];
+    }
 }
 
 + (GDataXMLDocument *)InjecValues:(XForms *)form {

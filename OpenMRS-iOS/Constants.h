@@ -61,6 +61,7 @@ extern NSString *const UDblankForms;
 extern NSString *const UDfilledForms;
 extern NSString *const UDnewSession;
 extern NSString *const UDrefreshInterval;
+extern NSString *const UDshowLocked;
 
 + (NSDictionary *)PATIENT_ATTRIBUTES;
 + (NSDictionary *)PATIENT_ATTRIBUTES_TYPES;
