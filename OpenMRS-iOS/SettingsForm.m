@@ -23,11 +23,14 @@
 @implementation SettingsForm
 
 NSString *kUserName = @"username";
+NSString *kHost = @"host";
+NSString *kVersion = @"version";
 NSString *kSendFeedback = @"sendFeedback";
 NSString *kRemoveOfflinePatient = @"removePatient";
 NSString *kSyncPatient = @"syncPatient";
 NSString *kRefreshInterval = @"refreshInterval";
 NSString *kWizardMode = @"wizardMode";
+
 
 - (instancetype)init {
     self = [super init];
@@ -60,19 +63,21 @@ NSString *kWizardMode = @"wizardMode";
         appVersion = [appVersion stringByAppendingString:@".0"];
     }
     
-    section.footerTitle = [NSString stringWithFormat:@"%@: (%@)", NSLocalizedString(@"App version", @"Label version"), appVersion];
-    
     [form addFormSection:section];
 
     XLFormRowDescriptor *row = [XLFormRowDescriptor formRowDescriptorWithTag:kUserName rowType:XLFormRowDescriptorTypeInfo title:[NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Logged in as", @"Label -logged- -in- -as"), username]];
     row.disabled = @YES;
     [section addFormRow:row];
     
-    row = [XLFormRowDescriptor formRowDescriptorWithTag:kUserName rowType:XLFormRowDescriptorTypeInfo title:host];
+    row = [XLFormRowDescriptor formRowDescriptorWithTag:kHost rowType:XLFormRowDescriptorTypeInfo title:host];
+    row.disabled = @YES;
+    [section addFormRow:row];
+    
+    row = [XLFormRowDescriptor formRowDescriptorWithTag:kVersion rowType:XLFormRowDescriptorTypeInfo title:[NSString stringWithFormat:@"%@: (%@)", NSLocalizedString(@"App version", @"Label version"), appVersion]];
     row.disabled = @YES;
     [section addFormRow:row];
 
-    row = [XLFormRowDescriptor formRowDescriptorWithTag:kSendFeedback rowType:XLFormRowDescriptorTypeButton title:NSLocalizedString(@"About", @"Label about")];
+    row = [XLFormRowDescriptor formRowDescriptorWithTag:kSendFeedback rowType:XLFormRowDescriptorTypeButton title:NSLocalizedString(@"About the project", @"Label about the project")];
     row.action.formSelector = @selector(showCredits);
     [row.cellConfig setObject:[UIColor colorWithRed:39/255.0 green:139/255.0 blue:146/255.0 alpha:1] forKey:@"textLabel.color"];
     [section addFormRow:row];
@@ -124,7 +129,7 @@ NSString *kWizardMode = @"wizardMode";
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 0 && indexPath.row == 1) {
+    if (indexPath.section == 0 && (indexPath.row == 1  || indexPath.row == 2)) {
         return 33;
     } else {
         return 44;
@@ -155,7 +160,7 @@ NSString *kWizardMode = @"wizardMode";
     UIViewController *webVC = [[UIViewController alloc] init];
     webVC.view = webview;
     webVC.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(dismissWebView)];
-    webVC.title = NSLocalizedString(@"About", @"Label about");
+    webVC.title = NSLocalizedString(@"About the project", @"Label about the project");
 
     self.activityIndicator = [[UIActivityIndicatorView alloc] initWithFrame:CGRectMake(0, 0, 20, 20)];
     UIBarButtonItem *barButton = [[UIBarButtonItem alloc] initWithCustomView:self.activityIndicator];
@@ -181,7 +186,7 @@ NSString *kWizardMode = @"wizardMode";
 
 - (void)sendFeedback {
     [Instabug invokeFeedbackSender];
-    [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForItem:3 inSection:0] animated:YES];
+    [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForItem:4 inSection:0] animated:YES];
 }
 
 - (void)removeOfflinePatients {
