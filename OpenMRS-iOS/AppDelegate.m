@@ -81,6 +81,7 @@
     if (![userDefaults objectForKey:UDisWizard]) {
         [userDefaults setBool:NO forKey:UDisWizard];
     }
+
     
     /* Setting paths for offline savingf of XForms */
     NSString * resourcePath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
@@ -105,6 +106,15 @@
         NSLog(@"Create directory error: %@", error);
     }
     [userDefaults setObject:filledFormsPath forKey:UDfilledForms];
+    
+    NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:resourcePath error:nil];
+
+    for (int i=0;i<directoryContent.count;i++) {
+        NSString *fileAbsPath = [resourcePath stringByAppendingPathComponent:directoryContent[i]];
+        if ([directoryContent[i] hasPrefix:@"Audio"]) {
+            [[NSFileManager defaultManager] removeItemAtPath:fileAbsPath error:nil];
+        }
+    }
     
     if (![userDefaults objectForKey:UDnewSession]) {
         [userDefaults setBool:YES forKey:UDnewSession];
