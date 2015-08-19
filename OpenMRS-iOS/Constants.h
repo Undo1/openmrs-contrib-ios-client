@@ -64,6 +64,9 @@ extern NSString *const UDfilledForms;
 extern NSString *const UDnewSession;
 extern NSString *const UDrefreshInterval;
 extern NSString *const UDshowLocked;
+extern NSString *const UDdateFormat;
+extern NSString *const UDtimeFromat;
+extern NSString *const UDdateTimeFormat;
 
 + (NSDictionary *)PATIENT_ATTRIBUTES;
 + (NSDictionary *)PATIENT_ATTRIBUTES_TYPES;

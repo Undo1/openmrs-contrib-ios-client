@@ -115,6 +115,15 @@
     if (![userDefaults objectForKey:UDshowLocked]) {
         [userDefaults setBool:YES forKey:UDshowLocked];
     }
+    if (![userDefaults objectForKey:UDdateFormat]) {
+        [userDefaults setObject:@"yyyy-MM-dd" forKey:UDdateFormat];
+    }
+    if (![userDefaults objectForKey:UDtimeFromat]) {
+        [userDefaults setObject:@"HH:mm:ss" forKey:UDtimeFromat];
+    }
+    if (![userDefaults objectForKey:UDdateTimeFormat]) {
+        [userDefaults setObject:@"yyyy-MM-dd'T'HH:mm:ss" forKey:UDdateTimeFormat];
+    }
 
     if ([[NSProcessInfo processInfo] respondsToSelector:@selector(operatingSystemVersion)]) {
         if ([[NSProcessInfo processInfo] operatingSystemVersion].majorVersion >= 8) {

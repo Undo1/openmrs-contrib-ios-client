@@ -82,6 +82,9 @@ NSString *const UDfilledForms = @"filledForms";
 NSString *const UDnewSession = @"newSession";
 NSString *const UDrefreshInterval = @"refreshInterval";
 NSString *const UDshowLocked = @"showLocked";
+NSString *const UDdateFormat = @"dateFromat";
+NSString *const UDtimeFromat = @"timeFormat";
+NSString *const UDdateTimeFormat = @"dateTimeFromat";
 
 + (NSDictionary *)PATIENT_ATTRIBUTES {
     return @{

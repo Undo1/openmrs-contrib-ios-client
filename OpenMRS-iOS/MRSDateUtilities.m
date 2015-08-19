@@ -39,12 +39,13 @@
 
 + (NSString *)XFormformatStringwithDate:(NSDate *)date type:(NSString *)type {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     if ([type isEqualToString:kXFormsDate]) {
-        [formatter setDateFormat:@"yyyy-MM-dd"];
+        [formatter setDateFormat:[userDefaults objectForKey:UDdateFormat]];
     } else if ([type isEqualToString:kXFormsDateTime]) {
-        [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+        [formatter setDateFormat:[userDefaults objectForKey:UDdateTimeFormat]];
     } else {
-        [formatter setDateFormat:@"HH:mm:ss"];
+        [formatter setDateFormat:[userDefaults objectForKey:UDtimeFromat]];
     }
     NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
     [formatter setTimeZone:timeZone];
@@ -54,12 +55,13 @@
 
 + (NSDate *)DatefromXFormsString:(NSString *)dateString type:(NSString *)type {
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     if ([type isEqualToString:kXFormsDate]) {
-        [formatter setDateFormat:@"yyyy-MM-dd"];
+        [formatter setDateFormat:[userDefaults objectForKey:UDdateFormat]];
     } else if ([type isEqualToString:kXFormsDateTime]) {
-        [formatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss"];
+        [formatter setDateFormat:[userDefaults objectForKey:UDdateTimeFormat]];
     } else {
-        [formatter setDateFormat:@"HH:mm:ss"];
+        [formatter setDateFormat:[userDefaults objectForKey:UDtimeFromat]];
     }
     NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
     [formatter setTimeZone:timeZone];

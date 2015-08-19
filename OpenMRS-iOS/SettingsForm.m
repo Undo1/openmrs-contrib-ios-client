@@ -31,6 +31,9 @@ NSString *kSyncPatient = @"syncPatient";
 NSString *kRefreshInterval = @"refreshInterval";
 NSString *kWizardMode = @"wizardMode";
 NSString *kShowLocked = @"showLocked";
+NSString *kDateFormat = @"dateFormat";
+NSString *kTimeFormat = @"timeForamt";
+NSString *kDateTimeFormat = @"DateTimeFormat";
 
 
 - (instancetype)init {
@@ -110,10 +113,10 @@ NSString *kShowLocked = @"showLocked";
     [row.cellConfig setObject:@(NSLineBreakByWordWrapping) forKey:@"textLabel.lineBreakMode"];
     [section addFormRow:row];
     
-    section = [XLFormSectionDescriptor formSection];
+    section = [XLFormSectionDescriptor formSectionWithTitle:@"XForms"];
     [form addFormSection:section];
-    
-    row = [XLFormRowDescriptor formRowDescriptorWithTag:kWizardMode rowType:XLFormRowDescriptorTypeSelectorSegmentedControl title:NSLocalizedString(@"XForm View", @"Label xform view")];
+
+    row = [XLFormRowDescriptor formRowDescriptorWithTag:kWizardMode rowType:XLFormRowDescriptorTypeSelectorActionSheet title:NSLocalizedString(@"XForm View", @"Label xform view")];
     row.selectorOptions = @[NSLocalizedString(@"Single form", @"Label single form"),
                             NSLocalizedString(@"Wizard mode", @"Label wizard mode")];
     BOOL isWizard = [[NSUserDefaults standardUserDefaults] boolForKey:UDisWizard];
@@ -121,11 +124,8 @@ NSString *kShowLocked = @"showLocked";
         row.value = NSLocalizedString(@"Wizard mode", @"Label wizard mode");
     else
         row.value = NSLocalizedString(@"Single form", @"Label single form");
-    
-    [row.cellConfig setObject:@(0) forKey:@"textLabel.numberOfLines"];
-    [row.cellConfig setObject:@(NSLineBreakByWordWrapping) forKey:@"textLabel.lineBreakMode"];
     [section addFormRow:row];
-    
+
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kShowLocked
                                                 rowType:XLFormRowDescriptorTypeBooleanSwitch
                                                   title:NSLocalizedString(@"Show locked fields", @"Label show locked fileds")];
@@ -135,7 +135,28 @@ NSString *kShowLocked = @"showLocked";
         row.value = @NO;
     }
     [section addFormRow:row];
-    
+
+    row = [XLFormRowDescriptor formRowDescriptorWithTag:kDateFormat rowType:XLFormRowDescriptorTypeText title:@"dateSubmitFormat"];
+    row.value = [[NSUserDefaults standardUserDefaults] objectForKey:UDdateFormat];
+    [row.cellConfig setObject:@(0) forKey:@"textLabel.numberOfLines"];
+    [row.cellConfig setObject:@(NSLineBreakByWordWrapping) forKey:@"textLabel.lineBreakMode"];
+    [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
+    [section addFormRow:row];
+
+    row = [XLFormRowDescriptor formRowDescriptorWithTag:kTimeFormat rowType:XLFormRowDescriptorTypeText title:@"timeSubmitFormat"];
+    row.value = [[NSUserDefaults standardUserDefaults] objectForKey:UDtimeFromat];
+    [row.cellConfig setObject:@(0) forKey:@"textLabel.numberOfLines"];
+    [row.cellConfig setObject:@(NSLineBreakByWordWrapping) forKey:@"textLabel.lineBreakMode"];
+    [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
+    [section addFormRow:row];
+
+    row = [XLFormRowDescriptor formRowDescriptorWithTag:kDateTimeFormat rowType:XLFormRowDescriptorTypeText title:@"dateTimeSubmitFormat"];
+    [row.cellConfig setObject:@(0) forKey:@"textLabel.numberOfLines"];
+    [row.cellConfig setObject:@(NSLineBreakByWordWrapping) forKey:@"textLabel.lineBreakMode"];
+    [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
+    row.value = [[NSUserDefaults standardUserDefaults] objectForKey:UDdateTimeFormat];
+    [section addFormRow:row];
+
     self.form = form;
 }
 
@@ -164,6 +185,19 @@ NSString *kShowLocked = @"showLocked";
     //Set refresh interval
     row = [self.form formRowWithTag:kRefreshInterval];
     [[NSUserDefaults standardUserDefaults] setDouble:[row.value floatValue] forKey:UDrefreshInterval];
+    
+    //set formats
+    row = [self.form formRowWithTag:kDateFormat];
+    [[NSUserDefaults standardUserDefaults] setObject:row.value forKey:UDdateFormat];
+    [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
+
+    row = [self.form formRowWithTag:kTimeFormat];
+    [[NSUserDefaults standardUserDefaults] setObject:row.value forKey:UDtimeFromat];
+    [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
+
+    row = [self.form formRowWithTag:kDateTimeFormat];
+    [[NSUserDefaults standardUserDefaults] setObject:row.value forKey:UDdateTimeFormat];
+    [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
     
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
