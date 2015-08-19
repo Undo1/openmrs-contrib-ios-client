@@ -13,17 +13,17 @@
 
 + (void)showBlockWithTitle:(NSString *)title inView:(UIView *)view {
     [[MBProgressHUD showHUDAddedTo:view animated:YES] setLabelText:title];
-    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+    view.userInteractionEnabled = NO;
 }
 
 + (void)showBlockWithDetailTitle:(NSString *)detailTitle inView:(UIView *)view {
     [[MBProgressHUD showHUDAddedTo:view animated:YES] setDetailsLabelText:detailTitle];
-    [[UIApplication sharedApplication] beginIgnoringInteractionEvents];
+    view.userInteractionEnabled = NO;
 }
 
 + (void)hideActivityIndicatorInView:(UIView *)view {
     [MBProgressHUD hideHUDForView:view animated:YES];
-    [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+    view.userInteractionEnabled = YES;
 }
 
 + (void)showSucessWithTitle:(NSString *)title inView:(UIView *)view {
