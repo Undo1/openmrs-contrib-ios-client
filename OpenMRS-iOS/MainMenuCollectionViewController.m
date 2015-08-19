@@ -246,11 +246,17 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 
 - (void)logout {
-    [OpenMRSAPIManager logout];
-    [[XFormsStore sharedStore] clearFilledForms];
-    [[XFormsStore sharedStore] clearBlankForms];
-    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-    [delegate clearStore];
+    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", @"Label warning") message:NSLocalizedString(@"When logged out your current offline saved forms and patients will be removed",     ) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel button label") otherButtonTitles:@"OK", nil] show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        [OpenMRSAPIManager logout];
+        [[XFormsStore sharedStore] clearFilledForms];
+        [[XFormsStore sharedStore] clearBlankForms];
+        AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+        [delegate clearStore];
+    }
 }
 
 #pragma mark - <UIViewControllerRestoration>

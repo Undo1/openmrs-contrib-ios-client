@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface MainMenuCollectionViewController : UICollectionViewController <UIViewControllerRestoration>
+@interface MainMenuCollectionViewController : UICollectionViewController <UIViewControllerRestoration, UIAlertViewDelegate>
 
 @end
