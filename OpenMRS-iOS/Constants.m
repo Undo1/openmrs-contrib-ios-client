@@ -55,8 +55,9 @@ NSString *const kXFormBase64 = @"xsd:base64Binary";
 
 NSString *const kXFormsImage = @"image";
 NSString *const kXFormsAudio = @"audio";
+NSString *const kXFormsVideo = @"video";
 NSString *const kXFormsGPS = @"gps";
-
+NSString *const kUnSupported = @"UnSupported";
 
 + (NSDictionary *)MAPPING_TYPES {
     return @{

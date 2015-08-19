@@ -18,8 +18,10 @@
 @property (nonatomic, strong) GDataXMLDocument *doc;
 @property (nonatomic, strong) NSMutableArray *forms;
 @property (nonatomic, strong) NSMutableArray *groups;
+@property (nonatomic, strong) NSString *notSupportedType;
 @property (nonatomic) BOOL loadedLocaly;
 @property (nonatomic) BOOL isForPatient;
+@property (nonatomic) BOOL isSupported;
 
 - (instancetype)initFormFromFile:(NSString *)fileName andURL:(NSURL *)url Patient:(MRSPatient *)patient;
 - (NSData *)getModelFromDocument;

@@ -200,6 +200,16 @@
                 form.disabled = YES;
             }
         }
+        if (!selectedForm.isSupported) {
+            [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Warning label error")
+                                       message:[NSString stringWithFormat:@"\"%@\" %@", selectedForm.notSupportedType, NSLocalizedString(@"is not supported, please make a request for it from send feedback in Settings", @"message for unsupoorted types")]
+                                       delegate:self
+                              cancelButtonTitle:@"OK"
+                              otherButtonTitles: nil]
+             show];
+            [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+            return;
+        }
         [self presentViewController:nc animated:YES completion:nil];
     } else {
         if (!self.FilledForms) {
@@ -208,6 +218,16 @@
                 [MBProgressExtension hideActivityIndicatorInView:self.view];
                 if (!error) {
                     UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:[[XFormViewController alloc] initWithForm:xform WithIndex:0]];
+                    if (!xform.isSupported) {
+                        [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Error", @"Warning label error")
+                                                    message:[NSString stringWithFormat:@"\"%@\" %@", xform.notSupportedType, NSLocalizedString(@"is not supported, please make a request for it from send feedback in Settings", @"message for unsupoorted types")]
+                                                   delegate:self
+                                          cancelButtonTitle:@"OK"
+                                          otherButtonTitles: nil]
+                         show];
+                        [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
+                        return;
+                    }
                     [self presentViewController:nc animated:YES completion:nil];
                 } else {
                     [[MRSAlertHandler alertViewForError:self error:error] show];

@@ -28,6 +28,7 @@
     form.XFormsID = formID;
     form.forms = [[NSMutableArray alloc] init];
     form.groups = [[NSMutableArray alloc] init];
+    form.isSupported = YES;
     
     GDataXMLElement *model = [doc.rootElement elementsForName:@"xf:model"][0];
     GDataXMLElement *instance = [model elementsForName:@"xf:instance"][0];
@@ -112,12 +113,15 @@
     int old_count = 0;
     BOOL inRepeat = NO;
     for (GDataXMLElement *element in [group children]) {
+        if (!form.isSupported) {
+            break;
+        }
         //handling input
         if ([element.localName isEqualToString:@"input"] ||
             [element.localName isEqualToString:kXFormsSelect] ||
             [element.localName isEqualToString:kXFormsMutlipleSelect] ||
             [element.localName isEqualToString:kXFormsUpload]) {
-            [XFormsParser parseInput:element count:0 bindings:bindings instance:instance Section:section Group:groupDict Document:doc];
+            [XFormsParser parseInput:element count:0 bindings:bindings instance:instance Section:section Group:groupDict Document:doc xform:form];
         }
         //handling repeat
         if ([element.name isEqualToString:kXFormsRepeat]) {
@@ -234,13 +238,13 @@
             [element.localName isEqualToString:kXFormsMutlipleSelect] ||
             [element.localName isEqualToString:kXFormsUpload]) {
             //It adds the new row to the new section
-            [XFormsParser parseInput:element count:count bindings:bindings instance:instance Section:section Group:formElement.subElements Document:doc];
+            [XFormsParser parseInput:element count:count bindings:bindings instance:instance Section:section Group:formElement.subElements Document:doc xform:form];
         }
     }
     [group setObject:formElement forKey:formElement.bindID];
 }
 
-+ (void)parseInput:(GDataXMLElement *)input count:(int)count bindings:(NSArray *)bindings instance:(GDataXMLElement* )instance Section:(XLFormSectionDescriptor *)section Group:(NSMutableDictionary *)group Document:(GDataXMLDocument *)doc {
++ (void)parseInput:(GDataXMLElement *)input count:(int)count bindings:(NSArray *)bindings instance:(GDataXMLElement* )instance Section:(XLFormSectionDescriptor *)section Group:(NSMutableDictionary *)group Document:(GDataXMLDocument *)doc xform:(XForms *)form {
     XFormElement *formElement = [[XFormElement alloc] init];
     //labels and hints
     if ([input elementsForName:@"xf:label"]) {
@@ -277,12 +281,16 @@
             formElement.type = kXFormsAudio;
         } else if ([[[bindingForInput attributeForName:@"format"] stringValue] isEqualToString:kXFormsImage]) {
             formElement.type = kXFormsImage;
+        } else if ([[[bindingForInput attributeForName:@"format"] stringValue] isEqualToString:kXFormsVideo]) {
+            formElement.type = kXFormsVideo;
+        } else {
+            formElement.type = [[bindingForInput attributeForName:@"format"] stringValue];
         }
     } else {
         formElement.type = [[bindingForInput attributeForName:@"type"] stringValue];
     }
-    /* Sufficent data here to create the row */
 
+    /* Sufficent data here to create the row */
     XLFormRowDescriptor *row = nil;
     if ([formElement.type isEqualToString:kXFormsBoolean]) {
         row = [XLFormRowDescriptor formRowDescriptorWithTag:formElement.bindID
@@ -364,8 +372,13 @@
     formElement.XMLnode = instanceNode;
     
     
+    form.notSupportedType = formElement.type;
     //Adding default value.. now only strings
     row.value = [XFormsParser getRowValueFromElement:formElement andValue:instanceNode.stringValue];
+    if ([formElement.type isEqualToString:kUnSupported]) {
+        form.isSupported = NO;
+        return;
+    }
 
     if (formElement.hint && formElement.visible) {
         XLFormRowDescriptor *infoRow = [XLFormRowDescriptor formRowDescriptorWithTag:@"info" rowType:XLFormRowDescriptorTypeInfo title:formElement.hint];
@@ -509,6 +522,7 @@
                [formElement.type isEqualToString:kXFormsAudio]) {
         return [XLFormOptionsObject formOptionsObjectWithValue:value displayText:@""];
     } else {
+        formElement.type = kUnSupported;
         return nil;
     }
 }

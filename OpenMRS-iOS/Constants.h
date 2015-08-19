@@ -53,6 +53,8 @@ extern NSString *const kXFormBase64;
 extern NSString *const kXFormsImage;
 extern NSString *const kXFormsAudio;
 extern NSString *const kXFormsGPS;
+extern NSString *const kXFormsVideo;
+extern NSString *const kUnSupported;
 
 + (NSDictionary *)MAPPING_TYPES;
 
