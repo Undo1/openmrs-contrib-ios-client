@@ -210,6 +210,7 @@
             [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
             return;
         }
+        nc.modalPresentationStyle = UIModalPresentationFormSheet;
         [self presentViewController:nc animated:YES completion:nil];
     } else {
         if (!self.FilledForms) {
@@ -228,6 +229,7 @@
                         [self.tableView deselectRowAtIndexPath:indexPath animated:YES];
                         return;
                     }
+                    nc.modalPresentationStyle = UIModalPresentationFormSheet;
                     [self presentViewController:nc animated:YES completion:nil];
                 } else {
                     [[MRSAlertHandler alertViewForError:self error:error] show];
