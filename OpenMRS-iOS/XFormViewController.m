@@ -303,10 +303,12 @@
     
     XLFormRowDescriptor *row = [XLFormRowDescriptor formRowDescriptorWithTag:@"add" rowType:XLFormRowDescriptorTypeButton title:NSLocalizedString(@"Add", @"Label add")];
     row.action.formSelector = @selector(addNewSection:);
+    [row.cellConfig setObject:[UIColor colorWithRed:39/255.0 green:139/255.0 blue:146/255.0 alpha:1] forKey:@"textLabel.color"];
     [section addFormRow:row];
     
     row = [XLFormRowDescriptor formRowDescriptorWithTag:@"delete" rowType:XLFormRowDescriptorTypeButton title:NSLocalizedString(@"Remove", @"Label remove")];
     row.action.formSelector = @selector(removeSection:);
+    [row.cellConfig setObject:[UIColor colorWithRed:39/255.0 green:139/255.0 blue:146/255.0 alpha:1] forKey:@"textLabel.color"];
     [section addFormRow:row];
 }
 
