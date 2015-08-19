@@ -127,10 +127,16 @@
 }
 
 - (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        return NO;
+    }
     return YES;
 }
 
 - (BOOL)application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        return NO;
+    }
     return YES;
 }
 - (UIViewController *)application:(UIApplication *)application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
@@ -167,6 +173,7 @@
     }
     return nc;
 }
+
 - (void)saveContext
 {
     NSError *error = nil;
@@ -206,15 +213,21 @@
 }
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator
 {
-    if (_persistentStoreCoordinator != nil) {
+    /*if (_persistentStoreCoordinator != nil) {
         return _persistentStoreCoordinator;
-    }
+    }*/
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
-    NSDictionary *options = @ { EncryptedStorePassphraseKey: [wrapper objectForKey:(__bridge id)(kSecValueData)],
-                                NSMigratePersistentStoresAutomaticallyOption : @YES,
-                                NSInferMappingModelAutomaticallyOption : @YES
+
+    [[NSFileManager defaultManager] createDirectoryAtURL:[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] withIntermediateDirectories:NO attributes:nil error:nil];
+    
+    NSURL *databaseURL = [[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] URLByAppendingPathComponent:[NSString stringWithFormat:@"OpenMRS-iOS.sqlite"]];
+    NSDictionary *options = @ { EncryptedStorePassphraseKey: [wrapper objectForKey:(__bridge id)(kSecValueData)],EncryptedStoreDatabaseLocation : [databaseURL description],
+        NSMigratePersistentStoresAutomaticallyOption : @YES,
+        NSInferMappingModelAutomaticallyOption : @YES
     };
-    _persistentStoreCoordinator = [EncryptedStore makeStoreWithOptions:options managedObjectModel:[self managedObjectModel]];
+    _persistentStoreCoordinator = [EncryptedStore makeStoreWithOptions:options
+                                    managedObjectModel:[self managedObjectModel]];
+    //_persistentStoreCoordinator = [EncryptedStore makeStoreWithOptions:options managedObjectModel:[self managedObjectModel]];
     /*if (![_persistentStoreCoordinator addPersistentStoreWithType:EncryptedStoreType configuration:nil URL:storeURL options:options error:&error]) {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
@@ -227,50 +240,20 @@
 }
 - (void)clearStore;
 {
-    if (self.persistentStoreCoordinator.persistentStores.count == 0) {
-        return;
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"OpenMRS-iOS.sqlite"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+
+    [fileManager removeItemAtURL:storeURL error:NULL];
+
+    NSError* error = nil;
+
+    if([fileManager fileExistsAtPath:[NSString stringWithContentsOfURL:storeURL encoding:NSASCIIStringEncoding error:&error]])
+    {
+        [fileManager removeItemAtURL:storeURL error:nil];
     }
 
-    /*
-     * Well the commnented part is the old clear store which I don't see
-     * it's point while we can just delete exisiting patients.
-     */
-
-    /*NSLog(@"Presitance stores: %@", self.persistentStoreCoordinator.persistentStores);
-    NSPersistentStore *store = self.persistentStoreCoordinator.persistentStores[0];
-    NSError *error;
-    NSURL *storeURL = store.URL;
-    NSPersistentStoreCoordinator *storeCoordinator = self.persistentStoreCoordinator;
-    [storeCoordinator removePersistentStore:store error:&error];
-    [[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error];
-    /*NSDictionary *options = @{
-                              NSMigratePersistentStoresAutomaticallyOption : @YES,
-                              NSInferMappingModelAutomaticallyOption : @YES
-                              };
-    [[self.managedObjectContext persistentStoreCoordinator] addPersistentStoreWithType:EncryptedStoreType configuration:nil URL:storeURL options:options error:&error];//recreates the persistent store
-    _persistentStoreCoordinator = nil;
-
-    [self persistentStoreCoordinator];*/
-
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:self.managedObjectContext]];
-
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uuid != nil", [NSNumber numberWithBool:NO]];
-    [request setPredicate:predicate];
-    NSError *error = nil;
-    NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
-    if (error)
-        return;
-
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        for (NSManagedObject *object in results) {
-
-            __block MRSPatient *patient = [[MRSPatient alloc] init];
-            patient.UUID = [object valueForKey:@"uuid"];
-            [patient updateFromCoreData];
-            [patient cascadingDelete];
-        }
-    });
+    self.managedObjectContext = nil;
+    self.persistentStoreCoordinator = nil;
 }
 
 @end
