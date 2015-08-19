@@ -49,6 +49,12 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [MRSVisitCell updateTableViewForDynamicTypeSize:self.tableView];
+    
+    UINavigationController *parentNav = self.tabBarController.viewControllers[0];
+    PatientViewController *patientVC = parentNav.viewControllers[0];
+    patientVC.visitsEdited = YES;
+    [patientVC updateWithDetailedInfo];
+    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

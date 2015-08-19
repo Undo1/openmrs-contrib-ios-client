@@ -148,16 +148,18 @@
     if (self.encoutersEdited) {
         UINavigationController *parentNav = self.tabBarController.viewControllers[2];
         PatientEncounterListView *encounterList = parentNav.viewControllers[0];
-        if (encounterList && encounterList.isViewLoaded && encounterList.view.window) {
+        if (encounterList) {
             [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:encounterList.view];
+        }
+        if (!(encounterList.isViewLoaded && encounterList.view.window)) {
             [[UIApplication sharedApplication] endIgnoringInteractionEvents];
         }
         [OpenMRSAPIManager getEncountersForPatient:self.patient completion:^(NSError *error, NSArray *encounters) {
-            if (encounterList && encounterList.isViewLoaded && encounterList.view.window) {
+            if (encounterList) {
                 [MBProgressExtension hideActivityIndicatorInView:encounterList.view];
             }
             if (error == nil) {
-                if (encounterList && encounterList.isViewLoaded && encounterList.view.window) {
+                if (encounterList) {
                     [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Encounters loaded", @"Label loaded encounters") inView:encounterList.view];
                 }
                 self.encounters = encounters;
@@ -179,16 +181,18 @@
     if (self.visitsEdited) {
         UINavigationController *parentNav = self.tabBarController.viewControllers[1];
         PatientVisitListView *visitsView = parentNav.viewControllers[0];
-        if (visitsView && visitsView.isViewLoaded && visitsView.view.window) {
+        if (visitsView) {
             [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:visitsView.view];
+        }
+        if (!(visitsView.isViewLoaded && visitsView.view.window)) {
             [[UIApplication sharedApplication] endIgnoringInteractionEvents];
         }
         [OpenMRSAPIManager getVisitsForPatient:self.patient completion:^(NSError *error, NSArray *visits) {
-            if (visitsView && visitsView.isViewLoaded && visitsView.view.window) {
+            if (visitsView) {
                 [MBProgressExtension hideActivityIndicatorInView:visitsView.view];
             }
             if (error == nil) {
-                if (visitsView && visitsView.isViewLoaded && visitsView.view.window) {
+                if (visitsView) {
                     [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Visits loaded", @"Label loaded visits") inView:visitsView.view];
                 }
                 self.visits = visits;
@@ -219,6 +223,9 @@
 }
 - (void)syncPatient:(MRSPatient *)savedPatient {
     [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Syncing", @"Label syncing") inView:self.view];
+    if (!(self.isViewLoaded && self.view.window)) {
+        [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+    }
     [[SyncingEngine sharedEngine] SyncPatient:savedPatient completion:^(NSError *error) {
         [MBProgressExtension hideActivityIndicatorInView:self.view];
         if (!error) {
@@ -236,6 +243,9 @@
 }
 -(void)fetchPatient {
     [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:self.view];
+    if (!(self.isViewLoaded && self.view.window)) {
+        [[UIApplication sharedApplication] endIgnoringInteractionEvents];
+    }
     [OpenMRSAPIManager getDetailedDataOnPatient:self.patient completion:^(NSError *error, MRSPatient *detailedPatient) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         [[UIApplication sharedApplication] endIgnoringInteractionEvents];
