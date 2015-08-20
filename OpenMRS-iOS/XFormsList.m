@@ -156,6 +156,9 @@
     if (self.FilledForms) {
         [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     } else {
+        UINavigationController *parentNav = self.tabBarController.viewControllers[0];
+        PatientViewController *patientVC = parentNav.viewControllers[0];
+        [patientVC.refreshingTimer invalidate];
         [self.tabBarController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
     }
 }

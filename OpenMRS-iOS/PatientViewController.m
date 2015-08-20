@@ -27,7 +27,6 @@
 
 @interface PatientViewController ()
 
-@property (nonatomic, strong) NSTimer *refreshingTimer;
 @property (nonatomic) BOOL showedErrorAlready;
 
 @end
@@ -42,7 +41,9 @@
 
         self.tabBarItem.image = [UIImage imageNamed:@"user_icon"];
         double interval = [[NSUserDefaults standardUserDefaults] doubleForKey:UDrefreshInterval];
-        self.refreshingTimer = [NSTimer scheduledTimerWithTimeInterval:interval * 60 target:self selector:@selector(refresh) userInfo:nil repeats:YES];
+        if (interval > 0.001) { //cause you know.. doubles.
+            self.refreshingTimer = [NSTimer scheduledTimerWithTimeInterval:interval * 60 target:self selector:@selector(refresh) userInfo:nil repeats:YES];
+        }
     }
     return self;
 }

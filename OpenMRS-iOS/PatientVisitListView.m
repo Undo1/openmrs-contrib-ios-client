@@ -43,6 +43,9 @@
 }
 
 - (void)close {
+    UINavigationController *parentNav = self.tabBarController.viewControllers[0];
+    PatientViewController *patientVC = parentNav.viewControllers[0];
+    [patientVC.refreshingTimer invalidate];
     [self.tabBarController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 

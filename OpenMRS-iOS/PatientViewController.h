@@ -20,6 +20,8 @@
 @property (nonatomic) BOOL isShowingActions;
 @property (nonatomic) BOOL hasActiveVisit;
 
+@property (nonatomic, strong) NSTimer *refreshingTimer;
+
 @property (nonatomic) BOOL patientEdited;
 @property (nonatomic) BOOL encoutersEdited;
 @property (nonatomic) BOOL visitsEdited;
