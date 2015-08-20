@@ -11,6 +11,4 @@
 
 @interface PatientVisitListView : UITableViewController <UIViewControllerRestoration>
 @property (nonatomic, strong) NSArray *visits;
-
-@property (nonatomic, strong) PatientViewController *pvc;
 @end

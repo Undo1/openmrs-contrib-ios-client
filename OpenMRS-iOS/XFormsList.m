@@ -65,7 +65,7 @@
     if (self.FilledForms) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(close)];
     } else {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self.pvc action:@selector(close)];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self action:@selector(close)];
     }
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"Cell"];
     
@@ -87,6 +87,9 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     self.counter = 1;
+    UINavigationController *parentNav = self.tabBarController.viewControllers[0];
+    PatientViewController *pateientVC = parentNav.viewControllers[0];
+    self.patient = pateientVC.patient;
     [self updateForms];
 }
 
@@ -150,7 +153,11 @@
 }
 
 - (void)close {
-    [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    if (self.FilledForms) {
+        [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    } else {
+        [self.tabBarController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
+    }
 }
 
 #pragma mark - Table view data source

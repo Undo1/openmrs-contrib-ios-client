@@ -37,9 +37,13 @@
     [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
     [MRSVisitCell updateTableViewForDynamicTypeSize:self.tableView];
 
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self.pvc action:@selector(close)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self action:@selector(close)];
 
     self.title = NSLocalizedString(@"Visits", @"Label visits");
+}
+
+- (void)close {
+    [self.tabBarController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)updateFontSize {

@@ -159,13 +159,11 @@
     navController1.restorationIdentifier = @"navController1";
     
     PatientVisitListView *visitsList = [[PatientVisitListView alloc] initWithStyle:UITableViewStyleGrouped];
-    visitsList.pvc = vc;
     UINavigationController *navController2 = [[UINavigationController alloc] initWithRootViewController:visitsList];
     navController2.restorationIdentifier = @"navController2";
     
     
     PatientEncounterListView *encounterList = [[PatientEncounterListView alloc] initWithStyle:UITableViewStyleGrouped];
-    encounterList.pvc = vc;
     UINavigationController *navController3 = [[UINavigationController alloc] initWithRootViewController:encounterList];
     navController3.restorationIdentifier = @"navContrller3";
     
