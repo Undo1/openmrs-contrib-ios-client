@@ -30,6 +30,7 @@
         error = nil;
         GDataXMLDocument *doc = [[GDataXMLDocument alloc] initWithData:fileData encoding:NSUTF8StringEncoding error:&error];
         self = [XFormsParser parseXFormsXML:doc withID:self.XFormsID andName:self.name Patient:patient];
+        self.patient = patient;
     }
     return self;
 }
@@ -61,11 +62,25 @@
 }
 
 - (XLFormDescriptor *)getReviewFormWithTitle:(NSString *)title {
+    XForms *cloneForm = [XFormsParser parseXFormsXML:self.doc withID:self.XFormsID andName:NSLocalizedString(@"Summary", @"Title summary") Patient:self.patient];
+    for (int i =0; i <self.forms.count;i++) {
+        XLFormDescriptor *clone = cloneForm.forms[i];
+        XLFormDescriptor *org = self.forms[i];
+        for (int j=0;j<clone.formSections.count;j++) {
+            XLFormSectionDescriptor *clonesec = clone.formSections[j];
+            XLFormSectionDescriptor *orgsec = org.formSections[j];
+            for (int k=0;k<clonesec.formRows.count;k++) {
+                XLFormRowDescriptor *clonerow = clonesec.formRows[k];
+                XLFormRowDescriptor *orgrow = orgsec.formRows[k];
+                clonerow.value = orgrow.value;
+            }
+        }
+    }
     XLFormDescriptor *reviewForm = [XLFormDescriptor formDescriptorWithTitle:title];
     XLFormSectionDescriptor *reviewSection = [XLFormSectionDescriptor formSection];
     [reviewForm addFormSection:reviewSection];
 
-    for (XLFormDescriptor *form in self.forms) {
+    for (XLFormDescriptor *form in cloneForm.forms) {
         for (XLFormSectionDescriptor *section in form.formSections) {
             XLFormRowDescriptor *row = section.formRows[0];
             if (![row.tag isEqualToString:@"add"]) {

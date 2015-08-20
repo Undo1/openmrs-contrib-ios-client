@@ -37,6 +37,7 @@
     if ([formNode elementsForName:@"patient"].count > 0 && patient != nil) {
         NSLog(@"It's for patient!%@", patient.birthdateEstimated);
         form.isForPatient = YES;
+        form.patient = patient;
         [XFormsParser fillFormDataTo:[formNode elementsForName:@"patient"][0] fromPatient:patient];
     }
 

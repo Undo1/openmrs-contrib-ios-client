@@ -19,6 +19,7 @@
 @property (nonatomic, strong) NSMutableArray *forms;
 @property (nonatomic, strong) NSMutableArray *groups;
 @property (nonatomic, strong) NSString *notSupportedType;
+@property (nonatomic, strong) MRSPatient *patient;
 @property (nonatomic) BOOL loadedLocaly;
 @property (nonatomic) BOOL isForPatient;
 @property (nonatomic) BOOL isSupported;

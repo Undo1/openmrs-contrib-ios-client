@@ -59,7 +59,7 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:leftLabel style:UIBarButtonItemStylePlain target:self action:@selector(pervious:)];
     self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:rightLabel style:UIBarButtonItemStylePlain target:self action:@selector(next:)];
     
-    self.navigationItem.title = [NSString stringWithFormat:@"%@ (%d/%lu)", self.XForm.name, self.index + 1, (unsigned long)self.XForm.forms.count];
+    self.navigationItem.title = [NSString stringWithFormat:@"(%d/%lu) %@", self.index + 1, (unsigned long)self.XForm.forms.count, self.XForm.name];
     
     UISwipeGestureRecognizer * swipeleft=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(next:)];
     swipeleft.direction=UISwipeGestureRecognizerDirectionLeft;
@@ -74,6 +74,16 @@
         [self addTutorialView];
         [[NSUserDefaults standardUserDefaults] setBool:NO forKey:UDnewSession];
     }
+    if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
+        self.edgesForExtendedLayout = UIRectEdgeNone;
+        self.tableView.contentInset = UIEdgeInsetsMake(0., 0., CGRectGetHeight(self.tabBarController.tabBar.frame), 0);
+    }
+    
+    // Without this awesome 2 lines prevent bad things..
+    // like, when you press perv then next everything normal,
+    // do it again the next page rows disappears!
+    [self.tableView beginUpdates];
+    [self.tableView endUpdates];
 }
 
 - (void)viewWillAppear:(BOOL)animated {
@@ -146,11 +156,12 @@
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    CGFloat temp = [super tableView:tableView heightForRowAtIndexPath:indexPath];
     // change cell height of a particular cell
     if ([[self.form formRowAtIndex:indexPath].tag isEqualToString:@"info"]){
         return 30.0;
     }
-    return [super tableView:tableView heightForRowAtIndexPath:indexPath];
+    return temp;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
@@ -196,7 +207,6 @@
                     self.reviewForm = [[XLFormViewController alloc] initWithForm:[self.XForm getReviewFormWithTitle:NSLocalizedString(@"Summary", @"Title summary")]];
                     self.reviewForm.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(dismissNew:)];
                     self.reviewForm.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Submit form", @"Button label submit form") style:UIBarButtonItemStylePlain target:self action:@selector(submitForm)];
-                    self.reviewForm.navigationItem.title = self.XForm.name;
                     [self.navigationController pushViewController:self.reviewForm animated:YES];
                 } else {
                     [self submitForm];
@@ -245,8 +255,6 @@
 
 - (void)dismissNew:(UIBarButtonItem *)sender {
     [self.navigationController popViewControllerAnimated:YES];
-    [self.navigationController popViewControllerAnimated:NO];
-    [self.navigationController pushViewController:[[XFormViewController alloc] initWithForm:self.XForm WithIndex:self.index] animated:NO];
 }
 
 - (BOOL)isValid {
