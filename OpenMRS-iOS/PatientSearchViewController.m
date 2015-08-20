@@ -12,9 +12,10 @@
 #import "PatientVisitListView.h"
 #import "MRSPatient.h"
 #import "PatientViewController.h"
-#import "SVProgressHUD.h"
 #import "MRSHelperFunctions.h"
 #import "XFormsList.h"
+#import "MBProgressExtension.h"
+#import "MRSAlertHandler.h"
 
 @interface PatientSearchViewController ()
 
@@ -96,30 +97,28 @@
 - (void)reloadDataForSearch:(NSString *)search
 {
     if (self.searchButtonPressed) {
-        [SVProgressHUD show];
+        [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:self.view];
     }
     [OpenMRSAPIManager getPatientListWithSearch:search online:self.isOnline completion:^(NSError *error, NSArray *patients) {
+        if (self.searchButtonPressed) {
+            [MBProgressExtension hideActivityIndicatorInView:self.view];
+        }
         if (!error) {
             self.currentSearchResults = patients;
             dispatch_async(dispatch_get_main_queue(), ^ {
-                if (patients.count == 0 && self.searchButtonPressed && [SVProgressHUD isVisible])
+                if (self.searchButtonPressed)
                 {
-                    [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Couldn't find patients", @"Message -could- -not- -find- -patients")];
-                    self.searchButtonPressed = NO;
-                }
-                else if (self.searchButtonPressed && [SVProgressHUD isVisible])
-                {
-                    [SVProgressHUD showSuccessWithStatus:[NSString stringWithFormat:@"%lu %@", self.currentSearchResults.count, NSLocalizedString(@"patients found", @"Message -patients- -found-")]];
+                    [MBProgressExtension showSucessWithTitle:[NSString stringWithFormat:@"%lu %@", self.currentSearchResults.count, NSLocalizedString(@"patients found", @"Message -patients- -found-")] inView:self.view];
                     self.searchButtonPressed = NO;
                 }
 
                 [self.tableView reloadData];
             });
         } else {
-            if (self.searchButtonPressed && [SVProgressHUD isVisible])
+            if (self.searchButtonPressed)
             {
-                [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Can't load patients", @"Message -can- -not- -load- -patients-")];
                 self.searchButtonPressed = NO;
+                [[MRSAlertHandler alertViewForError:self error:error] show];
             }
         }
     }];
