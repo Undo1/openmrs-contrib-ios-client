@@ -7,7 +7,6 @@
 //
 
 #import "PatientViewController.h"
-#import "EditPatient.h"
 #import "OpenMRSAPIManager.h"
 #import "PatientEncounterListView.h"
 #import "PatientVisitListView.h"

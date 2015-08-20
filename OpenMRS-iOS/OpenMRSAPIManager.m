@@ -20,7 +20,6 @@
 #import "AppDelegate.h"
 #import "MRSPatientIdentifierType.h"
 #import "KeychainItemWrapper.h"
-#import "SVProgressHUD.h"
 #import "MRSEncounterOb.h"
 #import "MRSEncounterType.h"
 #import "OpenMRS_iOS-Swift.h"

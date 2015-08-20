@@ -19,7 +19,6 @@
 		2412409F1B627766009E172B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2412409E1B627766009E172B /* AVFoundation.framework */; };
 		241240A61B62854B009E172B /* MapViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 241240A21B62854B009E172B /* MapViewController.m */; };
 		241240A81B62854B009E172B /* MapViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 241240A51B62854B009E172B /* MapViewController.xib */; };
-		2432066D1B2E439000B54970 /* EditPatient.m in Sources */ = {isa = PBXBuildFile; fileRef = 2432066C1B2E439000B54970 /* EditPatient.m */; };
 		243206711B30436700B54970 /* MRSHelperFunctions.m in Sources */ = {isa = PBXBuildFile; fileRef = 243206701B30436700B54970 /* MRSHelperFunctions.m */; };
 		2436F2B11B49A01000294B4C /* EditPatientForm.m in Sources */ = {isa = PBXBuildFile; fileRef = 2436F2B01B49A01000294B4C /* EditPatientForm.m */; };
 		2436F2B51B49D56C00294B4C /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = 2436F2B41B49D56C00294B4C /* Constants.m */; };
@@ -142,8 +141,6 @@
 		241240A21B62854B009E172B /* MapViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapViewController.m; sourceTree = "<group>"; };
 		241240A51B62854B009E172B /* MapViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MapViewController.xib; sourceTree = "<group>"; };
 		241729061B30C73400BB35F0 /* openmrs-offline 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "openmrs-offline 2.xcdatamodel"; sourceTree = "<group>"; };
-		2432066B1B2E439000B54970 /* EditPatient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditPatient.h; sourceTree = "<group>"; };
-		2432066C1B2E439000B54970 /* EditPatient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EditPatient.m; sourceTree = "<group>"; };
 		2432066F1B30436700B54970 /* MRSHelperFunctions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSHelperFunctions.h; sourceTree = "<group>"; };
 		243206701B30436700B54970 /* MRSHelperFunctions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSHelperFunctions.m; sourceTree = "<group>"; };
 		2436F2AF1B49A01000294B4C /* EditPatientForm.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EditPatientForm.h; sourceTree = "<group>"; };
@@ -383,15 +380,6 @@
 			name = GPSChooserViewController;
 			sourceTree = "<group>";
 		};
-		2432066E1B2E439C00B54970 /* Edit Patient */ = {
-			isa = PBXGroup;
-			children = (
-				2432066B1B2E439000B54970 /* EditPatient.h */,
-				2432066C1B2E439000B54970 /* EditPatient.m */,
-			);
-			name = "Edit Patient";
-			sourceTree = "<group>";
-		};
 		2436F2B21B49A01900294B4C /* Edit patient Form */ = {
 			isa = PBXGroup;
 			children = (
@@ -462,7 +450,6 @@
 				243786441B46B82000AB5089 /* Forms */,
 				2494E8E91B3CC1CC00ABFE53 /* Identifier Type Cell */,
 				24DAC0D81B397F6D0089AD12 /* Visit Cell */,
-				2432066E1B2E439C00B54970 /* Edit Patient */,
 				24A8DECD1B18F67500F5FF84 /* ActiveVisits */,
 				248FBE481B03BC2300569C2C /* Add patient */,
 				248FBE421B03BBAA00569C2C /* Add visit note */,
@@ -1152,7 +1139,6 @@
 				D39AD7AE1A3C081000C01540 /* MRSVital.m in Sources */,
 				2436F2B51B49D56C00294B4C /* Constants.m in Sources */,
 				D317E7F61A4C6BD300E05212 /* OrderedDictionary.m in Sources */,
-				2432066D1B2E439000B54970 /* EditPatient.m in Sources */,
 				247BC28E1B7FC65600853B37 /* MBProgressExtension.m in Sources */,
 				240F4EEF1B5D415100E943FC /* XFormElement.m in Sources */,
 				D396A52D1A2E09DE00DE6448 /* MRSPatient.m in Sources */,

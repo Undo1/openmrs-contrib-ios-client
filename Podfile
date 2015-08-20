@@ -4,7 +4,6 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
 pod "AFNetworking", "2.5.0"
-pod "SVProgressHUD"
 pod "EncryptedCoreData", :git => 'https://github.com/project-imas/encrypted-core-data.git'
 pod "UIAlertView+Blocks"
 pod 'XLForm', '~> 3.0.0'

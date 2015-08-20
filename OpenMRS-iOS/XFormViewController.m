@@ -12,7 +12,6 @@
 #import "Constants.h"
 #import "XFormsParser.h"
 #import "OpenMRSAPIManager.h"
-#import "SVProgressHUD.h"
 #import "XFormsStore.h"
 #import "XFormImageCell.h"
 #import "MRSDateUtilities.h"

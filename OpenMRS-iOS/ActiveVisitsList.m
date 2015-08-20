@@ -6,7 +6,6 @@
 //  Copyright (c) 2015 Erway Software. All rights reserved.
 //
 #import "OpenMRSAPIManager.h"
-#import "SVProgressHUD.h"
 #import "ActiveVisitsList.h"
 #import "MRSHelperFunctions.h"
 #import "MRSVisitCell.h"
@@ -110,7 +109,6 @@
 
 - (void)close
 {
-    [SVProgressHUD dismiss];
     [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
 }
 
