@@ -455,7 +455,7 @@
             if (!editCell) {
                 editCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"actionCell"];
             }
-            editCell.textLabel.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Edit Patient", @"Title -Edit- -patient-")];
+            editCell.textLabel.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Edit patient", @"Title -Edit- -patient-")];
             editCell.textLabel.textAlignment = NSTextAlignmentCenter;
             editCell.textLabel.textColor = self.view.tintColor;
             return editCell;

@@ -50,7 +50,7 @@ NSString *kDateTimeFormat = @"DateTimeFormat";
     
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(exitSettings)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self action:@selector(exitSettings)];
 }
 
 - (void)initForm {
