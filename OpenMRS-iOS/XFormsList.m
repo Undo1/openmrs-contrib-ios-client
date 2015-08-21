@@ -31,6 +31,7 @@
     if (self) {
         self.tabBarItem.title = NSLocalizedString(@"Form Entry", "Label form entry");
         self.tabBarItem.image = [UIImage imageNamed:@"form-icon"];
+        self.restorationClass = [self class];
     }
     return self;
 }
@@ -39,6 +40,7 @@
     self = [self init];
     if (self) {
         self.FilledForms = NO;
+        self.restorationIdentifier = @"blankForms";
     }
     return self;
 }
@@ -47,19 +49,13 @@
     self = [self init];
     if (self) {
         self.FilledForms = YES;
+        self.restorationIdentifier = @"filledForms";
     }
     return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-
-    if (self.FilledForms) {
-        self.restorationIdentifier = @"filledForms";
-    } else {
-        self.restorationIdentifier = @"blankForms";
-    }
-    self.restorationClass = [self class];
 
     self.navigationItem.title = @"XForms"; //That doesn't need localization.
     if (self.FilledForms) {

@@ -167,10 +167,8 @@
     navController3.restorationIdentifier = @"navContrller3";
     
     XFormsList *formsList = [[XFormsList alloc] initBlankForms];
-    formsList.pvc = vc;
     UINavigationController *formListNavigationController = [[UINavigationController alloc] initWithRootViewController:formsList];
     formListNavigationController.restorationIdentifier = @"navController4";
-    formsList.patient = vc.patient;
 
     UITabBarController *patientView = [[UITabBarController alloc] init];
     NSArray *controllers = [NSArray arrayWithObjects:navController1, navController2, navController3, formListNavigationController, nil];

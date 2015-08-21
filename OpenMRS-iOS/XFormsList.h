@@ -13,7 +13,6 @@
 @interface XFormsList : UITableViewController <UIViewControllerRestoration>
 
 @property (nonatomic, strong) MRSPatient *patient;
-@property (nonatomic, strong) PatientViewController *pvc;
 
 - (instancetype)initBlankForms;
 - (instancetype)initFilledForms;

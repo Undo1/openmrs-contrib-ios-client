@@ -55,8 +55,6 @@
         self.visitsEdited = YES;
         self.encoutersEdited = YES;
     }
-    XFormsList *formsList = [(UINavigationController *)(self.tabBarController.viewControllers[3]) viewControllers][0];
-    [formsList setPatient:patient];
     _patient = patient;
     self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
                            @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
