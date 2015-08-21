@@ -62,7 +62,6 @@
     PatientViewController *patientVC = parentNav.viewControllers[0];
     patientVC.visitsEdited = YES;
     [patientVC updateWithDetailedInfo];
-    [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView

@@ -53,7 +53,7 @@
     
     //Gender
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kGender
-                                                rowType:XLFormRowDescriptorTypePicker title:@"Gender"];
+                                                rowType:XLFormRowDescriptorTypeSelectorSegmentedControl title:@"Gender"];
     row.selectorOptions = @[
                             NSLocalizedString(@"Male", @"Label female"),
                             NSLocalizedString(@"Female", @"Label male")
