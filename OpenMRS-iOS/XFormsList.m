@@ -63,7 +63,7 @@
 
     self.navigationItem.title = @"XForms"; //That doesn't need localization.
     if (self.FilledForms) {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(close)];
+        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self action:@selector(close)];
     } else {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self action:@selector(close)];
     }
@@ -362,12 +362,10 @@
                 break;
             }
         }
-        self.forms = finalArray;
         if (!master_error) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [hud hide:YES];
                 [[UIApplication sharedApplication] endIgnoringInteractionEvents];
-                [self.tableView reloadData];
                 if (self.forms.count == 0) {
                     [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"No forms to submit yet", @"warning no forms to submit")
                                                 message:@""
@@ -378,6 +376,8 @@
                 } else {
                     [[MRSAlertHandler alertForSucess:self] show];
                 }
+                self.forms = finalArray;
+                [self.tableView reloadData];
             });
         }
     });
