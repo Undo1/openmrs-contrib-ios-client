@@ -25,6 +25,7 @@
 - (void)setVisits:(NSArray *)visits
 {
     _visits = visits;
+    [MRSVisitCell updateTableViewForDynamicTypeSize:self.tableView];
     [self.tableView reloadData];
 }
 - (void)viewDidLoad
