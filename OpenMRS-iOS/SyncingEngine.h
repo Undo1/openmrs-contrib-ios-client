@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+@class MRSPatient;
 @interface SyncingEngine : NSObject
 
 +(SyncingEngine *)sharedEngine;

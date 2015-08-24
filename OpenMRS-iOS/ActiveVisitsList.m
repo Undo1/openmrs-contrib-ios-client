@@ -6,11 +6,13 @@
 //  Copyright (c) 2015 Erway Software. All rights reserved.
 //
 #import "OpenMRSAPIManager.h"
-#import "SVProgressHUD.h"
 #import "ActiveVisitsList.h"
 #import "MRSHelperFunctions.h"
 #import "MRSVisitCell.h"
 #import "MRSVisit.h"
+#import "MBProgressHUD.h"
+#import "MRSAlertHandler.h"
+#import "MBProgressExtension.h"
 
 @interface ActiveVisitsList ()
 
@@ -26,6 +28,20 @@
 
 #define MARGIN 5
 #define SPINNERSIZE 50
+
+- (instancetype)initWithStyle:(UITableViewStyle)style {
+    self = [super initWithStyle:style];
+    if (self) {
+        //else paramters are set from restoration
+        if (self.startIndex == 0) {
+            self.hasMore = YES;
+        }
+        if (self.activeVisits.count == 0) {
+            [self loadMore];
+        }
+    }
+    return self;
+}
 
 - (void)viewDidLoad
 {
@@ -44,14 +60,6 @@
                                                                             action:@selector(close)];
     if ([MRSHelperFunctions isNull:self.activeVisits]) {
         self.activeVisits = [[NSMutableArray alloc] init];
-    }
-    
-    //else paramters are set from restoration
-    if (self.startIndex == 0) {
-        self.hasMore = YES;
-    }
-    if (self.activeVisits.count == 0) {
-        [self loadMore];
     }
 
     [self.tableView registerClass:[MRSVisitCell class] forCellReuseIdentifier:@"cell"];
@@ -83,16 +91,24 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
+    NSLog(@"has more: %d", self.hasMore);
     if (self.hasMore) {
         return self.activeVisits.count + 1;
     } else {
+        if (self.activeVisits.count == 0) {
+            UILabel *backgroundLabel = [[UILabel alloc] init];
+            backgroundLabel.textAlignment = NSTextAlignmentCenter;
+            backgroundLabel.text = [NSString stringWithFormat:@"%@", NSLocalizedString(@"No active visits available", @"Label no active visits available")];
+            self.tableView.backgroundView = backgroundLabel;
+        } else {
+            self.tableView.backgroundView = nil;
+        }
         return self.activeVisits.count;
     }
 }
 
 - (void)close
 {
-    [SVProgressHUD dismiss];
     [[self presentingViewController] dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -143,24 +159,23 @@
 
 - (void)loadMore {
     self.loading = YES;
-    [SVProgressHUD showWithStatus:[NSString stringWithFormat:@"%@..", NSLocalizedString(@"Loading more visits", @"Message Loading more visits")]];
+
+    [MBProgressExtension showBlockWithDetailTitle:NSLocalizedString(@"Loading more visits", @"Message Loading more visits") inView:self.view];
     [OpenMRSAPIManager getActiveVisits:self.activeVisits From:self.startIndex withCompletion:^(NSError *error) {
+        [MBProgressExtension hideActivityIndicatorInView:self.view];
         if (!error) {
+            [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Completed", @"Label completed") inView:self.view];
             [self.tableView reloadData];
             int current = self.startIndex;
             self.startIndex = self.activeVisits.count;
             self.loading = NO;
             [self addNewRows:current];
-            [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Done", @"Label done")];
         } else {
             if (self.activeVisits.count == 0){
-                [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Can not load active visits", @"Message Can not load active visits")];
-                //To remove the spinning indicator cell.
                 self.hasMore = NO;
                 [self.tableView reloadData];
-            } else {
-                [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Problem loading more active visits", @"Message Problem loading more active visits")];
             }
+            [[MRSAlertHandler alertViewForError:self error:error] show];
         }
     }];
 }

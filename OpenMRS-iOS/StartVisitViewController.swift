@@ -58,20 +58,27 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
     
     func done()
     {
+        MBProgressExtension.showSucessWithTitle(NSLocalizedString("Loading", comment: "Label loading"), inView: self.view)
         OpenMRSAPIManager.startVisitWithLocation(location, visitType: visitType, forPatient: patient) { (error:NSError!) -> Void in
             if error == nil
             {
+                MBProgressExtension.hideActivityIndicatorInView(self.view)
                 dispatch_async(dispatch_get_main_queue()) {
                     self.delegate?.didCreateVisitForPatient(self.patient)
+                    MBProgressExtension.showSucessWithTitle(NSLocalizedString("Completed", comment: "Label loading"), inView: self.presentingViewController?.view)
                     self.dismissViewControllerAnimated(true, completion: nil)
                 }
+            } else {
+                MRSAlertHandler.alertViewForError(self, error: error).show()
             }
         }
     }
     
     func reloadData()
     {
+        MBProgressExtension.showSucessWithTitle(NSLocalizedString("Loading", comment: "Label loading"), inView: self.view)
         OpenMRSAPIManager.getVisitTypesWithCompletion { (error:NSError!, types:[AnyObject]!) -> Void in
+            MBProgressExtension.hideActivityIndicatorInView(self.view)
             if error == nil
             {
                 self.cachedVisitTypes = types as! [MRSVisitType]!
@@ -84,6 +91,8 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
                         self.updateDoneButtonState()
                     }
                 }
+            } else {
+                MRSAlertHandler.alertViewForError(self, error: error).show()
             }
         }
     }

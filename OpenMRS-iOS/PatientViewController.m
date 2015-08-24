@@ -7,12 +7,10 @@
 //
 
 #import "PatientViewController.h"
-#import "EditPatient.h"
 #import "OpenMRSAPIManager.h"
 #import "PatientEncounterListView.h"
 #import "PatientVisitListView.h"
 #import "OpenMRS_iOS-Swift.h"
-#import <SVProgressHUD.h>
 #import "AddVisitNoteTableViewController.h"
 #import "CaptureVitalsTableViewController.h"
 #import "MRSPatient.h"
@@ -20,12 +18,15 @@
 #import "AppDelegate.h"
 #import "SyncingEngine.h"
 #import "EditPatientForm.h"
+#import "XFormsList.h"
+#import "Constants.h"
+#import "MBProgressExtension.h"
+#import "MRSAlertHandler.h"
+#import "MBProgressHUD.h"
 
 @interface PatientViewController ()
 
-@property (nonatomic) BOOL patientEdited;
-@property (nonatomic) BOOL encoutersEdited;
-@property (nonatomic) BOOL visitsEdited;
+@property (nonatomic) BOOL showedErrorAlready;
 
 @end
 
@@ -38,12 +39,17 @@
         self.restorationClass = [self class];
 
         self.tabBarItem.image = [UIImage imageNamed:@"user_icon"];
+        double interval = [[NSUserDefaults standardUserDefaults] doubleForKey:UDrefreshInterval];
+        if (interval > 0.001) { //cause you know.. doubles.
+            self.refreshingTimer = [NSTimer scheduledTimerWithTimeInterval:interval * 60 target:self selector:@selector(refresh) userInfo:nil repeats:YES];
+        }
     }
     return self;
 }
 
 - (void)setPatient:(MRSPatient *)patient
 {
+    NSLog(@"tabbar: views: %@", [(UINavigationController *)(self.tabBarController.viewControllers[3]) viewControllers]);
     if (![MRSHelperFunctions isNull:_patient]) {
         self.patientEdited = YES;
         self.visitsEdited = YES;
@@ -78,12 +84,23 @@
     self.patientEdited = YES;
     self.visitsEdited = YES;
     self.encoutersEdited = YES;
+    
+    self.showedErrorAlready = NO;
+}
+
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+}
+
+- (void)refresh {
+    self.patientEdited = YES;
+    self.encoutersEdited = YES;
+    self.visitsEdited = YES;
+    [self updateWithDetailedInfo];
 }
 
 - (void)close {
-    if ([SVProgressHUD isVisible]) {
-        [SVProgressHUD dismiss];
-    }
+    [self.refreshingTimer invalidate];
     [self.tabBarController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
@@ -117,15 +134,8 @@
             if (!savedPatient.upToDate) {
                 NSLog(@"will be edited!");
                 self.patient = savedPatient;
-                [[SyncingEngine sharedEngine] SyncPatient:savedPatient completion:^(NSError *error) {
-                    if (!error) {
-                        [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Synced", @"Label synced")];
-                        self.patient = savedPatient;
-                        self.patientEdited = NO;
-                    } else {
-                        [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Error syncing", @"Label error syncing")];
-                    }
-                }];
+                [self.tableView reloadData];
+                [self syncPatient:savedPatient];
             } else {
                 [self fetchPatient];
             }
@@ -133,48 +143,36 @@
             [self fetchPatient];
         }
     }
-    if (self.encoutersEdited) {
-        [OpenMRSAPIManager getEncountersForPatient:self.patient completion:^(NSError *error, NSArray *encounters) {
-            if (error == nil) {
-                self.encounters = encounters;
-                self.encoutersEdited = NO;
-                dispatch_async(dispatch_get_main_queue(), ^ {
-                    [self.tableView reloadData];
-                });
-                UINavigationController *parentNav = self.tabBarController.viewControllers[2];
-                PatientEncounterListView *encounterList = parentNav.viewControllers[0];
-                encounterList.encounters = self.encounters;
-            }
-        }];
+    [self fetchEncounters];
+    [self fetchVisits];
+}
+- (void)syncPatient:(MRSPatient *)savedPatient {
+    [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Syncing", @"Label syncing") inView:self.view];
+    if (!(self.isViewLoaded && self.view.window)) {
+        [[UIApplication sharedApplication] endIgnoringInteractionEvents];
     }
-    if (self.visitsEdited) {
-        [OpenMRSAPIManager getVisitsForPatient:self.patient completion:^(NSError *error, NSArray *visits) {
-            if (error == nil) {
-                self.visits = visits;
-                self.visitsEdited = NO;
-                dispatch_async(dispatch_get_main_queue(), ^ {
-                    [self.tableView reloadData];
-                });
-                self.hasActiveVisit = NO;
-                for (MRSVisit *visit in visits) {
-                    if (visit.active) {
-                        self.hasActiveVisit = YES;
-                        dispatch_async(dispatch_get_main_queue(), ^ {
-                            [self.tableView reloadData];
-                        });
-                        break;
-                    }
-                }
-                UINavigationController *parentNav = self.tabBarController.viewControllers[1];
-                PatientVisitListView *visitsView = parentNav.viewControllers[0];
-                visitsView.visits = self.visits;
+    [[SyncingEngine sharedEngine] SyncPatient:savedPatient completion:^(NSError *error) {
+        [MBProgressExtension hideActivityIndicatorInView:self.view];
+        if (!error) {
+            [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Synced", @"Label synced") inView:self.view];
+            self.showedErrorAlready = NO;
+            self.patient = savedPatient;
+            self.patientEdited = NO;
+        } else {
+            if (!self.showedErrorAlready) {
+                [[MRSAlertHandler alertViewForError:self error:error] show];
+                self.showedErrorAlready = YES;
             }
-        }];
-    }
+        }
+    }];
 }
 -(void)fetchPatient {
+    [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:self.view];
     [OpenMRSAPIManager getDetailedDataOnPatient:self.patient completion:^(NSError *error, MRSPatient *detailedPatient) {
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        self.view.userInteractionEnabled = YES;
         if (error == nil) {
+            [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Patient details loaded", @"Label patient loaded") inView:self.view];
             self.patient = detailedPatient;
             self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
                                    @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
@@ -196,6 +194,7 @@
                 self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
             });
             self.patientEdited = NO;
+            self.showedErrorAlready = NO;
         } else {
             if ([self.patient isInCoreData]) {
                 [self.patient updateFromCoreData];
@@ -211,8 +210,85 @@
                     }
                 });
             }
+            if (!self.showedErrorAlready) {
+                [[MRSAlertHandler alertViewForError:self error:error] show];
+                self.showedErrorAlready = YES;
+            }
         }
     }];
+}
+- (void)fetchVisits {
+    if (self.visitsEdited) {
+        UINavigationController *parentNav = self.tabBarController.viewControllers[1];
+        PatientVisitListView *visitsView = parentNav.viewControllers[0];
+        if (visitsView) {
+            [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:visitsView.view];
+        }
+        [OpenMRSAPIManager getVisitsForPatient:self.patient completion:^(NSError *error, NSArray *visits) {
+            if (visitsView.view) {
+                [MBProgressExtension hideActivityIndicatorInView:visitsView.view];
+            }
+            if (error == nil) {
+                if (visitsView.view) {
+                    [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Visits loaded", @"Label loaded visits") inView:visitsView.view];
+                }
+                self.visits = visits;
+                self.visitsEdited = NO;
+                self.showedErrorAlready = NO;
+                dispatch_async(dispatch_get_main_queue(), ^ {
+                    [self.tableView reloadData];
+                });
+                self.hasActiveVisit = NO;
+                for (MRSVisit *visit in visits) {
+                    if (visit.active) {
+                        self.hasActiveVisit = YES;
+                        dispatch_async(dispatch_get_main_queue(), ^ {
+                            [self.tableView reloadData];
+                        });
+                        break;
+                    }
+                }
+                visitsView.visits = self.visits;
+            } else {
+                if (visitsView.isViewLoaded && visitsView.view.window && !self.showedErrorAlready) {
+                    [[MRSAlertHandler alertViewForError:visitsView error:error] show];
+                    self.showedErrorAlready = YES;
+                }
+            }
+        }];
+    }
+}
+- (void)fetchEncounters {
+    if (self.encoutersEdited) {
+        UINavigationController *parentNav = self.tabBarController.viewControllers[2];
+        PatientEncounterListView *encounterList = parentNav.viewControllers[0];
+        if (encounterList) {
+            [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:encounterList.view];
+        }
+        [OpenMRSAPIManager getEncountersForPatient:self.patient completion:^(NSError *error, NSArray *encounters) {
+            if (encounterList.view) {
+                [MBProgressExtension hideActivityIndicatorInView:encounterList.view];
+            }
+            if (error == nil) {
+                if (encounterList.view) {
+                    [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Encounters loaded", @"Label loaded encounters") inView:encounterList.view];
+                }
+                self.encounters = encounters;
+                self.encoutersEdited = NO;
+                self.showedErrorAlready = NO;
+                dispatch_async(dispatch_get_main_queue(), ^ {
+                    [self.tableView reloadData];
+                });
+                encounterList.encounters = self.encounters;
+                [encounterList.tableView reloadData];
+            } else {
+                if (encounterList.isViewLoaded && encounterList.view.window && !self.showedErrorAlready) {
+                    [[MRSAlertHandler alertViewForError:encounterList error:error] show];
+                    self.showedErrorAlready = YES;
+                }
+            }
+        }];
+    }
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -377,7 +453,7 @@
             if (!editCell) {
                 editCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"actionCell"];
             }
-            editCell.textLabel.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Edit Patient", @"Title -Edit- -patient-")];
+            editCell.textLabel.text = [NSString stringWithFormat:@"%@...", NSLocalizedString(@"Edit patient", @"Title -Edit- -patient-")];
             editCell.textLabel.textAlignment = NSTextAlignmentCenter;
             editCell.textLabel.textColor = self.view.tintColor;
             return editCell;
@@ -429,16 +505,7 @@
                 savedPatient.UUID = self.patient.UUID;
                 [savedPatient updateFromCoreData];
                 if (!self.patient.upToDate) {
-                    [[SyncingEngine sharedEngine] SyncPatient:savedPatient completion:^(NSError *error) {
-                        if (!error) {
-                            [SVProgressHUD showSuccessWithStatus:NSLocalizedString(@"Synced", @"Label synced")];
-                            self.patient = savedPatient;
-                            self.patientEdited = NO;
-                        } else {
-                            NSLog(@"ERROR");
-                            [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Error syncing", @"Label error syncing")];
-                        }
-                    }];
+                    [self syncPatient:savedPatient];
                     return;
                 }
             }
@@ -468,12 +535,19 @@
                          otherButtonTitles:@[NSLocalizedString(@"Stop Visit", @"Label stop visit")]
                                   tapBlock:^(UIAlertView *alertView, NSInteger buttonIndex) {
                     if (buttonIndex != alertView.cancelButtonIndex) {
+                        [MBProgressExtension showBlockWithTitle:@"" inView:self.view];
                         [OpenMRSAPIManager stopVisit:activeVisit completion:^(NSError *error) {
+                            [MBProgressExtension hideActivityIndicatorInView:self.view];
                             if (error == nil) {
+                                [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Done", @"Label done") inView:self.view];
+                                self.visitsEdited = YES;
                                 [self updateWithDetailedInfo];
                             } else {
-                                [SVProgressHUD showErrorWithStatus:NSLocalizedString(@"Couldn't stop visit", @"Response label -could- -not- saved - visit- ")];
+                                [[MRSAlertHandler alertViewForError:self error:error] show];
                             }
+                            dispatch_async(dispatch_get_main_queue(), ^{
+                                [self.tableView reloadData];
+                            });
                         }];
                     }
                 }];
@@ -497,6 +571,7 @@
             editPatientNavController.restorationIdentifier = NSStringFromClass([editPatientNavController class]);
             editPatientNavController.modalPresentationStyle = UIModalPresentationFormSheet;
             [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
+            self.patientEdited = YES;
             [self presentViewController:editPatientNavController animated:YES completion:nil];
         }
     }

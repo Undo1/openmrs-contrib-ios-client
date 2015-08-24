@@ -36,7 +36,16 @@
         NSLog(@"%@", _sharedManager.baseURL.absoluteString);
         _sharedManager = [[self alloc] initWithBaseURL:[NSURL URLWithString:host]];
     }
+    _sharedManager.requestSerializer.timeoutInterval = 10;
+    _sharedManager.responseSerializer = [AFJSONResponseSerializer new];
     return _sharedManager;
+}
+
+
++ (CredentialsLayer *)sharedManagerWithHost:(NSString *)host andRequestSerializer:(AFHTTPResponseSerializer *)serializer {
+    CredentialsLayer *manager = [self sharedManagerWithHost:host];
+    manager.responseSerializer = serializer;
+    return manager;
 }
 
 @end

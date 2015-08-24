@@ -13,11 +13,12 @@
 #import "MRSVisit.h"
 #import "MRSLocation.h"
 @class MRSVisitType;
+@class XForms;
 
 @interface OpenMRSAPIManager : NSObject
 + (void)getPatientListWithSearch:(NSString *)search online:(BOOL)online completion:(void (^)(NSError *error, NSArray *patients))completion;
 + (void)getDetailedDataOnPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, MRSPatient *detailedPatient))completion;
-+ (void)verifyCredentialsWithUsername:(NSString *)username password:(NSString *)password host:(NSString *)host completion:(void (^)(BOOL success))completion;
++ (void)verifyCredentialsWithUsername:(NSString *)username password:(NSString *)password host:(NSString *)host completion:(void (^)(NSError *error))completion;
 + (void)getVisitsForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *visits))completion;
 + (void)getDetailedDataOnEncounter:(MRSEncounter *)encounter completion:(void (^)(NSError *, MRSEncounter *))completion;
 + (void)getEncounterTypesWithCompletion:(void (^)(NSError *, NSArray *))completion;
@@ -35,5 +36,10 @@
 + (void)EditPatient:(MRSPatient *)patient completion:(void (^)(NSError *error))completion;
 + (void)EditAddressForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion;
 + (void)EditNameForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion;
++ (void)getXFormsList: (void (^)(NSArray *forms, NSError *error))completion;
++ (void)getXformWithID:(NSString *)xformID andName:(NSString *)name Patient:(MRSPatient *)patient completion:(void (^)(XForms* form, NSError *error))completion;
++ (void)getXformWithEncounterUuid:(NSString *)encounterUuid andName:(NSString *)name completion:(void (^)(XForms* form, NSError *error))completion;
++ (void)uploadXForms:(XForms *)form completion:(void (^)(NSError *error))completion;
++ (void)cancelPreviousSearchOperations;
 + (void)logout;
 @end

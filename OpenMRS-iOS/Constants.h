@@ -34,4 +34,49 @@ extern NSString *const kStateProvince;
 extern NSString *const kCountry;
 extern NSString *const kPostalCode;
 
+
+extern NSString *const kXFormsString;
+extern NSString *const kXFormsNumber;
+extern NSString *const kXFormsDecimal;
+extern NSString *const kXFormsDate;
+extern NSString *const kXFormsTime;
+extern NSString *const kXFormsDateTime;
+extern NSString *const kXFormsBoolean;
+
+extern NSString *const kXFormsUpload;
+extern NSString *const kXFormsGroup;
+extern NSString *const kXFormsSelect;
+extern NSString *const kXFormsMutlipleSelect;
+extern NSString *const kXFormsRepeat;
+extern NSString *const kXFormBase64;
+
+extern NSString *const kXFormsImage;
+extern NSString *const kXFormsAudio;
+extern NSString *const kXFormsGPS;
+extern NSString *const kXFormsVideo;
+extern NSString *const kUnSupported;
+
++ (NSDictionary *)MAPPING_TYPES;
+
+extern NSString *const UDisWizard;
+extern NSString *const UDblankForms;
+extern NSString *const UDfilledForms;
+extern NSString *const UDnewSession;
+extern NSString *const UDrefreshInterval;
+extern NSString *const UDshowLocked;
+extern NSString *const UDdateFormat;
+extern NSString *const UDtimeFromat;
+extern NSString *const UDdateTimeFormat;
+
++ (NSDictionary *)PATIENT_ATTRIBUTES;
++ (NSDictionary *)PATIENT_ATTRIBUTES_TYPES;
+
+extern NSInteger const errNoInternet;
+extern NSInteger const errBadRequest;
+extern NSInteger const errServerNotFound;
+extern NSInteger const errTimeout;
+extern NSInteger const errNetWorkLost;
+extern NSInteger const errNetworkDown;
+extern NSInteger const errCanNotConnect;
+
 @end

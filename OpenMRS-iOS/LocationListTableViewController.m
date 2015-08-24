@@ -10,6 +10,8 @@
 #import "MRSLocation.h"
 #import "MRSHelperFunctions.h"
 #import "OpenMRSAPIManager.h"
+#import "MBProgressExtension.h"
+#import "MRSAlertHandler.h"
 
 @interface LocationListTableViewController ()
 
@@ -43,12 +45,17 @@
 
 - (void)refreshData
 {
+    [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:self.view];
     [OpenMRSAPIManager getLocationsWithCompletion:^(NSError *error, NSArray *locations) {
+        [MBProgressExtension hideActivityIndicatorInView:self.view];
         if (!error) {
+            [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Completed", @"Label completed") inView:self.view];
             self.locations = locations;
             dispatch_async(dispatch_get_main_queue(), ^ {
                 [self.tableView reloadData];
             });
+        } else {
+            [[MRSAlertHandler alertViewForError:self error:error] show];
         }
     }];
 }

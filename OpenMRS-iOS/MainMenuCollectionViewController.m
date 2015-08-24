@@ -8,13 +8,18 @@
 
 #import "MainMenuCollectionViewController.h"
 #import "PatientSearchViewController.h"
-#import "SettingsViewController.h"
 #import "AddPatientTableViewController.h"
 #import "ActiveVisitsList.h"
 #import "AddPatientForm.h"
 #import "PatientViewController.h"
 #import "PatientVisitListView.h"
 #import "PatientEncounterListView.h"
+#import "XFormsList.h"
+#import "XFormViewController.h"
+#import "XFormsStore.h"
+#import "SettingsForm.h"
+#import "AppDelegate.h"
+#import "Constants.h"
 
 @implementation MainMenuCollectionViewController
 
@@ -25,11 +30,10 @@ static NSString * const reuseIdentifier = @"Cell";
     [super viewDidLoad];
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
-    self.title = NSLocalizedString(@"OpenMRS", @"Orgnaization name");
+    self.title = @"OpenMRS iOS Client";
     self.view.backgroundColor = [UIColor whiteColor];
-    if (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPad) {
-        self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Settings", @"Label settings") style:UIBarButtonItemStyleBordered target:self action:@selector(showSettings)];
-    }
+
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Logout", @"Label logout") style:UIBarButtonItemStyleDone target:self action:@selector(logout)];
 
     self.collectionView.backgroundColor = [UIColor whiteColor];
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
@@ -45,7 +49,7 @@ static NSString * const reuseIdentifier = @"Cell";
 }
 - (void)showSettings
 {
-    SettingsViewController *settings = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    SettingsForm *settings = [[SettingsForm alloc] init];
     UINavigationController *navcon = [[UINavigationController alloc] initWithRootViewController:settings];
     navcon.restorationIdentifier = NSStringFromClass([navcon class]);
     [self presentViewController:navcon animated:YES completion:nil];
@@ -73,10 +77,7 @@ static NSString * const reuseIdentifier = @"Cell";
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
 {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        return 4;
-    }
-    return 3;
+    return 5;
 }
 
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
@@ -101,6 +102,9 @@ static NSString * const reuseIdentifier = @"Cell";
         image = [UIImage imageNamed:@"active_visits_icon"];
         break;
     case 3:
+        image = [UIImage imageNamed:@"form-thumbnail"];
+        break;
+    case 4:
         image = [UIImage imageNamed:@"settings_icon"];
     default:
         break;
@@ -124,6 +128,9 @@ static NSString * const reuseIdentifier = @"Cell";
         label.text = NSLocalizedString(@"Active visits", @"Label -active- -visits");
         break;
     case 3:
+        label.text = NSLocalizedString(@"Filled XForms", @"Label filled xforms");
+        break;
+    case 4:
         label.text = NSLocalizedString(@"Settings", @"Label settings");
     default:
         break;
@@ -223,12 +230,38 @@ static NSString * const reuseIdentifier = @"Cell";
         activeVisitsNavController.restorationIdentifier = NSStringFromClass([activeVisitsNavController class]);
         activeVisitsNavController.modalPresentationStyle = UIModalPresentationPageSheet;
         [self presentViewController:activeVisitsNavController animated:YES completion:nil];
+    } else if (indexPath.item == 3) {
+        
+        XFormsList *formsList = [[XFormsList alloc] initFilledForms];
+        UINavigationController *formListNavigationController = [[UINavigationController alloc] initWithRootViewController:formsList];
+        formListNavigationController.restorationIdentifier = NSStringFromClass([formListNavigationController class]);
+        formListNavigationController.modalPresentationStyle = UIModalPresentationFormSheet;
+        [self presentViewController:formListNavigationController animated:YES completion:nil];
     } else {
-        SettingsViewController *settings = [[SettingsViewController alloc] initWithStyle:UITableViewStyleGrouped];
+        SettingsForm *settings = [[SettingsForm alloc] init];
         UINavigationController *navcon = [[UINavigationController alloc] initWithRootViewController:settings];
         navcon.restorationIdentifier = NSStringFromClass([navcon class]);
         navcon.modalPresentationStyle = UIModalPresentationFormSheet;
         [self presentViewController:navcon animated:YES completion:nil];
+    }
+}
+
+- (void)logout {
+    [[[UIAlertView alloc] initWithTitle:NSLocalizedString(@"Warning", @"Label warning") message:NSLocalizedString(@"When logged out your current offline saved forms and patients will be removed",     ) delegate:self cancelButtonTitle:NSLocalizedString(@"Cancel", @"Cancel button label") otherButtonTitles:@"OK", nil] show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
+    if (buttonIndex == 1) {
+        [OpenMRSAPIManager logout];
+        [[XFormsStore sharedStore] clearFilledForms];
+        [[XFormsStore sharedStore] clearBlankForms];
+        AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+        [delegate clearStore];
+
+        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+        [userDefaults setObject:@"yyyy-MM-dd" forKey:UDdateFormat];
+        [userDefaults setObject:@"HH:mm:ss" forKey:UDtimeFromat];
+        [userDefaults setObject:@"yyyy-MM-dd'T'HH:mm:ss" forKey:UDdateTimeFormat];
     }
 }
 

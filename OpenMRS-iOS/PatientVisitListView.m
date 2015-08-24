@@ -25,6 +25,7 @@
 - (void)setVisits:(NSArray *)visits
 {
     _visits = visits;
+    [MRSVisitCell updateTableViewForDynamicTypeSize:self.tableView];
     [self.tableView reloadData];
 }
 - (void)viewDidLoad
@@ -37,7 +38,16 @@
     [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
     [MRSVisitCell updateTableViewForDynamicTypeSize:self.tableView];
 
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self action:@selector(close)];
+
     self.title = NSLocalizedString(@"Visits", @"Label visits");
+}
+
+- (void)close {
+    UINavigationController *parentNav = self.tabBarController.viewControllers[0];
+    PatientViewController *patientVC = parentNav.viewControllers[0];
+    [patientVC.refreshingTimer invalidate];
+    [self.tabBarController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)updateFontSize {
@@ -47,6 +57,11 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     [MRSVisitCell updateTableViewForDynamicTypeSize:self.tableView];
+    
+    UINavigationController *parentNav = self.tabBarController.viewControllers[0];
+    PatientViewController *patientVC = parentNav.viewControllers[0];
+    patientVC.visitsEdited = YES;
+    [patientVC updateWithDetailedInfo];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -55,10 +70,10 @@
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (self.visits.count) {
+    if (self.visits.count == 0) {
         UILabel *backgroundLabel = [[UILabel alloc] init];
         backgroundLabel.textAlignment = NSTextAlignmentCenter;
-        backgroundLabel.text = [NSString stringWithFormat:@"\"%@\"", NSLocalizedString(@"No Visits", @"Label -no- -visits-")];
+        backgroundLabel.text = [NSString stringWithFormat:@"%@", NSLocalizedString(@"No Visits", @"Label -no- -visits-")];
         self.tableView.backgroundView = backgroundLabel;
     } else {
         self.tableView.backgroundView = nil;

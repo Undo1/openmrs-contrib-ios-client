@@ -8,6 +8,7 @@
 
 #import "MRSDateUtilities.h"
 #import "MRSHelperFunctions.h"
+#import "Constants.h"
 
 @implementation MRSDateUtilities
 
@@ -34,6 +35,37 @@
     //[formatter setTimeZone:timeZone];
     NSDate *date = [formatter dateFromString:openmrsDate];
     return date;
+}
+
++ (NSString *)XFormformatStringwithDate:(NSDate *)date type:(NSString *)type {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([type isEqualToString:kXFormsDate]) {
+        [formatter setDateFormat:[userDefaults objectForKey:UDdateFormat]];
+    } else if ([type isEqualToString:kXFormsDateTime]) {
+        [formatter setDateFormat:[userDefaults objectForKey:UDdateTimeFormat]];
+    } else {
+        [formatter setDateFormat:[userDefaults objectForKey:UDtimeFromat]];
+    }
+    NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+    [formatter setTimeZone:timeZone];
+    NSString *stringFromDate = [formatter stringFromDate:date];
+    return stringFromDate;
+}
+
++ (NSDate *)DatefromXFormsString:(NSString *)dateString type:(NSString *)type {
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if ([type isEqualToString:kXFormsDate]) {
+        [formatter setDateFormat:[userDefaults objectForKey:UDdateFormat]];
+    } else if ([type isEqualToString:kXFormsDateTime]) {
+        [formatter setDateFormat:[userDefaults objectForKey:UDdateTimeFormat]];
+    } else {
+        [formatter setDateFormat:[userDefaults objectForKey:UDtimeFromat]];
+    }
+    NSTimeZone *timeZone = [NSTimeZone timeZoneWithName:@"UTC"];
+    [formatter setTimeZone:timeZone];
+    return [formatter dateFromString:dateString];
 }
 
 @end

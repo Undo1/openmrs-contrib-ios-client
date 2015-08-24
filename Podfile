@@ -4,13 +4,15 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
 pod "AFNetworking", "2.5.0"
-pod "SVProgressHUD"
 pod "EncryptedCoreData", :git => 'https://github.com/project-imas/encrypted-core-data.git'
 pod "UIAlertView+Blocks"
 pod 'XLForm', '~> 3.0.0'
 pod "OHHTTPStubs"
 pod 'Instabug'
 pod 'FlurrySDK'
+pod 'XMLDictionary'
+pod 'GDataXML-HTML', '~> 1.2.0'
+pod 'MBProgressHUD', '~> 0.9.1'
 
 target 'OpenMRS-iOS' do
 

@@ -11,6 +11,9 @@
 #import "EncounterViewController.h"
 #import "MRSHelperFunctions.h"
 #import "AppDelegate.h"
+#import "PatientViewController.h"
+#import "XLForm.h"
+#import "XForms.h"
 
 @implementation PatientEncounterListView
 
@@ -38,12 +41,25 @@
     [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
     [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
     
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self action:@selector(close)];
+
     self.title = NSLocalizedString(@"Encounters", "Label encounters");
+}
+
+- (void)close {
+    UINavigationController *parentNav = self.tabBarController.viewControllers[0];
+    PatientViewController *patientVC = parentNav.viewControllers[0];
+    [patientVC.refreshingTimer invalidate];
+    [self.tabBarController.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     
+    UINavigationController *parentNav = self.tabBarController.viewControllers[0];
+    PatientViewController *patientVC = parentNav.viewControllers[0];
+    patientVC.encoutersEdited = YES;
+    [patientVC updateWithDetailedInfo];
     [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
 }
 
@@ -84,7 +100,22 @@
     MRSEncounter *encounter = self.encounters[indexPath.row];
     EncounterViewController *vc = [[EncounterViewController alloc] initWithStyle:UITableViewStyleGrouped];
     vc.encounter = encounter;
-    [self.navigationController pushViewController:vc animated:YES];
+    [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:self.view];
+    [OpenMRSAPIManager getXformWithEncounterUuid:encounter.UUID andName:encounter.displayName completion:^(XForms *form, NSError *error) {
+        [MBProgressExtension hideActivityIndicatorInView:self.view];
+        if (!error) {
+            XLFormViewController *reviewForm = [[XLFormViewController alloc] initWithForm:[form getReviewFormWithTitle:encounter.displayName]];
+            reviewForm.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(dismissNew:)];
+            [self.navigationController pushViewController:reviewForm animated:YES];
+        } else {
+            [MRSAlertHandler alertViewForError:self error:error];
+            [self.navigationController pushViewController:vc animated:YES];
+        }
+    }];
+}
+
+- (void)dismissNew:(id)sender {
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)encodeRestorableStateWithCoder:(NSCoder *)coder {

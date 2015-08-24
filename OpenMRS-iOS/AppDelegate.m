@@ -20,6 +20,7 @@
 #import "SyncingEngine.h"
 #import <Instabug/Instabug.h>
 #import "Flurry.h"
+#import "Constants.h"
 @interface AppDelegate ()
 
 @end
@@ -49,6 +50,7 @@
     } else {
         [[SyncingEngine sharedEngine] updateExistingOutOfDatePatients:nil];
     }
+
     return YES;
 }
 
@@ -74,6 +76,65 @@
     [[UISearchBar appearance] setBarTintColor:[UIColor colorWithRed:30/255.0 green:130/255.0 blue:112/255.0 alpha:1]];
     [self.window makeKeyAndVisible];
     
+    /* Setting user defaults */
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    if (![userDefaults objectForKey:UDisWizard]) {
+        [userDefaults setBool:NO forKey:UDisWizard];
+    }
+
+    
+    /* Setting paths for offline savingf of XForms */
+    NSString * resourcePath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *blankFormsPath = [resourcePath stringByAppendingPathComponent:@"blank_forms"];
+    NSError *error;
+    if (![[NSFileManager defaultManager] createDirectoryAtPath:blankFormsPath
+                                   withIntermediateDirectories:NO
+                                                    attributes:nil
+                                                         error:&error])
+    {
+        NSLog(@"Create directory error: %@", error);
+    }
+    [userDefaults setObject:blankFormsPath forKey:UDblankForms];
+    
+    NSString *filledFormsPath = [resourcePath  stringByAppendingPathComponent:@"filled_forms"];
+    error = nil;
+    if (![[NSFileManager defaultManager] createDirectoryAtPath:filledFormsPath
+                                   withIntermediateDirectories:NO
+                                                    attributes:nil
+                                                         error:&error])
+    {
+        NSLog(@"Create directory error: %@", error);
+    }
+    [userDefaults setObject:filledFormsPath forKey:UDfilledForms];
+    
+    NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:resourcePath error:nil];
+
+    for (int i=0;i<directoryContent.count;i++) {
+        NSString *fileAbsPath = [resourcePath stringByAppendingPathComponent:directoryContent[i]];
+        if ([directoryContent[i] hasPrefix:@"Audio"]) {
+            [[NSFileManager defaultManager] removeItemAtPath:fileAbsPath error:nil];
+        }
+    }
+    
+    if (![userDefaults objectForKey:UDnewSession]) {
+        [userDefaults setBool:YES forKey:UDnewSession];
+    }
+    if (![userDefaults objectForKey:UDrefreshInterval]) {
+        [userDefaults setDouble:5 forKey:UDrefreshInterval];
+    }
+    if (![userDefaults objectForKey:UDshowLocked]) {
+        [userDefaults setBool:YES forKey:UDshowLocked];
+    }
+    if (![userDefaults objectForKey:UDdateFormat]) {
+        [userDefaults setObject:@"yyyy-MM-dd" forKey:UDdateFormat];
+    }
+    if (![userDefaults objectForKey:UDtimeFromat]) {
+        [userDefaults setObject:@"HH:mm:ss" forKey:UDtimeFromat];
+    }
+    if (![userDefaults objectForKey:UDdateTimeFormat]) {
+        [userDefaults setObject:@"yyyy-MM-dd'T'HH:mm:ss" forKey:UDdateTimeFormat];
+    }
+
     if ([[NSProcessInfo processInfo] respondsToSelector:@selector(operatingSystemVersion)]) {
         if ([[NSProcessInfo processInfo] operatingSystemVersion].majorVersion >= 8) {
             [[UIBarButtonItem appearance] setTintColor:[UIColor whiteColor]];
@@ -85,10 +146,16 @@
 }
 
 - (BOOL)application:(UIApplication *)application shouldSaveApplicationState:(NSCoder *)coder {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        return NO;
+    }
     return YES;
 }
 
 - (BOOL)application:(UIApplication *)application shouldRestoreApplicationState:(NSCoder *)coder {
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        return NO;
+    }
     return YES;
 }
 - (UIViewController *)application:(UIApplication *)application viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
@@ -110,8 +177,13 @@
     if ([[identifierComponents lastObject] isEqualToString:@"navContrller3"]) {
         self.nav3 = [[UINavigationController alloc] init];
         self.nav3.restorationIdentifier = [identifierComponents lastObject];
-        self.tabbar.viewControllers = [NSArray arrayWithObjects:self.nav1, self.nav2, self.nav3, nil];
         return self.nav3;
+    }
+    if ([[identifierComponents lastObject] isEqualToString:@"navController4"])  {
+        self.nav4 = [[UINavigationController alloc] init];
+        self.nav4.restorationIdentifier = [identifierComponents lastObject];
+        self.tabbar.viewControllers = [NSArray arrayWithObjects:self.nav1, self.nav2, self.nav3, self.nav4, nil];
+        return self.nav4;
     }
     UIViewController *nc = [[UINavigationController alloc] init];
     nc.restorationIdentifier = [identifierComponents lastObject];
@@ -120,6 +192,7 @@
     }
     return nc;
 }
+
 - (void)saveContext
 {
     NSError *error = nil;
@@ -159,15 +232,21 @@
 }
 - (NSPersistentStoreCoordinator *)persistentStoreCoordinator
 {
-    if (_persistentStoreCoordinator != nil) {
+    /*if (_persistentStoreCoordinator != nil) {
         return _persistentStoreCoordinator;
-    }
+    }*/
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
-    NSDictionary *options = @ { EncryptedStorePassphraseKey: [wrapper objectForKey:(__bridge id)(kSecValueData)],
-                                NSMigratePersistentStoresAutomaticallyOption : @YES,
-                                NSInferMappingModelAutomaticallyOption : @YES
+
+    [[NSFileManager defaultManager] createDirectoryAtURL:[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] withIntermediateDirectories:NO attributes:nil error:nil];
+    
+    NSURL *databaseURL = [[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] URLByAppendingPathComponent:[NSString stringWithFormat:@"OpenMRS-iOS.sqlite"]];
+    NSDictionary *options = @ { EncryptedStorePassphraseKey: [wrapper objectForKey:(__bridge id)(kSecValueData)],EncryptedStoreDatabaseLocation : [databaseURL description],
+        NSMigratePersistentStoresAutomaticallyOption : @YES,
+        NSInferMappingModelAutomaticallyOption : @YES
     };
-    _persistentStoreCoordinator = [EncryptedStore makeStoreWithOptions:options managedObjectModel:[self managedObjectModel]];
+    _persistentStoreCoordinator = [EncryptedStore makeStoreWithOptions:options
+                                    managedObjectModel:[self managedObjectModel]];
+    //_persistentStoreCoordinator = [EncryptedStore makeStoreWithOptions:options managedObjectModel:[self managedObjectModel]];
     /*if (![_persistentStoreCoordinator addPersistentStoreWithType:EncryptedStoreType configuration:nil URL:storeURL options:options error:&error]) {
         NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
         abort();
@@ -180,50 +259,20 @@
 }
 - (void)clearStore;
 {
-    if (self.persistentStoreCoordinator.persistentStores.count == 0) {
-        return;
+    NSURL *storeURL = [[self applicationDocumentsDirectory] URLByAppendingPathComponent:@"OpenMRS-iOS.sqlite"];
+    NSFileManager *fileManager = [NSFileManager defaultManager];
+
+    [fileManager removeItemAtURL:storeURL error:NULL];
+
+    NSError* error = nil;
+
+    if([fileManager fileExistsAtPath:[NSString stringWithContentsOfURL:storeURL encoding:NSASCIIStringEncoding error:&error]])
+    {
+        [fileManager removeItemAtURL:storeURL error:nil];
     }
 
-    /*
-     * Well the commnented part is the old clear store which I don't see
-     * it's point while we can just delete exisiting patients.
-     */
-
-    /*NSLog(@"Presitance stores: %@", self.persistentStoreCoordinator.persistentStores);
-    NSPersistentStore *store = self.persistentStoreCoordinator.persistentStores[0];
-    NSError *error;
-    NSURL *storeURL = store.URL;
-    NSPersistentStoreCoordinator *storeCoordinator = self.persistentStoreCoordinator;
-    [storeCoordinator removePersistentStore:store error:&error];
-    [[NSFileManager defaultManager] removeItemAtPath:storeURL.path error:&error];
-    /*NSDictionary *options = @{
-                              NSMigratePersistentStoresAutomaticallyOption : @YES,
-                              NSInferMappingModelAutomaticallyOption : @YES
-                              };
-    [[self.managedObjectContext persistentStoreCoordinator] addPersistentStoreWithType:EncryptedStoreType configuration:nil URL:storeURL options:options error:&error];//recreates the persistent store
-    _persistentStoreCoordinator = nil;
-
-    [self persistentStoreCoordinator];*/
-
-    NSFetchRequest *request = [[NSFetchRequest alloc] init];
-    [request setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:self.managedObjectContext]];
-
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"uuid != nil", [NSNumber numberWithBool:NO]];
-    [request setPredicate:predicate];
-    NSError *error = nil;
-    NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
-    if (error)
-        return;
-
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        for (NSManagedObject *object in results) {
-
-            __block MRSPatient *patient = [[MRSPatient alloc] init];
-            patient.UUID = [object valueForKey:@"uuid"];
-            [patient updateFromCoreData];
-            [patient cascadingDelete];
-        }
-    });
+    self.managedObjectContext = nil;
+    self.persistentStoreCoordinator = nil;
 }
 
 @end
