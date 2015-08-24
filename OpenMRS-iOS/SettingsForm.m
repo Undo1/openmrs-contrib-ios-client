@@ -107,7 +107,7 @@ NSString *kDateTimeFormat = @"DateTimeFormat";
     double interval = [[NSUserDefaults standardUserDefaults] doubleForKey:UDrefreshInterval];
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kRefreshInterval
                                                 rowType:XLFormRowDescriptorTypeStepCounter
-                                                  title:[NSString stringWithFormat:@"%@\n(%.f %@)", NSLocalizedString(@"Patient refersh interval", @"Label -patient- -refresh- -interval-"), interval, NSLocalizedString(@"minutes", @"word minutes")]];
+                                                  title:[NSString stringWithFormat:@"%@\n(%.f %@)", NSLocalizedString(@"Patient refresh interval", @"Label -patient- -refresh- -interval-"), interval, NSLocalizedString(@"minutes", @"word minutes")]];
     row.value = @(interval);
     [row.cellConfig setObject:@(0) forKey:@"textLabel.numberOfLines"];
     [row.cellConfig setObject:@(NSLineBreakByWordWrapping) forKey:@"textLabel.lineBreakMode"];

@@ -52,7 +52,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    NSString *leftLabel = self.index > 0 ? NSLocalizedString(@"Pervious", @"Label pervious") : NSLocalizedString(@"Cancel", @"Cancel button label");
+    NSString *leftLabel = self.index > 0 ? NSLocalizedString(@"Previous", @"Label previous") : NSLocalizedString(@"Cancel", @"Cancel button label");
     NSString *rightLabel =  self.index < (self.XForm.forms.count - 1) ? NSLocalizedString(@"Next", @"Label next") : NSLocalizedString(@"Done", @"Label done");
     
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:leftLabel style:UIBarButtonItemStylePlain target:self action:@selector(pervious:)];
