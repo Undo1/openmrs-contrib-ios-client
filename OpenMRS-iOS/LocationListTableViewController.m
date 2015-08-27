@@ -12,12 +12,15 @@
 #import "OpenMRSAPIManager.h"
 #import "MBProgressExtension.h"
 #import "MRSAlertHandler.h"
+#import "XLForm.h"
 
 @interface LocationListTableViewController ()
 
 @end
 
 @implementation LocationListTableViewController
+
+@synthesize rowDescriptor = _rowDescriptor;
 
 - (void)viewDidLoad
 {
@@ -91,6 +94,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MRSLocation *location = self.locations[indexPath.row];
+    XLFormOptionsObject *opValue = [XLFormOptionsObject formOptionsObjectWithValue:location.UUID displayText:location.display];
+    _rowDescriptor.value = opValue;
+    if (self.delegate == nil) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }
     [self.delegate didChooseLocation:location];
 }
 

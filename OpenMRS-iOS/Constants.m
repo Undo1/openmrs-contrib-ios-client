@@ -21,6 +21,7 @@ NSString *const kGender = @"gender";
 NSString *const kbirthdateEstimated = @"birthdateEstimated";
 NSString *const kAge = @"age";
 NSString *const kBirthdate = @"birthdate";
+NSString *const kLocation = @"location";
 NSString *const kIdentifier = @"identifier";
 NSString *const kIdentifierType = @"identifierType";
 NSString *const kDead = @"dead";

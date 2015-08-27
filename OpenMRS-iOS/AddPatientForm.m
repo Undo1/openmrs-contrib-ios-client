@@ -16,6 +16,7 @@
 #import "Constants.h"
 #import "MRSAlertHandler.h"
 #import "MBProgressExtension.h"
+#import "LocationListTableViewController.h"
 
 
 @interface AddPatientForm ()
@@ -135,6 +136,14 @@
     [section addFormRow:row];
     row.hidden = [NSString stringWithFormat:@"$%@==1", kbirthdateEstimated];
     
+    //Location
+    row = [XLFormRowDescriptor formRowDescriptorWithTag:kLocation
+                                                rowType:XLFormRowDescriptorTypeSelectorPush
+                                                  title:NSLocalizedString(@"Location", @"Label location")];
+    row.action.viewControllerClass = [LocationListTableViewController class];
+    row.required = YES;
+    [section addFormRow:row];
+
     // Identifier Type
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kIdentifierType
                                                 rowType:XLFormRowDescriptorTypeSelectorPush
@@ -251,7 +260,13 @@
         } else {
             parameters[kBirthdate] = [MRSDateUtilities openMRSFormatStringWithDate:values[kBirthdate]];
         }
-        NSArray *identifiers = @[@{@"identifier":values[kIdentifier], @"identifierType":self.patientIdentifierType.UUID}];
+        XLFormOptionsObject *opValue = values[kLocation];
+        NSString *locationUUID = opValue.valueData;
+        NSArray *identifiers = @[@{
+                                     @"identifier":values[kIdentifier],
+                                     @"identifierType":self.patientIdentifierType.UUID,
+                                     @"location": locationUUID
+                                     }];
         NSLog(@"Identifiers: %@", identifiers);
         [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:self.view];
         [OpenMRSAPIManager addPatient:parameters withIdentifier:identifiers completion:^(NSError *error, MRSPatient *createdPatient) {
@@ -259,6 +274,7 @@
             if (!error) {
                 UIAlertView *sucess = [MRSAlertHandler alertForSucess:self];
                 [sucess show];
+                [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
             } else {
                 [[MRSAlertHandler alertViewForError:self error:error] show];
             }
@@ -278,19 +294,12 @@
     BOOL valid = YES;
     for(id obj in array) {
         XLFormValidationStatus * validationStatus = [[obj userInfo] objectForKey:XLValidationStatusErrorKey];
-        NSString *tag = validationStatus.rowDescriptor.tag;
-        if ([tag isEqualToString:kGivenName] || [tag isEqualToString:kFamilyName] ||
-            [tag isEqualToString:kIdentifier] || [tag isEqualToString:kAddress1] ||
-            [tag isEqualToString:kAge] || [tag isEqualToString:kBirthdate] ||
-            [tag isEqualToString:kIdentifierType]){
-
-            UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[self.form indexPathOfFormRow:validationStatus.rowDescriptor]];
-            cell.backgroundColor = [UIColor orangeColor];
-            [UIView animateWithDuration:0.5 animations:^{
-                cell.backgroundColor = [UIColor whiteColor];
-            }];
-            valid = NO;
-        }
+        UITableViewCell * cell = [self.tableView cellForRowAtIndexPath:[self.form indexPathOfFormRow:validationStatus.rowDescriptor]];
+        cell.backgroundColor = [UIColor orangeColor];
+        [UIView animateWithDuration:0.5 animations:^{
+            cell.backgroundColor = [UIColor whiteColor];
+        }];
+        valid = NO;
     }
     return valid;
 }
