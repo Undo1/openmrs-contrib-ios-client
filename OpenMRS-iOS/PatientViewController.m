@@ -318,7 +318,7 @@
 - (NSString *)formatPatientAdress:(MRSPatient *)patient
 {
     NSString *string = [self notNil:patient.address1];
-    NSArray *addressAttributes = @[@"address1", @"address2", @"address3", @"address4", @"address5", @"address6",
+    NSArray *addressAttributes = @[@"address2", @"address3", @"address4", @"address5", @"address6",
                                    @"cityVillage", @"stateProvince", @"country", @"postalCode"];
     for (NSString *attribute in addressAttributes) {
         if (![MRSHelperFunctions isNull:[self.patient valueForKey:attribute]]) {

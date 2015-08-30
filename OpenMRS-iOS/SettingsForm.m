@@ -105,9 +105,22 @@ NSString *kDateTimeFormat = @"DateTimeFormat";
     [section addFormRow:row];
     
     double interval = [[NSUserDefaults standardUserDefaults] doubleForKey:UDrefreshInterval];
+
+    //Modifying string
+    NSString *intervalLabel = [NSString stringWithFormat:@"%@\n", NSLocalizedString(@"Patient refresh interval", @"Label -patient- -refresh- -interval-")];
+    NSArray *tokens = [intervalLabel componentsSeparatedByString:@" "];
+    int i=0;
+    intervalLabel = @"";
+    while (i<tokens.count) {
+        intervalLabel = [intervalLabel stringByAppendingString:[tokens[i] stringByAppendingString:@" "]];
+        i++;
+        if (i == tokens.count/2) {
+            intervalLabel = [intervalLabel stringByAppendingString:@"\n"];
+        }
+    }
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kRefreshInterval
                                                 rowType:XLFormRowDescriptorTypeStepCounter
-                                                  title:[NSString stringWithFormat:@"%@\n(%.f %@)", NSLocalizedString(@"Patient refresh interval", @"Label -patient- -refresh- -interval-"), interval, NSLocalizedString(@"minutes", @"word minutes")]];
+                                                  title:intervalLabel];
     row.value = @(interval);
     [row.cellConfig setObject:@(0) forKey:@"textLabel.numberOfLines"];
     [row.cellConfig setObject:@(NSLineBreakByWordWrapping) forKey:@"textLabel.lineBreakMode"];
@@ -163,6 +176,8 @@ NSString *kDateTimeFormat = @"DateTimeFormat";
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0 && (indexPath.row == 1  || indexPath.row == 2)) {
         return 33;
+    } else if(indexPath.section == 1 && indexPath.row == 2) {
+        return 66;
     } else {
         return 44;
     }
