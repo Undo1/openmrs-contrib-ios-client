@@ -30,6 +30,7 @@
 #import "GDataXMLNode.h"
 #import "XFormsParser.h"
 #import "Constants.h"
+#import "XFormsStore.h"
 #import <CoreData/CoreData.h>
 
 @implementation OpenMRSAPIManager
@@ -793,10 +794,21 @@
       operationQueue] addOperation:operation];
 }
 
+#pragma mark - Login/Logout
+
 + (void)presentLoginController
 {
+    [[XFormsStore sharedStore] clearFilledForms];
+    [[XFormsStore sharedStore] clearBlankForms];
+    AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
+    [delegate clearStore];
+
+    NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
+    [userDefaults setObject:@"yyyy-MM-dd" forKey:UDdateFormat];
+    [userDefaults setObject:@"HH:mm:ss" forKey:UDtimeFromat];
+    [userDefaults setObject:@"yyyy-MM-dd'T'HH:mm:ss" forKey:UDdateTimeFormat];
+
     SignInViewController *vc = [[SignInViewController alloc] init];
-    AppDelegate *delegate = [UIApplication sharedApplication].delegate;
     [delegate.window.rootViewController presentViewController:vc animated:YES completion:nil];
 }
 

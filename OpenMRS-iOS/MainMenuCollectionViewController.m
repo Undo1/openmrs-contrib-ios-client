@@ -253,15 +253,6 @@ static NSString * const reuseIdentifier = @"Cell";
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
     if (buttonIndex == 1) {
         [OpenMRSAPIManager logout];
-        [[XFormsStore sharedStore] clearFilledForms];
-        [[XFormsStore sharedStore] clearBlankForms];
-        AppDelegate *delegate = [[UIApplication sharedApplication] delegate];
-        [delegate clearStore];
-
-        NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
-        [userDefaults setObject:@"yyyy-MM-dd" forKey:UDdateFormat];
-        [userDefaults setObject:@"HH:mm:ss" forKey:UDtimeFromat];
-        [userDefaults setObject:@"yyyy-MM-dd'T'HH:mm:ss" forKey:UDdateTimeFormat];
     }
 }
 
