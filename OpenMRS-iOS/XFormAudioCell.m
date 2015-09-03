@@ -75,7 +75,7 @@ NSString * const XLFormRowDescriptorTypeAudioInLine = @"AudioInLine";
     
     self.record = [[UIButton alloc] init];
     [self.record addTarget:self action:@selector(recordPressed) forControlEvents:UIControlEventTouchUpInside];
-    [self.record setBackgroundImage:[UIImage imageNamed:@"reocrd_plain"] forState:UIControlStateNormal];
+    [self.record setBackgroundImage:[UIImage imageNamed:@"record_plain"] forState:UIControlStateNormal];
     [self.record setTitle:NSLocalizedString(@"Record", @"Label record") forState:UIControlStateNormal];
     [self.record setTitleColor:[UIColor grayColor] forState:UIControlStateDisabled];
     [self.record setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
