@@ -63,9 +63,6 @@ NSString *kDateTimeFormat = @"DateTimeFormat";
     XLFormSectionDescriptor *section = [XLFormSectionDescriptor formSection];
     
     NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    if ([appVersion componentsSeparatedByString:@"."].count == 2) {
-        appVersion = [appVersion stringByAppendingString:@".0"];
-    }
     
     [form addFormSection:section];
 
@@ -77,7 +74,7 @@ NSString *kDateTimeFormat = @"DateTimeFormat";
     row.disabled = @YES;
     [section addFormRow:row];
     
-    row = [XLFormRowDescriptor formRowDescriptorWithTag:kVersion rowType:XLFormRowDescriptorTypeInfo title:[NSString stringWithFormat:@"%@: (%@)", NSLocalizedString(@"App version", @"Label version"), appVersion]];
+    row = [XLFormRowDescriptor formRowDescriptorWithTag:kVersion rowType:XLFormRowDescriptorTypeInfo title:[NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"App version", @"Label version"), appVersion]];
     row.disabled = @YES;
     [section addFormRow:row];
 
