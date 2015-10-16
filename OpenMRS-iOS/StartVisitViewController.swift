@@ -24,7 +24,7 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     override init(style: UITableViewStyle) {
@@ -42,7 +42,7 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
         self.restorationIdentifier = NSStringFromClass(self.dynamicType);
         self.restorationClass = self.dynamicType;
 
-        var defaultCenter = NSNotificationCenter.defaultCenter()
+        let defaultCenter = NSNotificationCenter.defaultCenter()
         defaultCenter.addObserver(self, selector:"updateFontSize", name: UIContentSizeCategoryDidChangeNotification, object: nil)
         MRSHelperFunctions.updateTableViewForDynamicTypeSize(self.tableView)
 
@@ -131,7 +131,7 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
         switch indexPath.section
         {
         case 0:
-            var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("visit_type") as! UITableViewCell!
+            var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("visit_type")
             
             if cell == nil
             {
@@ -153,7 +153,7 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
             
             return cell
         case 1:
-            var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("location") as! UITableViewCell!
+            var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("location")
             
             if cell == nil
             {

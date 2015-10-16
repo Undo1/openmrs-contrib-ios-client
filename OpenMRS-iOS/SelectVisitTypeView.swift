@@ -18,7 +18,7 @@ class SelectVisitTypeView : UITableViewController, UIViewControllerRestoration
     var visitTypes: [MRSVisitType]! = []
     var delegate: SelectVisitTypeViewDelegate!
     
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
@@ -42,7 +42,7 @@ class SelectVisitTypeView : UITableViewController, UIViewControllerRestoration
         self.restorationIdentifier = NSStringFromClass(self.dynamicType);
         self.restorationClass = self.dynamicType;
         
-        var defaultCenter = NSNotificationCenter.defaultCenter()
+        let defaultCenter = NSNotificationCenter.defaultCenter()
         defaultCenter.addObserver(self, selector:"updateFontSize", name: UIContentSizeCategoryDidChangeNotification, object: nil)
         MRSHelperFunctions.updateTableViewForDynamicTypeSize(self.tableView)
         
@@ -81,7 +81,7 @@ class SelectVisitTypeView : UITableViewController, UIViewControllerRestoration
         return self.visitTypes.count
     }
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("cell") as! UITableViewCell!
+        var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("cell")
         
         if cell == nil
         {
