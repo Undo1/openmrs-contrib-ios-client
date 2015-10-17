@@ -33,7 +33,7 @@ static NSString * const reuseIdentifier = @"Cell";
     self.title = @"OpenMRS";
     self.view.backgroundColor = [UIColor whiteColor];
 
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Logout", @"Label logout") style:UIBarButtonItemStyleDone target:self action:@selector(logout)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Logout", @"Label logout") style:UIBarButtonItemStyleBordered target:self action:@selector(logout)];
 
     self.collectionView.backgroundColor = [UIColor whiteColor];
     [self.collectionView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"cell"];
