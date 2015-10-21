@@ -56,6 +56,8 @@
     self.bar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 64)];
     self.bar .autoresizingMask = UIViewAutoresizingFlexibleWidth;
     self.bar .delegate = self;
+    self.bar.layer.borderWidth = 1;
+    self.bar.layer.borderColor = [[UIColor colorWithRed:40/255.0 green:140/255.0 blue:122/255.0 alpha:1] CGColor];
     [self.bar  sizeToFit];
     if (![MRSHelperFunctions isNull:self.barText]) {
         self.bar.text = self.barText;
