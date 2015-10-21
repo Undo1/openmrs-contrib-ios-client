@@ -100,6 +100,7 @@
 		D3A57DBD1B2E5BF800F25F30 /* active_visits_tab_bar_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D3A57DBA1B2E5BF800F25F30 /* active_visits_tab_bar_icon@2x.png */; };
 		D3A57DBE1B2E5BF800F25F30 /* active_visits_tab_bar_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D3A57DBB1B2E5BF800F25F30 /* active_visits_tab_bar_icon@3x.png */; };
 		D3A869511A32B3D400D1963F /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3A869501A32B3D400D1963F /* CoreData.framework */; };
+		D3B241821BD8231400E09F36 /* openmrs-offline.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D3B2417F1BD8231400E09F36 /* openmrs-offline.xcdatamodeld */; settings = {ASSET_TAGS = (); }; };
 		D3DCBBF81A71F4940024D088 /* StartVisitViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3DCBBF71A71F4940024D088 /* StartVisitViewController.swift */; };
 		D3E47BA31A3A00C0004B3F95 /* MRSPatientIdentifierType.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E47BA21A3A00C0004B3F95 /* MRSPatientIdentifierType.m */; };
 		D3E47BA61A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E47BA51A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m */; };
@@ -274,6 +275,8 @@
 		D3A57DBA1B2E5BF800F25F30 /* active_visits_tab_bar_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "active_visits_tab_bar_icon@2x.png"; sourceTree = "<group>"; };
 		D3A57DBB1B2E5BF800F25F30 /* active_visits_tab_bar_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "active_visits_tab_bar_icon@3x.png"; sourceTree = "<group>"; };
 		D3A869501A32B3D400D1963F /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		D3B241801BD8231400E09F36 /* openmrs-offline 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "openmrs-offline 2.xcdatamodel"; sourceTree = "<group>"; };
+		D3B241811BD8231400E09F36 /* openmrs-offline.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "openmrs-offline.xcdatamodel"; sourceTree = "<group>"; };
 		D3DCBBF61A71F4930024D088 /* OpenMRS-iOS-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "OpenMRS-iOS-Bridging-Header.h"; sourceTree = "<group>"; };
 		D3DCBBF71A71F4940024D088 /* StartVisitViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StartVisitViewController.swift; sourceTree = "<group>"; };
 		D3E47BA11A3A00C0004B3F95 /* MRSPatientIdentifierType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSPatientIdentifierType.h; sourceTree = "<group>"; };
@@ -665,6 +668,7 @@
 		D397396E1A2E082200D0AB69 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D3B2417F1BD8231400E09F36 /* openmrs-offline.xcdatamodeld */,
 				247BC28F1B7FC79400853B37 /* 37x-Checkmark.png */,
 				247BC2901B7FC79400853B37 /* 37x-Checkmark@2x.png */,
 				240BE39E1B7E2191008E60DE /* form-thumbnail@3x.png */,
@@ -783,7 +787,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0620;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Erway Software";
 				TargetAttributes = {
 					D397396A1A2E082200D0AB69 = {
@@ -792,6 +796,7 @@
 					};
 					D39739831A2E082300D0AB69 = {
 						CreatedOnToolsVersion = 6.2;
+						DevelopmentTeam = VRGDQ857JW;
 						TestTargetID = D397396A1A2E082200D0AB69;
 					};
 				};
@@ -933,6 +938,7 @@
 				D38DB4F81A320EF700E2CF23 /* MRSEncounterOb.m in Sources */,
 				240F4EE31B5BB22900E943FC /* XFormsList.m in Sources */,
 				D39AD7AE1A3C081000C01540 /* MRSVital.m in Sources */,
+				D3B241821BD8231400E09F36 /* openmrs-offline.xcdatamodeld in Sources */,
 				2436F2B51B49D56C00294B4C /* Constants.m in Sources */,
 				D317E7F61A4C6BD300E05212 /* OrderedDictionary.m in Sources */,
 				247BC28E1B7FC65600853B37 /* MBProgressExtension.m in Sources */,
@@ -1030,7 +1036,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iOS Development: Paul Erway (EQ5J258XZL)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iOS Development: Paul Erway (EQ5J258XZL)";
 				COPY_PHASE_STRIP = NO;
 				DEFINES_MODULE = NO;
 				ENABLE_BITCODE = NO;
@@ -1052,6 +1059,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
+				PROVISIONING_PROFILE = "39a09aa3-a79b-4a26-b7bd-44752931946a";
 				SDKROOT = iphoneos;
 			};
 			name = Debug;
@@ -1073,7 +1081,8 @@
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Paul Erway (VRGDQ857JW)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: Paul Erway (VRGDQ857JW)";
 				COPY_PHASE_STRIP = YES;
 				DEFINES_MODULE = NO;
 				ENABLE_BITCODE = NO;
@@ -1088,6 +1097,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				MTL_ENABLE_DEBUG_INFO = NO;
+				PROVISIONING_PROFILE = "39a09aa3-a79b-4a26-b7bd-44752931946a";
 				SDKROOT = iphoneos;
 				VALIDATE_PRODUCT = YES;
 			};
@@ -1100,13 +1110,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iOS Development: Paul Erway (EQ5J258XZL)";
 				INFOPLIST_FILE = "OpenMRS-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ea4deb9c-c248-45fe-b8d1-8eb19b4f8702";
+				PROVISIONING_PROFILE = "39a09aa3-a79b-4a26-b7bd-44752931946a";
 				SWIFT_OBJC_BRIDGING_HEADER = "OpenMRS-iOS/OpenMRS-iOS-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1120,13 +1130,13 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				INFOPLIST_FILE = "OpenMRS-iOS/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "ea4deb9c-c248-45fe-b8d1-8eb19b4f8702";
+				PROVISIONING_PROFILE = "39a09aa3-a79b-4a26-b7bd-44752931946a";
 				SWIFT_OBJC_BRIDGING_HEADER = "OpenMRS-iOS/OpenMRS-iOS-Bridging-Header.h";
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1136,6 +1146,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -1147,6 +1159,7 @@
 				INFOPLIST_FILE = "OpenMRS-iOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OpenMRS-iOS.app/OpenMRS-iOS";
 			};
 			name = Debug;
@@ -1156,6 +1169,8 @@
 			baseConfigurationReference = D21FB0B4A47906E6EF7F24EA /* Pods.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -1163,6 +1178,7 @@
 				INFOPLIST_FILE = "OpenMRS-iOSTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/OpenMRS-iOS.app/OpenMRS-iOS";
 			};
 			name = Release;
@@ -1198,6 +1214,20 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		D3B2417F1BD8231400E09F36 /* openmrs-offline.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				D3B241801BD8231400E09F36 /* openmrs-offline 2.xcdatamodel */,
+				D3B241811BD8231400E09F36 /* openmrs-offline.xcdatamodel */,
+			);
+			currentVersion = D3B241801BD8231400E09F36 /* openmrs-offline 2.xcdatamodel */;
+			path = "openmrs-offline.xcdatamodeld";
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = D39739631A2E082200D0AB69 /* Project object */;
 }
