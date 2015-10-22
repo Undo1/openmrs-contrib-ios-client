@@ -100,7 +100,7 @@
                                                 rowType:XLFormRowDescriptorTypeText
                                                   title:NSLocalizedString(@"Cause Of Death", @"Cause of death")];
     [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
-    [row.cellConfigAtConfigure setObject:[NSString stringWithFormat:@"%@...", NSLocalizedString(@"Required", @"Place holder -required-")] forKey:@"textField.placeholder"];
+    [row.cellConfigAtConfigure setObject:[NSString stringWithFormat:@"%@", NSLocalizedString(@"Required", @"Place holder -required-")] forKey:@"textField.placeholder"];
     if (self.patient.causeOfDeath) {
         row.value = self.patient.causeOfDeath;
     }
@@ -127,7 +127,7 @@
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kGivenName
                                                 rowType:XLFormRowDescriptorTypeText
                                                   title:NSLocalizedString(@"Given Name", @"Given -first name")];
-    [row.cellConfigAtConfigure setObject:[NSString stringWithFormat:@"%@...", NSLocalizedString(@"Required", @"Place holder -required-")] forKey:@"textField.placeholder"];
+    [row.cellConfigAtConfigure setObject:[NSString stringWithFormat:@"%@", NSLocalizedString(@"Required", @"Place holder -required-")] forKey:@"textField.placeholder"];
     [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
     if (self.patient.givenName) {
         row.value = self.patient.givenName;
@@ -149,7 +149,7 @@
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kFamilyName
                                                 rowType:XLFormRowDescriptorTypeText
                                                   title:NSLocalizedString(@"Family Name", @"Family name")];
-    [row.cellConfigAtConfigure setObject:[NSString stringWithFormat:@"%@...", NSLocalizedString(@"Required", @"Place holder -required-")] forKey:@"textField.placeholder"];
+    [row.cellConfigAtConfigure setObject:[NSString stringWithFormat:@"%@", NSLocalizedString(@"Required", @"Place holder -required-")] forKey:@"textField.placeholder"];
     [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
     row.required = YES;
     if (self.patient.familyName) {

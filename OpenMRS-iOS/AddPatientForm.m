@@ -67,7 +67,7 @@
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kGivenName
                                                 rowType:XLFormRowDescriptorTypeText
                                                   title:NSLocalizedString(@"Given Name", @"Given -first name")];
-    [row.cellConfigAtConfigure setObject:[NSString stringWithFormat:@"%@...", NSLocalizedString(@"Required", @"Place holder -required-")] forKey:@"textField.placeholder"];
+    [row.cellConfigAtConfigure setObject:[NSString stringWithFormat:@"%@", NSLocalizedString(@"Required", @"Place holder -required-")] forKey:@"textField.placeholder"];
     [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
     row.required = YES;
     [section addFormRow:row];
@@ -83,7 +83,7 @@
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kFamilyName
                                                 rowType:XLFormRowDescriptorTypeText
                                                   title:NSLocalizedString(@"Family Name", @"Family name")];
-    [row.cellConfigAtConfigure setObject:[NSString stringWithFormat:@"%@...", NSLocalizedString(@"Required", @"Place holder -required-")] forKey:@"textField.placeholder"];
+    [row.cellConfigAtConfigure setObject:[NSString stringWithFormat:@"%@", NSLocalizedString(@"Required", @"Place holder -required-")] forKey:@"textField.placeholder"];
     [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
     row.required = YES;
     [section addFormRow:row];
@@ -157,7 +157,7 @@
                                                 rowType:XLFormRowDescriptorTypeText
                                                   title:NSLocalizedString(@"Identifier", @"Label identifier")];
     [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
-    [row.cellConfigAtConfigure setObject:[NSString stringWithFormat:@"%@...", NSLocalizedString(@"Required", @"Place holder -required-")] forKey:@"textField.placeholder"];
+    [row.cellConfigAtConfigure setObject:[NSString stringWithFormat:@"%@", NSLocalizedString(@"Required", @"Place holder -required-")] forKey:@"textField.placeholder"];
     row.required = YES;
     [section addFormRow:row];
     
@@ -170,7 +170,7 @@
                                                 rowType:XLFormRowDescriptorTypeText
                                                   title:[NSString stringWithFormat:@"%@ 1", NSLocalizedString(@"Address", "Address")]];
     [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
-    [row.cellConfigAtConfigure setObject:[NSString stringWithFormat:@"%@...", NSLocalizedString(@"Required", @"Place holder -required-")] forKey:@"textField.placeholder"];
+    [row.cellConfigAtConfigure setObject:[NSString stringWithFormat:@"%@", NSLocalizedString(@"Required", @"Place holder -required-")] forKey:@"textField.placeholder"];
     row.required = YES;
     [section addFormRow:row];
     
