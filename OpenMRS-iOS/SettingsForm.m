@@ -249,7 +249,7 @@ NSString *kDateTimeFormat = @"DateTimeFormat";
 }
 
 - (void)sendFeedback {
-    [Instabug invokeFeedbackSender];
+    [Instabug invokeWithInvocationMode:IBGInvocationModeFeedbackSender];
     [self.tableView deselectRowAtIndexPath:[NSIndexPath indexPathForItem:4 inSection:0] animated:YES];
 }
 

@@ -32,7 +32,7 @@
 {
 // SignInViewController *vc = [[SignInViewController alloc] init];
 //    [[[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil] resetKeychainItem];
-    [Instabug startWithToken:@"9827bbb908adffd0d628b2b1f6890899" captureSource:IBGCaptureSourceUIKit invocationEvent:IBGInvocationEventShake];
+    [Instabug startWithToken:@"9827bbb908adffd0d628b2b1f6890899" invocationEvent:IBGInvocationEventShake];
     [Flurry startSession:@"ZTXS4QTSX5499GPKQ6G4"];
     if (!self.window.rootViewController) {
         NSLog(@"Adding a root view controller");
