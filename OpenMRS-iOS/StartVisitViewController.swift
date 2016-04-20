@@ -43,13 +43,13 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
         self.restorationClass = self.dynamicType;
 
         let defaultCenter = NSNotificationCenter.defaultCenter()
-        defaultCenter.addObserver(self, selector:"updateFontSize", name: UIContentSizeCategoryDidChangeNotification, object: nil)
+        defaultCenter.addObserver(self, selector:#selector(StartVisitViewController.updateFontSize), name: UIContentSizeCategoryDidChangeNotification, object: nil)
         MRSHelperFunctions.updateTableViewForDynamicTypeSize(self.tableView)
 
         self.title = NSLocalizedString("Start Visit", comment: "Label -start- -visit-")
         
-        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: "cancel")
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: "done")
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(StartVisitViewController.cancel))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(StartVisitViewController.done))
         
         self.reloadData()
         
