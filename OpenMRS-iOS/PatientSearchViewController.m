@@ -163,7 +163,8 @@
     
     UITabBarController *patientView = [self patientViewForPatient:patient];
  
-
+    [self.bar resignFirstResponder];
+    
     if (!self.splitViewController) {
         [self presentViewController:patientView animated:YES completion:nil];
     } else {
