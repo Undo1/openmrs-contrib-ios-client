@@ -3,7 +3,6 @@
 //  OpenMRS-iOS
 //
 //  Created by Yousef Hamza on 5/29/15.
-//  Copyright (c) 2015 Erway Software. All rights reserved.
 //
 #import "OpenMRSAPIManager.h"
 #import "ActiveVisitsList.h"

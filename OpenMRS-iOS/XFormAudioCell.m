@@ -3,7 +3,6 @@
 //  OpenMRS-iOS
 //
 //  Created by Yousef Hamza on 8/9/15.
-//  Copyright (c) 2015 Erway Software. All rights reserved.
 //
 
 #import "XFormAudioCell.h"
