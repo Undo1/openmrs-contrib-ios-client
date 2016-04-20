@@ -7,7 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+@class MRSPatient;
 
 @interface PatientSearchViewController : UITableViewController <UISearchBarDelegate, UIViewControllerRestoration>
 @property (nonatomic, strong) NSArray *currentSearchResults;
+
+- (UITabBarController *)patientViewForPatient:(MRSPatient *)patient;
 @end

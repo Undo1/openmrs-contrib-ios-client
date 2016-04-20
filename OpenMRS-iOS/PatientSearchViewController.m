@@ -16,8 +16,9 @@
 #import "XFormsList.h"
 #import "MBProgressExtension.h"
 #import "MRSAlertHandler.h"
+#import "OpenMRS-iOS-Bridging-Header.h"
 
-@interface PatientSearchViewController ()
+@interface PatientSearchViewController () <UIViewControllerPreviewingDelegate>
 
 @property (atomic, assign) BOOL searchButtonPressed;
 @property (nonatomic) BOOL isOnline;
@@ -82,7 +83,15 @@
     [headerView addSubview:self.bar ];
     self.tableView.tableHeaderView = headerView;
 
-    [self.bar  becomeFirstResponder];
+    [self.bar becomeFirstResponder];
+    
+    if ([self.traitCollection
+         respondsToSelector:@selector(forceTouchCapability)] &&
+        (self.traitCollection.forceTouchCapability ==
+         UIForceTouchCapabilityAvailable))
+    {
+        [self registerForPreviewingWithDelegate:self sourceView:self.view];
+    }
 
     self.searchButtonPressed = NO;
 }
@@ -150,8 +159,24 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    
     MRSPatient *patient = self.currentSearchResults[indexPath.row];
+    
+    UITabBarController *patientView = [self patientViewForPatient:patient];
+ 
+
+    if (!self.splitViewController) {
+        [self presentViewController:patientView animated:YES completion:nil];
+    } else {
+        /* Getting the patient view controller already existed */
+        NSArray *vcs = @[self.splitViewController.viewControllers[0], patientView];
+        self.splitViewController.viewControllers = vcs;
+        PatientViewController *vc = [(UINavigationController *)(patientView.viewControllers[0]) viewControllers][0];
+        
+        vc.patient =  self.currentSearchResults[indexPath.row];
+    }
+}
+
+- (UITabBarController *)patientViewForPatient:(MRSPatient *)patient {
     PatientViewController *vc = [[PatientViewController alloc] initWithStyle:UITableViewStyleGrouped];
     vc.patient = patient;
     vc.tabBarItem.title = patient.display;
@@ -171,24 +196,15 @@
     XFormsList *formsList = [[XFormsList alloc] initBlankForms];
     UINavigationController *formListNavigationController = [[UINavigationController alloc] initWithRootViewController:formsList];
     formListNavigationController.restorationIdentifier = @"navController4";
-
+    
     UITabBarController *patientView = [[UITabBarController alloc] init];
     NSArray *controllers = [NSArray arrayWithObjects:navController1, navController2, navController3, formListNavigationController, nil];
     patientView.viewControllers = controllers;
     patientView.tabBar.translucent = NO;
     patientView.restorationIdentifier = NSStringFromClass([patientView class]);
     [patientView setSelectedIndex:0];
-
-    if (!self.splitViewController) {
-        [self presentViewController:patientView animated:YES completion:nil];
-    } else {
-        /* Getting the patient view controller already existed */
-        NSArray *vcs = @[self.splitViewController.viewControllers[0], patientView];
-        self.splitViewController.viewControllers = vcs;
-        PatientViewController *vc = [(UINavigationController *)(patientView.viewControllers[0]) viewControllers][0];
-        
-        vc.patient =  self.currentSearchResults[indexPath.row];
-    }
+    
+    return patientView;
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
@@ -227,12 +243,47 @@
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 
-#pragma mark - UIViewcontrollerRestortion
+#pragma mark - UIViewcontrollerRestoration
 
 + (UIViewController *)viewControllerWithRestorationIdentifierPath:(NSArray *)identifierComponents coder:(NSCoder *)coder {
     PatientSearchViewController *searchVC = [[PatientSearchViewController alloc] initWithStyle:UITableViewStylePlain];
     searchVC.barText = [coder decodeObjectForKey:@"searchtext"];
     searchVC.segmentIndex = [coder decodeObjectForKey:@"segmentIndex"];
     return searchVC;
+}
+
+#pragma mark 3DTouch
+
+- (UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location {
+    NSIndexPath *indexPath = [self.tableView
+                              indexPathForRowAtPoint:location];
+    
+    MRSPatient *patient = self.currentSearchResults[indexPath.row];
+    
+    if (patient)
+    {
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
+        
+        if (cell) {
+            previewingContext.sourceRect = cell.frame;
+            
+            PatientViewController *vc = [[PatientViewController alloc] initWithStyle:UITableViewStyleGrouped];
+            vc.patient = patient;
+            PatientPeekNavigationController *navController = [[PatientPeekNavigationController alloc] initWithRootViewController:vc];
+            navController.patient = patient;
+            navController.searchController = self;
+            navController.restorationIdentifier = @"navController1";
+            
+            return navController;
+        }
+    }
+    
+    return nil;
+}
+- (void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext commitViewController:(UIViewController *)viewControllerToCommit {
+    UINavigationController *navCon = (UINavigationController *)viewControllerToCommit;
+    MRSPatient *patient = ((PatientViewController *)navCon.viewControllers[0]).patient;
+    
+    [self showDetailViewController:[self patientViewForPatient:patient] sender:self];
 }
 @end
