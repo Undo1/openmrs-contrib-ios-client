@@ -13,7 +13,7 @@
 @property (nonatomic, strong) NSString *preferredNameUUID;
 @property (nonatomic, strong) NSString *preferredAddressUUID;
 @property (nonatomic, strong) NSString *gender;
-@property (nonatomic, strong) NSNumber *age;
+@property (nonatomic, strong) NSString *age;
 @property (nonatomic, strong) NSString *name;
 @property (nonatomic, strong) NSString *displayName;
 @property (nonatomic) BOOL dead;
