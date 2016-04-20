@@ -22,7 +22,7 @@ class MapViewController : UIViewController
                     let place = placemark![0]
                     self.mapView.setCenterCoordinate((place.location?.coordinate)!, animated: true)
                     
-                    let span = MKCoordinateSpan(latitudeDelta: 1, longitudeDelta: 1)
+                    let span = MKCoordinateSpan(latitudeDelta: 0.3, longitudeDelta: 0.3)
                     let region = MKCoordinateRegion(center: (place.location?.coordinate)!, span: span)
                     
                     self.mapView.setRegion(region, animated: true)
