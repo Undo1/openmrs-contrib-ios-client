@@ -4,7 +4,9 @@
 
 #import "OpenMRSAPIManager.h"
 #import "LocationListTableViewController.h"
+#import "PatientSearchViewController.h"
 #import "UIAlertView+Blocks.h"
 #import "MRSHelperFunctions.h"
 #import "MBProgressExtension.h"
 #import "MRSAlertHandler.h"
+#import "MRSPatient.h"

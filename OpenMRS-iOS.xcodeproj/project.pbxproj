@@ -69,6 +69,10 @@
 		D317E7F61A4C6BD300E05212 /* OrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = D317E7F41A4C6BD300E05212 /* OrderedDictionary.m */; };
 		D34BF5391A3BA7BE009205C9 /* AddVisitNoteTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D34BF5381A3BA7BE009205C9 /* AddVisitNoteTableViewController.m */; };
 		D3540AA51CC69A9900610C26 /* PatientPeekNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3540AA41CC69A9900610C26 /* PatientPeekNavigationController.swift */; };
+		D3540AA71CC6F17100610C26 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3540AA61CC6F17100610C26 /* MapViewController.swift */; };
+		D3540AA91CC6F3E200610C26 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3540AA81CC6F3E200610C26 /* CoreLocation.framework */; };
+		D3540AAB1CC6F7E400610C26 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D3540AAA1CC6F7E400610C26 /* MapKit.framework */; };
+		D3540AAD1CC6F8D400610C26 /* PatientAddressAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3540AAC1CC6F8D400610C26 /* PatientAddressAnnotation.swift */; };
 		D37674271A3BB114003A8005 /* MRSLocation.m in Sources */ = {isa = PBXBuildFile; fileRef = D37674261A3BB114003A8005 /* MRSLocation.m */; };
 		D376742A1A3BB254003A8005 /* LocationListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D37674291A3BB254003A8005 /* LocationListTableViewController.m */; };
 		D38DB4F51A316FAA00E2CF23 /* EncounterViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D38DB4F41A316FAA00E2CF23 /* EncounterViewController.m */; };
@@ -218,6 +222,10 @@
 		D34BF5371A3BA7BE009205C9 /* AddVisitNoteTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddVisitNoteTableViewController.h; sourceTree = "<group>"; };
 		D34BF5381A3BA7BE009205C9 /* AddVisitNoteTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddVisitNoteTableViewController.m; sourceTree = "<group>"; };
 		D3540AA41CC69A9900610C26 /* PatientPeekNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientPeekNavigationController.swift; sourceTree = "<group>"; };
+		D3540AA61CC6F17100610C26 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		D3540AA81CC6F3E200610C26 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		D3540AAA1CC6F7E400610C26 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		D3540AAC1CC6F8D400610C26 /* PatientAddressAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientAddressAnnotation.swift; sourceTree = "<group>"; };
 		D37674251A3BB114003A8005 /* MRSLocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSLocation.h; sourceTree = "<group>"; };
 		D37674261A3BB114003A8005 /* MRSLocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSLocation.m; sourceTree = "<group>"; };
 		D37674281A3BB254003A8005 /* LocationListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocationListTableViewController.h; sourceTree = "<group>"; };
@@ -297,6 +305,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D3540AAB1CC6F7E400610C26 /* MapKit.framework in Frameworks */,
+				D3540AA91CC6F3E200610C26 /* CoreLocation.framework in Frameworks */,
 				2412409F1B627766009E172B /* AVFoundation.framework in Frameworks */,
 				D3A869511A32B3D400D1963F /* CoreData.framework in Frameworks */,
 				65BE2B3E2C5F8BE1FB7090C2 /* libPods.a in Frameworks */,
@@ -438,6 +448,8 @@
 				D396A5211A2E09DE00DE6448 /* MRSPatient.m */,
 				D396A5121A2E09DE00DE6448 /* PatientViewController.h */,
 				D396A5131A2E09DE00DE6448 /* PatientViewController.m */,
+				D3540AA61CC6F17100610C26 /* MapViewController.swift */,
+				D3540AAC1CC6F8D400610C26 /* PatientAddressAnnotation.swift */,
 				D3E47BA71A3A08EF004B3F95 /* MRSPatientIdentifier.h */,
 				D3E47BA81A3A08EF004B3F95 /* MRSPatientIdentifier.m */,
 				2436F2B21B49A01900294B4C /* Edit patient Form */,
@@ -610,6 +622,8 @@
 		7E3ED26108E7D20D7E5E58E4 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D3540AAA1CC6F7E400610C26 /* MapKit.framework */,
+				D3540AA81CC6F3E200610C26 /* CoreLocation.framework */,
 				2412409E1B627766009E172B /* AVFoundation.framework */,
 				D3A869501A32B3D400D1963F /* CoreData.framework */,
 				87CFC2F5FC6F1445E8327AF6 /* libPods.a */,
@@ -968,6 +982,7 @@
 				D39AD7AB1A3BFE8600C01540 /* CaptureVitalsTableViewController.m in Sources */,
 				243206711B30436700B54970 /* MRSHelperFunctions.m in Sources */,
 				D396A5281A2E09DE00DE6448 /* SignInViewController.m in Sources */,
+				D3540AA71CC6F17100610C26 /* MapViewController.swift in Sources */,
 				2494E8E81B3CC1BC00ABFE53 /* IdentifierTypeCell.m in Sources */,
 				D3E47BA91A3A08EF004B3F95 /* MRSPatientIdentifier.m in Sources */,
 				240F4EF31B5D852700E943FC /* XFormViewController.m in Sources */,
@@ -990,6 +1005,7 @@
 				D39739711A2E082300D0AB69 /* main.m in Sources */,
 				D396A5501A2E3F7600DE6448 /* PatientVisitListView.m in Sources */,
 				240F4EEB1B5D401000E943FC /* XFormsParser.m in Sources */,
+				D3540AAD1CC6F8D400610C26 /* PatientAddressAnnotation.swift in Sources */,
 				D396A5271A2E09DE00DE6448 /* AppDelegate.m in Sources */,
 				24D127511B0DF6140018AA1D /* MRSDateUtilities.m in Sources */,
 				D396A54A1A2E3CBC00DE6448 /* MRSEncounter.m in Sources */,

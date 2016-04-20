@@ -50,5 +50,6 @@
 - (void)saveToCoreData;
 - (void)updateFromCoreData;
 - (BOOL)isInCoreData;
+- (NSString *)formattedPatientAddress;
 
 @end

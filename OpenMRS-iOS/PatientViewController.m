@@ -59,7 +59,7 @@
     self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
                            @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
                            @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
-                           @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAddress:self.patient]}];
+                           @ {NSLocalizedString(@"Address", "Address") : [self.patient formattedPatientAddress]}];
     NSLog(@"Information: %@", self.information);
     self.navigationItem.title = self.patient.name;
     self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
@@ -177,7 +177,7 @@
             self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
                                    @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
                                    @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
-                                   @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAddress:self.patient]}];
+                                   @ {NSLocalizedString(@"Address", "Address") : [self.patient formattedPatientAddress]}];
             if ([self.patient isInCoreData]) {
                 MRSPatient *savedPatient = [[MRSPatient alloc] init];
                 savedPatient.UUID = self.patient.UUID;
@@ -206,7 +206,7 @@
                         self.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[self notNil:self.patient.name]},
                                                @ {NSLocalizedString(@"Age", @"Label age") : [self notNil:self.patient.age]},
                                                @ {NSLocalizedString(@"Gender", @"Gender of person") : [self notNil:self.patient.gender]},
-                                               @ {NSLocalizedString(@"Address", "Address") : [self formatPatientAddress:self.patient]}];
+                                               @ {NSLocalizedString(@"Address", "Address") : [self.patient formattedPatientAddress]}];
                     }
                 });
             }
@@ -314,18 +314,6 @@
     NSString *detail = cell.detailTextLabel.text;
     CGRect bounding = [detail boundingRectWithSize:CGSizeMake(self.view.frame.size.width, 1000) options:NSStringDrawingUsesLineFragmentOrigin attributes:@ {NSFontAttributeName:cell.detailTextLabel.font} context:nil];
     return MAX(cellHeight.floatValue,bounding.size.height+10);
-}
-- (NSString *)formatPatientAddress:(MRSPatient *)patient
-{
-    NSString *string = [self notNil:patient.address1];
-    NSArray *addressAttributes = @[@"address2", @"address3", @"address4", @"address5", @"address6",
-                                   @"cityVillage", @"stateProvince", @"country", @"postalCode"];
-    for (NSString *attribute in addressAttributes) {
-        if (![MRSHelperFunctions isNull:[self.patient valueForKey:attribute]]) {
-            string = [string stringByAppendingString:[NSString stringWithFormat:@"\n%@", [patient valueForKey:attribute]]];
-        }
-    }
-    return string;
 }
 - (NSString *)formatDate:(NSString *)date
 {
@@ -468,7 +456,16 @@
     cell.textLabel.text = key;
     cell.detailTextLabel.text = value;
     cell.detailTextLabel.numberOfLines = 0;
-    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    if ([key isEqualToString:NSLocalizedString(@"Address", "Address")])
+    {
+        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
+    else
+    {
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+        cell.accessoryType = UITableViewCellAccessoryNone;
+    }
     return cell;
 }
 
@@ -575,6 +572,11 @@
             [self presentViewController:editPatientNavController animated:YES completion:nil];
         }
     }
+    else if (indexPath.section == 1) {
+        MapViewController *mapVc = [[MapViewController alloc] init];
+        mapVc.patient = self.patient;
+        [self.navigationController pushViewController:mapVc animated:YES];
+    }
 }
 
 -(void)reload {
@@ -625,7 +627,7 @@
     patientVC.information = @[@ {NSLocalizedString(@"Name", @"Label name"):[patientVC notNil:patientVC.patient.name]},
                                 @ {NSLocalizedString(@"Age", @"Label age") : [patientVC notNil:patientVC.patient.age]},
                                 @ {NSLocalizedString(@"Gender", @"Gender of person") : [patientVC notNil:patientVC.patient.gender]},
-                                @ {NSLocalizedString(@"Address", "Address") : [patientVC formatPatientAddress:patientVC.patient]}];
+                                @ {NSLocalizedString(@"Address", "Address") : [patientVC.patient formattedPatientAddress]}];
     return patientVC;
 }
 @end

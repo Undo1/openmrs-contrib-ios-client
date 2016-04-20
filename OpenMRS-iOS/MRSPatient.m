@@ -250,4 +250,24 @@
     }
 }
 
+- (NSString *)formattedPatientAddress
+{
+    NSString *string = [self notNil:self.address1];
+    NSArray *addressAttributes = @[@"address2", @"address3", @"address4", @"address5", @"address6",
+                                   @"cityVillage", @"stateProvince", @"country", @"postalCode"];
+    for (NSString *attribute in addressAttributes) {
+        if (![MRSHelperFunctions isNull:[self valueForKey:attribute]]) {
+            string = [string stringByAppendingString:[NSString stringWithFormat:@"\n%@", [self valueForKey:attribute]]];
+        }
+    }
+    return string;
+}
+- (id)notNil:(id)thing
+{
+    if (thing == nil || thing == [NSNull null]) {
+        return @"";
+    }
+    return thing;
+}
+
 @end
