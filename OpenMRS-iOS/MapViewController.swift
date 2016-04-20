@@ -27,7 +27,7 @@ class MapViewController : UIViewController
                     
                     self.mapView.setRegion(region, animated: true)
                     
-                    let annotation = PatientAddressAnnotation(coordinate: (place.location?.coordinate)!)
+                    let annotation = PatientAddressAnnotation(coordinate: (place.location?.coordinate)!, title: self.patient.displayName, subtitle: self.patient.formattedPatientAddress())
                     self.mapView.addAnnotation(annotation)
                 }
                 else

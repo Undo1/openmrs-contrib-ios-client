@@ -15,9 +15,11 @@ class PatientAddressAnnotation : NSObject, MKAnnotation {
     @objc var title: String?
     @objc var subtitle: String?
     
-    init(coordinate: CLLocationCoordinate2D)
+    init(coordinate: CLLocationCoordinate2D, title: String?, subtitle: String?)
     {
         super.init()
         self.coordinate = coordinate
+        self.title = title
+        self.subtitle = subtitle
     }
 }
