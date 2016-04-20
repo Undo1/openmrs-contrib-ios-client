@@ -10,7 +10,7 @@
 @class MRSPatient;
 @interface SyncingEngine : NSObject
 
-+(SyncingEngine *)sharedEngine;
++ (SyncingEngine *)sharedEngine;
 - (void)updateExistingPatientsInCoreData:(void (^)(NSError *error))completion;
 - (void)updateExistingOutOfDatePatients:(void (^)(NSError *error))completion;
 - (void)SyncPatient:(MRSPatient *)patient completion:(void (^)(NSError *error))completion;

@@ -43,7 +43,7 @@
     return self;
 }
 
--(void)viewDidLoad {
+- (void)viewDidLoad {
     [super viewDidLoad];
     
     self.restorationIdentifier = NSStringFromClass([self class]);

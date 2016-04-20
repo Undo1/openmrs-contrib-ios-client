@@ -18,7 +18,7 @@
 
 @implementation SyncingEngine
 
-+(SyncingEngine *)sharedEngine {
++ (SyncingEngine *)sharedEngine {
     static SyncingEngine *sharedEngine;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{

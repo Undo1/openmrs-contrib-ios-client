@@ -178,7 +178,7 @@
         }
     }];
 }
--(void)addNewRows:(int)currentIndex {
+- (void)addNewRows:(int)currentIndex {
     if (self.startIndex - currentIndex < 50) {
         self.hasMore = NO;
     }

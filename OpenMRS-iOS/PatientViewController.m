@@ -32,7 +32,7 @@
 
 @implementation PatientViewController
 
--(id)initWithStyle:(UITableViewStyle)style {
+- (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
         self.restorationIdentifier = NSStringFromClass([self class]);
@@ -166,7 +166,7 @@
         }
     }];
 }
--(void)fetchPatient {
+- (void)fetchPatient {
     [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:self.view];
     [OpenMRSAPIManager getDetailedDataOnPatient:self.patient completion:^(NSError *error, MRSPatient *detailedPatient) {
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
@@ -581,7 +581,7 @@
     }
 }
 
--(void)reload {
+- (void)reload {
     [self.tableView reloadData];
 }
 

@@ -16,7 +16,7 @@
 
 @implementation PatientEncounterListView
 
--(id)initWithStyle:(UITableViewStyle)style {
+- (id)initWithStyle:(UITableViewStyle)style {
     self = [super initWithStyle:style];
     if (self) {
         self.tabBarItem.title = NSLocalizedString(@"Encounters", "Label encounters");
