@@ -573,9 +573,11 @@
         }
     }
     else if (indexPath.section == 1) {
-        MapViewController *mapVc = [[MapViewController alloc] init];
-        mapVc.patient = self.patient;
-        [self.navigationController pushViewController:mapVc animated:YES];
+        if (indexPath.row == 3) {
+            MapViewController *mapVc = [[MapViewController alloc] init];
+            mapVc.patient = self.patient;
+            [self.navigationController pushViewController:mapVc animated:YES];
+        }
     }
 }
 
