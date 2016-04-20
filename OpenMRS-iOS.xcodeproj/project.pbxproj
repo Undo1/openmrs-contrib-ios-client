@@ -110,6 +110,7 @@
 		D3E47BA31A3A00C0004B3F95 /* MRSPatientIdentifierType.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E47BA21A3A00C0004B3F95 /* MRSPatientIdentifierType.m */; };
 		D3E47BA61A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E47BA51A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m */; };
 		D3E47BA91A3A08EF004B3F95 /* MRSPatientIdentifier.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E47BA81A3A08EF004B3F95 /* MRSPatientIdentifier.m */; };
+		D3F61E101CC7EB54002F8260 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D3F61E0F1CC7EB54002F8260 /* Launch Screen.storyboard */; };
 		D3F797BA1A71F690008E6064 /* SelectVisitTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F797B91A71F690008E6064 /* SelectVisitTypeView.swift */; };
 		D3F797BC1A71F72B008E6064 /* MRSVisitType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F797BB1A71F72B008E6064 /* MRSVisitType.swift */; };
 		D3FAEFFE1A51C1CD002B1BF7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3FAEFFD1A51C1CD002B1BF7 /* Images.xcassets */; };
@@ -295,6 +296,7 @@
 		D3E47BA51A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SelectPatientIdentifierTypeTableViewController.m; sourceTree = "<group>"; };
 		D3E47BA71A3A08EF004B3F95 /* MRSPatientIdentifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSPatientIdentifier.h; sourceTree = "<group>"; };
 		D3E47BA81A3A08EF004B3F95 /* MRSPatientIdentifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSPatientIdentifier.m; sourceTree = "<group>"; };
+		D3F61E0F1CC7EB54002F8260 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "../Launch Screen.storyboard"; sourceTree = "<group>"; };
 		D3F797B91A71F690008E6064 /* SelectVisitTypeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectVisitTypeView.swift; sourceTree = "<group>"; };
 		D3F797BB1A71F72B008E6064 /* MRSVisitType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MRSVisitType.swift; sourceTree = "<group>"; };
 		D3FAEFFD1A51C1CD002B1BF7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -685,6 +687,7 @@
 		D397396E1A2E082200D0AB69 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D3F61E0F1CC7EB54002F8260 /* Launch Screen.storyboard */,
 				D3B2417F1BD8231400E09F36 /* openmrs-offline.xcdatamodeld */,
 				247BC28F1B7FC79400853B37 /* 37x-Checkmark.png */,
 				247BC2901B7FC79400853B37 /* 37x-Checkmark@2x.png */,
@@ -851,6 +854,7 @@
 			files = (
 				2494E8EE1B3CDCF300ABFE53 /* launchImage.png in Resources */,
 				D3A57DBC1B2E5BF800F25F30 /* active_visits_tab_bar_icon.png in Resources */,
+				D3F61E101CC7EB54002F8260 /* Launch Screen.storyboard in Resources */,
 				247BC2991B811B3600853B37 /* openmrs-logo@2x.png in Resources */,
 				24C1E0E11B793953003A13A9 /* play_button_disabled.png in Resources */,
 				24A8DEC71B18C18A00F5FF84 /* active_visits_icon@3x.png in Resources */,
@@ -1145,7 +1149,6 @@
 			baseConfigurationReference = AFA25E06F401CA7D732F7C67 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iOS Development: Paul Erway (EQ5J258XZL)";
