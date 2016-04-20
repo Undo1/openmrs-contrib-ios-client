@@ -182,28 +182,34 @@ static NSString * const reuseIdentifier = @"Cell";
             UIView *view = [[UIView alloc] init];
             view.backgroundColor = [UIColor whiteColor];
             vc.view = view;
-            UIImageView *imageView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"launchImage"]];
-            imageView.translatesAutoresizingMaskIntoConstraints = NO;
-            [view addSubview:imageView];
-            
+
+            UILabel *noItemsLabel = [[UILabel alloc] init];
+            noItemsLabel.text = @"No patient selected";
+            noItemsLabel.textColor = [UIColor darkGrayColor];
+
+            noItemsLabel.translatesAutoresizingMaskIntoConstraints = NO;
+            [noItemsLabel sizeToFit];
+            [view addSubview:noItemsLabel];
+
+
             // Center horizontally
-            [view addConstraint:[NSLayoutConstraint constraintWithItem:imageView
+            [view addConstraint:[NSLayoutConstraint constraintWithItem:noItemsLabel
                                                                   attribute:NSLayoutAttributeCenterX
                                                                   relatedBy:NSLayoutRelationEqual
                                                                      toItem:view
                                                                   attribute:NSLayoutAttributeCenterX
                                                                  multiplier:1.0
                                                                    constant:0.0]];
-            
+
             // Center vertically
-            [view addConstraint:[NSLayoutConstraint constraintWithItem:imageView
+            [view addConstraint:[NSLayoutConstraint constraintWithItem:noItemsLabel
                                                                   attribute:NSLayoutAttributeCenterY
                                                                   relatedBy:NSLayoutRelationEqual
                                                                      toItem:view
                                                                   attribute:NSLayoutAttributeCenterY
                                                                  multiplier:1.0
                                                                    constant:0.0]];
-            
+
             UINavigationController *masterNav = [[UINavigationController alloc] initWithRootViewController:search];
             UINavigationController *vcNav = [[UINavigationController alloc] initWithRootViewController:vc];
             UISplitViewController *splitView = [[UISplitViewController alloc] init];
