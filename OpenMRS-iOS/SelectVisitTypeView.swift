@@ -43,7 +43,7 @@ class SelectVisitTypeView : UITableViewController, UIViewControllerRestoration
         self.restorationClass = self.dynamicType;
         
         let defaultCenter = NSNotificationCenter.defaultCenter()
-        defaultCenter.addObserver(self, selector:"updateFontSize", name: UIContentSizeCategoryDidChangeNotification, object: nil)
+        defaultCenter.addObserver(self, selector:#selector(SelectVisitTypeView.updateFontSize), name: UIContentSizeCategoryDidChangeNotification, object: nil)
         MRSHelperFunctions.updateTableViewForDynamicTypeSize(self.tableView)
         
         self.title = NSLocalizedString("Visit Type", comment: "Label -visit- -type-")
