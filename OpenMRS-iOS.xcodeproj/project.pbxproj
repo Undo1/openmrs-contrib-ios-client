@@ -111,6 +111,7 @@
 		D3E47BA61A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E47BA51A3A0213004B3F95 /* SelectPatientIdentifierTypeTableViewController.m */; };
 		D3E47BA91A3A08EF004B3F95 /* MRSPatientIdentifier.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E47BA81A3A08EF004B3F95 /* MRSPatientIdentifier.m */; };
 		D3F61E101CC7EB54002F8260 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D3F61E0F1CC7EB54002F8260 /* Launch Screen.storyboard */; };
+		D3F61E1A1CC7FE26002F8260 /* AddressMapCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F61E191CC7FE26002F8260 /* AddressMapCell.swift */; };
 		D3F797BA1A71F690008E6064 /* SelectVisitTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F797B91A71F690008E6064 /* SelectVisitTypeView.swift */; };
 		D3F797BC1A71F72B008E6064 /* MRSVisitType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3F797BB1A71F72B008E6064 /* MRSVisitType.swift */; };
 		D3FAEFFE1A51C1CD002B1BF7 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D3FAEFFD1A51C1CD002B1BF7 /* Images.xcassets */; };
@@ -297,6 +298,7 @@
 		D3E47BA71A3A08EF004B3F95 /* MRSPatientIdentifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MRSPatientIdentifier.h; sourceTree = "<group>"; };
 		D3E47BA81A3A08EF004B3F95 /* MRSPatientIdentifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MRSPatientIdentifier.m; sourceTree = "<group>"; };
 		D3F61E0F1CC7EB54002F8260 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = "Launch Screen.storyboard"; path = "../Launch Screen.storyboard"; sourceTree = "<group>"; };
+		D3F61E191CC7FE26002F8260 /* AddressMapCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddressMapCell.swift; sourceTree = "<group>"; };
 		D3F797B91A71F690008E6064 /* SelectVisitTypeView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectVisitTypeView.swift; sourceTree = "<group>"; };
 		D3F797BB1A71F72B008E6064 /* MRSVisitType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MRSVisitType.swift; sourceTree = "<group>"; };
 		D3FAEFFD1A51C1CD002B1BF7 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -446,6 +448,7 @@
 		248FBE301B03B9F400569C2C /* Patients */ = {
 			isa = PBXGroup;
 			children = (
+				D3F61E191CC7FE26002F8260 /* AddressMapCell.swift */,
 				D396A5201A2E09DE00DE6448 /* MRSPatient.h */,
 				D396A5211A2E09DE00DE6448 /* MRSPatient.m */,
 				D396A5121A2E09DE00DE6448 /* PatientViewController.h */,
@@ -982,6 +985,7 @@
 				240F4EEF1B5D415100E943FC /* XFormElement.m in Sources */,
 				D396A52D1A2E09DE00DE6448 /* MRSPatient.m in Sources */,
 				D3540AA51CC69A9900610C26 /* PatientPeekNavigationController.swift in Sources */,
+				D3F61E1A1CC7FE26002F8260 /* AddressMapCell.swift in Sources */,
 				247B747C1B70B86C00BD3D3A /* XFormsStore.m in Sources */,
 				D39AD7AB1A3BFE8600C01540 /* CaptureVitalsTableViewController.m in Sources */,
 				243206711B30436700B54970 /* MRSHelperFunctions.m in Sources */,

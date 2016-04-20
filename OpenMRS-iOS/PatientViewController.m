@@ -23,10 +23,13 @@
 #import "MBProgressExtension.h"
 #import "MRSAlertHandler.h"
 #import "MBProgressHUD.h"
+#import <CoreLocation/CoreLocation.h>
 
 @interface PatientViewController ()
 
 @property (nonatomic) BOOL showedErrorAlready;
+@property (nonatomic) BOOL hasAddressLocation;
+@property (nonatomic) CLLocationCoordinate2D addressLocation;
 
 @end
 
@@ -64,6 +67,12 @@
     self.navigationItem.title = self.patient.name;
     self.tabBarItem.title = [self.patient.name componentsSeparatedByString:@" "].firstObject;
     [self.tableView reloadData];
+
+    // Check whether the address is 'real'. If we can find it
+    // on a map, show it in a map cell below everything else:
+
+    [self attemptToDisplayMap];
+
     /* This is a just checking a random detailed value that will 
      * tell us if this is a detailed patient or not, because the old
      * loading from coredata will return .hasdetailedinfo as nill
@@ -73,6 +82,24 @@
         [self updateWithDetailedInfo];
     }
 }
+- (void)attemptToDisplayMap
+{
+    CLGeocoder *geocoder = [[CLGeocoder alloc] init];
+    [geocoder geocodeAddressString:[self.patient formattedPatientAddress] completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+        if (placemarks != nil && placemarks.count > 0)
+        {
+            self.addressLocation = placemarks[0].location.coordinate;
+            self.hasAddressLocation = YES;
+            [self.tableView reloadData];
+        }
+        else
+        {
+            NSLog(@"Couldn't geolocate address");
+            self.hasAddressLocation = NO;
+        }
+    }];
+}
+
 - (void)viewDidLoad
 {
     [super viewDidLoad];
@@ -86,6 +113,7 @@
     self.encoutersEdited = YES;
     
     self.showedErrorAlready = NO;
+    self.hasAddressLocation = NO;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
@@ -292,6 +320,8 @@
 }
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    if (indexPath.section == 2) return 300;
+
     static NSDictionary *cellHeightDictionary;
     if (!cellHeightDictionary) {
         cellHeightDictionary = @{ UIContentSizeCategoryExtraSmall : @33,
@@ -330,7 +360,11 @@
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    if (self.hasAddressLocation)
+    {
+        return 3;
+    }
+    else return 2;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
@@ -348,10 +382,9 @@
     } else if (section == 1) {
         return self.information.count;
     } else if (section == 2) {
-        return 2;
-    } else {
         return 1;
     }
+    else return 1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -447,6 +480,18 @@
             return editCell;
         }
     }
+    else if (indexPath.section == 2) // Map cell
+    {
+        AddressMapCell *cell = [tableView dequeueReusableCellWithIdentifier:@"mapcell"];
+
+        if (!cell)
+        {
+            cell = [[AddressMapCell  alloc] initWithLocation:self.addressLocation reuseIdentifier:@"mapcell"];
+        }
+
+        return cell;
+    }
+
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
     if (!cell) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"cell"];
@@ -456,16 +501,8 @@
     cell.textLabel.text = key;
     cell.detailTextLabel.text = value;
     cell.detailTextLabel.numberOfLines = 0;
-    if ([key isEqualToString:NSLocalizedString(@"Address", "Address")])
-    {
-        cell.selectionStyle = UITableViewCellSelectionStyleDefault;
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    }
-    else
-    {
-        cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        cell.accessoryType = UITableViewCellAccessoryNone;
-    }
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
+    cell.accessoryType = UITableViewCellAccessoryNone;
     return cell;
 }
 
@@ -572,12 +609,10 @@
             [self presentViewController:editPatientNavController animated:YES completion:nil];
         }
     }
-    else if (indexPath.section == 1) {
-        if (indexPath.row == 3) {
-            MapViewController *mapVc = [[MapViewController alloc] init];
-            mapVc.patient = self.patient;
-            [self.navigationController pushViewController:mapVc animated:YES];
-        }
+    else if (indexPath.section == 2) {
+        MapViewController *mapVc = [[MapViewController alloc] init];
+        mapVc.patient = self.patient;
+        [self.navigationController pushViewController:mapVc animated:YES];
     }
 }
 
