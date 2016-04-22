@@ -11,7 +11,9 @@
 @implementation MBProgressExtension
 
 + (void)showBlockWithTitle:(NSString *)title inView:(UIView *)view {
-    [[MBProgressHUD showHUDAddedTo:view animated:YES] setLabelText:title];
+    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
+    [hud setLabelText:title];
+    hud.minShowTime = 0.75;
     view.userInteractionEnabled = NO;
 }
 
@@ -26,6 +28,8 @@
 }
 
 + (void)showSucessWithTitle:(NSString *)title inView:(UIView *)view {
+    return;
+    
     MBProgressHUD *HUD = [MBProgressHUD showHUDAddedTo:view animated:YES];
     
     // The sample image is based on the work by http://www.pixelpressicons.com, http://creativecommons.org/licenses/by/2.5/ca/

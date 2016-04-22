@@ -42,4 +42,5 @@
 + (void)uploadXForms:(XForms *)form completion:(void (^)(NSError *error))completion;
 + (void)cancelPreviousSearchOperations;
 + (void)logout;
++ (void)presentLoginController;
 @end

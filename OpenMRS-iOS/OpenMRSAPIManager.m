@@ -16,7 +16,6 @@
 #import "MRSLocation.h"
 #import "MRSEncounterOb.h"
 #import "MRSEncounter.h"
-#import "SignInViewController.h"
 #import "AppDelegate.h"
 #import "MRSPatientIdentifierType.h"
 #import "KeychainItemWrapper.h"
@@ -31,6 +30,7 @@
 #import "XFormsParser.h"
 #import "Constants.h"
 #import "XFormsStore.h"
+#import "OpenMRS_iOS-Swift.h"
 #import <CoreData/CoreData.h>
 
 @implementation OpenMRSAPIManager
@@ -808,8 +808,11 @@
     [userDefaults setObject:@"HH:mm:ss" forKey:UDtimeFromat];
     [userDefaults setObject:@"yyyy-MM-dd'T'HH:mm:ss" forKey:UDdateTimeFormat];
 
-    SignInViewController *vc = [[SignInViewController alloc] init];
-    [delegate.window.rootViewController presentViewController:vc animated:YES completion:nil];
+    
+    UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login Screen" bundle:[NSBundle mainBundle]];
+    LoginViewController *loginViewController = [loginStoryboard instantiateViewControllerWithIdentifier:@"login"];
+    
+    [delegate.window.rootViewController presentViewController:loginViewController animated:YES completion:nil];
 }
 
 + (void)logout

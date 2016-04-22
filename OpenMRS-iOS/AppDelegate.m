@@ -6,7 +6,6 @@
 //
 
 #import "AppDelegate.h"
-#import "SignInViewController.h"
 #import "MainMenuCollectionViewController.h"
 #import "KeychainItemWrapper.h"
 #import <CoreData/CoreData.h>
@@ -21,6 +20,8 @@
 #import <Instabug/Instabug.h>
 #import "Flurry.h"
 #import "Constants.h"
+#import "OpenMRSAPIManager.h"
+
 @interface AppDelegate ()
 
 @end
@@ -45,8 +46,8 @@
     NSString *password = [[[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil] objectForKey:(__bridge id)(kSecValueData)];
     if ([password isEqual:@" "] || [password isEqual:@""] || password == nil) {
         //No password stored, go straight to login screen
-        SignInViewController *signin = [[SignInViewController alloc] init];
-        [self.window.rootViewController presentViewController:signin animated:NO completion:nil];
+        [OpenMRSAPIManager presentLoginController];
+    
     } else {
         [[SyncingEngine sharedEngine] updateExistingOutOfDatePatients:nil];
     }
