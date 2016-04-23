@@ -638,14 +638,23 @@
                              @"City Village", @"State Province", @"Country" ,@"Postal Code", @"Latitude", @"Latitude", @"County District"];
     for (NSString *key in addressKeys) {
         NSString *propertyKey = [MRSHelperFunctions formLabelToJSONLabel:key];
-        if (![MRSHelperFunctions isNull:[patient valueForKey:propertyKey]]  && ![[patient valueForKey:propertyKey] isEqualToString:@""]) {
+        NSString *value = [patient valueForKey:propertyKey];
+        NSString *stringValue = value;
+        
+        @try {
+            stringValue = [(NSNumber *)value stringValue];
+        } @catch (NSException *exception) {
+            
+        }
+        
+        if (![MRSHelperFunctions isNull:value]  && ![stringValue isEqualToString:@""]) {
             if ([propertyKey  isEqual: @"preferred"]) {
                 NSLog(@"propety: %@", propertyKey);
                 NSString *value = [patient valueForKey:propertyKey];
                 [parameters setValue:[value isEqualToString:@"1"]?@"true":@"false" forKey:propertyKey];
                 continue;
             }
-            [parameters setValue:[patient valueForKey:propertyKey] forKey:propertyKey];
+            [parameters setValue:stringValue forKey:propertyKey];
         }
     }
     //NSLog(@"Address parameters:\n%@", parameters);
