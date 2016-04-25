@@ -69,6 +69,7 @@
     MRSEncounterOb *ob = self.encounter.obs[indexPath.row];
     cell.textLabel.text = ob.display;
     cell.textLabel.numberOfLines = 0;
+    cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
 
