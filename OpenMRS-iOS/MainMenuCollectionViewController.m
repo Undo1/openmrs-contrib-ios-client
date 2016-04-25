@@ -110,6 +110,7 @@ static NSString * const reuseIdentifier = @"Cell";
     }
     UIImageView *iView = [[UIImageView alloc] initWithImage:[image imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]];
     iView.frame = CGRectMake(25, 0, cell.frame.size.width-50, cell.frame.size.height-44);
+    iView.tintColor = self.navigationController.navigationBar.barTintColor;
     iView.contentMode = UIViewContentModeScaleAspectFit;
     iView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [cell addSubview:iView];
