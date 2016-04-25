@@ -11,14 +11,21 @@
 @implementation MBProgressExtension
 
 + (void)showBlockWithTitle:(NSString *)title inView:(UIView *)view {
-    MBProgressHUD *hud = [MBProgressHUD showHUDAddedTo:view animated:YES];
+    
+    MBProgressHUD *hud =[MBProgressHUD HUDForView:view];
     [hud setLabelText:title];
-    hud.minShowTime = 0.75;
+    [hud setGraceTime:1];
+    
+    [hud show:YES];
     view.userInteractionEnabled = NO;
 }
 
 + (void)showBlockWithDetailTitle:(NSString *)detailTitle inView:(UIView *)view {
-    [[MBProgressHUD showHUDAddedTo:view animated:YES] setDetailsLabelText:detailTitle];
+    MBProgressHUD *hud = [MBProgressHUD HUDForView:view];
+    [hud setDetailsLabelText:detailTitle];
+    [hud setGraceTime:1];
+    
+    [hud show:YES];
     view.userInteractionEnabled = NO;
 }
 
