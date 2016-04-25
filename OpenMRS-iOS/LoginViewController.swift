@@ -220,6 +220,13 @@ class LoginViewController : UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        return UIInterfaceOrientationMask.Portrait
+        if UIDevice.currentDevice().userInterfaceIdiom == .Pad
+        {
+            return .All
+        }
+        else
+        {
+            return .Portrait
+        }
     }
 }
