@@ -109,7 +109,7 @@
     self.dateLabel.text = [formatter stringFromDate:[MRSDateUtilities  dateFromOpenMRSFormattedString:visit.startDateTime]];
     
     if (visit.active) {
-        self.activeLabel.textColor = [UIColor greenColor];
+        self.activeLabel.textColor = [UIColor colorWithRed:39/255.0 green:139/255.0 blue:146/255.0 alpha:1];
         self.activeLabel.text = [NSString stringWithFormat:@"%@ -", NSLocalizedString(@"Active", @"Label active")];
     } else {
         self.activeLabel.textColor = [UIColor redColor];
