@@ -41,6 +41,8 @@
 		24DAC0D71B397F680089AD12 /* MRSVisitCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 24DAC0D61B397F680089AD12 /* MRSVisitCell.m */; };
 		65BE2B3E2C5F8BE1FB7090C2 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 87CFC2F5FC6F1445E8327AF6 /* libPods.a */; };
 		D317E7F61A4C6BD300E05212 /* OrderedDictionary.m in Sources */ = {isa = PBXBuildFile; fileRef = D317E7F41A4C6BD300E05212 /* OrderedDictionary.m */; };
+		D33DCC6A1CCDA735008C5AE0 /* EncounterViewController Storyboard.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D33DCC691CCDA735008C5AE0 /* EncounterViewController Storyboard.storyboard */; };
+		D33DCC6C1CCDA77D008C5AE0 /* EncounterObCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D33DCC6B1CCDA77D008C5AE0 /* EncounterObCell.swift */; };
 		D34BF5391A3BA7BE009205C9 /* AddVisitNoteTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D34BF5381A3BA7BE009205C9 /* AddVisitNoteTableViewController.m */; };
 		D3540AA51CC69A9900610C26 /* PatientPeekNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3540AA41CC69A9900610C26 /* PatientPeekNavigationController.swift */; };
 		D3540AA71CC6F17100610C26 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D3540AA61CC6F17100610C26 /* MapViewController.swift */; };
@@ -165,6 +167,8 @@
 		D21FB0B4A47906E6EF7F24EA /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		D317E7F41A4C6BD300E05212 /* OrderedDictionary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = OrderedDictionary.m; sourceTree = "<group>"; };
 		D317E7F51A4C6BD300E05212 /* OrderedDictionary.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OrderedDictionary.h; sourceTree = "<group>"; };
+		D33DCC691CCDA735008C5AE0 /* EncounterViewController Storyboard.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "EncounterViewController Storyboard.storyboard"; sourceTree = "<group>"; };
+		D33DCC6B1CCDA77D008C5AE0 /* EncounterObCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EncounterObCell.swift; sourceTree = "<group>"; };
 		D34BF5371A3BA7BE009205C9 /* AddVisitNoteTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AddVisitNoteTableViewController.h; sourceTree = "<group>"; };
 		D34BF5381A3BA7BE009205C9 /* AddVisitNoteTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AddVisitNoteTableViewController.m; sourceTree = "<group>"; };
 		D3540AA41CC69A9900610C26 /* PatientPeekNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PatientPeekNavigationController.swift; sourceTree = "<group>"; };
@@ -506,6 +510,8 @@
 				D38DB4FD1A3216CF00E2CF23 /* MRSEncounterType.m */,
 				D38DB4F31A316FAA00E2CF23 /* EncounterViewController.h */,
 				D38DB4F41A316FAA00E2CF23 /* EncounterViewController.m */,
+				D33DCC691CCDA735008C5AE0 /* EncounterViewController Storyboard.storyboard */,
+				D33DCC6B1CCDA77D008C5AE0 /* EncounterObCell.swift */,
 				D396A5481A2E3CBC00DE6448 /* MRSEncounter.h */,
 				D396A5491A2E3CBC00DE6448 /* MRSEncounter.m */,
 				D38DB4F61A320EF700E2CF23 /* MRSEncounterOb.h */,
@@ -766,6 +772,7 @@
 				2494E8EE1B3CDCF300ABFE53 /* launchImage.png in Resources */,
 				D3F61E241CC84872002F8260 /* Images.xcassets in Resources */,
 				D3F61E101CC7EB54002F8260 /* Launch Screen.storyboard in Resources */,
+				D33DCC6A1CCDA735008C5AE0 /* EncounterViewController Storyboard.storyboard in Resources */,
 				24C1E0E11B793953003A13A9 /* play_button_disabled.png in Resources */,
 				241240A81B62854B009E172B /* MapViewController.xib in Resources */,
 				246BAB2B1B77969B00979E50 /* no-image.png in Resources */,
@@ -893,6 +900,7 @@
 				240F4EEB1B5D401000E943FC /* XFormsParser.m in Sources */,
 				D3540AAD1CC6F8D400610C26 /* PatientAddressAnnotation.swift in Sources */,
 				D396A5271A2E09DE00DE6448 /* AppDelegate.m in Sources */,
+				D33DCC6C1CCDA77D008C5AE0 /* EncounterObCell.swift in Sources */,
 				24D127511B0DF6140018AA1D /* MRSDateUtilities.m in Sources */,
 				D396A54A1A2E3CBC00DE6448 /* MRSEncounter.m in Sources */,
 				D3E47BA31A3A00C0004B3F95 /* MRSPatientIdentifierType.m in Sources */,

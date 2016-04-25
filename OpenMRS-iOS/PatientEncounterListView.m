@@ -97,7 +97,7 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MRSEncounter *encounter = self.encounters[indexPath.row];
-    EncounterViewController *vc = [[EncounterViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    EncounterViewController *vc = [[UIStoryboard storyboardWithName:@"EncounterViewController Storyboard" bundle:[NSBundle mainBundle]] instantiateViewControllerWithIdentifier:@"encounters"];
     vc.encounter = encounter;
     [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:self.view];
     [OpenMRSAPIManager getXformWithEncounterUuid:encounter.UUID andName:encounter.displayName completion:^(XForms *form, NSError *error) {

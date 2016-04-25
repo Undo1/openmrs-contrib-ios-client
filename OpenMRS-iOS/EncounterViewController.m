@@ -10,6 +10,8 @@
 #import "MRSEncounterOb.h"
 #import "MBProgressExtension.h"
 #import "MRSAlertHandler.h"
+#import "OpenMRS_iOS-Swift.h"
+
 @implementation EncounterViewController
 
 - (void)viewDidLoad {
@@ -25,6 +27,8 @@
     if (encounter.obs == nil) {
         [self refreshData];
     }
+    
+    self.tableView.estimatedRowHeight = 44;
 }
 - (void)refreshData
 {
@@ -62,13 +66,11 @@
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"cell"];
-    if (!cell) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"cell"];
-    }
+    EncounterObCell *cell = [tableView dequeueReusableCellWithIdentifier:@"EncounterObCell"];
+    
     MRSEncounterOb *ob = self.encounter.obs[indexPath.row];
-    cell.textLabel.text = ob.display;
-    cell.textLabel.numberOfLines = 0;
+    cell.observationLabel.text = ob.display;
+    cell.observationLabel.numberOfLines = 0;
     cell.selectionStyle = UITableViewCellSelectionStyleNone;
     return cell;
 }
