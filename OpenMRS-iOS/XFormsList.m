@@ -109,7 +109,6 @@
                     [MBProgressExtension hideActivityIndicatorInView:self.view];
                     self.counter = 3;
                 }
-                [[MRSAlertHandler alertViewForError:self error:error] show];
             }
         }];
     }
