@@ -14,6 +14,13 @@ class PatientPeekNavigationController : UINavigationController {
     
     @available(iOS 9.0, *)
     override func previewActionItems() -> [UIPreviewActionItem] {
-        return []
+        let editAction = UIPreviewAction(title: NSLocalizedString("Edit patient", comment: "Title -Edit- -patient-"), style: .Default) { (action: UIPreviewAction, viewController: UIViewController) in
+            let navigationController = viewController as! UINavigationController
+            let patientViewController = navigationController.viewControllers[0] as! PatientViewController
+
+            patientViewController.presentEditViewController(patientViewController.patient, fromViewController: UIApplication.sharedApplication().keyWindow?.rootViewController)
+        }
+
+        return [editAction]
     }
 }

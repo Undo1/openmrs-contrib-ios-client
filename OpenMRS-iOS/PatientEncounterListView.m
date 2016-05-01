@@ -13,6 +13,7 @@
 #import "PatientViewController.h"
 #import "XLForm.h"
 #import "XForms.h"
+#import "OpenMRS_iOS-Swift.h"
 
 @implementation PatientEncounterListView
 

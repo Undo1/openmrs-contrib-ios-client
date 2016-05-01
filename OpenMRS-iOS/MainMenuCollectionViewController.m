@@ -19,6 +19,7 @@
 #import "SettingsForm.h"
 #import "AppDelegate.h"
 #import "Constants.h"
+#import "OpenMRSAPIManager.h"
 
 @implementation MainMenuCollectionViewController
 

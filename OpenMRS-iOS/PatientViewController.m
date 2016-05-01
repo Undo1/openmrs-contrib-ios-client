@@ -600,13 +600,9 @@
         }
         if ((indexPath.row == 4&& !(![MRSHelperFunctions isNull:self.patient] && [self.patient isInCoreData])) ||
             ((indexPath.row == 5) && (![MRSHelperFunctions isNull:self.patient] && [self.patient isInCoreData])) ) {
-            EditPatientForm *pf = [[EditPatientForm alloc] initWithPatient:self.patient];
-            UINavigationController *editPatientNavController = [[UINavigationController alloc] initWithRootViewController:pf];
-            editPatientNavController.restorationIdentifier = NSStringFromClass([editPatientNavController class]);
-            editPatientNavController.modalPresentationStyle = UIModalPresentationFormSheet;
             [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-            self.patientEdited = YES;
-            [self presentViewController:editPatientNavController animated:YES completion:nil];
+
+            [self presentEditViewController:self.patient];
         }
     }
     else if (indexPath.section == 2) {
@@ -614,6 +610,21 @@
         mapVc.patient = self.patient;
         [self.navigationController pushViewController:mapVc animated:YES];
     }
+}
+
+- (void)presentEditViewController:(MRSPatient *)patient
+{
+    [self presentEditViewController:patient fromViewController:self];
+}
+
+- (void)presentEditViewController:(MRSPatient *)patient fromViewController:(UIViewController *)viewController
+{
+    EditPatientForm *pf = [[EditPatientForm alloc] initWithPatient:self.patient];
+    UINavigationController *editPatientNavController = [[UINavigationController alloc] initWithRootViewController:pf];
+    editPatientNavController.restorationIdentifier = NSStringFromClass([editPatientNavController class]);
+    editPatientNavController.modalPresentationStyle = UIModalPresentationFormSheet;
+    self.patientEdited = YES;
+    [viewController presentViewController:editPatientNavController animated:YES completion:nil];
 }
 
 - (void)reload {

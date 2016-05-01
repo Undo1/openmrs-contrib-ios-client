@@ -11,6 +11,8 @@
 #import "MRSPatientIdentifierType.h"
 #import "PatientViewController.h"
 #import "SelectPatientIdentifierTypeTableViewController.h"
+#import "OpenMRS_iOS-Swift.h"
+
 @interface AddPatientTableViewController ()
 
 @end

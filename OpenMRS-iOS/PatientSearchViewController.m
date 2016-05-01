@@ -17,6 +17,7 @@
 #import "MBProgressExtension.h"
 #import "MRSAlertHandler.h"
 #import "OpenMRS-iOS-Bridging-Header.h"
+#import "OpenMRS_iOS-Swift.h"
 
 @interface PatientSearchViewController () <UIViewControllerPreviewingDelegate>
 

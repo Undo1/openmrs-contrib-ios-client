@@ -10,7 +10,10 @@
 #import "MRSPatient.h"
 #import "AddVisitNoteTableViewController.h"
 #import "CaptureVitalsTableViewController.h"
-#import "OpenMRS_iOS-Swift.h"
+
+@protocol AddVisitNoteTableViewControllerDelegate;
+@protocol StartVisitViewControllerDelegate;
+@protocol CaptureVitalsTableViewControllerDelegate;
 
 @interface PatientViewController : UITableViewController <AddVisitNoteTableViewControllerDelegate, CaptureVitalsTableViewControllerDelegate, StartVisitViewControllerDelegate, UIViewControllerRestoration>
 @property (nonatomic, strong) MRSPatient *patient;
@@ -27,4 +30,6 @@
 @property (nonatomic) BOOL visitsEdited;
 
 - (void)updateWithDetailedInfo;
+- (void)presentEditViewController:(MRSPatient *)patient;
+- (void)presentEditViewController:(MRSPatient *)patient fromViewController:(UIViewController *)viewController;
 @end
