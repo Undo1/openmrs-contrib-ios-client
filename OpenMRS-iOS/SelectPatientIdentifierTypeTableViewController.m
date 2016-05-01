@@ -26,7 +26,7 @@
 - (instancetype)init {
     self = [super initWithStyle:UITableViewStyleGrouped];
     if (self) {
-        
+
     }
     return self;
 }
@@ -43,7 +43,7 @@
 
     self.title = NSLocalizedString(@"Identifier Type", @"Label -identifier- -type-");
     [self reloadData];
-    
+
     //Getting the AddPatientForm
     self.delegate = self.navigationController.viewControllers[0];
     //TODO: self-sizing cells
@@ -52,7 +52,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
     [IdentifierTypeCell updateTableViewForDynamicTypeSize:self.tableView];
 }
 

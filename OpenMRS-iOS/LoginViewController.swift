@@ -12,7 +12,7 @@ class LoginViewController : UIViewController, UITableViewDelegate, UITableViewDa
 {
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var scrollView: UIScrollView!
-    
+
     var hostField: UITextField! {
         didSet {
             hostField.addTarget(self, action: #selector(LoginViewController.updateHost(_:)), forControlEvents: .EditingChanged)
@@ -28,32 +28,32 @@ class LoginViewController : UIViewController, UITableViewDelegate, UITableViewDa
             passwordField.addTarget(self, action: #selector(LoginViewController.updatePassword(_:)), forControlEvents: .EditingChanged)
         }
     }
-    
+
     var host: String!
     var username: String!
     var password: String!
-    
-    
+
+
     @IBAction func useDemoServer(sender: UIButton) {
         self.hostField.text = "http://demo.openmrs.org/openmrs"
         self.updateHost(self.hostField)
-        
+
         self.usernameField.text = "admin"
         self.updateUsername(self.usernameField)
-        
+
         self.passwordField.text = "Admin123"
         self.updatePassword(self.passwordField)
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         UIApplication.sharedApplication().statusBarStyle = .Default
-        
+
         tableView.reloadData()
         tableView.layoutIfNeeded()
         self.hostField.becomeFirstResponder()
     }
-    
+
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 2
     }
@@ -71,13 +71,13 @@ class LoginViewController : UIViewController, UITableViewDelegate, UITableViewDa
         if indexPath.section == 0
         {
             let cell = tableView.dequeueReusableCellWithIdentifier("fieldCell")! as! LoginFieldCell
-            
+
             cell.legendLabel.text = ["Host", "Username", "Password"][indexPath.row]
             cell.textField.placeholder = ["Host", "Username", "Password"][indexPath.row]
             cell.textField.text = [host, username, password][indexPath.row]
             cell.textField.delegate = self
             cell.textField.returnKeyType = .Next
-            
+
             switch indexPath.row {
                 case 0:
                     hostField = cell.textField
@@ -89,46 +89,46 @@ class LoginViewController : UIViewController, UITableViewDelegate, UITableViewDa
                     cell.textField.returnKeyType = .Go
                 default: break
             }
-            
+
             cell.selectionStyle = .None
-            
+
             return cell
         }
         else
         {
             let cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")
-            
+
             cell.textLabel?.textAlignment = .Center
             cell.textLabel?.text = "Login"
             cell.textLabel?.textColor = UIColor(red: 39/255, green: 139/255, blue: 146/255, alpha: 1)
-            
+
             return cell
         }
     }
-    
+
     func login()
     {
         if host == nil || host == "" || username == nil || username == "" || password == nil || password == ""
         {
             let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Warning label error"), message: "One or more fields are empty. All are required.", preferredStyle: .Alert)
-            
+
             alert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
-            
+
             self.showViewController(alert, sender: nil)
-            
+
             return
         }
-        
+
         host = addProtocolToHost(host)
         self.hostField.text = host
-        
+
         MBProgressExtension.showBlockWithTitle(NSLocalizedString("Loading", comment: "Label loading"), inView: self.view)
         OpenMRSAPIManager.verifyCredentialsWithUsername(username, password: password, host: host) { (error: NSError!) in
             if error == nil
             {
                 MBProgressExtension.showSucessWithTitle(NSLocalizedString("Logged in", comment: "Message -logged- -in-"), inView: self.presentingViewController!.view)
                 self.updateKeychainItemWithHost(self.host, username: self.username, password: self.password)
-                
+
                 dispatch_async(dispatch_get_main_queue()) {
                     self.dismissViewControllerAnimated(true, completion: nil)
                     UIApplication.sharedApplication().setStatusBarStyle(.LightContent, animated: true)
@@ -140,7 +140,7 @@ class LoginViewController : UIViewController, UITableViewDelegate, UITableViewDa
                 {
                     let alert = UIAlertController(title: NSLocalizedString("Error", comment: "Warning label error"), message: NSLocalizedString("Invalid credentials", comment: "warning label invalid credentials"), preferredStyle: .Alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
-                        
+
                     self.showViewController(alert, sender: nil)
                 }
                 else
@@ -150,7 +150,7 @@ class LoginViewController : UIViewController, UITableViewDelegate, UITableViewDa
             }
         }
     }
-    
+
 //    - (void)updateKeychainWithHost:(NSString *)host username:(NSString *)username password:(NSString *)password
 //    {
 //    KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
@@ -166,30 +166,30 @@ class LoginViewController : UIViewController, UITableViewDelegate, UITableViewDa
         wrapper.setObject(username, forKey: kSecAttrAccount)
         wrapper.setObject(password, forKey: kSecValueData)
     }
-    
+
 
     func addProtocolToHost(hostString: String) -> String {
         if !hostString.hasPrefix("htt") // Account for both http and https. Not perfect, but it works
         {
             return "http://".stringByAppendingString(hostString)
         }
-        
+
         return hostString
     }
-    
+
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
         return 38
     }
-    
+
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 1
         {
             login()
         }
-        
+
         tableView.deselectRowAtIndexPath(indexPath, animated: true)
     }
-    
+
     func updateUsername(sender: UITextField!)
     {
         username = sender.text
@@ -202,7 +202,7 @@ class LoginViewController : UIViewController, UITableViewDelegate, UITableViewDa
     {
         host = sender.text
     }
-    
+
     func textFieldShouldReturn(textField: UITextField) -> Bool {
         if textField == hostField
         {
@@ -218,7 +218,7 @@ class LoginViewController : UIViewController, UITableViewDelegate, UITableViewDa
         }
         return false
     }
-    
+
     override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
         if UIDevice.currentDevice().userInterfaceIdiom == .Pad
         {

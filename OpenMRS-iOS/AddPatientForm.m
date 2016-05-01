@@ -45,7 +45,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
 
@@ -57,11 +57,11 @@
     XLFormDescriptor *form = [XLFormDescriptor formDescriptorWithTitle:NSLocalizedString(@"Add Patient", @"Label -add- -patient-")];
     XLFormSectionDescriptor *section;
     XLFormRowDescriptor *row;
-    
+
     /* =========================================== Name Section =====================================*/
     section = [XLFormSectionDescriptor formSectionWithTitle:NSLocalizedString(@"Preferred Name", @"Label named -Preferred- -Name-)")];
     [form addFormSection:section];
-    
+
     //Given Name
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kGivenName
                                                 rowType:XLFormRowDescriptorTypeText
@@ -70,14 +70,14 @@
     [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
     row.required = YES;
     [section addFormRow:row];
-    
+
     //Middle Name
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kMiddleName
                                                 rowType:XLFormRowDescriptorTypeText
                                                   title:NSLocalizedString(@"Middle Name", @"Middle name")];
     [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
     [section addFormRow:row];
-    
+
     //Family name
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kFamilyName
                                                 rowType:XLFormRowDescriptorTypeText
@@ -86,18 +86,18 @@
     [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
     row.required = YES;
     [section addFormRow:row];
-    
+
     //Family name2
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kFamilyName2
                                                 rowType:XLFormRowDescriptorTypeText
                                                   title:[NSString stringWithFormat:@"2nd %@", NSLocalizedString(@"Family Name", @"Family name")]];
     [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
     [section addFormRow:row];
-    
+
     /* =========================================== Person Section =====================================*/
     section = [XLFormSectionDescriptor formSectionWithTitle:NSLocalizedString(@"Person", @"Label named person")];
     [form addFormSection:section];
-    
+
     //Gender
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kGender
                                                 rowType:XLFormRowDescriptorTypePicker title:@"Gender"];
@@ -108,14 +108,14 @@
     row.value = row.selectorOptions[0];
     row.required = YES;
     [section addFormRow:row];
-    
+
     //Birthdate estimated?
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kbirthdateEstimated
                                                 rowType:XLFormRowDescriptorTypeBooleanSwitch
                                                   title:NSLocalizedString(@"BirthDate Estimated", @"Is birth date estimated?")];
     row.value = @1;
     [section addFormRow:row];
-    
+
     //Age
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kAge
                                                 rowType:XLFormRowDescriptorTypeInteger
@@ -134,7 +134,7 @@
     row.required = YES;
     [section addFormRow:row];
     row.hidden = [NSString stringWithFormat:@"$%@==1", kbirthdateEstimated];
-    
+
     //Location
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kLocation
                                                 rowType:XLFormRowDescriptorTypeSelectorPush
@@ -150,7 +150,7 @@
     row.action.viewControllerClass = [SelectPatientIdentifierTypeTableViewController class];
     row.required = YES;
     [section addFormRow:row];
-    
+
     //Identifier
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kIdentifier
                                                 rowType:XLFormRowDescriptorTypeText
@@ -159,11 +159,11 @@
     [row.cellConfigAtConfigure setObject:[NSString stringWithFormat:@"%@", NSLocalizedString(@"Required", @"Place holder -required-")] forKey:@"textField.placeholder"];
     row.required = YES;
     [section addFormRow:row];
-    
+
     /* =========================================== Address Section =====================================*/
     section = [XLFormSectionDescriptor formSectionWithTitle:NSLocalizedString(@"Preferred Address", @"Label named -Preferred- -Address-")];
     [form addFormSection:section];
-    
+
     //Address 1
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kAddress1
                                                 rowType:XLFormRowDescriptorTypeText
@@ -172,21 +172,21 @@
     [row.cellConfigAtConfigure setObject:[NSString stringWithFormat:@"%@", NSLocalizedString(@"Required", @"Place holder -required-")] forKey:@"textField.placeholder"];
     row.required = YES;
     [section addFormRow:row];
-    
+
     //Address 2
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kAddress2
                                                 rowType:XLFormRowDescriptorTypeText
                                                   title:[NSString stringWithFormat:@"%@ 2", NSLocalizedString(@"Address", "Address")]];
     [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
     [section addFormRow:row];
-    
+
     //City Village
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kCityVillage
                                                 rowType:XLFormRowDescriptorTypeText
                                                   title:NSLocalizedString(@"City Village", @"City village")];
     [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
     [section addFormRow:row];
-    
+
     //State Province
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kStateProvince
                                                 rowType:XLFormRowDescriptorTypeText
@@ -194,7 +194,7 @@
     [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
     [section addFormRow:row];
 
-    
+
     //Country
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kCountry
                                                 rowType:XLFormRowDescriptorTypeText
@@ -202,14 +202,14 @@
     [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
     [section addFormRow:row];
 
-    
+
     //Postal Code
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kPostalCode
                                                 rowType:XLFormRowDescriptorTypeInteger
                                                   title:NSLocalizedString(@"Postal Code", @"Postal code")];
     [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
     [section addFormRow:row];
-    
+
     self.form = form;
 }
 
@@ -234,7 +234,7 @@
                 address_parameters[address_row.tag] = values[address_row.tag];
             }
         }
-        
+
         NSMutableDictionary *name_parameters = [NSMutableDictionary dictionaryWithDictionary:@{
                                                                                                kGivenName: values[kGivenName],
                                                                                                kFamilyName: values[kFamilyName]

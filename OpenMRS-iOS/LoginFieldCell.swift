@@ -12,11 +12,11 @@ class LoginFieldCell : UITableViewCell
 {
     @IBOutlet var legendLabel: UILabel!
     @IBOutlet var textField: UITextField!
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
-    
+
     init(reuseIdentifier: String) {
         super.init(style: .Default, reuseIdentifier: reuseIdentifier)
     }

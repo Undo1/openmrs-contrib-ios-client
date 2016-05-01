@@ -46,7 +46,7 @@ NSString *kDateTimeFormat = @"DateTimeFormat";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
+
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self action:@selector(exitSettings)];
@@ -60,19 +60,19 @@ NSString *kDateTimeFormat = @"DateTimeFormat";
 
     XLFormDescriptor *form = [XLFormDescriptor formDescriptorWithTitle:NSLocalizedString(@"Settings", @"Label settings")];
     XLFormSectionDescriptor *section = [XLFormSectionDescriptor formSection];
-    
+
     NSString *appVersion = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
-    
+
     [form addFormSection:section];
 
     XLFormRowDescriptor *row = [XLFormRowDescriptor formRowDescriptorWithTag:kUserName rowType:XLFormRowDescriptorTypeInfo title:[NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"Logged in as", @"Label -logged- -in- -as"), username]];
     row.disabled = @YES;
     [section addFormRow:row];
-    
+
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kHost rowType:XLFormRowDescriptorTypeInfo title:host];
     row.disabled = @YES;
     [section addFormRow:row];
-    
+
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kVersion rowType:XLFormRowDescriptorTypeInfo title:[NSString stringWithFormat:@"%@: %@", NSLocalizedString(@"App version", @"Label version"), appVersion]];
     row.disabled = @YES;
     [section addFormRow:row];
@@ -86,20 +86,20 @@ NSString *kDateTimeFormat = @"DateTimeFormat";
     row.action.formSelector = @selector(sendFeedback);
     [row.cellConfig setObject:[UIColor colorWithRed:39/255.0 green:139/255.0 blue:146/255.0 alpha:1] forKey:@"textLabel.color"];
     [section addFormRow:row];
-    
+
     section = [XLFormSectionDescriptor formSection];
     [form addFormSection:section];
-    
+
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kRemoveOfflinePatient rowType:XLFormRowDescriptorTypeButton title:NSLocalizedString(@"Remove Offline Patients", @"Label -remove- -offline- -patients-")];
     row.action.formSelector = @selector(removeOfflinePatients);
     [row.cellConfig setObject:[UIColor redColor] forKey:@"textLabel.color"];
     [section addFormRow:row];
-    
+
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kSyncPatient rowType:XLFormRowDescriptorTypeButton title:NSLocalizedString(@"Sync offline patients", @"Label -sync- -offline- -patients-")];
     row.action.formSelector = @selector(syncOfflinePatients);
     [row.cellConfig setObject:[UIColor colorWithRed:39/255.0 green:139/255.0 blue:146/255.0 alpha:1] forKey:@"textLabel.color"];
     [section addFormRow:row];
-    
+
     double interval = [[NSUserDefaults standardUserDefaults] doubleForKey:UDrefreshInterval];
 
     //Modifying string
@@ -121,7 +121,7 @@ NSString *kDateTimeFormat = @"DateTimeFormat";
     [row.cellConfig setObject:@(0) forKey:@"textLabel.numberOfLines"];
     [row.cellConfig setObject:@(NSLineBreakByWordWrapping) forKey:@"textLabel.lineBreakMode"];
     [section addFormRow:row];
-    
+
     section = [XLFormSectionDescriptor formSectionWithTitle:@"XForms"];
     [form addFormSection:section];
 
@@ -181,7 +181,7 @@ NSString *kDateTimeFormat = @"DateTimeFormat";
 
 - (void)exitSettings {
     /* Setting user defaults */
-    
+
     //Set wizard
     XLFormRowDescriptor *row = [self.form formRowWithTag:kWizardMode];
     if ([row.value isEqualToString: NSLocalizedString(@"Single form", @"Label single form")]) {
@@ -196,7 +196,7 @@ NSString *kDateTimeFormat = @"DateTimeFormat";
     //Set refresh interval
     row = [self.form formRowWithTag:kRefreshInterval];
     [[NSUserDefaults standardUserDefaults] setDouble:[row.value floatValue] forKey:UDrefreshInterval];
-    
+
     //set formats
     row = [self.form formRowWithTag:kDateFormat];
     [[NSUserDefaults standardUserDefaults] setObject:row.value forKey:UDdateFormat];
@@ -209,7 +209,7 @@ NSString *kDateTimeFormat = @"DateTimeFormat";
     row = [self.form formRowWithTag:kDateTimeFormat];
     [[NSUserDefaults standardUserDefaults] setObject:row.value forKey:UDdateTimeFormat];
     [row.cellConfigAtConfigure setObject:@(NSTextAlignmentRight) forKey:@"textField.textAlignment"];
-    
+
     [self.presentingViewController dismissViewControllerAnimated:YES completion:nil];
 }
 

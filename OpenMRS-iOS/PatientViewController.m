@@ -73,7 +73,7 @@
 
     [self attemptToDisplayMap];
 
-    /* This is a just checking a random detailed value that will 
+    /* This is a just checking a random detailed value that will
      * tell us if this is a detailed patient or not, because the old
      * loading from coredata will return .hasdetailedinfo as nill
      * and the app will be caught in an infintie loop.
@@ -111,7 +111,7 @@
     self.patientEdited = YES;
     self.visitsEdited = YES;
     self.encoutersEdited = YES;
-    
+
     self.showedErrorAlready = NO;
     self.hasAddressLocation = NO;
 }
@@ -445,7 +445,7 @@
             deleteFromCoreData.textLabel.textColor = self.view.tintColor;
             return deleteFromCoreData;
         }
-        
+
         /* Cascading the conditional cell */
         if ((indexPath.row == 3 && !(![MRSHelperFunctions isNull:self.patient] && [self.patient isInCoreData])) ||
             ((indexPath.row == 4) && (![MRSHelperFunctions isNull:self.patient] && [self.patient isInCoreData])) ) {

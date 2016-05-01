@@ -50,7 +50,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
     [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
 }
 
@@ -71,7 +71,7 @@
         vital.value = self.textFieldValues[key];
         [vitals addObject:vital];
     }
-    
+
     [MBProgressExtension showBlockWithTitle:NSLocalizedString(@"Loading", @"Label loading") inView:self.view];
     [OpenMRSAPIManager captureVitals:vitals toPatient:self.patient atLocation:self.currentLocation completion:^(NSError *error) {
         [MBProgressExtension hideActivityIndicatorInView:self.view];

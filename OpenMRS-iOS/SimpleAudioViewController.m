@@ -34,17 +34,17 @@
 -(void)loadView {
     NSLog(@"load view");
     UIView *view = [[UIView alloc] init];
-    
+
     self.play = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.play setTitle:@"Play" forState:UIControlStateNormal];
     self.play.translatesAutoresizingMaskIntoConstraints = NO;
     [self.play addTarget:self action:@selector(playPressed) forControlEvents:UIControlEventTouchUpInside];
-    
+
     self.stop = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.stop setTitle:@"Stop" forState:UIControlStateNormal];
     self.stop.translatesAutoresizingMaskIntoConstraints = NO;
     [self.stop addTarget:self action:@selector(stopPressed) forControlEvents:UIControlEventTouchUpInside];
-    
+
     self.record = [UIButton buttonWithType:UIButtonTypeRoundedRect];
     [self.record setTitle:@"Record" forState:UIControlStateNormal];
     self.record.translatesAutoresizingMaskIntoConstraints = NO;
@@ -110,7 +110,7 @@
                                [NSString stringWithFormat:@"Audio%d.m4a", rand() % 1000],
                                nil];
     self.outputFileURL = [NSURL fileURLWithPathComponents:pathComponents];
-    
+
     AVAudioSession *session = [AVAudioSession sharedInstance];
     NSError *error = nil;
     [session setCategory:AVAudioSessionCategoryPlayAndRecord error:&error];
@@ -141,7 +141,7 @@
     if (!recorder.recording) {
         AVAudioSession *session = [AVAudioSession sharedInstance];
         [session setActive:YES error:nil];
-        
+
         [recorder record];
         [self.record setTitle:@"Pause" forState:UIControlStateNormal];
     } else {
@@ -155,7 +155,7 @@
 - (void)stopPressed {
     self.recorded = YES;
     [recorder stop];
-    
+
     AVAudioSession *session = [AVAudioSession sharedInstance];
     [session setActive:NO error:nil];
 }
@@ -170,7 +170,7 @@
 
 - (void)audioRecorderDidFinishRecording:(AVAudioRecorder *)recorder successfully:(BOOL)flag {
     [self.record setTitle:@"Record" forState:UIControlStateNormal];
-    
+
     self.stop.enabled = NO;
     self.play.enabled = YES;
 }

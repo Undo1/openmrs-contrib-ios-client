@@ -40,11 +40,11 @@
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
     [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
-    
+
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self action:@selector(close)];
     }
-    
+
     if ([MRSHelperFunctions isNull:self.segmentIndex] || [self.segmentIndex  isEqual: @0]) {
         self.isOnline = YES;
         self.segmentIndex = @0;
@@ -69,7 +69,7 @@
     self.onlineOrOffile = [[UISegmentedControl alloc] initWithItems:@[NSLocalizedString(@"Online", @"Label online"), NSLocalizedString(@"Offline", @"Label offline")]];
     self.onlineOrOffile.selectedSegmentIndex = [self.segmentIndex integerValue];
     [self.onlineOrOffile addTarget:self action:@selector(switchOnline) forControlEvents:UIControlEventValueChanged];
-    
+
     UIView *headerView = [[UIView alloc] init];
 
     CGFloat width = [[UIScreen mainScreen] bounds].size.width;
@@ -79,13 +79,13 @@
     [headerView setFrame:CGRectMake(0, 0, width, 88)];
     [self.onlineOrOffile setFrame:CGRectMake((width-segmentWidth)/2.0, 44+((height-segmentHeight)/2), segmentWidth, segmentHeight)];
     self.onlineOrOffile.autoresizingMask = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
-    
+
     [headerView addSubview:self.onlineOrOffile];
     [headerView addSubview:self.bar ];
     self.tableView.tableHeaderView = headerView;
 
     [self.bar becomeFirstResponder];
-    
+
     if ([self.traitCollection
          respondsToSelector:@selector(forceTouchCapability)] &&
         (self.traitCollection.forceTouchCapability ==
@@ -161,11 +161,11 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     MRSPatient *patient = self.currentSearchResults[indexPath.row];
-    
+
     UITabBarController *patientView = [self patientViewForPatient:patient];
- 
+
     [self.bar resignFirstResponder];
-    
+
     if (!self.splitViewController) {
         [self presentViewController:patientView animated:YES completion:nil];
     } else {
@@ -173,7 +173,7 @@
         NSArray *vcs = @[self.splitViewController.viewControllers[0], patientView];
         self.splitViewController.viewControllers = vcs;
         PatientViewController *vc = [(UINavigationController *)(patientView.viewControllers[0]) viewControllers][0];
-        
+
         vc.patient =  self.currentSearchResults[indexPath.row];
     }
 }
@@ -185,27 +185,27 @@
     vc.tabBarItem.image = [UIImage imageNamed:@"user_icon"];
     UINavigationController *navController1 = [[UINavigationController alloc] initWithRootViewController:vc];
     navController1.restorationIdentifier = @"navController1";
-    
+
     PatientVisitListView *visitsList = [[PatientVisitListView alloc] initWithStyle:UITableViewStyleGrouped];
     UINavigationController *navController2 = [[UINavigationController alloc] initWithRootViewController:visitsList];
     navController2.restorationIdentifier = @"navController2";
-    
-    
+
+
     PatientEncounterListView *encounterList = [[PatientEncounterListView alloc] initWithStyle:UITableViewStyleGrouped];
     UINavigationController *navController3 = [[UINavigationController alloc] initWithRootViewController:encounterList];
     navController3.restorationIdentifier = @"navContrller3";
-    
+
     XFormsList *formsList = [[XFormsList alloc] initBlankForms];
     UINavigationController *formListNavigationController = [[UINavigationController alloc] initWithRootViewController:formsList];
     formListNavigationController.restorationIdentifier = @"navController4";
-    
+
     UITabBarController *patientView = [[UITabBarController alloc] init];
     NSArray *controllers = [NSArray arrayWithObjects:navController1, navController2, navController3, formListNavigationController, nil];
     patientView.viewControllers = controllers;
     patientView.tabBar.translucent = NO;
     patientView.restorationIdentifier = NSStringFromClass([patientView class]);
     [patientView setSelectedIndex:0];
-    
+
     return patientView;
 }
 
@@ -259,33 +259,33 @@
 - (UIViewController *)previewingContext:(id<UIViewControllerPreviewing>)previewingContext viewControllerForLocation:(CGPoint)location {
     NSIndexPath *indexPath = [self.tableView
                               indexPathForRowAtPoint:location];
-    
+
     MRSPatient *patient = self.currentSearchResults[indexPath.row];
-    
+
     if (patient)
     {
         UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
-        
+
         if (cell) {
             previewingContext.sourceRect = cell.frame;
-            
+
             PatientViewController *vc = [[PatientViewController alloc] initWithStyle:UITableViewStyleGrouped];
             vc.patient = patient;
             PatientPeekNavigationController *navController = [[PatientPeekNavigationController alloc] initWithRootViewController:vc];
             navController.patient = patient;
             navController.searchController = self;
             navController.restorationIdentifier = @"navController1";
-            
+
             return navController;
         }
     }
-    
+
     return nil;
 }
 - (void)previewingContext:(id<UIViewControllerPreviewing>)previewingContext commitViewController:(UIViewController *)viewControllerToCommit {
     UINavigationController *navCon = (UINavigationController *)viewControllerToCommit;
     MRSPatient *patient = ((PatientViewController *)navCon.viewControllers[0]).patient;
-    
+
     [self showDetailViewController:[self patientViewForPatient:patient] sender:self];
 }
 @end

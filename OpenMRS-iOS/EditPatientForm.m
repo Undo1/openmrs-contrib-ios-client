@@ -45,11 +45,11 @@
     XLFormDescriptor *form = [XLFormDescriptor formDescriptorWithTitle:NSLocalizedString(@"Edit patient", @"Title -Edit- -patient-")];
     XLFormSectionDescriptor *section;
     XLFormRowDescriptor *row;
-    
+
     /* =========================================== Person Section =====================================*/
     section = [XLFormSectionDescriptor formSectionWithTitle:NSLocalizedString(@"Person", @"Label named person")];
     [form addFormSection:section];
-    
+
     //Gender
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kGender
                                                 rowType:XLFormRowDescriptorTypeSelectorSegmentedControl title:@"Gender"];
@@ -63,7 +63,7 @@
     }
     row.required = YES;
     [section addFormRow:row];
-    
+
     //Birthdate estimated
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kbirthdateEstimated
                                                 rowType:XLFormRowDescriptorTypeBooleanSwitch
@@ -73,7 +73,7 @@
         row.value = [self.patient.birthdateEstimated isEqualToString:@"true"]?@1:@0;
     }
     [section addFormRow:row];
-    
+
     //Birthdate
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kBirthdate
                                                 rowType:XLFormRowDescriptorTypeDate
@@ -83,7 +83,7 @@
         row.value = [MRSDateUtilities dateFromOpenMRSFormattedString:self.patient.birthdate];
     }
     [section addFormRow:row];
-    
+
     //Dead
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kDead
                                                 rowType:XLFormRowDescriptorTypeBooleanCheck
@@ -121,7 +121,7 @@
     /* =========================================== Name Section =====================================*/
     section = [XLFormSectionDescriptor formSectionWithTitle:NSLocalizedString(@"Preferred Name", @"Label named -Preferred- -Name-)")];
     [form addFormSection:section];
-    
+
     //Given Name
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kGivenName
                                                 rowType:XLFormRowDescriptorTypeText
@@ -133,7 +133,7 @@
     }
     row.required = YES;
     [section addFormRow:row];
-    
+
     //Middle Name
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kMiddleName
                                                 rowType:XLFormRowDescriptorTypeText
@@ -143,7 +143,7 @@
         row.value = self.patient.middleName;
     }
     [section addFormRow:row];
-    
+
     //Family name
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kFamilyName
                                                 rowType:XLFormRowDescriptorTypeText
@@ -155,7 +155,7 @@
         row.value = self.patient.familyName;
     }
     [section addFormRow:row];
-    
+
     //Family name2
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kFamilyName2
                                                 rowType:XLFormRowDescriptorTypeText
@@ -169,7 +169,7 @@
     /* =========================================== Address Section =====================================*/
     section = [XLFormSectionDescriptor formSectionWithTitle:NSLocalizedString(@"Preferred Address", @"Label named -Preferred- -Address-")];
     [form addFormSection:section];
-    
+
     //Address 1
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kAddress1
                                                 rowType:XLFormRowDescriptorTypeText
@@ -179,7 +179,7 @@
         row.value = self.patient.address1;
     }
     [section addFormRow:row];
-    
+
     //Address 2
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kAddress2
                                                 rowType:XLFormRowDescriptorTypeText
@@ -189,7 +189,7 @@
         row.value = self.patient.address2;
     }
     [section addFormRow:row];
-    
+
     //Address 3
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kAddress3
                                                 rowType:XLFormRowDescriptorTypeText
@@ -199,7 +199,7 @@
         row.value = self.patient.address3;
     }
     [section addFormRow:row];
-    
+
     //Address 4
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kAddress4
                                                 rowType:XLFormRowDescriptorTypeText
@@ -209,7 +209,7 @@
         row.value = self.patient.address4;
     }
     [section addFormRow:row];
-    
+
     //Address 5
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kAddress5
                                                 rowType:XLFormRowDescriptorTypeText
@@ -219,7 +219,7 @@
         row.value = self.patient.address5;
     }
     [section addFormRow:row];
-    
+
     //Address 6
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kAddress2
                                                 rowType:XLFormRowDescriptorTypeText
@@ -229,7 +229,7 @@
         row.value = self.patient.address6;
     }
     [section addFormRow:row];
-    
+
     //City Village
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kCityVillage
                                                 rowType:XLFormRowDescriptorTypeText
@@ -239,7 +239,7 @@
         row.value = self.patient.cityVillage;
     }
     [section addFormRow:row];
-    
+
     //State Province
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kStateProvince
                                                 rowType:XLFormRowDescriptorTypeText
@@ -249,8 +249,8 @@
         row.value = self.patient.stateProvince;
     }
     [section addFormRow:row];
-    
-    
+
+
     //Country
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kCountry
                                                 rowType:XLFormRowDescriptorTypeText
@@ -260,8 +260,8 @@
         row.value = self.patient.country;
     }
     [section addFormRow:row];
-    
-    
+
+
     //Postal Code
     row = [XLFormRowDescriptor formRowDescriptorWithTag:kPostalCode
                                                 rowType:XLFormRowDescriptorTypeInteger
@@ -271,7 +271,7 @@
         row.value = self.patient.postalCode;
     }
     [section addFormRow:row];
-    
+
     self.form = form;
 }
 - (void)processForm {

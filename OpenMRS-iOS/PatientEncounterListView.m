@@ -36,11 +36,11 @@
     [super viewDidLoad];
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
-    
+
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
     [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
-    
+
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"Close", @"Label close") style:UIBarButtonItemStylePlain target:self action:@selector(close)];
 
     self.title = NSLocalizedString(@"Encounters", "Label encounters");
@@ -55,7 +55,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
     UINavigationController *parentNav = self.tabBarController.viewControllers[0];
     PatientViewController *patientVC = parentNav.viewControllers[0];
     patientVC.encoutersEdited = YES;

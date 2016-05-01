@@ -19,7 +19,7 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
     var location: MRSLocation!
     var patient: MRSPatient!
     var delegate: StartVisitViewControllerDelegate!
-    
+
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: NSBundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
     }
@@ -46,15 +46,15 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
         MRSHelperFunctions.updateTableViewForDynamicTypeSize(self.tableView)
 
         self.title = NSLocalizedString("Start Visit", comment: "Label -start- -visit-")
-        
+
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Cancel, target: self, action: #selector(StartVisitViewController.cancel))
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Done, target: self, action: #selector(StartVisitViewController.done))
-        
+
         self.reloadData()
-        
+
         self.updateDoneButtonState()
     }
-    
+
     func done()
     {
         MBProgressExtension.showSucessWithTitle(NSLocalizedString("Loading", comment: "Label loading"), inView: self.view)
@@ -72,7 +72,7 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
             }
         }
     }
-    
+
     func reloadData()
     {
         MBProgressExtension.showSucessWithTitle(NSLocalizedString("Loading", comment: "Label loading"), inView: self.view)
@@ -84,7 +84,7 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
                 if types.count == 1
                 {
                     self.visitType = types[0] as! MRSVisitType
-                    
+
                     dispatch_async(dispatch_get_main_queue()) {
                         self.tableView.reloadData()
                         self.updateDoneButtonState()
@@ -95,12 +95,12 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
             }
         }
     }
-    
+
     func cancel()
     {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
-    
+
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 2
     }
@@ -131,14 +131,14 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
         {
         case 0:
             var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("visit_type")
-            
+
             if cell == nil
             {
                 cell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "visit_type")
             }
-            
+
             cell.textLabel?.text = NSLocalizedString("Visit Type", comment: "Label -visit- -type-")
-            
+
             if visitType == nil
             {
                 cell.detailTextLabel?.text = NSLocalizedString("Select visit Type", comment: "Label -select- -visit- -type-")
@@ -147,20 +147,20 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
             {
                 cell.detailTextLabel?.text = visitType.display
             }
-            
+
             cell.accessoryType = .DisclosureIndicator
-            
+
             return cell
         case 1:
             var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("location")
-            
+
             if cell == nil
             {
                 cell = UITableViewCell(style: UITableViewCellStyle.Value1, reuseIdentifier: "location")
             }
-            
+
             cell.textLabel?.text = NSLocalizedString("Location", comment:"Label location")
-            
+
             if location == nil
             {
                 cell.detailTextLabel?.text = NSLocalizedString("Select Location", comment: "Label -select- -location-")
@@ -169,16 +169,16 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
             {
                 cell.detailTextLabel?.text = location.display
             }
-            
+
             cell.accessoryType = .DisclosureIndicator
-            
+
             return cell
         default:
             return UITableViewCell()
         }
-        
+
     }
-    
+
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         switch indexPath.section
         {
@@ -201,17 +201,17 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
         tableView.reloadData()
         self.updateDoneButtonState()
     }
-    
+
     func didSelectVisitType(type: MRSVisitType) {
         visitType = type
         tableView.reloadData()
         self.updateDoneButtonState()
     }
-    
+
     func updateDoneButtonState() {
         self.navigationItem.rightBarButtonItem?.enabled = (location != nil && visitType != nil)
     }
-    
+
     override func encodeRestorableStateWithCoder(coder: NSCoder) {
         coder.encodeObject(self.patient, forKey: "patient")
         coder.encodeObject(self.delegate, forKey: "delegate")
@@ -220,7 +220,7 @@ class StartVisitViewController : UITableViewController, SelectVisitTypeViewDeleg
         coder.encodeObject(self.visitType, forKey: "visitType")
         coder.encodeObject(self.location, forKey: "location")
     }
-    
+
     static func viewControllerWithRestorationIdentifierPath(identifierComponents: [AnyObject], coder: NSCoder) -> UIViewController? {
         let startVisit: StartVisitViewController = StartVisitViewController(style: UITableViewStyle.Grouped)
         startVisit.patient = coder.decodeObjectForKey("patient") as! MRSPatient

@@ -1,6 +1,6 @@
 //
 //  SelectVisitTypeView.swift
-//  
+//
 //
 //  Created by Parker Erway on 1/22/15.
 //
@@ -17,7 +17,7 @@ class SelectVisitTypeView : UITableViewController, UIViewControllerRestoration
 {
     var visitTypes: [MRSVisitType]! = []
     var delegate: SelectVisitTypeViewDelegate!
-    
+
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -27,7 +27,7 @@ class SelectVisitTypeView : UITableViewController, UIViewControllerRestoration
     override init(style: UITableViewStyle) {
         super.init(style: .Plain)
     }
-    
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         MRSHelperFunctions.updateTableViewForDynamicTypeSize(self.tableView)
@@ -36,18 +36,18 @@ class SelectVisitTypeView : UITableViewController, UIViewControllerRestoration
     func updateFontSize() {
         MRSHelperFunctions.updateTableViewForDynamicTypeSize(self.tableView)
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.restorationIdentifier = NSStringFromClass(self.dynamicType);
         self.restorationClass = self.dynamicType;
-        
+
         let defaultCenter = NSNotificationCenter.defaultCenter()
         defaultCenter.addObserver(self, selector:#selector(SelectVisitTypeView.updateFontSize), name: UIContentSizeCategoryDidChangeNotification, object: nil)
         MRSHelperFunctions.updateTableViewForDynamicTypeSize(self.tableView)
-        
+
         self.title = NSLocalizedString("Visit Type", comment: "Label -visit- -type-")
-        
+
         self.reloadData()
     }
     func reloadData()
@@ -73,7 +73,7 @@ class SelectVisitTypeView : UITableViewController, UIViewControllerRestoration
             }
         }
     }
-    
+
     override func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         return 1
     }
@@ -82,16 +82,16 @@ class SelectVisitTypeView : UITableViewController, UIViewControllerRestoration
     }
     override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         var cell: UITableViewCell! = tableView.dequeueReusableCellWithIdentifier("cell")
-        
+
         if cell == nil
         {
             cell = UITableViewCell(style: .Default, reuseIdentifier: "cell")
         }
-        
+
         let visitType = self.visitTypes[indexPath.row]
-        
+
         cell.textLabel?.text = visitType.display
-        
+
         return cell
     }
     override func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
@@ -99,12 +99,12 @@ class SelectVisitTypeView : UITableViewController, UIViewControllerRestoration
         delegate.didSelectVisitType(visitType)
         self.navigationController?.popToRootViewControllerAnimated(true)
     }
-    
+
     override func encodeRestorableStateWithCoder(coder: NSCoder) {
         coder.encodeObject(self.delegate as! StartVisitViewController, forKey: "delegate")
         coder.encodeObject(self.visitTypes, forKey: "visitTypes")
     }
-    
+
     static func viewControllerWithRestorationIdentifierPath(identifierComponents: [AnyObject], coder: NSCoder) -> UIViewController? {
         let visitTypeList = SelectVisitTypeView(style: UITableViewStyle.Plain)
         visitTypeList.visitTypes = coder.decodeObjectForKey("visitTypes") as! [MRSVisitType]

@@ -178,7 +178,7 @@ static NSString * const reuseIdentifier = @"Cell";
     if (indexPath.item == 0) {
         if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
             PatientSearchViewController *search = [[PatientSearchViewController alloc] initWithStyle:UITableViewStylePlain];
-            
+
             /* Image VC */
             UIViewController *vc = [[UIViewController alloc] init];
             UIView *view = [[UIView alloc] init];
@@ -218,7 +218,7 @@ static NSString * const reuseIdentifier = @"Cell";
             splitView.viewControllers = @[masterNav, vcNav];
             splitView.preferredDisplayMode = UISplitViewControllerDisplayModeAllVisible;
             [self presentViewController:splitView animated:YES completion:nil];
-            
+
         } else {
             PatientSearchViewController *search = [[PatientSearchViewController alloc] initWithStyle:UITableViewStylePlain];
             [self.navigationController pushViewController:search animated:YES];
@@ -238,7 +238,7 @@ static NSString * const reuseIdentifier = @"Cell";
         activeVisitsNavController.modalPresentationStyle = UIModalPresentationPageSheet;
         [self presentViewController:activeVisitsNavController animated:YES completion:nil];
     } else if (indexPath.item == 3) {
-        
+
         XFormsList *formsList = [[XFormsList alloc] initFilledForms];
         UINavigationController *formListNavigationController = [[UINavigationController alloc] initWithRootViewController:formsList];
         formListNavigationController.restorationIdentifier = NSStringFromClass([formListNavigationController class]);

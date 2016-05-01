@@ -66,7 +66,7 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSDictionary *cellHeightDictionary;
-    
+
     if (!cellHeightDictionary) {
         cellHeightDictionary = @{ UIContentSizeCategoryExtraSmall : @44,
                                   UIContentSizeCategorySmall : @44,
@@ -76,10 +76,10 @@
                                   UIContentSizeCategoryExtraExtraLarge : @65,
                                   UIContentSizeCategoryExtraExtraExtraLarge : @75 };
     }
-    
+
     NSString *userSize =
     [[UIApplication sharedApplication] preferredContentSizeCategory];
-    
+
     NSNumber *cellHeight = cellHeightDictionary[userSize];
     if (indexPath.section == 1) {
         return cellHeight.floatValue;

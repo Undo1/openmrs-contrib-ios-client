@@ -54,7 +54,7 @@
     NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
     NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] setUsername:username andPassword:password];
-    
+
     return hostUrl;
 }
 
@@ -103,7 +103,7 @@
 {
     NSURL *hostUrl = [self setUpCredentialsLayer];
     /*NSDictionary *parameters;
-    
+
     if ([MRSHelperFunctions isNull:person.name] || [MRSHelperFunctions isNull:person.familyName] || [MRSHelperFunctions isNull:person.gender]
         || [MRSHelperFunctions isNull:person.age]) {
         completion([[NSError alloc] init], nil);
@@ -312,7 +312,7 @@
 + (void)getActiveVisits:(NSMutableArray *)activeVisits  From:(int)startIndex  withCompletion:(void (^)(NSError *error))completion
 {
     NSURL *hostUrl = [self setUpCredentialsLayer];
-    
+
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] GET:[NSString stringWithFormat:@"%@/ws/rest/v1/visit?includeInactive=false&startIndex=%d&v=full",[hostUrl absoluteString],startIndex] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
         for (NSDictionary *visit in results[@"results"]) {
@@ -320,7 +320,7 @@
             newVisit.displayName = visit[@"display"];
             newVisit.UUID = visit[@"uuid"];
             newVisit.startDateTime = visit[@"startDatetime"];
-            
+
             if (![MRSHelperFunctions isNull:visit[@"location"]]) {
                 MRSLocation *location = [[MRSLocation alloc] init];
                 location.display = visit[@"location"][@"display"];
@@ -344,7 +344,7 @@
         NSLog(@"Failing reason: %@", failureReason);
         completion(failureReason);
     }];
-    
+
 }
 + (void)getVisitsForPatient:(MRSPatient *)patient completion:(void (^)(NSError *error, NSArray *visits))completion
 {
@@ -580,7 +580,7 @@
 + (void)EditPatient:(MRSPatient *)patient completion:(void (^)(NSError *error))completion
 {
     NSURL *hostUrl = [self setUpCredentialsLayer];
-    
+
     NSArray *personKeys = @[@"BirthDate", @"BirthDate Estimated", @"Dead", @"Cause Of Death"];
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithDictionary:@{
                                                                    @"gender": patient.gender
@@ -609,7 +609,7 @@
 
 + (void)EditNameForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion {
     NSURL *hostUrl = [self setUpCredentialsLayer];
-    
+
     NSMutableDictionary *parameters = [[NSMutableDictionary alloc] initWithDictionary:@{
                                                                                         @"givenName": patient.givenName?patient.givenName:[NSNull null],
                                                                                         @"familyName": patient.familyName?patient.familyName:[NSNull null]
@@ -618,7 +618,7 @@
         [parameters setValue:patient.middleName forKey:@"middleName"];
     if (![MRSHelperFunctions isNull:patient.familyName2] && ![patient.familyName2 isEqualToString:@""])
         [parameters setValue:patient.familyName2 forKey:@"familyName2"];
-    
+
     //NSLog(@"Name parameters: %@", parameters);
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host] POST:[NSString stringWithFormat:@"%@/ws/rest/v1/person/%@/name/%@", [hostUrl absoluteString], patient.UUID, patient.preferredNameUUID] parameters:parameters success:^(AFHTTPRequestOperation *operation, id responseObject) {
         NSDictionary *results = [NSJSONSerialization JSONObjectWithData:operation.responseData options:kNilOptions error:nil];
@@ -632,7 +632,7 @@
 
 + (void)EditAddressForPatient:(MRSPatient *) patient completion:(void (^)(NSError *error))completion {
     NSURL *hostUrl = [self setUpCredentialsLayer];
-    
+
     NSMutableDictionary *parameters =[[NSMutableDictionary alloc] init];
     NSArray *addressKeys = @[@"Address 1", @"Address 2", @"Address 3", @"Address 4", @"Address 5", @"Address 6",
                              @"City Village", @"State Province", @"Country" ,@"Postal Code", @"Latitude", @"Latitude", @"County District"];
@@ -640,13 +640,13 @@
         NSString *propertyKey = [MRSHelperFunctions formLabelToJSONLabel:key];
         NSString *value = [patient valueForKey:propertyKey];
         NSString *stringValue = value;
-        
+
         @try {
             stringValue = [(NSNumber *)value stringValue];
         } @catch (NSException *exception) {
-            
+
         }
-        
+
         if (![MRSHelperFunctions isNull:value]  && ![stringValue isEqualToString:@""]) {
             if ([propertyKey  isEqual: @"preferred"]) {
                 NSLog(@"propety: %@", propertyKey);
@@ -681,13 +681,13 @@
     NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
     NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
     NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
-    
+
     NSURL *hostUrl = [NSURL URLWithString:host];
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host andRequestSerializer:[AFXMLParserResponseSerializer new]] GET:[NSString stringWithFormat:@"%@/moduleServlet/xforms/xformDownload?target=xformslist&uname=%@&pw=%@", [hostUrl absoluteString], username, password] parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         XMLDictionaryParser *parser  = [[XMLDictionaryParser alloc] init];
         NSDictionary *results = [parser dictionaryWithData:operation.responseData];
         NSMutableArray *forms = [[NSMutableArray alloc] init];
-        
+
         if ([MRSHelperFunctions isNull:results[@"xform"]]) {
              completion(forms, nil);
         }
@@ -721,9 +721,9 @@
     NSString *host = [wrapper objectForKey:(__bridge id)(kSecAttrService)];
     NSString *username = [wrapper objectForKey:(__bridge id)(kSecAttrAccount)];
     NSString *password = [wrapper objectForKey:(__bridge id)(kSecValueData)];
-    
+
     NSURL *hostUrl = [NSURL URLWithString:host];
-    
+
     [[CredentialsLayer sharedManagerWithHost:hostUrl.host andRequestSerializer:[AFXMLParserResponseSerializer new]]
      GET:[NSString stringWithFormat:@"%@/moduleServlet/xforms/xformDownload?target=xform&uname=%@&pw=%@&formId=%@&contentType=xml&excludeLayout=true", [hostUrl absoluteString], username, password, xformID]
      parameters:nil
@@ -817,10 +817,10 @@
     [userDefaults setObject:@"HH:mm:ss" forKey:UDtimeFromat];
     [userDefaults setObject:@"yyyy-MM-dd'T'HH:mm:ss" forKey:UDdateTimeFormat];
 
-    
+
     UIStoryboard *loginStoryboard = [UIStoryboard storyboardWithName:@"Login Screen" bundle:[NSBundle mainBundle]];
     LoginViewController *loginViewController = [loginStoryboard instantiateViewControllerWithIdentifier:@"login"];
-    
+
     [delegate.window.rootViewController presentViewController:loginViewController animated:YES completion:nil];
 }
 

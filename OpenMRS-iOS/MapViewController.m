@@ -109,7 +109,7 @@
 
 - (MKAnnotationView *)mapView:(MKMapView *)mapView
             viewForAnnotation:(id <MKAnnotation>)annotation {
-    
+
     MKPinAnnotationView *pinAnnotationView = [[MKPinAnnotationView alloc] initWithAnnotation:annotation
                                                                              reuseIdentifier:@"annotation"];
     pinAnnotationView.pinColor = MKPinAnnotationColorRed;

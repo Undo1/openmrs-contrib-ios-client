@@ -45,7 +45,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
+
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
     [MRSVisitCell updateTableViewForDynamicTypeSize:self.tableView];
@@ -63,7 +63,7 @@
 
     [self.tableView registerClass:[MRSVisitCell class] forCellReuseIdentifier:@"cell"];
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"transperantCell"];
-    
+
     self.tableView.separatorColor = [UIColor clearColor];
     self.tableView.rowHeight = 100;
 }

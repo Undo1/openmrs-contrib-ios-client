@@ -10,5 +10,5 @@ import UIKit
 
 class EncounterObCell : UITableViewCell
 {
-    @IBOutlet weak var observationLabel: UILabel!   
+    @IBOutlet weak var observationLabel: UILabel!
 }

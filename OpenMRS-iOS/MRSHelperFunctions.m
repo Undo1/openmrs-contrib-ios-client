@@ -45,7 +45,7 @@
 
 + (void)updateTableViewForDynamicTypeSize:(UITableView *) tableview {
     static NSDictionary *cellHeightDictionary;
-    
+
     if (!cellHeightDictionary) {
         cellHeightDictionary = @{ UIContentSizeCategoryExtraSmall : @33,
                                   UIContentSizeCategorySmall : @33,
@@ -56,9 +56,9 @@
                                   UIContentSizeCategoryExtraExtraExtraLarge : @70
                                   };
     }
-    
+
     NSString *userSize = [[UIApplication sharedApplication] preferredContentSizeCategory];
-    
+
     NSNumber *cellHeight = cellHeightDictionary[userSize];
     [tableview setRowHeight:cellHeight.floatValue];
     [tableview reloadData];

@@ -26,18 +26,18 @@
     [super viewDidLoad];
     self.restorationIdentifier = NSStringFromClass([self class]);
     self.restorationClass = [self class];
-    
+
     NSNotificationCenter *defaultCenter = [NSNotificationCenter defaultCenter];
     [defaultCenter addObserver:self selector:@selector(updateFontSize) name:UIContentSizeCategoryDidChangeNotification object:nil];
     [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
-    
+
     self.title = NSLocalizedString(@"Choose Location", @"Label -choose- -location-");
     [self refreshData];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    
+
     [MRSHelperFunctions updateTableViewForDynamicTypeSize:self.tableView];
 }
 

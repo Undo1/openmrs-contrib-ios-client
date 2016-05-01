@@ -27,7 +27,7 @@
     if (encounter.obs == nil) {
         [self refreshData];
     }
-    
+
     self.tableView.estimatedRowHeight = 44;
 }
 - (void)refreshData
@@ -67,7 +67,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     EncounterObCell *cell = [tableView dequeueReusableCellWithIdentifier:@"EncounterObCell"];
-    
+
     MRSEncounterOb *ob = self.encounter.obs[indexPath.row];
     cell.observationLabel.text = ob.display;
     cell.observationLabel.numberOfLines = 0;

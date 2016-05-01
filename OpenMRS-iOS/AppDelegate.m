@@ -47,7 +47,7 @@
     if ([password isEqual:@" "] || [password isEqual:@""] || password == nil) {
         //No password stored, go straight to login screen
         [OpenMRSAPIManager presentLoginController];
-    
+
     } else {
         [[SyncingEngine sharedEngine] updateExistingOutOfDatePatients:nil];
     }
@@ -63,7 +63,7 @@
 
 - (BOOL)application:(UIApplication *)application willFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
+
     self.window.tintColor = [UIColor colorWithRed:39/255.0
                                             green:139/255.0
                                              blue:146/255.0
@@ -76,14 +76,14 @@
     [[UINavigationBar appearance] setTitleTextAttributes:@ { NSForegroundColorAttributeName:[UIColor whiteColor] }];
     [[UISearchBar appearance] setBarTintColor:[UIColor colorWithRed:30/255.0 green:130/255.0 blue:112/255.0 alpha:1]];
     [self.window makeKeyAndVisible];
-    
+
     /* Setting user defaults */
     NSUserDefaults *userDefaults = [NSUserDefaults standardUserDefaults];
     if (![userDefaults objectForKey:UDisWizard]) {
         [userDefaults setBool:NO forKey:UDisWizard];
     }
 
-    
+
     /* Setting paths for offline savingf of XForms */
     NSString * resourcePath = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *blankFormsPath = [resourcePath stringByAppendingPathComponent:@"blank_forms"];
@@ -96,7 +96,7 @@
         NSLog(@"Create directory error: %@", error);
     }
     [userDefaults setObject:blankFormsPath forKey:UDblankForms];
-    
+
     NSString *filledFormsPath = [resourcePath  stringByAppendingPathComponent:@"filled_forms"];
     error = nil;
     if (![[NSFileManager defaultManager] createDirectoryAtPath:filledFormsPath
@@ -107,7 +107,7 @@
         NSLog(@"Create directory error: %@", error);
     }
     [userDefaults setObject:filledFormsPath forKey:UDfilledForms];
-    
+
     NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:resourcePath error:nil];
 
     for (int i=0;i<directoryContent.count;i++) {
@@ -116,7 +116,7 @@
             [[NSFileManager defaultManager] removeItemAtPath:fileAbsPath error:nil];
         }
     }
-    
+
     if (![userDefaults objectForKey:UDnewSession]) {
         [userDefaults setBool:YES forKey:UDnewSession];
     }
@@ -239,7 +239,7 @@
     KeychainItemWrapper *wrapper = [[KeychainItemWrapper alloc] initWithIdentifier:@"OpenMRS-iOS" accessGroup:nil];
 
     [[NSFileManager defaultManager] createDirectoryAtURL:[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] withIntermediateDirectories:NO attributes:nil error:nil];
-    
+
     NSURL *databaseURL = [[[[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask] lastObject] URLByAppendingPathComponent:[NSString stringWithFormat:@"OpenMRS-iOS.sqlite"]];
     NSDictionary *options = @ { EncryptedStorePassphraseKey: [wrapper objectForKey:(__bridge id)(kSecValueData)],EncryptedStoreDatabaseLocation : [databaseURL description],
         NSMigratePersistentStoresAutomaticallyOption : @YES,

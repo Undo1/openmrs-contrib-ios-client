@@ -39,18 +39,18 @@
 - (void)updateExistingPatientsInCoreData:(void (^)(NSError *error))completion {
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:self.managedObjectContext]];
-    
+
     NSPredicate *predicate = [NSPredicate predicateWithFormat:@"upToDate == nil"];
     [request setPredicate:predicate];
     NSError *error = nil;
     NSArray *results = [self.managedObjectContext executeFetchRequest:request error:&error];
     if (error)
         return completion(error);
-    
+
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         __block NSError *master_error = nil;
         for (NSManagedObject *object in results) {
-            
+
             __block MRSPatient *patient = [[MRSPatient alloc] init];
             patient.UUID = [object valueForKey:@"uuid"];
             NSLog(@"Updating patient: %@", patient.UUID);
@@ -80,7 +80,7 @@
         if (!error) {
             NSFetchRequest *request = [[NSFetchRequest alloc] init];
             [request setEntity:[NSEntityDescription entityForName:@"Patient" inManagedObjectContext:self.managedObjectContext]];
-            
+
             NSPredicate *predicate = [NSPredicate predicateWithFormat:@"upToDate == %@", [NSNumber numberWithBool:NO]];
             [request setPredicate:predicate];
             NSError *error = nil;
@@ -90,7 +90,7 @@
             NSLog(@"To sync %d", results.count);
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 for (NSManagedObject *object in results) {
-                    
+
                     __block MRSPatient *patient = [[MRSPatient alloc] init];
                     patient.UUID = [object valueForKey:@"uuid"];
                     NSLog(@"Patient UUID syncing: %@", patient.UUID);
@@ -104,7 +104,7 @@
                         dispatch_semaphore_signal(semaphore);
                     }];
                     dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
-                    
+
                 }
                 if (completion)
                     completion(nil);

@@ -11,7 +11,7 @@ import UIKit
 class PatientPeekNavigationController : UINavigationController {
     var patient: MRSPatient!
     var searchController: PatientSearchViewController!
-    
+
     @available(iOS 9.0, *)
     override func previewActionItems() -> [UIPreviewActionItem] {
         let editAction = UIPreviewAction(title: NSLocalizedString("Edit patient", comment: "Title -Edit- -patient-"), style: .Default) { (action: UIPreviewAction, viewController: UIViewController) in
