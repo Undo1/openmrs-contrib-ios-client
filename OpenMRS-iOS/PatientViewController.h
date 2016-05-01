@@ -32,4 +32,6 @@
 - (void)updateWithDetailedInfo;
 - (void)presentEditViewController:(MRSPatient *)patient;
 - (void)presentEditViewController:(MRSPatient *)patient fromViewController:(UIViewController *)viewController;
+- (void)presentCaptureVitalsViewController:(MRSPatient *)patient;
+- (void)presentCaptureVitalsViewController:(MRSPatient *)patient fromViewController:(UIViewController *)viewController;
 @end

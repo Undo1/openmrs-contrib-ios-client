@@ -77,7 +77,14 @@
         [MBProgressExtension hideActivityIndicatorInView:self.view];
         if (!error) {
             [MBProgressExtension showSucessWithTitle:NSLocalizedString(@"Completed", @"Label completed") inView:self.presentingViewController.view];
-            [self.delegate didCaptureVitalsForPatient:self.patient];
+            if (self.delegate != nil)
+            {
+                [self.delegate didCaptureVitalsForPatient:self.patient];
+            }
+            else
+            {
+                [self dismissViewControllerAnimated:true completion:nil];
+            }
         } else {
             [[MRSAlertHandler alertViewForError:self error:error] show];
         }
@@ -94,12 +101,12 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (section == 0) {
+    if (section <= 1) {
         return 1;
     }
     return self.fields.count;
@@ -108,6 +115,15 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.section == 0) {
+        UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"patientCell"];
+
+        cell.textLabel.text = self.patient.name;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
+        return cell;
+    }
+
+    if (indexPath.section == 1) {
         UITableViewCell *cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:@"locCell"];
         cell.textLabel.text = NSLocalizedString(@"Location", @"Label location");
         if (self.currentLocation) {
@@ -147,11 +163,11 @@
 }
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (indexPath.section == 0) {
+    if (indexPath.section == 1) {
         LocationListTableViewController *locList = [[LocationListTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
         locList.delegate = self;
         [self.navigationController pushViewController:locList animated:YES];
-    } else {
+    } else if (indexPath.section == 2) {
         //Pick the textfield in tableviewcell and make it first responder.
         [(UITextField *)([self.tableView cellForRowAtIndexPath:indexPath].subviews[1]) becomeFirstResponder];
     }
@@ -160,9 +176,12 @@
 {
     switch (section) {
     case 0:
-        return NSLocalizedString(@"Location", @"Label location");
+        return @"Patient";
         break;
     case 1:
+        return NSLocalizedString(@"Location", @"Label location");
+        break;
+    case 2:
         return NSLocalizedString(@"Vitals", @"Label vitals");
         break;
     default:

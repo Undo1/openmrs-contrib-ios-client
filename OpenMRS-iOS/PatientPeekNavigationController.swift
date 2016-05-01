@@ -21,6 +21,13 @@ class PatientPeekNavigationController : UINavigationController {
             patientViewController.presentEditViewController(patientViewController.patient, fromViewController: UIApplication.sharedApplication().keyWindow?.rootViewController)
         }
 
-        return [editAction]
+        let captureVitalsAction = UIPreviewAction(title: NSLocalizedString("Capture Vitals", comment: "Label -capture- -vitals-"), style: .Default) { (action: UIPreviewAction, viewController: UIViewController) in
+            let navigationController = viewController as! UINavigationController
+            let patientViewController = navigationController.viewControllers[0] as! PatientViewController
+
+            patientViewController.presentCaptureVitalsViewController(patientViewController.patient, fromViewController: UIApplication.sharedApplication().keyWindow?.rootViewController)
+        }
+
+        return [editAction, captureVitalsAction]
     }
 }

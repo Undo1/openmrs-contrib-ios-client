@@ -524,14 +524,9 @@
             addVisitNoteNavContrller.modalPresentationStyle = UIModalPresentationFormSheet;
             [self presentViewController:addVisitNoteNavContrller animated:YES completion:nil];
         } else if (indexPath.row == 1) {
-            CaptureVitalsTableViewController *vitals = [[CaptureVitalsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
-            vitals.patient = self.patient;
-            vitals.delegate = self;
-            UINavigationController *captureVitalsNavContrller = [[UINavigationController alloc] initWithRootViewController:vitals];
-            captureVitalsNavContrller.restorationIdentifier = NSStringFromClass([captureVitalsNavContrller class]);
-            captureVitalsNavContrller.modalPresentationStyle = UIModalPresentationFormSheet;
             [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
-            [self presentViewController:captureVitalsNavContrller animated:YES completion:nil];
+
+            [self presentCaptureVitalsViewController:self.patient];
         }
         if (indexPath.row == 2) {
             if ([self.patient isInCoreData]) {
@@ -625,6 +620,27 @@
     editPatientNavController.modalPresentationStyle = UIModalPresentationFormSheet;
     self.patientEdited = YES;
     [viewController presentViewController:editPatientNavController animated:YES completion:nil];
+}
+
+- (void)presentCaptureVitalsViewController:(MRSPatient *)patient
+{
+    [self presentCaptureVitalsViewController:patient fromViewController:self];
+}
+
+- (void)presentCaptureVitalsViewController:(MRSPatient *)patient fromViewController:(UIViewController *)viewController
+{
+    CaptureVitalsTableViewController *vitals = [[CaptureVitalsTableViewController alloc] initWithStyle:UITableViewStyleGrouped];
+    vitals.patient = self.patient;
+
+    if (viewController == self)
+    {
+        vitals.delegate = self;
+    }
+
+    UINavigationController *captureVitalsNavContrller = [[UINavigationController alloc] initWithRootViewController:vitals];
+    captureVitalsNavContrller.restorationIdentifier = NSStringFromClass([captureVitalsNavContrller class]);
+    captureVitalsNavContrller.modalPresentationStyle = UIModalPresentationFormSheet;
+    [viewController presentViewController:captureVitalsNavContrller animated:YES completion:nil];
 }
 
 - (void)reload {
