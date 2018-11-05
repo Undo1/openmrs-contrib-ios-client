@@ -1,4 +1,4 @@
-﻿/* Address */
+/* Address */
 "Address" = "Address";
 
 /* Birth date of person */
@@ -49,10 +49,10 @@
 /* Given -first name */
 "Given Name" = "Given Name";
 
-/* Location lattitude */
+/* Location latitude */
 "Latitude" = "Latitude";
 
-/* Location longtiude */
+/* Location longitude */
 "Longitude" = "Longitude";
 
 /* First character of gender -male- */
@@ -175,7 +175,7 @@
 /* Label password */
 "Password" = "Password";
 
-/* Lable -sign- -in */
+/* Label -sign- -in */
 "Sign in" = "Sign in";
 
 /* Label username */
@@ -311,7 +311,7 @@
 "Camera not available" = "Camera not available";
 
 /* Error message */
-"Plese fill" = "Plese fill";
+"Please fill" = "Please fill";
 
 /* Label save all offline */
 "Save all offline" = "Save all offline";
@@ -370,7 +370,7 @@
 /* Button label submit form */
 "Submit form" = "Submit form";
 
-/* alert msesage empty files */
+/* alert message empty files */
 "is empty" = "is empty";
 
 /* Label loading */
@@ -489,3 +489,5 @@
 
 /* Label server error */
 "Server error" = "Server error";
+
+
